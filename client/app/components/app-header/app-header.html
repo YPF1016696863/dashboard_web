@@ -25,7 +25,7 @@
           ng-show="$ctrl.showDashboardsMenu"
           uib-dropdown
         >
-          <a class="btn" href="dashboards">Dashboards</a>
+          <a class="btn" href="dashboards">{{'HEADER.DASHBOARDS' | translate}}</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -52,7 +52,7 @@
           ng-show="$ctrl.showQueriesMenu"
           uib-dropdown
         >
-          <a class="btn" href="queries">Queries</a>
+          <a class="btn" href="queries">{{'HEADER.QUERIES' | translate}}</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -75,7 +75,7 @@
           </ul>
         </li>
         <li ng-if="$ctrl.showAlertsLink">
-          <a href="alerts">Alerts</a>
+          <a href="alerts">{{'HEADER.ALERTS' | translate}}</a>
         </li>
       </ul>
 
@@ -93,7 +93,7 @@
           uib-dropdown-toggle
           ng-disabled="disabled"
         >
-          Create <span class="caret caret--nav"></span>
+          {{'HEADER.CREATE' | translate}} <span class="caret caret--nav"></span>
         </button>
         <ul
           class="dropdown-menu"
@@ -102,16 +102,16 @@
           aria-labelledby="create-button"
         >
           <li role="menuitem" ng-show="$ctrl.showNewQueryMenu">
-            <a href="queries/new">Query</a>
+            <a href="queries/new">{{'HEADER.QUERIES' | translate}}</a>
           </li>
           <li role="menuitem">
             <a
               ng-show="$ctrl.currentUser.hasPermission('create_dashboard')"
-              ng-click="$ctrl.newDashboard()"
-              >Dashboard</a
-            >
+              ng-click="$ctrl.newDashboard()">
+              {{'HEADER.DASHBOARDS' | translate}}
+            </a>
           </li>
-          <li role="menuitem"><a href="alerts/new">Alert</a></li>
+          <li role="menuitem"><a href="alerts/new">{{'HEADER.ALERTS' | translate}}</a></li>
         </ul>
       </div>
 
@@ -150,7 +150,7 @@
           ></a>
           <ul class="dropdown-menu dropdown-menu--profile">
             <li>
-              <a ng-href="users/me">Edit Profile</a>
+              <a ng-href="users/me">{{ 'HEADER.EDIT_PROFILE' | translate }}</a>
             </li>
             <li
               class="divider"
@@ -218,7 +218,7 @@
             type="text"
             ng-model="$ctrl.searchTerm"
             class="form-control navbar__search__input"
-            placeholder="Search queries..."
+            placeholder="{{'HEADER.SEARCH_PLACEHOLDER' | translate}}"
             data-test="AppHeaderSearch"
           />
           <span class="input-group-btn">

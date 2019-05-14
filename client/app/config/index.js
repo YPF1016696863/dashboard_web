@@ -10,6 +10,8 @@ import angular from 'angular';
 import ngSanitize from 'angular-sanitize';
 import ngRoute from 'angular-route';
 import ngResource from 'angular-resource';
+import mocke2e from 'angular-mocks/ngMockE2E';
+import 'angular-translate';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiSelect from 'ui-select';
 import ngMessages from 'angular-messages';
@@ -48,6 +50,8 @@ const requirements = [
   ngSanitize,
   uiBootstrap,
   ngMessages,
+  mocke2e,
+  'pascalprecht.translate',
   uiSelect,
   'ui.ace',
   ngUpload,

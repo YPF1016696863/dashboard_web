@@ -47,7 +47,6 @@ class AppViewComponent {
         // For routes that need authentication, check if session is already
         // loaded, and load it if not.
         logger('Requested authenticated route: ', route);
-        /*
         if (!Auth.isAuthenticated()) {
           event.preventDefault();
           // Auth.requireSession resolves only if session loaded
@@ -56,7 +55,6 @@ class AppViewComponent {
             $route.reload();
           });
         }
-        */
       }
     });
 

@@ -50,6 +50,7 @@ Step.defaultProps = {
 export function EmptyState({
   icon,
   title,
+  header,
   description,
   illustration,
   helpLink,
@@ -84,7 +85,8 @@ export function EmptyState({
   return (
     <div className="empty-state bg-white tiled">
       <div className="empty-state__summary">
-        {title && <h4>{title}</h4>}
+        {title && <h5>{title}</h5>}
+        {header && <h4>{header}</h4>}
         <h2>
           <i className={icon} />
         </h2>
@@ -158,6 +160,7 @@ export function EmptyState({
 EmptyState.propTypes = {
   icon: PropTypes.string,
   title: PropTypes.string,
+  header: PropTypes.string,
   description: PropTypes.string.isRequired,
   illustration: PropTypes.string.isRequired,
   helpLink: PropTypes.string.isRequired,
@@ -171,6 +174,7 @@ EmptyState.propTypes = {
 EmptyState.defaultProps = {
   icon: null,
   title: null,
+  header: null,
 
   onboardingMode: false,
   showAlertStep: false,
