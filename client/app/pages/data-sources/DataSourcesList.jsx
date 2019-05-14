@@ -91,6 +91,7 @@ class DataSourcesList extends React.Component {
   }
 
   render() {
+    const {$translate} = this.props;
     const newDataSourceProps = {
       type: 'primary',
       onClick: policy.isCreateDataSourceEnabled() ? this.showCreateSourceDialog : null,
@@ -102,7 +103,7 @@ class DataSourcesList extends React.Component {
         <div className="m-b-15">
           <Button {...newDataSourceProps}>
             <i className="fa fa-plus m-r-5" />
-            New Data Source
+            {$translate.instant("DATASOURCELIST.NEW_DATA_SOURCE")}
           </Button>
         </div>
         {this.state.loading ? <LoadingState className="" /> : this.renderDataSources()}
@@ -114,7 +115,7 @@ class DataSourcesList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'Data Sources',
+    title: 'DATASOURCELIST.DATA_SOURCES',
     path: 'data_sources',
     order: 1,
   });

@@ -63,17 +63,17 @@ class TextboxDialog extends React.Component {
   render() {
     const { dialog } = this.props;
     const isNew = !this.props.text;
-
+    const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <Modal
         {...dialog.props}
-        title={isNew ? 'Add Textbox' : 'Edit Textbox'}
+        title={isNew ? translate.instant("TEXTBOXDIALOG.ADD") : translate.instant("TEXTBOXDIALOG.EDIT")}
         onOk={() => this.saveWidget()}
         okButtonProps={{
           loading: this.state.saveInProgress,
           disabled: !this.state.text,
         }}
-        okText={isNew ? 'Add to Dashboard' : 'Save'}
+        okText={isNew ? translate.instant("TEXTBOXDIALOG.ADD_TO_DASHBOARD") : translate.instant("TEXTBOXDIALOG.SAVE")}
         width={500}
         wrapProps={{ 'data-test': 'TextboxDialog' }}
       >
@@ -84,7 +84,7 @@ class TextboxDialog extends React.Component {
             value={this.state.text}
             onChange={this.onTextChanged}
             autoFocus
-            placeholder="This is where you write some text"
+            placeholder={translate.instant("TEXTBOXDIALOG.PLACEHOLDER")}
           />
           <small>
             Supports basic{' '}
@@ -99,7 +99,7 @@ class TextboxDialog extends React.Component {
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />
-              <strong className="preview-title">Preview:</strong>
+              <strong className="preview-title">{translate.instant("TEXTBOXDIALOG.PREVIEW")}</strong>
               <p
                 dangerouslySetInnerHTML={{ __html: this.state.preview }} // eslint-disable-line react/no-danger
                 className="preview markdown"

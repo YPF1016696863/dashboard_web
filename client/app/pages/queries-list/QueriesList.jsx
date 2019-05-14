@@ -34,6 +34,8 @@ class QueriesList extends React.Component {
     $translate: text => text,
   };
 
+  listColumns = [];
+
   sidebarMenu = [
     {
       key: 'all',
@@ -61,32 +63,35 @@ class QueriesList extends React.Component {
     },
   ];
 
-  listColumns = [
-    Columns.favorites({ className: 'p-r-0' }),
-    Columns.custom.sortable((text, item) => (
-      <React.Fragment>
-        <a className="table-main-title" href={'queries/' + item.id}>{ item.name }</a>
-        <QueryTagsControl
-          className="d-block"
-          tags={item.tags}
-          isDraft={item.is_draft}
-          isArchived={item.is_archived}
-        />
-      </React.Fragment>
-    ), {
-      title: 'Name',
-      field: 'name',
-      width: null,
-    }),
-    Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
-    Columns.dateTime.sortable({ title: 'Created At', field: 'created_at' }),
-    Columns.duration.sortable({ title: 'Runtime', field: 'runtime' }),
-    Columns.dateTime.sortable({ title: 'Last Executed At', field: 'retrieved_at', orderByField: 'executed_at' }),
-    Columns.custom.sortable(
-      (text, item) => <SchedulePhrase schedule={item.schedule} isNew={item.isNew()} />,
-      { title: 'Update Schedule', field: 'schedule' },
-    ),
-  ];
+  componentDidMount() {
+    const translate = this.props.$translate ? this.props.$translate : null; 
+    this.listColumns = [
+      Columns.favorites({ className: 'p-r-0' }),
+      Columns.custom.sortable((text, item) => (
+        <React.Fragment>
+          <a className="table-main-title" href={'queries/' + item.id}>{ item.name }</a>
+          <QueryTagsControl
+            className="d-block"
+            tags={item.tags}
+            isDraft={item.is_draft}
+            isArchived={item.is_archived}
+          />
+        </React.Fragment>
+      ), {
+        title: translate.instant("QUERIESLIST.QUERIES_TABLE.NAME"),
+        field: 'name',
+        width: null,
+      }),
+      Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
+      Columns.dateTime.sortable({ title: translate.instant("QUERIESLIST.QUERIES_TABLE.CREATED_AT"), field: 'created_at' }),
+      Columns.duration.sortable({ title: translate.instant("QUERIESLIST.QUERIES_TABLE.RUNTIME"), field: 'runtime' }),
+      Columns.dateTime.sortable({ title: translate.instant("QUERIESLIST.QUERIES_TABLE.LAST_EXECUTED_AT"), field: 'retrieved_at', orderByField: 'executed_at' }),
+      Columns.custom.sortable(
+        (text, item) => <SchedulePhrase schedule={item.schedule} isNew={item.isNew()} />,
+        { title: translate.instant("QUERIESLIST.QUERIES_TABLE.UPDATE_SCHEDULE"), field: 'schedule' },
+      ),
+    ];
+  }
 
   render() {
     const { controller } = this.props;
@@ -94,7 +99,7 @@ class QueriesList extends React.Component {
     const { appSettings } = this.props;
     return (
       <div className="container">
-        <PageHeader title={controller.params.title} />
+        <PageHeader title={translate.instant(controller.params.title)} />
         <Layout className="m-l-15 m-r-15">
           <Layout.Sidebar className="m-b-0">
             <Sidebar.SearchInput
@@ -171,22 +176,22 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/queries',
-      title: 'Queries',
+      title: 'QUERIESLIST.QUERIES',
       key: 'all',
     },
     {
       path: '/queries/favorites',
-      title: 'Favorite Queries',
+      title: 'QUERIESLIST.FAVORITE_QUERIES',
       key: 'favorites',
     },
     {
       path: '/queries/archive',
-      title: 'Archived Queries',
+      title: 'QUERIESLIST.ARCHIVED_QUERIES',
       key: 'archive',
     },
     {
       path: '/queries/my',
-      title: 'My Queries',
+      title: 'QUERIESLIST.MY_QUERIES',
       key: 'my',
     },
   ], {

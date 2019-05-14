@@ -33,41 +33,50 @@ class AlertsList extends React.Component {
     $translate: text => text,
   };
 
-  listColumns = [
-    Columns.custom.sortable((text, alert) => (
-      <div>
-        <a className="table-main-title" href={'alerts/' + alert.id}>{alert.name}</a>
-      </div>
-    ), {
-      title: 'Name',
-      field: 'name',
-    }),
-    Columns.custom.sortable((text, alert) => (
-      <div>
-        <span className={`label ${STATE_CLASS[alert.state]}`}>{toUpper(alert.state)}</span>
-      </div>
-    ), {
-      title: 'State',
-      field: 'state',
-      width: '1%',
-    }),
-    Columns.timeAgo.sortable({ title: 'Last Updated At',
-      field: 'updated_at',
-      className: 'text-nowrap',
-      width: '1%' }),
-    Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
-    Columns.dateTime.sortable({ title: 'Created At',
-      field: 'created_at',
-      className: 'text-nowrap',
-      width: '1%' }),
-  ];
+  static defaultProps = {
+    $translate: text => text,
+  };
+
+  listColumns = [];
+
+  componentDidMount() {
+    const translate = this.props.$translate ? this.props.$translate : null;
+    this.listColumns = [
+      Columns.custom.sortable((text, alert) => (
+        <div>
+          <a className="table-main-title" href={'alerts/' + alert.id}>{alert.name}</a>
+        </div>
+      ), {
+        title:translate.instant( 'ALERTSLIST.ALERTS_TABLE.NAME'),
+        field: 'name',
+      }),
+      Columns.custom.sortable((text, alert) => (
+        <div>
+          <span className={`label ${STATE_CLASS[alert.state]}`}>{toUpper(alert.state)}</span>
+        </div>
+      ), {
+        title: translate.instant( 'ALERTSLIST.ALERTS_TABLE.STATE'),
+        field: 'state',
+        width: '1%',
+      }),
+      Columns.timeAgo.sortable({ title:translate.instant( 'ALERTSLIST.ALERTS_TABLE.LAST_UPDATE_AT'),
+        field: 'updated_at',
+        className: 'text-nowrap',
+        width: '1%' }),
+      Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
+      Columns.dateTime.sortable({ title:  translate.instant( 'ALERTSLIST.ALERTS_TABLE.CREATED_AT'),
+        field: 'created_at',
+        className: 'text-nowrap',
+        width: '1%' }),
+    ];
+  }
 
   render() {
     const { controller } = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div className="container">
-        <PageHeader title={controller.params.title} />
+        <PageHeader title={translate.instant(controller.params.title)} />
         <div className="m-l-15 m-r-15">
           {!controller.isLoaded && <LoadingState className="" />}
           {controller.isLoaded && controller.isEmpty && (
@@ -125,7 +134,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/alerts',
-      title: 'Alerts',
+      title: 'ALERTSLIST.ALERTS',
       key: 'alerts',
     },
   ], {

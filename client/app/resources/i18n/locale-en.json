@@ -51,7 +51,9 @@
     "ARCHIVED": "Archived",
     "ACTIVE_USERS": "Active Users",
     "PENDING_INVITATIONS": "Pending Invitations",
-    "DISABLED_USERS": "Disabled Users"
+    "DISABLED_USERS": "Disabled Users",
+    "MEMBERS": "Members",
+    "DATA_SOURCE": "Data Sources"
   },
   "SETTINGS": {
     "SYSTEM": {
@@ -62,6 +64,22 @@
   },
   "CREATE_SOURCE_DIALOG": {
     "SETUP_INSTRUCTIONS": "Setup Instructions"
+  },
+  "ALERT": {
+    "NEW_ALERT": "New Alert",
+    "FEATURE_NAME": "alert emails",
+    "QUERY": "Query",
+    "NAME":"Name",
+    "EMAIL_SETTINGS_WARNING": {
+      "MESSAGE": "It looks like your mail server isn't configured. Make sure to configure it for the {{featureName}} to work."
+    },
+    "NOTIFICATION":{
+      "NOTIFICATIONS": "Notifications"
+    }
+  },
+  "USERPROFILE": {
+    "INVITE_EMAILS": "invite emails",
+    "ACCOUNT": "Account"
   },
   "DASHBOARD": {
     "SETTINGS": {
@@ -75,6 +93,214 @@
     "CONNECTION_LIGHT": {
       "ON": "Online",
       "OFF": "Offline"
+    },
+    "NEW_DASHBOARD": "New Dashboard",
+    "SAERCH_DASHBOARD": "Search Dashboard ...",
+    "PUBLISH": "Publish",
+    "UNPUBLISH": "Unpublish",
+    "ARCHIVE": "Archive",
+    "EDIT": "Edit",
+    "DONE_EDITING": "Done Editing",
+    "MESSAGE": "Widgets are individual query visualizations or text boxes you can place on your dashboard in various arrangements.",
+    "TEXTBOX": "Add Textbox",
+    "WIDGETS": "Add Widget",
+    "FILTERS": "Use Dashboard Level Filters",
+    "SAVED": "Saved"
+  },
+  "DATASOURCELIST": {
+    "DATA_SOURCES": "Data Sources",
+    "NEW_DATA_SOURCE": "New Data Source",
+    "MESSAGE": {
+      "EMPTY": "There are no data sources in this group yet.",
+      "CLICK": "Click here",
+      "ADD": "to add data sources"
     }
+  },
+  "GROUPLIST": {
+    "GROUPS": "Groups",
+    "NEW_GROUP": "New Group"
+  },
+  "USERLIST": {
+    "USERS": "Users",
+    "NEW_USER": "New User",
+    "USERS_TABLE": {
+      "NAME": "Name",
+      "GROUPS": "Groups",
+      "JOINED": "Joined",
+      "LAST_ACTIVE_AT": "Last Active At"
+    }
+  },
+  "DESTINATIONLIST": {
+    "ALERT_DESTINATIONS": "Alert Destinations",
+    "NEW_ALERT_DESTINATION": "New Alert Destination",
+    "MESSAGE": {
+      "EMPTY": "There are no alert destinations yet.",
+      "CLICK": "Click here",
+      "ADD": "to add one"
+    }
+  },
+  "VISUALIZATION":{
+    "NEW_VISUALIZATION": "New Visualization",
+    "VISUALIZATION_EDITOR": "Visualization Editor",
+    "VISUALIZATION_TYPE": "Visualization Type",
+    "VISUALIZATION_NAME": "Visualization Name",
+    "EDIT_VISUALIZATION": "Editor Visualization",
+    "ADD_TO_DASHBOARD": "Add to Dashboard",
+    "EMBED_ELSEWHERE": "Embed elsewhere",
+    "CSV": "Download as CSV File",
+    "EXC": "Download as Excel File",
+    "DESCRIPTION": "Add description",
+    "REFRESH": "Refresh Schedule"
+
+  },
+  "QUERIESLIST":{
+    "QUERIES":"Queries",
+    "FAVORITE_QUERIES":"Favorite Queries",
+    "ARCHIVED_QUERIES":"Archived Queries",
+    "MY_QUERIES":"My Queries",
+    "QUERIES_TABLE":{
+      "NAME":"Name",
+      "CREATED_AT":"Created At",
+      "RUNTIME":"Runtime",
+      "LAST_EXECUTED_AT":"Last Executed At",
+      "UPDATE_SCHEDULE":"Update Schedule"
+    }
+  },
+  "DASHBOARDLIST": {
+    "DASHBOARDS": "Dashboards",
+    "FAVORITE": "Favorite Dashboards",
+    "DASNBOARDS_TABLE": {
+      "NAME": "Name",
+      "CREATED_AT": "Created at"
+    }
+  },
+  "ALERTSLIST": {
+    "ALERTS": "Alerts",
+    "ALERTS_TABLE": {
+      "NAME": "Name",
+      "STATE": "State",
+      "LAST_UPDATE_AT": "Last Update At",
+      "CREATED_AT": "Created at"
+    }
+  },
+  "CREATESOURCEDIALOG": {
+    "TYPE_SELECTION": "Type Selection",
+    "CONFIGRATION": "Configuration",
+    "DONE": "Done",
+    "CREATE_A_NEW": "Create a New {{sourceType}}"
+  },
+  "CREATEUSERDIALOG": {
+    "CREATE": "Create a New User",
+    "NAME": "Name",
+    "EMAIL": "Email"
+  },
+  "QUERYSNIPPETIS": {
+    "NEW_SNIPPET": "New Snippet",
+    "TRIGGER": "Trigger",
+    "DESCRIPTION": "Description",
+    "SNIPPET": "Snippet",
+    "CREATED_BY": "Created By",
+    "UPDATED_AT": "Updated At"
+  },
+  "WIDGETDIALOG": {
+    "ADD": "Add Widget",
+    "ADD_TO_DASHBOARD": "Add to Dashboard",
+    "CHOOSE_VISUALIZATION": "Choose Visualization"
+  },
+  "TEXTBOXDIALOG": {
+    "ADD": "Add Textbox",
+    "EDIT": "Edit Textbox",
+    "PLACEHOLDER": "This is where you write some text",
+    "ADD_TO_DASHBOARD": "Add To Dashboard",
+    "SAVE": "Save",
+    "PREVIEW": "Preview:"
+  },
+  "QUERY": {
+    "FORK": "Fork",
+    "ARCHIVE": "Archive",
+    "UNPUBLISH": "Unpublish",
+    "API": "Show API Key",
+    "EDIT": "Edit Source",
+    "SHOW_DATA_ONLY": "Show Data Only"
+  },
+  "CHART_EDITOR": {
+    "GENERAL": "General",
+    "X_AXIS": "X Axis",
+    "Y_AXIS": "Y Axis",
+    "SERIES": "Series",
+    "COLORS": "Colors",
+    "DATA_LABELS": "Data Labels",
+    "CHART_TYPE": "Chart Type",
+    "X_COLUMN": "X Column",
+    "Y_COLUMNS": "Y Columns",
+    "GROUP_BY": "Group By",
+    "BUBBLE_SIZE_COLUMN": "Bubble size column",
+    "COLOR_COLUMN": "Color Column",
+    "ERRORS_COLUMN": "Errors column",
+    "SHOW_LEGEND": "Show Legend",
+    "SHOW_ALL_POINTS": "Show All Points",
+    "STACKING": "Stacking",
+    "NORMAL": "Normalize values to percentage",
+    "COLUMN_CODE": "Custom code",
+    "SHOW_ERRORS": "Show errors in the console",
+    "AUTO_UPDATE": "Auto update graph",
+    "SCALE": "Scale",
+    "NAME": "Name",
+    "SORT_VALUES": "Sort Values",
+    "REVERSE_ORDER": "Reverse Order",
+    "SHOW_LABELS": "Show Labels",
+    "MIN_VALUE": "Min Value",
+    "MAX_VALUE": "Max Value",
+    "LEFT_Y_AXIS": "Left Y Axis",
+    "RIGHT_Y_AXIS": "Right Y Axis",
+    "LABEL": "Label",
+    "TYPE": "Type",
+    "COLOR_SCHEME": "Color Scheme",
+    "MIN_COLOR": "Min Color",
+    "MAX_COLOR": "Max Color",
+    "SHOW_DATA_LABELS": "Show Data Labels",
+    "NUMBER_V_F": "Number Values Format",
+    "PERCENT_V_F": "Percent Values Format",
+    "DATA_TIME_V_F": "Date/Time Values Format"
+  },
+  "BOX_PLOT_EDITOR": {
+    "X_AXIS_LABEL": "X Axis Label",
+    "Y_AXIS_LABEL": "Y Axis Label"
+  },
+  "CHOROPLETH": {
+    "GENERAL": "General",
+    "COLORS": "Colors",
+    "BOUNDS": "Bounds",
+    "COUNTRY_CODE_COLUMN": "Country code column",
+    "COUNTRY_CODE_TYPE": "Country code type",
+    "VALUE_COLUMN": "Value column",
+    "VALUE_FORMAT": "Value format",
+    "VALUE_PLACEHOLDER": "Value placeholder",
+    "SHOW_LEGEND": "Show legend",
+    "LEGEND_POSITION":"Legend position",
+    "LEGEND_TEXT_ALIGNMENT": "Legend text alignment",
+    "SHOW_TOOLTIP": "Show tooltip",
+    "TOOLTIP_TEMPLATE": "Tooltip template",
+    "SHOW_POPUP": "Show popup",
+    "POPUP_TEMPLATE": "Popup template",
+    "CLUSTERING_MODE": "Clustering mode",
+    "MIN_COLOR": "Min color",
+    "MAX_COLOR": "Max color",
+    "NO_VALUE_COLOR": "No value color",
+    "BACKGROUND_COLOR": "Background color",
+    "BORDERS_COLOR": "Borders color",
+    "NORTH_EAST": "North-East latitude and longitude",
+    "SOUTH_WEST": "South-West latitude and longitude",
+    "FORMAT": "Format specs"
+  },
+  "COHORT_EDITOR": {
+    "COLUMNS": "Columns",
+    "OPTIONS": "Options",
+    "DAILY": "Daily",
+    "WEEKLY": "Weekly",
+    "MONTHLY": "Monthly",
+    "MODE": "Mode",
+    "FILL_GAPS_WITH_ZEROS": "Fill gaps with zeros",
+    "SHOW_DATA_AS_IS": "Show data as is"
   }
 }

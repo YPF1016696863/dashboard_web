@@ -1,5 +1,5 @@
 <div class="container">
-  <page-header title="'Settings'"></page-header>
+  <page-header title="'HEADER.SETTINGS' | translate"></page-header>
 
   <div class="bg-white tiled">
     <ul class="tab-nav">
@@ -8,7 +8,7 @@
         ng-if="$ctrl.isAvailable(menuItem.permission)"
         ng-class="{'active': $ctrl.isActive(menuItem)}"
       >
-        <a href="{{menuItem.path}}">{{menuItem.title}}</a>
+        <a href="{{menuItem.path}}">{{ menuItem.title | translate }}</a>
       </li>
 
     </ul>

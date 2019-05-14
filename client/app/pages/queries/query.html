@@ -40,10 +40,10 @@
 
             <span ng-show="query.id && canViewSource">
               <a ng-show="!sourceMode" ng-href="{{query.getUrl(true, selectedTab)}}" class="btn btn-default btn--showhide">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Source</i>
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'QUERY.EDIT'|translate}}</i>
               </a>
               <a ng-show="sourceMode" ng-href="{{query.getUrl(false, selectedTab)}}" class="btn btn-default btn--showhide">
-                <i class="fa fa-table" aria-hidden="true"></i> Show Data Only</i>
+                <i class="fa fa-table" aria-hidden="true"></i> {{'QUERY.SHOW_DATA_ONLY'|translate}}</i>
               </a>
             </span>
 
@@ -53,21 +53,21 @@
               </button>
               <ul class="dropdown-menu pull-right" uib-dropdown-menu>
                 <li ng-class="{'disabled': query.id === undefined || !canForkQuery() }">
-                  <a ng-click="duplicateQuery()"> Fork <i class="fa fa-external-link"></i></a>
+                  <a ng-click="duplicateQuery()">{{'QUERY.FORK'|translate}}<i class="fa fa-external-link"></i></a>
                 </li>
                 <li class="divider" ng-if="query.is_archived"></li>
                 <li ng-if="!query.is_archived && query.id != undefined && (isQueryOwner || currentUser.hasPermission('admin'))">
-                  <a ng-click="archiveQuery()">Archive</a>
+                  <a ng-click="archiveQuery()">{{'QUERY.ARCHIVE'|translate}}</a>
                 </li>
                 <li ng-if="!query.is_archived && query.id != undefined && (isQueryOwner || currentUser.hasPermission('admin')) && showPermissionsControl">
                   <a ng-click="showManagePermissionsModal()">Manage Permissions</a>
                 </li>
                 <li ng-if="!query.is_draft && query.id != undefined && (isQueryOwner || currentUser.hasPermission('admin'))">
-                  <a ng-click="togglePublished()">Unpublish</a>
+                  <a ng-click="togglePublished()">{{'QUERY.UNPUBLISH'|translate}}</a>
                 </li>
                 <li class="divider" ng-if="!query.is_archived"></li>
                 <li ng-if="query.id != undefined">
-                  <a ng-click="showApiKey()">Show API Key</a>
+                  <a ng-click="showApiKey()">{{'QUERY.API'|translate}}</a>
                 </li>
               </ul>
             </div>
@@ -98,7 +98,7 @@
       <div ng-if="!sourceMode" style="flex-grow: 1;">&nbsp;</div>
 
       <div class="query-metadata query-metadata--description" ng-if="!query.isNew()">
-        <edit-in-place is-editable="canEdit" on-done="saveDescription" editor="'textarea'" placeholder="'Add description'" ignore-blanks='false'
+        <edit-in-place is-editable="canEdit" on-done="saveDescription" editor="'textarea'" placeholder="'VISUALIZATION.DESCRIPTION' | translate" ignore-blanks='false'
           value="query.description" markdown="true">
         </edit-in-place>
       </div>
@@ -132,7 +132,7 @@
           <tr>
             <td class="p-t-15">
               <span class="query-metadata__property">
-                <span class="zmdi zmdi-refresh"></span> Refresh Schedule</span>
+                <span class="zmdi zmdi-refresh"></span> {{'VISUALIZATION.REFRESH' | translate}}</span>
             </td>
             <td class="p-t-15 text-right">
               <schedule-phrase ng-click="editSchedule()" is-link="true" schedule="query.schedule" is-new="query.isNew()" />
@@ -235,7 +235,7 @@
                     </rd-tab>
                     <li class="rd-tab tab-new-vis">
                       <a ng-click="openVisualizationEditor()" class="btn btn-default" ng-if="canEdit">
-                        <i class="zmdi zmdi-plus"></i> New Visualization</a>
+                        <i class="zmdi zmdi-plus"></i>{{'VISUALIZATION.NEW_VISUALIZATION'| translate}}</a>
                     </li>
                   </ul>
                   <div ng-if="!query.visualizations.length" class="query__vis m-t-15 p-b-15 scrollbox">
@@ -255,7 +255,7 @@
       <div class="bottom-controller-container" ng-if="showDataset">
         <div class="bottom-controller">
 
-          <button class="m-r-5 btn btn-default btn-edit-visualisation" ng-click="openVisualizationEditor(selectedTab)" ng-if="!query.isNew() && canEdit"><span class="fa fa-edit"></span><span class="hidden-xs hidden-s hidden-m"> Edit Visualization</span></button>
+          <button class="m-r-5 btn btn-default btn-edit-visualisation" ng-click="openVisualizationEditor(selectedTab)" ng-if="!query.isNew() && canEdit"><span class="fa fa-edit"></span><span class="hidden-xs hidden-s hidden-m"> {{'VISUALIZATION.EDIT_VISUALIZATION' | translate}}</span></button>
 
           <div class="m-r-5 btn-group dropup" uib-dropdown>
             <button type="button" class="btn btn-default dropup-toggle" aria-haspopup="true"
@@ -265,22 +265,22 @@
             <ul class="dropdown-menu" uib-dropdown-menu>
               <li>
                 <a target="_self" ng-click="openAddToDashboardForm(selectedTab)" ng-if="!query.isNew() && (!query.is_draft || !query.is_archived)">
-                  <span class="fa fa-plus-circle"></span> Add to Dashboard
+                  <span class="fa fa-plus-circle"></span> {{'VISUALIZATION.ADD_TO_DASHBOARD' | translate}}
                 </a>
               </li>
               <li>
                 <a ng-click="showEmbedDialog(query, selectedTab)" ng-if="!query.isNew()" data-test="ShowEmbedDialogButton">
-                  <span class="zmdi zmdi-code"></span> Embed elsewhere
+                  <span class="zmdi zmdi-code"></span> {{'VISUALIZATION.EMBED_ELSEWHERE' | translate}}
                 </a>
               </li>
               <li>
                 <a query-result-link target="_self" ng-disabled="queryExecuting || !queryResult.getData()">
-                  <span class="fa fa-file-o"></span> Download as CSV File
+                  <span class="fa fa-file-o"></span> {{'VISUALIZATION.CSV' | translate}}
                 </a>
               </li>
               <li>
                 <a query-result-link file-type="xlsx" target="_self" ng-disabled="queryExecuting || !queryResult.getData()">
-                  <span class="fa fa-file-excel-o"></span> Download as Excel File
+                  <span class="fa fa-file-excel-o"></span> {{'VISUALIZATION.EXC' | translate}}
                 </a>
               </li>
             </ul>

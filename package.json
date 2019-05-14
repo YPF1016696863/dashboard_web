@@ -13,7 +13,7 @@
     "lint": "npm run lint:base  -- --ext .js --ext .jsx ./client",
     "lint:base": "eslint --config ./client/.eslintrc.js --ignore-path ./client/.eslintignore",
     "lint:ci": "npm run lint -- --format junit --output-file /tmp/test-results/eslint/results.xml",
-    "test": "TZ=Africa/Khartoum jest",
+    "test": "jest",
     "test:watch": "jest --watch",
     "cypress:install": "npm install --no-save cypress@^3.1.5 @percy/cypress@^0.2.3 atob@2.1.2",
     "cypress": "node client/cypress/cypress.js"

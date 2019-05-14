@@ -69,6 +69,7 @@ class DestinationsList extends React.Component {
   };
 
   renderDestinations() {
+    const {$translate} = this.props;
     const { destinations } = this.state;
     const items = destinations.map(destination => ({
       title: destination.name,
@@ -78,10 +79,10 @@ class DestinationsList extends React.Component {
 
     return isEmpty(destinations) ? (
       <div className="text-center">
-        There are no alert destinations yet.
+        {$translate.instant('DESTINATIONLIST.MESSAGE.EMPTY')}
         {policy.isCreateDestinationEnabled() && (
           <div className="m-t-5">
-            <a className="clickable" onClick={this.showCreateSourceDialog}>Click here</a> to add one.
+            <a className="clickable" onClick={this.showCreateSourceDialog}>{$translate.instant('DESTINATIONLIST.MESSAGE.CLICK')}</a> {$translate.instant('DESTINATIONLIST.MESSAGE.ADD')}
           </div>
         )}
       </div>
@@ -89,6 +90,7 @@ class DestinationsList extends React.Component {
   }
 
   render() {
+    const {$translate} = this.props;
     const newDestinationProps = {
       type: 'primary',
       onClick: policy.isCreateDestinationEnabled() ? this.showCreateSourceDialog : null,
@@ -100,7 +102,7 @@ class DestinationsList extends React.Component {
         <div className="m-b-15">
           <Button {...newDestinationProps}>
             <i className="fa fa-plus m-r-5" />
-            New Alert Destination
+            {$translate.instant('DESTINATIONLIST.NEW_ALERT_DESTINATION')}
           </Button>
         </div>
         {this.state.loading ? <LoadingState className="" /> : this.renderDestinations()}
@@ -112,12 +114,12 @@ class DestinationsList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'Alert Destinations',
+    title: 'DESTINATIONLIST.ALERT_DESTINATIONS',
     path: 'destinations',
     order: 4,
   });
 
-  ngModule.component('pageDestinationsList', react2angular(DestinationsList));
+  ngModule.component('pageDestinationsList', react2angular(DestinationsList,[],['$translate']));
 
   return routesToAngularRoutes([
     {

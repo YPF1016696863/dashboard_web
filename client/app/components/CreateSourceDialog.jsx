@@ -147,10 +147,11 @@ class CreateSourceDialog extends React.Component {
   render() {
     const { currentStep, savingSource } = this.state;
     const { dialog, sourceType } = this.props;
+    const {$translate} = this.props;
     return (
       <Modal
         {...dialog.props}
-        title={`Create a New ${sourceType}`}
+        title={$translate("CREATESOURCEDIALOG.CREATE_A_NEW",{sourceType})}
         footer={(currentStep === StepEnum.SELECT_TYPE) ? [
           (<Button key="cancel" onClick={() => dialog.dismiss()}>Cancel</Button>),
           (<Button key="submit" type="primary" disabled>Create</Button>),
@@ -174,13 +175,13 @@ class CreateSourceDialog extends React.Component {
           <Steps className="hidden-xs m-b-10" size="small" current={currentStep} progressDot>
             {currentStep === StepEnum.CONFIGURE_IT ? (
               <Step
-                title={<a>Type Selection</a>}
+                title={<a>{$translate("CREATESOURCEDIALOG.TYPE_SELECTION")}</a>}
                 className="clickable"
                 onClick={this.resetType}
               />
-            ) : (<Step title="Type Selection" />)}
-            <Step title="Configuration" />
-            <Step title="Done" />
+            ) : (<Step title={$translate("CREATESOURCEDIALOG.TYPE_SELECTION")} />)}
+            <Step title={$translate("CREATESOURCEDIALOG.CONFIGRATION")} />
+            <Step title={$translate("CREATESOURCEDIALOG.DONE")} />
           </Steps>
           {currentStep === StepEnum.SELECT_TYPE && this.renderTypeSelector()}
           {currentStep !== StepEnum.SELECT_TYPE && this.renderForm()}

@@ -80,14 +80,14 @@ class GroupsList extends React.Component {
 
   render() {
     const { controller } = this.props;
-
+    const {$translate} = this.props;
     return (
       <div data-test="GroupList">
         {currentUser.isAdmin && (
           <div className="m-b-15">
             <Button type="primary" onClick={this.createGroup}>
               <i className="fa fa-plus m-r-5" />
-              New Group
+              {$translate.instant("GROUPLIST.NEW_GROUP")}
             </Button>
           </div>
         )}
@@ -123,7 +123,7 @@ class GroupsList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'list_users',
-    title: 'Groups',
+    title: 'GROUPLIST.GROUPS',
     path: 'groups',
     order: 3,
   });
@@ -143,7 +143,7 @@ export default function init(ngModule) {
       },
     }),
     new StateStorage({ orderByField: 'name', itemsPerPage: 10 }),
-  )));
+  ),[],['$translate']));
 
   return routesToAngularRoutes([
     {

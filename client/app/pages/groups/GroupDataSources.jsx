@@ -1,5 +1,7 @@
-import { filter, map, includes } from 'lodash';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { filter, map, includes } from 'lodash';
+
 import { react2angular } from 'react2angular';
 import Button from 'antd/lib/button';
 import Dropdown from 'antd/lib/dropdown';
@@ -28,7 +30,6 @@ import { Group } from '@/services/group';
 import { DataSource } from '@/services/data-source';
 import navigateTo from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
-import PropTypes from 'prop-types';
 
 class GroupDataSources extends React.Component {
   static propTypes = {
@@ -48,12 +49,12 @@ class GroupDataSources extends React.Component {
     {
       key: 'users',
       href: `groups/${this.groupId}`,
-      title: 'Members',
+      title: 'SIDEBAR.MEMBERS',
     },
     {
       key: 'datasources',
       href: `groups/${this.groupId}/data_sources`,
-      title: 'Data Sources',
+      title: 'SIDEBAR.DATA_SOURCE',
       isAvailable: () => currentUser.isAdmin,
     },
   ];
@@ -171,6 +172,7 @@ class GroupDataSources extends React.Component {
 
   render() {
     const { controller } = this.props;
+    const {$translate} = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div data-test="Group">
@@ -191,11 +193,11 @@ class GroupDataSources extends React.Component {
             {!controller.isLoaded && <LoadingState className="" />}
             {controller.isLoaded && controller.isEmpty && (
               <div className="text-center">
-                There are no data sources in this group yet.
+                {$translate.instant("DATASOURCELIST.MESSAGE.EMPTY")}
                 {currentUser.isAdmin && (
                   <div className="m-t-5">
-                    <a href="javascript:void(0)" onClick={this.addDataSources}>Click here</a>
-                    {' '} to add data sources.
+                    <a href="javascript:void(0)" onClick={this.addDataSources}>{$translate.instant("DATASOURCELIST.MESSAGE.CLICK")}</a>
+                    {' '} {$translate.instant("DATASOURCELIST.MESSAGE.ADD")}
                   </div>
                 )}
               </div>
