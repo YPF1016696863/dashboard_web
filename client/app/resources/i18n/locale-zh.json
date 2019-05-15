@@ -1,0 +1,26 @@
+{
+  "HEADER": {
+    "DASHBOARDS": "数据可视化面板",
+    "QUERIES": "查询",
+    "ALERTS": "系统警报",
+    "EDIT_PROFILE": "编辑个人资料",
+    "CREATE": "创建",
+    "SEARCH_PLACEHOLDER": "查询...",
+    "DATA_SOURCE": "数据源",
+    "GROUPS": "组管理",
+    "USERS": "用户管理",
+    "QUERY_SNIPPETS": "查询片段",
+    "ALERT_DESTINATIONS": "警告设置",
+    "SYSTEM_STATUS": "系统状态",
+    "LOG_OUT": "登出",
+    "VERSION": "版本",
+    "FAVORITE_DASHBOARD": "被标注的仪表板将显示在此处",
+    "FAVORITE_QUERY": "被标注的查询将显示在此处",
+    "SETTINGS": "设置",
+    "HELP": "帮助"
+  },
+  "HOME": {
+    "WELCOME": "欢迎使用中科蜂巢DataVis BI数据可视化系统",
+    "DESCRIPTION": "连接到任何数据源，轻松可视化和共享您的数据"
+  }
+}

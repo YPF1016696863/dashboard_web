@@ -79,6 +79,7 @@ export class HelpTrigger extends React.Component {
   constructor(props) {
     super(props);
     this.iframeRef = React.createRef();
+    this.translate = key => this.props.$translate.instant(key);
   }
 
   state = {
@@ -120,12 +121,11 @@ export class HelpTrigger extends React.Component {
   }
 
   render() {
-    const [, tooltip] = TYPES[this.props.type];
     const className = cx('help-trigger', this.props.className);
 
     return (
       <React.Fragment>
-        <Tooltip title={tooltip}>
+        <Tooltip title={this.translate('HEADER.HELP')}>
           <a href="javascript: void(0)" onClick={this.openDrawer} className={className}>
             {this.props.children}
           </a>
@@ -179,7 +179,10 @@ export class HelpTrigger extends React.Component {
 }
 
 export default function init(ngModule) {
-  ngModule.component('helpTrigger', react2angular(HelpTrigger));
+  ngModule.component(
+    'helpTrigger',
+    react2angular(HelpTrigger, Object.keys(HelpTrigger.propTypes), ['$translate', '$scope']),
+  );
 }
 
 init.init = true;

@@ -1,0 +1,26 @@
+{
+  "HEADER": {
+  "DASHBOARDS": "Dashboards",
+  "QUERIES": "Queries",
+  "ALERTS": "Alerts",
+  "EDIT_PROFILE": "Edit Profile",
+  "CREATE": "Create",
+  "SEARCH_PLACEHOLDER": "Search queries...",
+  "DATA_SOURCE": "Data Sources",
+  "GROUPS": "Groups",
+  "USERS": "Users",
+  "QUERY_SNIPPETS": "Query Snippets",
+  "ALERT_DESTINATIONS": "Alert Destinations",
+  "SYSTEM_STATUS": "System Status",
+  "LOG_OUT": "Log out",
+  "VERSION": "Version",
+  "FAVORITE_DASHBOARD": "Favorite Dashboards will appear here",
+  "FAVORITE_QUERY": "Favorite Queries will appear here",
+  "SETTINGS": "Settings",
+  "HELP": "Help"
+  },
+  "HOME": {
+    "WELCOME": "Welcome to zkhoneycomb DataVis BI system",
+    "DESCRIPTION": "Connect to any data source, easily visualize and share your data"
+  }
+}

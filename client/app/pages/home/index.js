@@ -34,7 +34,7 @@ export default function init(ngModule) {
   return {
     '/': {
       template: '<home-page></home-page>',
-      title: 'Redash',
+      title: 'DataVis - 数据可视化',
     },
   };
 }

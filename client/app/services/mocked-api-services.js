@@ -75,7 +75,7 @@ export default function init(ngModule) {
           dateFormat: 'DD/MM/YY',
           floatFormat: '0,0.00',
           mailSettingsMissing: true,
-          basePath: 'http://localhost:5000/',
+          basePath: 'http://localhost:8080/',
           autoPublishNamedQueries: true,
           queryRefreshIntervals: [60, 300, 600, 900, 1800, 3600, 7200, 10800, 14400, 18000, 21600, 25200, 28800,
             32400, 36000, 39600, 43200, 86400, 604800, 1209600, 2592000],

@@ -9,9 +9,13 @@ import debug from 'debug';
 import angular from 'angular';
 import ngSanitize from 'angular-sanitize';
 import ngRoute from 'angular-route';
+import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
 import mocke2e from 'angular-mocks/ngMockE2E';
 import 'angular-translate';
+import 'angular-translate-loader-static-files';
+import 'angular-translate-storage-cookie';
+import 'angular-translate-storage-local';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiSelect from 'ui-select';
 import ngMessages from 'angular-messages';
@@ -51,6 +55,7 @@ const requirements = [
   uiBootstrap,
   ngMessages,
   mocke2e,
+  ngCookies,
   'pascalprecht.translate',
   uiSelect,
   'ui.ace',

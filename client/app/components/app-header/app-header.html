@@ -36,7 +36,7 @@
                   <span class="btn-favourite">
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
-                  Favorite Dashboards will appear here
+                  {{'HEADER.FAVORITE_DASHBOARD' | translate}}
                 </em>
               </a>
             </li>
@@ -63,7 +63,7 @@
                   <span class="btn-favourite">
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
-                  Favorite Queries will appear here
+                  {{'HEADER.FAVORITE_QUERY' | translate}}
                 </em>
               </a>
             </li>
@@ -124,7 +124,7 @@
           ></help-trigger>
         </li>
         <li ng-show="$ctrl.currentUser.isAdmin">
-          <a href="data_sources" title="Settings"
+          <a href="data_sources" title="{{'HEADER.SETTINGS' | translate}}"
             ><i class="fa fa-sliders" aria-hidden="true"></i
           ></a>
         </li>
@@ -158,19 +158,19 @@
             ></li>
 
             <li ng-show="$ctrl.currentUser.isAdmin">
-              <a href="data_sources" title="Data Sources">Data Sources</a>
+              <a href="data_sources" title="Data Sources">{{ 'HEADER.DATA_SOURCE' | translate }}</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="groups" title="Settings">Groups</a>
+              <a href="groups" title="Settings">{{ 'HEADER.GROUPS' | translate }}</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="users" title="Settings">Users</a>
+              <a href="users" title="Settings">{{ 'HEADER.USERS' | translate }}</a>
             </li>
             <li>
-              <a ng-href="query_snippets">Query Snippets</a>
+              <a ng-href="query_snippets">{{ 'HEADER.QUERY_SNIPPETS' | translate }}</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="destinations" title="Settings">Alert Destinations</a>
+              <a href="destinations" title="Settings">{{ 'HEADER.ALERT_DESTINATIONS' | translate }}</a>
             </li>
 
             <li
@@ -179,18 +179,18 @@
             ></li>
 
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="admin/status">System Status</a>
+              <a href="admin/status">{{ 'HEADER.SYSTEM_STATUS' | translate }}</a>
             </li>
 
             <li class="divider"></li>
 
             <li>
-              <a ng-click="$ctrl.logout()">Log out</a>
+              <a ng-click="$ctrl.logout()">{{ 'HEADER.LOG_OUT' | translate }}</a>
             </li>
 
             <li class="divider"></li>
             <li class="dropdown-menu__version">
-              Version: {{ $ctrl.backendVersion }}
+              {{ 'HEADER.VERSION' | translate }}: {{ $ctrl.backendVersion }}
               <span ng-if="$ctrl.frontendVersion !== $ctrl.backendVersion">
                 ({{ $ctrl.frontendVersion.substring(0, 8) }})
               </span>

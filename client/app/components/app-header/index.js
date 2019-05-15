@@ -7,7 +7,8 @@ import './app-header.css';
 
 const logger = debug('redash:appHeader');
 
-function controller($rootScope, $location, $route, $uibModal, Auth, currentUser, clientConfig, Dashboard, Query) {
+function controller($rootScope, $location, $route, $uibModal,
+  Auth, currentUser, clientConfig, Dashboard, Query) {
   this.logoUrl = logoUrl;
   this.basePath = clientConfig.basePath;
   this.currentUser = currentUser;
