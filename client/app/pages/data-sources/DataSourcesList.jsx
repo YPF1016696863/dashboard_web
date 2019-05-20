@@ -57,6 +57,7 @@ class DataSourcesList extends React.Component {
 
   showCreateSourceDialog = () => {
     CreateSourceDialog.showModal({
+      $translate: this.props.$translate.instant,
       types: this.state.dataSourceTypes,
       sourceType: 'Data Source',
       imageFolder: IMG_ROOT,
@@ -118,7 +119,7 @@ export default function init(ngModule) {
     order: 1,
   });
 
-  ngModule.component('pageDataSourcesList', react2angular(DataSourcesList));
+  ngModule.component('pageDataSourcesList', react2angular(DataSourcesList,[], ['$translate']));
 
   return routesToAngularRoutes([
     {

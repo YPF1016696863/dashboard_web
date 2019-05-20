@@ -4,7 +4,7 @@ import { BigMessage } from '@/components/BigMessage';
 import { NoTaggedObjectsFound } from '@/components/NoTaggedObjectsFound';
 import { EmptyState } from '@/components/empty-state/EmptyState';
 
-export default function QueriesListEmptyState({ page, searchTerm, selectedTags }) {
+export default function QueriesListEmptyState({ page, searchTerm, selectedTags, $translate }) {
   if (searchTerm !== '') {
     return (
       <BigMessage message="Sorry, we couldn't find anything." icon="fa-search" />
@@ -35,6 +35,7 @@ export default function QueriesListEmptyState({ page, searchTerm, selectedTags }
         illustration="query"
         description="Getting the data from your datasources."
         helpLink="https://help.redash.io/category/21-querying"
+        $translate={$translate}
       />
     );
   }

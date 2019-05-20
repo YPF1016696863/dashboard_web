@@ -95,7 +95,7 @@ class CreateSourceDialog extends React.Component {
   }
 
   renderForm() {
-    const { imageFolder, helpTriggerPrefix } = this.props;
+    const { imageFolder, helpTriggerPrefix, $translate } = this.props;
     const { selectedType } = this.state;
     const fields = helper.getFields(selectedType);
     const helpTriggerType = `${helpTriggerPrefix}${toUpper(selectedType.type)}`;
@@ -112,8 +112,8 @@ class CreateSourceDialog extends React.Component {
         </div>
         <div className="text-right">
           {HELP_TRIGGER_TYPES[helpTriggerType] && (
-            <HelpTrigger className="f-13" type={helpTriggerType}>
-              Setup Instructions <i className="fa fa-question-circle" />
+            <HelpTrigger className="f-13" type={helpTriggerType} text={$translate("CREATE_SOURCE_DIALOG.SETUP_INSTRUCTIONS")}>
+              {$translate("CREATE_SOURCE_DIALOG.SETUP_INSTRUCTIONS")} <i className="fa fa-question-circle" />
             </HelpTrigger>
           )}
         </div>

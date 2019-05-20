@@ -11,16 +11,46 @@
     "USERS": "用户管理",
     "QUERY_SNIPPETS": "查询片段",
     "ALERT_DESTINATIONS": "警告设置",
+    "SYSTEM_SETTINGS": "系统设置",
     "SYSTEM_STATUS": "系统状态",
     "LOG_OUT": "登出",
     "VERSION": "版本",
-    "FAVORITE_DASHBOARD": "被标注的仪表板将显示在此处",
+    "FAVORITE_DASHBOARD": "被标注的可视化面板将显示在此处",
     "FAVORITE_QUERY": "被标注的查询将显示在此处",
     "SETTINGS": "设置",
     "HELP": "帮助"
   },
   "HOME": {
     "WELCOME": "欢迎使用中科蜂巢DataVis BI数据可视化系统",
-    "DESCRIPTION": "连接到任何数据源，轻松可视化和共享您的数据"
+    "DESCRIPTION": "连接到任何数据源，轻松可视化和共享您的数据",
+    "FAVORITE_DASHBOARDS": "被标注的可视化面板",
+    "FAVORITE_QUERIES": "被标注的查询",
+    "FAVORITE": "被标注的",
+    "DASHBOARD": "可视化面板",
+    "QUERIES": "查询",
+    "WILL_APPEAR_HERE": "出现在这里",
+    "EMPTY_STATE": {
+      "LETS_GET_STARTED": "从这里开始",
+      "CONNECT": "连接",
+      "CREATE": "创建",
+      "INVITE": "邀请/添加",
+      "A_DATA_SOURCE": "一个数据源",
+      "YOUR_FIRST_QUERY": "你的第一个查询",
+      "YOUR_FIRST_DASHBOARD": "你的第一个数据可视化面板",
+      "YOUR_FIRST_ALERT": "你的第一个系统警报设置",
+      "YOUR_TEAM_MEMBERS": "小组成员/其他用户",
+      "NEED_MORE_SUPPORT": "需要其他帮助?",
+      "SEE_OUR_HELP": "查询产品文档"
+    }
+  },
+  "SETTINGS": {
+    "SYSTEM": {
+      "LANGUAGE": "系统设置",
+      "LANG": "系统语言:",
+      "SELECT_LANG": "请从以下列表中选择设置系统语言."
+    }
+  },
+  "CREATE_SOURCE_DIALOG": {
+    "SETUP_INSTRUCTIONS": "设置说明"
   }
 }

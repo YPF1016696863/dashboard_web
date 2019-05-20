@@ -58,7 +58,10 @@ export function EmptyState({
   showAlertStep,
   showDashboardStep,
   showInviteStep,
+  $translate,
 }) {
+  const translate = key => $translate?$translate.instant(key):key;
+
   const isAvailable = {
     dataSource: true,
     query: true,
@@ -98,15 +101,15 @@ export function EmptyState({
         />
       </div>
       <div className="empty-state__steps">
-        <h4>Let&apos;s get started</h4>
+        <h4>{translate('HOME.EMPTY_STATE.LETS_GET_STARTED')}</h4>
         <ol>
           {currentUser.isAdmin && (
             <Step
               show={isAvailable.dataSource}
               completed={isCompleted.dataSource}
               url="data_sources/new"
-              urlText="Connect"
-              text="a Data Source"
+              urlText={translate('HOME.EMPTY_STATE.CONNECT')}
+              text={translate('HOME.EMPTY_STATE.A_DATA_SOURCE')}
             />
           )}
           {!currentUser.isAdmin && (
@@ -120,35 +123,35 @@ export function EmptyState({
             show={isAvailable.query}
             completed={isCompleted.query}
             url="queries/new"
-            urlText="Create"
-            text="your first Query"
+            urlText={translate('HOME.EMPTY_STATE.CREATE')}
+            text={translate('HOME.EMPTY_STATE.YOUR_FIRST_QUERY')}
           />
           <Step
             show={isAvailable.alert}
             completed={isCompleted.alert}
             url="alerts/new"
-            urlText="Create"
-            text="your first Alert"
+            urlText={translate('HOME.EMPTY_STATE.CREATE')}
+            text={translate('HOME.EMPTY_STATE.YOUR_FIRST_ALERT')}
           />
           <Step
             show={isAvailable.dashboard}
             completed={isCompleted.dashboard}
             onClick={createDashboard}
-            urlText="Create"
-            text="your first Dashboard"
+            urlText={translate('HOME.EMPTY_STATE.CREATE')}
+            text={translate('HOME.EMPTY_STATE.YOUR_FIRST_DASHBOARD')}
           />
           <Step
             show={isAvailable.inviteUsers}
             completed={isCompleted.inviteUsers}
             url="users/new"
-            urlText="Invite"
-            text="your team members"
+            urlText={translate('HOME.EMPTY_STATE.INVITE')}
+            text={translate('HOME.EMPTY_STATE.YOUR_TEAM_MEMBERS')}
           />
         </ol>
         <p>
-          Need more support?{' '}
+          {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
           <a href={helpLink} target="_blank" rel="noopener noreferrer">
-            See our Help
+            {translate('HOME.EMPTY_STATE.SEE_OUR_HELP')}
             <i className="fa fa-external-link m-l-5" aria-hidden="true" />
           </a>
         </p>
@@ -183,7 +186,7 @@ EmptyState.defaultProps = {
 };
 
 export default function init(ngModule) {
-  ngModule.component('emptyState', react2angular(EmptyState));
+  ngModule.component('emptyState', react2angular(EmptyState, Object.keys(EmptyState.propTypes), ['$translate']));
 }
 
 init.init = true;

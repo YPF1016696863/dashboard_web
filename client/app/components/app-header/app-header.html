@@ -179,6 +179,10 @@
             ></li>
 
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
+              <a href="settings/system">{{ 'HEADER.SYSTEM_SETTINGS' | translate }}</a>
+            </li>
+
+            <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
               <a href="admin/status">{{ 'HEADER.SYSTEM_STATUS' | translate }}</a>
             </li>
 

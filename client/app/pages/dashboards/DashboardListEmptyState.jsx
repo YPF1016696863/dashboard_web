@@ -4,7 +4,7 @@ import { BigMessage } from '@/components/BigMessage';
 import { NoTaggedObjectsFound } from '@/components/NoTaggedObjectsFound';
 import { EmptyState } from '@/components/empty-state/EmptyState';
 
-export default function DashboardListEmptyState({ page, searchTerm, selectedTags }) {
+export default function DashboardListEmptyState({ page, searchTerm, selectedTags, $translate }) {
   if (searchTerm !== '') {
     return (
       <BigMessage message="Sorry, we couldn't find anything." icon="fa-search" />
@@ -26,6 +26,7 @@ export default function DashboardListEmptyState({ page, searchTerm, selectedTags
         illustration="dashboard"
         helpLink="https://help.redash.io/category/22-dashboards"
         showDashboardStep
+        $translate={$translate}
       />
     );
   }

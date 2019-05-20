@@ -16,6 +16,7 @@ import 'angular-translate';
 import 'angular-translate-loader-static-files';
 import 'angular-translate-storage-cookie';
 import 'angular-translate-storage-local';
+import 'angular-local-storage';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiSelect from 'ui-select';
 import ngMessages from 'angular-messages';
@@ -56,6 +57,7 @@ const requirements = [
   ngMessages,
   mocke2e,
   ngCookies,
+  'LocalStorageModule',
   'pascalprecht.translate',
   uiSelect,
   'ui.ace',

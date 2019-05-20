@@ -11,6 +11,7 @@
   "USERS": "Users",
   "QUERY_SNIPPETS": "Query Snippets",
   "ALERT_DESTINATIONS": "Alert Destinations",
+  "SYSTEM_SETTINGS": "System Settings",
   "SYSTEM_STATUS": "System Status",
   "LOG_OUT": "Log out",
   "VERSION": "Version",
@@ -21,6 +22,35 @@
   },
   "HOME": {
     "WELCOME": "Welcome to zkhoneycomb DataVis BI system",
-    "DESCRIPTION": "Connect to any data source, easily visualize and share your data"
+    "DESCRIPTION": "Connect to any data source, easily visualize and share your data",
+    "FAVORITE_DASHBOARDS": "Favorite Dashboards",
+    "FAVORITE_QUERIES": "Favorite Queries",
+    "FAVORITE": "Favorite",
+    "DASHBOARD": "Dashboards",
+    "QUERIES": "Queries",
+    "WILL_APPEAR_HERE": "will appear here.",
+    "EMPTY_STATE": {
+      "LETS_GET_STARTED": "Let's get started",
+      "CONNECT": "Connect",
+      "CREATE": "Create",
+      "INVITE": "Invite/Add",
+      "A_DATA_SOURCE": "a Data Source",
+      "YOUR_FIRST_QUERY": "you first Query",
+      "YOUR_FIRST_DASHBOARD": "you first Dashboard",
+      "YOUR_FIRST_ALERT": "your first Alert",
+      "YOUR_TEAM_MEMBERS": "your team members",
+      "NEED_MORE_SUPPORT": "Need more support?",
+      "SEE_OUR_HELP": "See our Help"
+    }
+  },
+  "SETTINGS": {
+    "SYSTEM": {
+      "LANGUAGE": "System Language Settings",
+      "LANG": "System Language:",
+      "SELECT_LANG": "Select a system language in the list..."
+    }
+  },
+  "CREATE_SOURCE_DIALOG": {
+    "SETUP_INSTRUCTIONS": "Setup Instructions"
   }
 }

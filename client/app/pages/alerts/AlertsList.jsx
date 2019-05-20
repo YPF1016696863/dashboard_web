@@ -58,7 +58,7 @@ class AlertsList extends React.Component {
 
   render() {
     const { controller } = this.props;
-
+    const translate = this.props.$translate?this.props.$translate:null;
     return (
       <div className="container">
         <PageHeader title={controller.params.title} />
@@ -71,6 +71,7 @@ class AlertsList extends React.Component {
               description="Get notified on certain events"
               helpLink="https://redash.io/help/user-guide/alerts/"
               showAlertStep
+              $translate={translate}
             />
           )}
           {
@@ -114,7 +115,7 @@ export default function init(ngModule) {
       },
     }),
     new StateStorage({ orderByField: 'created_at', orderByReverse: true, itemsPerPage: 20 }),
-  )));
+  ),[], ['$translate']));
   return routesToAngularRoutes([
     {
       path: '/alerts',

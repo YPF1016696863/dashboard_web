@@ -6,8 +6,9 @@ export default function init(ngModule) {
   ngModule.config(($translateProvider) => {
     $translateProvider.translations('zh', Chinese);
     $translateProvider.translations('en', English);
-    $translateProvider.useLocalStorage();
     $translateProvider.preferredLanguage('zh');
+
+    $translateProvider.useLocalStorage();
   });
 }
 

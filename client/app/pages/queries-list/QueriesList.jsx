@@ -85,6 +85,7 @@ class QueriesList extends React.Component {
 
   render() {
     const { controller } = this.props;
+    const translate = this.props.$translate?this.props.$translate:null;
     return (
       <div className="container">
         <PageHeader title={controller.params.title} />
@@ -112,6 +113,7 @@ class QueriesList extends React.Component {
                   page={controller.params.currentPage}
                   searchTerm={controller.searchTerm}
                   selectedTags={controller.selectedTags}
+                  $translate={translate}
                 />
               )
             }
@@ -158,7 +160,7 @@ export default function init(ngModule) {
       },
     }),
     new UrlStateStorage({ orderByField: 'created_at', orderByReverse: true }),
-  )));
+  ),[],['$translate']));
 
   return routesToAngularRoutes([
     {

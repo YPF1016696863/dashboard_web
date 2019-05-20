@@ -21,13 +21,13 @@
     <div class="t-body tb-padding">
       <div class="row">
         <div class="col-sm-6">
-          <p class="f-500 m-b-20 c-black">Favorite Dashboards</p>
+          <p class="f-500 m-b-20 c-black">{{"HOME.FAVORITE_DASHBOARDS" | translate}}</p>
 
           <p ng-if="$ctrl.noDashboards">
             <span class="btn-favourite">
               <i class="fa fa-star" aria-hidden="true"></i>
             </span>
-            Favorite <a href="dashboards">Dashboards</a> will appear here
+            {{"HOME.FAVORITE" | translate}} <a href="dashboards">{{"HOME.DASHBOARD" | translate}}</a> {{"HOME.WILL_APPEAR_HERE" | translate}}
           </p>
 
           <div class="list-group">
@@ -43,12 +43,12 @@
         </div>
 
         <div class="col-sm-6">
-          <p class="f-500 m-b-20 c-black">Favorite Queries</p>
+          <p class="f-500 m-b-20 c-black">{{"HOME.FAVORITE_QUERIES" | translate}}</p>
           <p ng-if="$ctrl.noQueries">
             <span class="btn-favourite">
               <i class="fa fa-star" aria-hidden="true"></i>
             </span>
-            Favorite <a href="queries">Queries</a> will appear here
+            {{"HOME.FAVORITE" | translate}} <a href="dashboards">{{"HOME.QUERIES" | translate}}</a> {{"HOME.WILL_APPEAR_HERE" | translate}}
           </p>
           <div class="list-group">
             <a ng-href="queries/{{query.id}}" class="list-group-item" ng-repeat="query in $ctrl.favoriteQueries" ng-if="query.is_favorite">
