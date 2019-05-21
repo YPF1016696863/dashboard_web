@@ -6,21 +6,20 @@ function SystemSettingsCtrl(localStorageService, $translate) {
   this.availableLanguages = [
     {
       code: 'zh',
-      title: '简体中文'
+      title: '简体中文',
     },
     {
       code: 'en',
-      title: 'English'
+      title: 'English',
     },
   ];
 
-  this.currentLanguage = this.availableLanguages.find((lang)=>lang.code == (localStorageService.get("systemLanguage")?localStorageService.get("systemLanguage"):'zh'));
+  this.currentLanguage = this.availableLanguages.find(lang => (lang.code === (localStorageService.get('systemLanguage') ? localStorageService.get('systemLanguage') : 'zh')));
 
-  this.onChangeLanguage = (lang) => {
-    localStorageService.set("systemLanguage",lang.code);
-    $translate.use(lang.code);
+  this.onChangeLanguage = () => {
+    localStorageService.set('systemLanguage', this.currentLanguage.code);
+    $translate.use(this.currentLanguage.code);
   };
-
 }
 
 export default function init(ngModule) {

@@ -1,4 +1,4 @@
-// eslint-disable-line import/no-mutable-exports
+/* eslint-disable */
 
 export default function init(ngModule) {
   ngModule.run(($httpBackend) => {
@@ -7,9 +7,9 @@ export default function init(ngModule) {
         object_counters: {
           queries: 0,
           alerts: 0,
-          dashboards: 0,
+          dashboards: 1,//0
           users: 1,
-          data_sources: 0,
+          data_sources: 1,//0
         },
       },
     );
@@ -148,7 +148,24 @@ export default function init(ngModule) {
       ]
     );
 
-    $httpBackend.whenGET('api/data_sources').respond([]);
+    $httpBackend.whenGET('api/data_sources').respond(
+      [{
+        "name": "My MySQL",
+        "pause_reason": null,
+        "syntax": "sql",
+        "paused": 0,
+        "view_only": false,
+        "type": "mysql",
+        "id": 1
+      }]
+    );
+
+    $httpBackend.whenGET('api/data_sources/1/schema').respond(
+      {"error": {"message": "Error retrieving schema.", "code": 2}}
+    );
+
+    $httpBackend.whenGET('api/query_snippets').respond([]);
+
 
     $httpBackend.whenGET('api/data_sources/types').respond([
       {
@@ -878,10 +895,113 @@ export default function init(ngModule) {
     );
 
     $httpBackend.whenGET('api/dashboards?order=-created_at&page=1&page_size=20').respond(
-      {"count": 0, "page": 1, "page_size": 20, "results": []}
+      {
+        "count": 1,
+        "page": 1,
+        "page_size": 20,
+        "results": [{
+          "tags": [],
+          "is_archived": false,
+          "updated_at": "2019-05-21T21:01:00.747Z",
+          "is_favorite": false,
+          "user": {
+            "auth_type": "password",
+            "is_disabled": false,
+            "updated_at": "2019-05-21T21:01:00.747Z",
+            "profile_image_url": "https://www.gravatar.com/avatar/53444f91e698c0c7caa2dbc3bdbf93fc?s=40&d=identicon",
+            "is_invitation_pending": false,
+            "groups": [1, 2],
+            "id": 1,
+            "name": "demo",
+            "created_at": "2019-05-01T19:09:11.134Z",
+            "disabled_at": null,
+            "is_email_verified": true,
+            "active_at": "2019-05-02T20:30:02Z",
+            "email": "demo@demo.com"
+          },
+          "layout": [],
+          "is_draft": true,
+          "id": 2,
+          "user_id": 1,
+          "name": "\u6d4b\u8bd5Dashboard",
+          "created_at": "2019-05-21T21:01:00.747Z",
+          "slug": "-dashboard",
+          "version": 1,
+          "widgets": null,
+          "dashboard_filters_enabled": false
+        }]
+      }
     );
 
+    $httpBackend.whenGET('api/dashboards/-dashboard').respond(
+      {
+        "tags": [],
+        "is_archived": false,
+        "updated_at": "2019-05-21T21:01:00.747Z",
+        "is_favorite": false,
+        "user": {
+          "auth_type": "password",
+          "is_disabled": false,
+          "updated_at": "2019-05-21T21:01:00.747Z",
+          "profile_image_url": "https://www.gravatar.com/avatar/53444f91e698c0c7caa2dbc3bdbf93fc?s=40&d=identicon",
+          "is_invitation_pending": false,
+          "groups": [1, 2],
+          "id": 1,
+          "name": "demo",
+          "created_at": "2019-05-01T19:09:11.134Z",
+          "disabled_at": null,
+          "is_email_verified": true,
+          "active_at": "2019-05-02T20:30:02Z",
+          "email": "demo@demo.com"
+        },
+        "layout": [],
+        "is_draft": true,
+        "id": 2,
+        "can_edit": true,
+        "user_id": 1,
+        "name": "\u6d4b\u8bd5Dashboard",
+        "created_at": "2019-05-21T21:01:00.747Z",
+        "slug": "-dashboard",
+        "version": 1,
+        "widgets": [],
+        "dashboard_filters_enabled": false
+      }
+    );
 
+    // {"name":"测试Dashboard"}
+    $httpBackend.whenPOST('api/dashboards').respond(
+      {
+        "tags": [],
+        "is_archived": false,
+        "updated_at": "2019-05-21T21:01:00.747Z",
+        "is_favorite": false,
+        "user": {
+          "auth_type": "password",
+          "is_disabled": false,
+          "updated_at": "2019-05-21T21:01:00.747Z",
+          "profile_image_url": "https://www.gravatar.com/avatar/53444f91e698c0c7caa2dbc3bdbf93fc?s=40&d=identicon",
+          "is_invitation_pending": false,
+          "groups": [1, 2],
+          "id": 1,
+          "name": "demo",
+          "created_at": "2019-05-01T19:09:11.134Z",
+          "disabled_at": null,
+          "is_email_verified": true,
+          "active_at": "2019-05-02T20:30:02Z",
+          "email": "demo@demo.com"
+        },
+        "layout": [],
+        "is_draft": true,
+        "id": 2,
+        "user_id": 1,
+        "name": "\u6d4b\u8bd5Dashboard",
+        "created_at": "2019-05-21T21:01:00.747Z",
+        "slug": "-dashboard",
+        "version": 1,
+        "widgets": null,
+        "dashboard_filters_enabled": false
+      }
+    );
 
 
   });

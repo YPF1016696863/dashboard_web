@@ -30,11 +30,13 @@ class CreateSourceDialog extends React.Component {
     imageFolder: PropTypes.string.isRequired,
     helpTriggerPrefix: PropTypes.string,
     onCreate: PropTypes.func.isRequired,
+    $translate: PropTypes.func,
   };
 
   static defaultProps = {
     types: [],
     helpTriggerPrefix: null,
+    $translate: text => text,
   };
 
   state = {
@@ -112,8 +114,8 @@ class CreateSourceDialog extends React.Component {
         </div>
         <div className="text-right">
           {HELP_TRIGGER_TYPES[helpTriggerType] && (
-            <HelpTrigger className="f-13" type={helpTriggerType} text={$translate("CREATE_SOURCE_DIALOG.SETUP_INSTRUCTIONS")}>
-              {$translate("CREATE_SOURCE_DIALOG.SETUP_INSTRUCTIONS")} <i className="fa fa-question-circle" />
+            <HelpTrigger className="f-13" type={helpTriggerType} text={$translate('CREATE_SOURCE_DIALOG.SETUP_INSTRUCTIONS')}>
+              {$translate('CREATE_SOURCE_DIALOG.SETUP_INSTRUCTIONS')} <i className="fa fa-question-circle" />
             </HelpTrigger>
           )}
         </div>

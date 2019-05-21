@@ -8,7 +8,7 @@
                 {{'SETTINGS.SYSTEM.LANG' | translate}}
             </label>
 
-            <ui-select ng-model="$ctrl.currentLanguage" on-select="$ctrl.onChangeLanguage($ctrl.currentLanguage)"
+            <ui-select ng-model="$ctrl.currentLanguage" on-select="$ctrl.onChangeLanguage()"
                        theme="bootstrap">
                 <ui-select-match placeholder="{{'SETTINGS.SYSTEM.SELECT_LANG' | translate}}">
                     {{$select.selected.title}}

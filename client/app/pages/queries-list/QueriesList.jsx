@@ -1,6 +1,6 @@
 import React from 'react';
 import { react2angular } from 'react2angular';
-
+import PropTypes from 'prop-types';
 import { PageHeader } from '@/components/PageHeader';
 import { Paginator } from '@/components/Paginator';
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
@@ -27,6 +27,11 @@ import './queries-list.css';
 class QueriesList extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
   };
 
   sidebarMenu = [
@@ -85,7 +90,7 @@ class QueriesList extends React.Component {
 
   render() {
     const { controller } = this.props;
-    const translate = this.props.$translate?this.props.$translate:null;
+    const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div className="container">
         <PageHeader title={controller.params.title} />
@@ -160,7 +165,7 @@ export default function init(ngModule) {
       },
     }),
     new UrlStateStorage({ orderByField: 'created_at', orderByReverse: true }),
-  ),[],['$translate']));
+  ), [], ['$translate']));
 
   return routesToAngularRoutes([
     {

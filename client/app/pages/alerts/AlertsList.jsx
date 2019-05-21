@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 
 import { toUpper } from 'lodash';
@@ -25,6 +26,11 @@ const STATE_CLASS = {
 class AlertsList extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
   };
 
   listColumns = [
@@ -58,7 +64,7 @@ class AlertsList extends React.Component {
 
   render() {
     const { controller } = this.props;
-    const translate = this.props.$translate?this.props.$translate:null;
+    const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div className="container">
         <PageHeader title={controller.params.title} />
@@ -115,7 +121,7 @@ export default function init(ngModule) {
       },
     }),
     new StateStorage({ orderByField: 'created_at', orderByReverse: true, itemsPerPage: 20 }),
-  ),[], ['$translate']));
+  ), [], ['$translate']));
   return routesToAngularRoutes([
     {
       path: '/alerts',

@@ -36,4 +36,9 @@ DashboardListEmptyState.propTypes = {
   page: PropTypes.string.isRequired,
   searchTerm: PropTypes.string.isRequired,
   selectedTags: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  $translate: PropTypes.func,
+};
+
+DashboardListEmptyState.defaultProps = {
+  $translate: text => text,
 };

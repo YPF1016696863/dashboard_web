@@ -119,7 +119,7 @@ export default function init(ngModule) {
     order: 1,
   });
 
-  ngModule.component('pageDataSourcesList', react2angular(DataSourcesList,[], ['$translate']));
+  ngModule.component('pageDataSourcesList', react2angular(DataSourcesList, [], ['$translate']));
 
   return routesToAngularRoutes([
     {

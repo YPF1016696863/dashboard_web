@@ -60,7 +60,7 @@ export function EmptyState({
   showInviteStep,
   $translate,
 }) {
-  const translate = key => $translate?$translate.instant(key):key;
+  const translate = key => ($translate ? $translate.instant(key) : key);
 
   const isAvailable = {
     dataSource: true,
@@ -172,6 +172,8 @@ EmptyState.propTypes = {
   showAlertStep: PropTypes.bool,
   showDashboardStep: PropTypes.bool,
   showInviteStep: PropTypes.bool,
+
+  $translate: PropTypes.func,
 };
 
 EmptyState.defaultProps = {
@@ -183,6 +185,7 @@ EmptyState.defaultProps = {
   showAlertStep: false,
   showDashboardStep: false,
   showInviteStep: false,
+  $translate: text => text,
 };
 
 export default function init(ngModule) {
