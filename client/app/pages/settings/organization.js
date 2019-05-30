@@ -2,16 +2,16 @@ import settingsMenu from '@/services/settingsMenu';
 import notification from '@/services/notification';
 import template from './organization.html';
 
-function OrganizationSettingsCtrl($http, clientConfig, Events) {
+function OrganizationSettingsCtrl($http, clientConfig, Events, appSettings) {
   Events.record('view', 'page', 'org_settings');
 
   this.settings = {};
-  $http.get('api/settings/organization').then((response) => {
+  $http.get(appSettings.server.backendUrl + '/api/settings/organization').then((response) => {
     this.settings = response.data.settings;
   });
 
   this.update = (key) => {
-    $http.post('api/settings/organization', { [key]: this.settings[key] }).then((response) => {
+    $http.post(appSettings.server.backendUrl + '/api/settings/organization', { [key]: this.settings[key] }).then((response) => {
       this.settings = response.data.settings;
       notification.success('Settings changes saved.');
 

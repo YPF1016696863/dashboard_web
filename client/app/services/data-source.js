@@ -5,7 +5,7 @@ export const IMG_ROOT = '/static/images/db-logos';
 export let DataSource = null; // eslint-disable-line import/no-mutable-exports
 
 
-function DataSourceService($q, $resource, $http) {
+function DataSourceService($q, $resource, $http, appSettings) {
   function fetchSchema(dataSourceId, refresh = false) {
     const params = {};
 
@@ -13,7 +13,7 @@ function DataSourceService($q, $resource, $http) {
       params.refresh = true;
     }
 
-    return $http.get(`api/data_sources/${dataSourceId}/schema`, { params });
+    return $http.get(appSettings.server.backendUrl + `/api/data_sources/${dataSourceId}/schema`, { params });
   }
 
   const actions = {
@@ -24,17 +24,17 @@ function DataSourceService($q, $resource, $http) {
       method: 'GET',
       cache: false,
       isArray: true,
-      url: 'api/data_sources/types',
+      url: appSettings.server.backendUrl + '/api/data_sources/types',
     },
     test: {
       method: 'POST',
       cache: false,
       isArray: false,
-      url: 'api/data_sources/:id/test',
+      url: appSettings.server.backendUrl + '/api/data_sources/:id/test',
     },
   };
 
-  const DataSourceResource = $resource('api/data_sources/:id', { id: '@id' }, actions);
+  const DataSourceResource = $resource(appSettings.server.backendUrl + '/api/data_sources/:id', { id: '@id' }, actions);
 
   DataSourceResource.prototype.getSchema = function getSchema(refresh = false) {
     if (this._schema === undefined || refresh) {

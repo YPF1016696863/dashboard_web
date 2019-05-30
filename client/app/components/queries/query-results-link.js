@@ -1,3 +1,5 @@
+import appSettings from '@/config/app-settings';
+
 function queryResultLink() {
   return {
     restrict: 'A',
@@ -13,11 +15,11 @@ function queryResultLink() {
         } else {
           let url;
           if (scope.query.id) {
-            url = `api/queries/${scope.query.id}/results/${scope.queryResult.getId()}.${fileType}${scope.embed
+            url = appSettings.server.backendUrl + `/api/queries/${scope.query.id}/results/${scope.queryResult.getId()}.${fileType}${scope.embed
               ? `?api_key=${scope.apiKey}`
               : ''}`;
           } else {
-            url = `api/query_results/${scope.queryResult.getId()}.${fileType}`;
+            url = appSettings.server.backendUrl + `/api/query_results/${scope.queryResult.getId()}.${fileType}`;
           }
           element.attr('href', url);
         }

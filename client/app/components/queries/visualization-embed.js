@@ -34,11 +34,11 @@ export default function init(ngModule) {
     return Auth.loadConfig();
   }
 
-  function loadData($http, $route, $q, Auth) {
+  function loadData($http, $route, $q, Auth, appSettings) {
     return session($http, $route, Auth).then(() => {
       const queryId = $route.current.params.queryId;
-      const query = $http.get(`api/queries/${queryId}`).then(response => response.data);
-      const queryResult = $http.post(`api/queries/${queryId}/results`, { parameters: queryStringParameters() }).then(response => response.data);
+      const query = $http.get(appSettings.server.backendUrl + `/api/queries/${queryId}`).then(response => response.data);
+      const queryResult = $http.post(appSettings.server.backendUrl + `/api/queries/${queryId}/results`, { parameters: queryStringParameters() }).then(response => response.data);
       return $q.all([query, queryResult]);
     });
   }

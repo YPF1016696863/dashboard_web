@@ -11,7 +11,7 @@ import ngSanitize from 'angular-sanitize';
 import ngRoute from 'angular-route';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
-import mocke2e from 'angular-mocks/ngMockE2E';
+// import mocke2e from 'angular-mocks/ngMockE2E';
 import 'angular-translate';
 import 'angular-translate-loader-static-files';
 import 'angular-translate-storage-cookie';
@@ -37,6 +37,7 @@ import registerDirectives from '@/directives';
 import markdownFilter from '@/filters/markdown';
 import dateTimeFilter from '@/filters/datetime';
 import dashboardGridOptions from './dashboard-grid-options';
+import appSettings from './app-settings';
 import './antd-spinner';
 
 const logger = debug('redash:config');
@@ -55,7 +56,7 @@ const requirements = [
   ngSanitize,
   uiBootstrap,
   ngMessages,
-  mocke2e,
+  // mocke2e, // Disable mocked backend request.
   ngCookies,
   'LocalStorageModule',
   'pascalprecht.translate',
@@ -70,6 +71,7 @@ const requirements = [
 const ngModule = angular.module('app', requirements);
 
 dashboardGridOptions(ngModule);
+appSettings(ngModule);
 
 function registerAll(context) {
   const modules = context

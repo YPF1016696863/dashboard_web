@@ -45,6 +45,7 @@ function DashboardCtrl(
   currentUser,
   clientConfig,
   Events,
+  appSettings,
 ) {
   this.saveInProgress = false;
   this.saveDelay = false;
@@ -253,7 +254,7 @@ function DashboardCtrl(
     $uibModal.open({
       component: 'permissionsEditor',
       resolve: {
-        aclUrl: { url: `api/dashboards/${this.dashboard.id}/acl` },
+        aclUrl: { url: appSettings.server.backendUrl + `/api/dashboards/${this.dashboard.id}/acl` },
         owner: this.dashboard.user,
       },
     });
@@ -272,7 +273,7 @@ function DashboardCtrl(
     this.layoutEditing = enableEditing;
   };
 
-  this.loadTags = () => getTags('api/dashboards/tags').then(tags => _.map(tags, t => t.name));
+  this.loadTags = () => getTags(appSettings.server.backendUrl + '/api/dashboards/tags').then(tags => _.map(tags, t => t.name));
 
   const updateDashboard = (data) => {
     _.extend(this.dashboard, data);

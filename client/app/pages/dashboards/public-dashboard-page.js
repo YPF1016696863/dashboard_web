@@ -2,9 +2,9 @@ import logoUrl from '@/assets/images/redash_icon_small.png';
 import template from './public-dashboard-page.html';
 import './dashboard.less';
 
-function loadDashboard($http, $route) {
+function loadDashboard($http, $route, appSettings) {
   const token = $route.current.params.token;
-  return $http.get(`api/dashboards/public/${token}`).then(response => response.data);
+  return $http.get(appSettings.server.backendUrl + `/api/dashboards/public/${token}`).then(response => response.data);
 }
 
 const PublicDashboardPage = {
@@ -44,10 +44,10 @@ const PublicDashboardPage = {
 export default function init(ngModule) {
   ngModule.component('publicDashboardPage', PublicDashboardPage);
 
-  function loadPublicDashboard($http, $route) {
+  function loadPublicDashboard($http, $route, appSettings) {
     'ngInject';
 
-    return loadDashboard($http, $route);
+    return loadDashboard($http, $route, appSettings);
   }
 
   function session($http, $route, Auth) {

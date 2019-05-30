@@ -1,7 +1,7 @@
 export let QuerySnippet = null; // eslint-disable-line import/no-mutable-exports
 
-function QuerySnippetService($resource) {
-  const resource = $resource('api/query_snippets/:id', { id: '@id' });
+function QuerySnippetService($resource, appSettings) {
+  const resource = $resource(appSettings.server.backendUrl + '/api/query_snippets/:id', { id: '@id' });
   resource.prototype.getSnippet = function getSnippet() {
     let name = this.trigger;
     if (this.description !== '') {

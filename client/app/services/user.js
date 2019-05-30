@@ -2,11 +2,12 @@ import { isString, get } from 'lodash';
 import { $http, $sanitize } from '@/services/ng';
 import notification from '@/services/notification';
 import { clientConfig } from '@/services/auth';
+import appSettings from '@/config/app-settings';
 
 export let User = null; // eslint-disable-line import/no-mutable-exports
 
 function disableResource(user) {
-  return `api/users/${user.id}/disable`;
+  return appSettings.server.backendUrl + `/api/users/${user.id}/disable`;
 }
 
 function enableUser(user) {
@@ -48,7 +49,7 @@ function disableUser(user) {
 function deleteUser(user) {
   const userName = $sanitize(user.name);
   return $http
-    .delete(`api/users/${user.id}`)
+    .delete(appSettings.server.backendUrl + `/api/users/${user.id}`)
     .then((data) => {
       notification.warning(`User ${userName} has been deleted.`);
       return data;
@@ -74,7 +75,7 @@ function convertUserInfo(user) {
 
 function regenerateApiKey(user) {
   return $http
-    .post(`api/users/${user.id}/regenerate_api_key`)
+    .post(appSettings.server.backendUrl + `/api/users/${user.id}/regenerate_api_key`)
     .then(({ data }) => {
       notification.success('The API Key has been updated.');
       return data.api_key;
@@ -87,7 +88,7 @@ function regenerateApiKey(user) {
 
 function sendPasswordReset(user) {
   return $http
-    .post(`api/users/${user.id}/reset_password`)
+    .post(appSettings.server.backendUrl + `/api/users/${user.id}/reset_password`)
     .then(({ data }) => {
       if (clientConfig.mailSettingsMissing) {
         notification.warning('The mail server is not configured.');
@@ -103,7 +104,7 @@ function sendPasswordReset(user) {
 
 function resendInvitation(user) {
   return $http
-    .post(`api/users/${user.id}/invite`)
+    .post(appSettings.server.backendUrl + `/api/users/${user.id}/invite`)
     .then(({ data }) => {
       if (clientConfig.mailSettingsMissing) {
         notification.warning('The mail server is not configured.');
@@ -125,11 +126,11 @@ function UserService($resource) {
     save: { method: 'POST' },
     query: { method: 'GET', isArray: false },
     delete: { method: 'DELETE' },
-    disable: { method: 'POST', url: 'api/users/:id/disable' },
-    enable: { method: 'DELETE', url: 'api/users/:id/disable' },
+    disable: { method: 'POST', url: appSettings.server.backendUrl + '/api/users/:id/disable' },
+    enable: { method: 'DELETE', url: appSettings.server.backendUrl + '/api/users/:id/disable' },
   };
 
-  const UserResource = $resource('api/users/:id', { id: '@id' }, actions);
+  const UserResource = $resource(appSettings.server.backendUrl + '/api/users/:id', { id: '@id' }, actions);
 
   UserResource.enableUser = enableUser;
   UserResource.disableUser = disableUser;

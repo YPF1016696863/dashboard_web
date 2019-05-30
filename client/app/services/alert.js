@@ -1,6 +1,6 @@
 export let Alert = null; // eslint-disable-line import/no-mutable-exports
 
-function AlertService($resource, $http) {
+function AlertService($resource, $http, appSettings) {
   const actions = {
     save: {
       method: 'POST',
@@ -17,7 +17,7 @@ function AlertService($resource, $http) {
       }].concat($http.defaults.transformRequest),
     },
   };
-  return $resource('api/alerts/:id', { id: '@id' }, actions);
+  return $resource(appSettings.server.backendUrl + '/api/alerts/:id', { id: '@id' }, actions);
 }
 
 export default function init(ngModule) {

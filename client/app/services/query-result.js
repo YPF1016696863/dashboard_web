@@ -50,9 +50,9 @@ function addPointToSeries(point, seriesCollection, seriesName) {
   seriesCollection[seriesName].data.push(point);
 }
 
-function QueryResultService($resource, $timeout, $q, QueryResultError) {
-  const QueryResultResource = $resource('api/query_results/:id', { id: '@id' }, { post: { method: 'POST' } });
-  const Job = $resource('api/jobs/:id', { id: '@id' });
+function QueryResultService($resource, $timeout, $q, QueryResultError, appSettings) {
+  const QueryResultResource = $resource(appSettings.server.backendUrl + '/api/query_results/:id', { id: '@id' }, { post: { method: 'POST' } });
+  const Job = $resource(appSettings.server.backendUrl + '/api/jobs/:id', { id: '@id' });
   const statuses = {
     1: 'waiting',
     2: 'processing',
@@ -520,7 +520,7 @@ function QueryResultService($resource, $timeout, $q, QueryResultError) {
     }
 
     getLink(queryId, fileType, apiKey) {
-      let link = `api/queries/${queryId}/results/${this.getId()}.${fileType}`;
+      let link = appSettings.server.backendUrl + `/api/queries/${queryId}/results/${this.getId()}.${fileType}`;
       if (apiKey) {
         link = `${link}?api_key=${apiKey}`;
       }
@@ -534,7 +534,7 @@ function QueryResultService($resource, $timeout, $q, QueryResultError) {
     static getByQueryId(id, parameters, maxAge) {
       const queryResult = new QueryResult();
 
-      $resource('api/queries/:id/results', { id: '@id' }, { post: { method: 'POST' } }).post(
+      $resource(appSettings.server.backendUrl + '/api/queries/:id/results', { id: '@id' }, { post: { method: 'POST' } }).post(
         {
           id,
           parameters,

@@ -33,7 +33,7 @@ function updateSession(sessionData) {
   extend(messages, session.messages);
 }
 
-function AuthService($window, $location, $q, $http) {
+function AuthService($window, $location, $q, $http, appSettings) {
   return {
     isAuthenticated() {
       return session.loaded && session.user.id;
@@ -55,14 +55,14 @@ function AuthService($window, $location, $q, $http) {
       }
 
       this.setApiKey(null);
-      return $http.get('api/session').then((response) => {
+      return $http.get(appSettings.server.backendUrl + '/api/session').then((response) => {
         updateSession(response.data);
         return session;
       });
     },
     loadConfig() {
       logger('Loading config');
-      return $http.get('/api/config').then((response) => {
+      return $http.get(appSettings.server.backendUrl + '/api/config').then((response) => {
         updateSession({ client_config: response.data.client_config, user: { permissions: [] }, messages: [] });
         return response.data;
       });
@@ -117,6 +117,7 @@ export default function init(ngModule) {
   ngModule.factory('apiKeyHttpInterceptor', apiKeyHttpInterceptor);
 
   ngModule.config(($httpProvider) => {
+    $httpProvider.defaults.withCredentials = true;
     $httpProvider.interceptors.push('apiKeyHttpInterceptor');
   });
 

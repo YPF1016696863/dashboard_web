@@ -9,11 +9,11 @@ function cancelQueryButton() {
     template:
       '<button class="btn btn-default" ng-disabled="inProgress" ng-click="cancelExecution()"><i class="zmdi zmdi-spinner zmdi-hc-spin" ng-if="inProgress"></i> Cancel</button>',
     replace: true,
-    controller($scope, $http, currentUser, Events) {
+    controller($scope, $http, currentUser, Events, appSettings) {
       $scope.inProgress = false;
 
       $scope.cancelExecution = () => {
-        $http.delete(`api/jobs/${$scope.taskId}`).success(() => {});
+        $http.delete(appSettings.server.backendUrl + `/api/jobs/${$scope.taskId}`).success(() => {});
 
         let queryId = $scope.queryId;
         if ($scope.queryId === 'adhoc') {

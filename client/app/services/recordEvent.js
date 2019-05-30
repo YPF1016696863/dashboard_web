@@ -1,5 +1,6 @@
 import { debounce, extend } from 'lodash';
 import { $http } from '@/services/ng';
+import appSettings from '@/config/app-settings';
 
 let events = [];
 
@@ -7,7 +8,7 @@ const post = debounce(() => {
   const eventsToSend = events;
   events = [];
 
-  $http.post('api/events', eventsToSend);
+  $http.post(appSettings.server.backendUrl + '/api/events', eventsToSend);
 }, 1000);
 
 export default function recordEvent(action, objectType, objectId, additionalProperties) {

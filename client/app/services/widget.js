@@ -69,7 +69,7 @@ export const ParameterMappingType = {
   StaticValue: 'static-value',
 };
 
-function WidgetFactory($http, $location, Query, Visualization, dashboardGridOptions) {
+function WidgetFactory($http, $location, Query, Visualization, dashboardGridOptions, appSettings) {
   class WidgetService {
     static MappingType = ParameterMappingType;
 
@@ -155,7 +155,7 @@ function WidgetFactory($http, $location, Query, Visualization, dashboardGridOpti
     save() {
       const data = pick(this, 'options', 'text', 'id', 'width', 'dashboard_id', 'visualization_id');
 
-      let url = 'api/widgets';
+      let url = appSettings.server.backendUrl + '/api/widgets';
       if (this.id) {
         url = `${url}/${this.id}`;
       }
@@ -172,7 +172,7 @@ function WidgetFactory($http, $location, Query, Visualization, dashboardGridOpti
     }
 
     delete() {
-      const url = `api/widgets/${this.id}`;
+      const url = appSettings.server.backendUrl + `/api/widgets/${this.id}`;
       return $http.delete(url);
     }
 

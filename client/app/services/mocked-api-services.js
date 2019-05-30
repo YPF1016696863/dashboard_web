@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-export default function init(ngModule) {
+/* export default */ function init(ngModule) {
   ngModule.run(($httpBackend) => {
     $httpBackend.whenGET('api/organization/status').respond(
       {

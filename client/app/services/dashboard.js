@@ -46,7 +46,9 @@ function prepareWidgetsForDashboard(widgets) {
   return widgets;
 }
 
-function DashboardService($resource, $http, $location, currentUser, Widget, dashboardGridOptions) {
+function DashboardService($resource, $http, $location, currentUser, Widget, dashboardGridOptions, appSettings) {
+  const apiServerUrl = appSettings.server.backendUrl;
+
   function prepareDashboardWidgets(widgets) {
     return prepareWidgetsForDashboard(_.map(widgets, widget => new Widget(widget)));
   }
@@ -68,7 +70,7 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
   });
 
   const resource = $resource(
-    'api/dashboards/:slug',
+    apiServerUrl + '/api/dashboards/:slug',
     { slug: '@slug' },
     {
       get: { method: 'GET', transformResponse: transform },
@@ -77,24 +79,25 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
       recent: {
         method: 'get',
         isArray: true,
-        url: 'api/dashboards/recent',
+        url: apiServerUrl + '/api/dashboards/recent',
         transformResponse: transform,
       },
       favorites: {
         method: 'get',
         isArray: false,
-        url: 'api/dashboards/favorites',
+        url: apiServerUrl + '/api/dashboards/favorites',
+        options: {},
       },
       favorite: {
         method: 'post',
         isArray: false,
-        url: 'api/dashboards/:slug/favorite',
+        url: apiServerUrl + '/api/dashboards/:slug/favorite',
         transformRequest: [() => ''], // body not needed
       },
       unfavorite: {
         method: 'delete',
         isArray: false,
-        url: 'api/dashboards/:slug/favorite',
+        url: apiServerUrl + '/api/dashboards/:slug/favorite',
         transformRequest: [() => ''], // body not needed
       },
     },

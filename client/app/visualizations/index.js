@@ -49,8 +49,8 @@ function VisualizationProvider() {
     return mergedTemplates;
   };
 
-  this.$get = ($resource) => {
-    const Visualization = $resource('api/visualizations/:id', { id: '@id' });
+  this.$get = ($resource, appSettings) => {
+    const Visualization = $resource(appSettings.server.backendUrl + '/api/visualizations/:id', { id: '@id' });
     Visualization.visualizations = this.visualizations;
     Visualization.visualizationTypes = this.visualizationTypes;
     Visualization.renderVisualizationsTemplate = this.getSwitchTemplate('renderTemplate');

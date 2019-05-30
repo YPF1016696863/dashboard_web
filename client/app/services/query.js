@@ -359,20 +359,21 @@ function QueryResource(
   currentUser,
   QueryResultError,
   QueryResult,
+  appSettings,
 ) {
   const QueryService = $resource(
-    'api/queries/:id',
+    appSettings.server.backendUrl + '/api/queries/:id',
     { id: '@id' },
     {
       recent: {
         method: 'get',
         isArray: true,
-        url: 'api/queries/recent',
+        url: appSettings.server.backendUrl + '/api/queries/recent',
       },
       archive: {
         method: 'get',
         isArray: false,
-        url: 'api/queries/archive',
+        url: appSettings.server.backendUrl + '/api/queries/archive',
       },
       query: {
         isArray: false,
@@ -380,44 +381,44 @@ function QueryResource(
       myQueries: {
         method: 'get',
         isArray: false,
-        url: 'api/queries/my',
+        url: appSettings.server.backendUrl + '/api/queries/my',
       },
       fork: {
         method: 'post',
         isArray: false,
-        url: 'api/queries/:id/fork',
+        url: appSettings.server.backendUrl + '/api/queries/:id/fork',
         params: { id: '@id' },
       },
       resultById: {
         method: 'get',
         isArray: false,
-        url: 'api/queries/:id/results.json',
+        url: appSettings.server.backendUrl + '/api/queries/:id/results.json',
       },
       asDropdown: {
         method: 'get',
         isArray: true,
-        url: 'api/queries/:id/dropdown',
+        url: appSettings.server.backendUrl + '/api/queries/:id/dropdown',
       },
       associatedDropdown: {
         method: 'get',
         isArray: true,
-        url: 'api/queries/:queryId/dropdowns/:dropdownQueryId',
+        url: appSettings.server.backendUrl + '/api/queries/:queryId/dropdowns/:dropdownQueryId',
       },
       favorites: {
         method: 'get',
         isArray: false,
-        url: 'api/queries/favorites',
+        url: appSettings.server.backendUrl + '/api/queries/favorites',
       },
       favorite: {
         method: 'post',
         isArray: false,
-        url: 'api/queries/:id/favorite',
+        url: appSettings.server.backendUrl + '/api/queries/:id/favorite',
         transformRequest: [() => ''], // body not needed
       },
       unfavorite: {
         method: 'delete',
         isArray: false,
-        url: 'api/queries/:id/favorite',
+        url: appSettings.server.backendUrl + '/api/queries/:id/favorite',
         transformRequest: [() => ''], // body not needed
       },
     },
@@ -442,7 +443,7 @@ function QueryResource(
         return $q.reject(String(err));
       }
     } else if (syntax === 'sql') {
-      return $http.post('api/queries/format', { query }).then(response => response.data.query);
+      return $http.post(appSettings.server.backendUrl + '/api/queries/format', { query }).then(response => response.data.query);
     } else {
       return $q.reject('Query formatting is not supported for your data source syntax.');
     }

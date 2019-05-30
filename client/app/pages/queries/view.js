@@ -26,6 +26,7 @@ function QueryViewCtrl(
   Query,
   DataSource,
   Visualization,
+  appSettings,
 ) {
   function getQueryResult(maxAge, selectedQueryText) {
     if (maxAge === undefined) {
@@ -205,7 +206,7 @@ function QueryViewCtrl(
     $scope.saveQuery({}, { tags: $scope.query.tags });
   };
 
-  $scope.loadTags = () => getTags('api/queries/tags').then(tags => map(tags, t => t.name));
+  $scope.loadTags = () => getTags(appSettings.server.backendUrl + '/api/queries/tags').then(tags => map(tags, t => t.name));
 
   $scope.saveQuery = (customOptions, data) => {
     let request = data;
@@ -524,7 +525,7 @@ function QueryViewCtrl(
     $uibModal.open({
       component: 'permissionsEditor',
       resolve: {
-        aclUrl: { url: `api/queries/${$routeParams.queryId}/acl` },
+        aclUrl: { url: appSettings.server.backendUrl + `/api/queries/${$routeParams.queryId}/acl` },
         owner: $scope.query.user,
       },
     });

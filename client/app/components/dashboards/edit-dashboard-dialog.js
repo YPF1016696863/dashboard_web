@@ -9,7 +9,7 @@ const EditDashboardDialog = {
     dismiss: '&',
   },
   template,
-  controller($location, $http, Events) {
+  controller($location, $http, Events, appSettings) {
     'ngInject';
 
     this.dashboard = this.resolve.dashboard;
@@ -25,7 +25,7 @@ const EditDashboardDialog = {
       this.saveInProgress = true;
 
       $http
-        .post('api/dashboards', {
+        .post(appSettings.server.backendUrl + '/api/dashboards', {
           name: this.dashboard.name,
         })
         .success((response) => {
