@@ -1,5 +1,5 @@
 import { $http } from '@/services/ng';
-import { appSettings } from '@/config/app-settings';
+import { appSettings } from '@/services/ng';
 
 class OrganizationStatus {
   constructor() {
