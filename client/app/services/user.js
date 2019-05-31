@@ -1,8 +1,7 @@
 import { isString, get } from 'lodash';
-import { $http, $sanitize } from '@/services/ng';
+import { $http, $sanitize, appSettings } from '@/services/ng';
 import notification from '@/services/notification';
 import { clientConfig } from '@/services/auth';
-import { appSettings } from '@/config/app-settings';
 
 export let User = null; // eslint-disable-line import/no-mutable-exports
 
