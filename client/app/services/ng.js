@@ -8,6 +8,7 @@ export let $rootScope = null; // eslint-disable-line import/no-mutable-exports
 export let $uibModal = null; // eslint-disable-line import/no-mutable-exports
 export let $httpBackend = null; // eslint-disable-line import/no-mutable-exports
 export let $translate = null; // eslint-disable-line import/no-mutable-exports
+export let appSettings = null; // eslint-disable-line import/no-mutable-exports
 
 export default function init(ngModule) {
   ngModule.run(($injector) => {
@@ -21,6 +22,7 @@ export default function init(ngModule) {
     $uibModal = $injector.get('$uibModal');
     $httpBackend = $injector.get('$httpBackend');
     $translate = $injector.get('$translate');
+    appSettings = $injector.get('appSettings');
   });
 }
 
