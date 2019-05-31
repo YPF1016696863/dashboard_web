@@ -15,17 +15,17 @@
     "SYSTEM_STATUS": "系统状态",
     "LOG_OUT": "登出",
     "VERSION": "版本",
-    "FAVORITE_DASHBOARD": "被标注的可视化面板将显示在此处",
-    "FAVORITE_QUERY": "被标注的查询将显示在此处",
+    "FAVORITE_DASHBOARD": "加星标的可视化面板将显示在此处",
+    "FAVORITE_QUERY": "加星标的查询将显示在此处",
     "SETTINGS": "设置",
     "HELP": "帮助"
   },
   "HOME": {
     "WELCOME": "欢迎使用中科蜂巢DataVis BI数据可视化系统",
     "DESCRIPTION": "连接到任何数据源，轻松可视化和共享您的数据",
-    "FAVORITE_DASHBOARDS": "被标注的可视化面板",
-    "FAVORITE_QUERIES": "被标注的查询",
-    "FAVORITE": "被标注的",
+    "FAVORITE_DASHBOARDS": "加星标的可视化面板",
+    "FAVORITE_QUERIES": "加星标的查询",
+    "FAVORITE": "加星标的项目",
     "DASHBOARD": "可视化面板",
     "QUERIES": "查询",
     "WILL_APPEAR_HERE": "出现在这里",
@@ -42,6 +42,16 @@
       "NEED_MORE_SUPPORT": "需要其他帮助?",
       "SEE_OUR_HELP": "查询产品文档"
     }
+  },
+  "SIDEBAR": {
+    "ALL_DASHBOARDS": "所有可视化面板",
+    "ALL_QUERIES": "所有查询",
+    "MY_QUERIES": "我的查询",
+    "FAVORITES": "加星标的项目",
+    "ARCHIVED": "归档的项目",
+    "ACTIVE_USERS": "正常用户",
+    "PENDING_INVITATIONS": "等验证用户",
+    "DISABLED_USERS": "禁用用户"
   },
   "SETTINGS": {
     "SYSTEM": {

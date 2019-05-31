@@ -37,12 +37,12 @@ class DashboardList extends React.Component {
     {
       key: 'all',
       href: 'dashboards',
-      title: 'All Dashboards',
+      title: 'SIDEBAR.ALL_DASHBOARDS',
     },
     {
       key: 'favorites',
       href: 'dashboards/favorites',
-      title: 'Favorites',
+      title: 'SIDEBAR.FAVORITES',
       icon: () => <Sidebar.MenuIcon icon="fa fa-star" />,
     },
   ];
@@ -86,7 +86,7 @@ class DashboardList extends React.Component {
               value={controller.searchTerm}
               onChange={controller.updateSearch}
             />
-            <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} />
+            <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} $translate={translate} />
             <Sidebar.Tags url="api/dashboards/tags" onChange={controller.updateSelectedTags} />
             <Sidebar.PageSizeSelect
               className="m-b-10"

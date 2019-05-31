@@ -13,13 +13,13 @@ export default function DetailsPageSidebar({
   controller, group, items,
   canAddMembers, onAddMembersClick,
   canAddDataSources, onAddDataSourcesClick,
-  onGroupDeleted,
+  onGroupDeleted, $translate,
 }) {
   const canRemove = group && currentUser.isAdmin && (group.type !== 'builtin');
 
   return (
     <React.Fragment>
-      <Sidebar.Menu items={items} selected={controller.params.currentPage} />
+      <Sidebar.Menu items={items} selected={controller.params.currentPage} $translate={$translate} />
       <Sidebar.PageSizeSelect
         className="m-b-10"
         options={controller.pageSizeOptions}
@@ -58,6 +58,7 @@ DetailsPageSidebar.propTypes = {
   onAddDataSourcesClick: PropTypes.func,
 
   onGroupDeleted: PropTypes.func,
+  $translate: PropTypes.func,
 };
 
 DetailsPageSidebar.defaultProps = {
@@ -70,4 +71,5 @@ DetailsPageSidebar.defaultProps = {
   onAddDataSourcesClick: null,
 
   onGroupDeleted: null,
+  $translate: text => text,
 };

@@ -28,10 +28,16 @@ import { Group } from '@/services/group';
 import { DataSource } from '@/services/data-source';
 import navigateTo from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
+import PropTypes from 'prop-types';
 
 class GroupDataSources extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
   };
 
   groupId = parseInt(this.props.controller.params.groupId, 10);
@@ -165,6 +171,7 @@ class GroupDataSources extends React.Component {
 
   render() {
     const { controller } = this.props;
+    const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div data-test="Group">
         <GroupName className="d-block m-t-0 m-b-15" group={this.group} onChange={() => this.forceUpdate()} />
@@ -177,6 +184,7 @@ class GroupDataSources extends React.Component {
               canAddDataSources={currentUser.isAdmin}
               onAddDataSourcesClick={this.addDataSources}
               onGroupDeleted={() => navigateTo('/groups', true)}
+              $translate={translate}
             />
           </Layout.Sidebar>
           <Layout.Content>
@@ -236,7 +244,7 @@ export default function init(ngModule) {
       },
     }),
     new StateStorage({ orderByField: 'name' }),
-  )));
+  ), [], ['$translate']));
 
   return routesToAngularRoutes([
     {

@@ -38,24 +38,24 @@ class QueriesList extends React.Component {
     {
       key: 'all',
       href: 'queries',
-      title: 'All Queries',
+      title: 'SIDEBAR.ALL_QUERIES',
     },
     {
       key: 'favorites',
       href: 'queries/favorites',
-      title: 'Favorites',
+      title: 'SIDEBAR.FAVORITES',
       icon: () => <Sidebar.MenuIcon icon="fa fa-star" />,
     },
     {
       key: 'archive',
       href: 'queries/archive',
-      title: 'Archived',
+      title: 'SIDEBAR.ARCHIVED',
       icon: () => <Sidebar.MenuIcon icon="fa fa-archive" />,
     },
     {
       key: 'my',
       href: 'queries/my',
-      title: 'My Queries',
+      title: 'SIDEBAR.MY_QUERIES',
       icon: () => <Sidebar.ProfileImage user={currentUser} />,
       isAvailable: () => currentUser.hasPermission('create_query'),
     },
@@ -101,7 +101,7 @@ class QueriesList extends React.Component {
               value={controller.searchTerm}
               onChange={controller.updateSearch}
             />
-            <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} />
+            <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} $translate={translate} />
             <Sidebar.Tags url="api/queries/tags" onChange={controller.updateSelectedTags} />
             <Sidebar.PageSizeSelect
               className="m-b-10"

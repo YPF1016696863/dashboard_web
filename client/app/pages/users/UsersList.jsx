@@ -60,23 +60,28 @@ UsersListActions.propTypes = {
 class UsersList extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
   };
 
   sidebarMenu = [
     {
       key: 'active',
       href: 'users',
-      title: 'Active Users',
+      title: 'SIDEBAR.ACTIVE_USERS',
     },
     {
       key: 'pending',
       href: 'users/pending',
-      title: 'Pending Invitations',
+      title: 'SIDEBAR.PENDING_INVITATIONS',
     },
     {
       key: 'disabled',
       href: 'users/disabled',
-      title: 'Disabled Users',
+      title: 'SIDEBAR.DISABLED_USERS',
       isAvailable: () => policy.canCreateUser(),
     },
   ];
@@ -183,6 +188,7 @@ class UsersList extends React.Component {
 
   render() {
     const { controller } = this.props;
+    const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <React.Fragment>
         {this.renderPageHeader()}
@@ -192,7 +198,7 @@ class UsersList extends React.Component {
               value={controller.searchTerm}
               onChange={controller.updateSearch}
             />
-            <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} />
+            <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} $translate={translate} />
             <Sidebar.PageSizeSelect
               className="m-b-10"
               options={controller.pageSizeOptions}
@@ -265,7 +271,7 @@ export default function init(ngModule) {
       },
     }),
     new UrlStateStorage({ orderByField: 'created_at', orderByReverse: true }),
-  )));
+  ), [], ['$translate']));
 }
 
 init.init = true;

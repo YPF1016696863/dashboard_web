@@ -41,7 +41,9 @@ SearchInput.defaultProps = {
     Menu
  */
 
-export function Menu({ items, selected }) {
+export function Menu({ items, selected, $translate }) {
+  const translate = key => ($translate ? $translate.instant(key) : key);
+
   items = filter(
     items,
     item => (isFunction(item.isAvailable) ? item.isAvailable() : true),
@@ -62,7 +64,7 @@ export function Menu({ items, selected }) {
             <span className="btn-favourite m-r-5"><i className={item.icon} aria-hidden="true" /></span>
           }
           {isFunction(item.icon) && (item.icon(item) || null)}
-          {item.title}
+          {translate(item.title)}
         </a>
       ))}
     </div>
@@ -78,11 +80,13 @@ Menu.propTypes = {
     isAvailable: PropTypes.func, // return `true` to show item and `false` to hide; if omitted: show item
   })),
   selected: PropTypes.string,
+  $translate: PropTypes.func,
 };
 
 Menu.defaultProps = {
   items: [],
   selected: null,
+  $translate: text => text,
 };
 
 /*
