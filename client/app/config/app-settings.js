@@ -1,4 +1,4 @@
-const appSettings = {
+export const appSettings = {
   server: {
     backendUrl: 'http://39.98.168.0:5000',
   },
