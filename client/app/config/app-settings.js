@@ -3,7 +3,7 @@ const appSettings = {
     backendUrl: 'http://39.98.168.0:5000',
   },
   app: {
-    login: 'http://localhost:3000/',
+    login: 'http://login.chinambse.com',
     setup: '',
     help: '',
   },
