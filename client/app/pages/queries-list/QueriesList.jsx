@@ -91,6 +91,7 @@ class QueriesList extends React.Component {
   render() {
     const { controller } = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
+    const { appSettings } = this.props;
     return (
       <div className="container">
         <PageHeader title={controller.params.title} />
@@ -102,7 +103,7 @@ class QueriesList extends React.Component {
               onChange={controller.updateSearch}
             />
             <Sidebar.Menu items={this.sidebarMenu} selected={controller.params.currentPage} $translate={translate} />
-            <Sidebar.Tags url="api/queries/tags" onChange={controller.updateSelectedTags} />
+            <Sidebar.Tags url={appSettings.server.backendUrl + '/api/queries/tags'} onChange={controller.updateSelectedTags} />
             <Sidebar.PageSizeSelect
               className="m-b-10"
               options={controller.pageSizeOptions}
@@ -165,7 +166,7 @@ export default function init(ngModule) {
       },
     }),
     new UrlStateStorage({ orderByField: 'created_at', orderByReverse: true }),
-  ), [], ['$translate']));
+  ), [], ['$translate', 'appSettings']));
 
   return routesToAngularRoutes([
     {
