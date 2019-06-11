@@ -41,7 +41,7 @@ function AuthService($window, $location, $q, $http, appSettings) {
     login() {
       const next = encodeURI($location.url());
       logger('Calling login with next = %s', next);
-      window.location.href = `login?next=${next}`;
+      window.location.href = `${appSettings.app.login}?next=${next}`;
     },
     logout() {
       logger('Logout.');
