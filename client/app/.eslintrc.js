@@ -1,7 +1,7 @@
 module.exports = {
-  extends: ["plugin:jest/recommended"],
+  extends: ["plugin:jest/recommended", "prettier"],
   plugins: ["jest"],
   env: {
-    "jest/globals": true,
-  },
+    "jest/globals": true
+  }
 };

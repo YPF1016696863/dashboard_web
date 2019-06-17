@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ["airbnb", "plugin:compat/recommended"],
+  extends: ["airbnb", "plugin:compat/recommended", "prettier"],
   plugins: ["jest", "compat"],
   settings: {
     "import/resolver": "webpack"
