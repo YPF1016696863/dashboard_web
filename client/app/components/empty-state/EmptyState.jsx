@@ -12,8 +12,8 @@ function createDashboard() {
   $uibModal.open({
     component: 'editDashboardDialog',
     resolve: {
-      dashboard: () => ({ name: null, layout: null }),
-    },
+      dashboard: () => ({ name: null, layout: null })
+    }
   });
 }
 
@@ -32,19 +32,95 @@ function Step({ show, completed, text, url, urlText, onClick }) {
   );
 }
 
+function ShowOnBoarding({
+  translate,
+  isAvailable,
+  isCompleted,
+  helpLink,
+  onboardingMode
+}) {
+  // Show if `onboardingMode=false` or any requested step not completed
+  const shouldShow =
+    !onboardingMode ||
+    some(keys(isAvailable), step => isAvailable[step] && !isCompleted[step]);
+
+  if (!shouldShow) {
+    return null;
+  }
+
+  return (
+    <div className="empty-state__steps">
+      <h4>{translate('HOME.EMPTY_STATE.LETS_GET_STARTED')}</h4>
+      <ol>
+        {currentUser.isAdmin && (
+          <Step
+            show={isAvailable.dataSource}
+            completed={isCompleted.dataSource}
+            url="data_sources/new"
+            urlText={translate('HOME.EMPTY_STATE.CONNECT')}
+            text={translate('HOME.EMPTY_STATE.A_DATA_SOURCE')}
+          />
+        )}
+        {!currentUser.isAdmin && (
+          <Step
+            show={isAvailable.dataSource}
+            completed={isCompleted.dataSource}
+            text="Ask an account admin to connect a data source"
+          />
+        )}
+        <Step
+          show={isAvailable.query}
+          completed={isCompleted.query}
+          url="queries/new"
+          urlText={translate('HOME.EMPTY_STATE.CREATE')}
+          text={translate('HOME.EMPTY_STATE.YOUR_FIRST_QUERY')}
+        />
+        <Step
+          show={isAvailable.alert}
+          completed={isCompleted.alert}
+          url="alerts/new"
+          urlText={translate('HOME.EMPTY_STATE.CREATE')}
+          text={translate('HOME.EMPTY_STATE.YOUR_FIRST_ALERT')}
+        />
+        <Step
+          show={isAvailable.dashboard}
+          completed={isCompleted.dashboard}
+          onClick={createDashboard}
+          urlText={translate('HOME.EMPTY_STATE.CREATE')}
+          text={translate('HOME.EMPTY_STATE.YOUR_FIRST_DASHBOARD')}
+        />
+        <Step
+          show={isAvailable.inviteUsers}
+          completed={isCompleted.inviteUsers}
+          url="users/new"
+          urlText={translate('HOME.EMPTY_STATE.INVITE')}
+          text={translate('HOME.EMPTY_STATE.YOUR_TEAM_MEMBERS')}
+        />
+      </ol>
+      <p>
+        {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
+        <a href={helpLink} target="_blank" rel="noopener noreferrer">
+          {translate('HOME.EMPTY_STATE.SEE_OUR_HELP')}
+          <i className="fa fa-external-link m-l-5" aria-hidden="true" />
+        </a>
+      </p>
+    </div>
+  );
+}
+
 Step.propTypes = {
   show: PropTypes.bool.isRequired,
   completed: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
   url: PropTypes.string,
   urlText: PropTypes.string,
-  onClick: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 Step.defaultProps = {
   url: null,
   urlText: null,
-  onClick: null,
+  onClick: null
 };
 
 export function EmptyState({
@@ -58,7 +134,7 @@ export function EmptyState({
   showAlertStep,
   showDashboardStep,
   showInviteStep,
-  $translate,
+  $translate
 }) {
   const translate = key => ($translate ? $translate.instant(key) : key);
 
@@ -67,7 +143,7 @@ export function EmptyState({
     query: true,
     alert: showAlertStep,
     dashboard: showDashboardStep,
-    inviteUsers: showInviteStep,
+    inviteUsers: showInviteStep
   };
 
   const isCompleted = {
@@ -75,15 +151,8 @@ export function EmptyState({
     query: organizationStatus.objectCounters.queries > 0,
     alert: organizationStatus.objectCounters.alerts > 0,
     dashboard: organizationStatus.objectCounters.dashboards > 0,
-    inviteUsers: organizationStatus.objectCounters.users > 1,
+    inviteUsers: organizationStatus.objectCounters.users > 1
   };
-
-  // Show if `onboardingMode=false` or any requested step not completed
-  const shouldShow = !onboardingMode || some(keys(isAvailable), step => isAvailable[step] && !isCompleted[step]);
-
-  if (!shouldShow) {
-    return null;
-  }
 
   return (
     <div className="empty-state bg-white tiled">
@@ -100,62 +169,14 @@ export function EmptyState({
           width="75%"
         />
       </div>
-      <div className="empty-state__steps">
-        <h4>{translate('HOME.EMPTY_STATE.LETS_GET_STARTED')}</h4>
-        <ol>
-          {currentUser.isAdmin && (
-            <Step
-              show={isAvailable.dataSource}
-              completed={isCompleted.dataSource}
-              url="data_sources/new"
-              urlText={translate('HOME.EMPTY_STATE.CONNECT')}
-              text={translate('HOME.EMPTY_STATE.A_DATA_SOURCE')}
-            />
-          )}
-          {!currentUser.isAdmin && (
-            <Step
-              show={isAvailable.dataSource}
-              completed={isCompleted.dataSource}
-              text="Ask an account admin to connect a data source"
-            />
-          )}
-          <Step
-            show={isAvailable.query}
-            completed={isCompleted.query}
-            url="queries/new"
-            urlText={translate('HOME.EMPTY_STATE.CREATE')}
-            text={translate('HOME.EMPTY_STATE.YOUR_FIRST_QUERY')}
-          />
-          <Step
-            show={isAvailable.alert}
-            completed={isCompleted.alert}
-            url="alerts/new"
-            urlText={translate('HOME.EMPTY_STATE.CREATE')}
-            text={translate('HOME.EMPTY_STATE.YOUR_FIRST_ALERT')}
-          />
-          <Step
-            show={isAvailable.dashboard}
-            completed={isCompleted.dashboard}
-            onClick={createDashboard}
-            urlText={translate('HOME.EMPTY_STATE.CREATE')}
-            text={translate('HOME.EMPTY_STATE.YOUR_FIRST_DASHBOARD')}
-          />
-          <Step
-            show={isAvailable.inviteUsers}
-            completed={isCompleted.inviteUsers}
-            url="users/new"
-            urlText={translate('HOME.EMPTY_STATE.INVITE')}
-            text={translate('HOME.EMPTY_STATE.YOUR_TEAM_MEMBERS')}
-          />
-        </ol>
-        <p>
-          {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
-          <a href={helpLink} target="_blank" rel="noopener noreferrer">
-            {translate('HOME.EMPTY_STATE.SEE_OUR_HELP')}
-            <i className="fa fa-external-link m-l-5" aria-hidden="true" />
-          </a>
-        </p>
-      </div>
+
+      <ShowOnBoarding
+        translate={translate}
+        isAvailable={isAvailable}
+        isCompleted={isCompleted}
+        helpLink={helpLink}
+        onboardingMode={onboardingMode}
+      />
     </div>
   );
 }
@@ -173,7 +194,7 @@ EmptyState.propTypes = {
   showDashboardStep: PropTypes.bool,
   showInviteStep: PropTypes.bool,
 
-  $translate: PropTypes.func,
+  $translate: PropTypes.func
 };
 
 EmptyState.defaultProps = {
@@ -185,11 +206,14 @@ EmptyState.defaultProps = {
   showAlertStep: false,
   showDashboardStep: false,
   showInviteStep: false,
-  $translate: text => text,
+  $translate: text => text
 };
 
 export default function init(ngModule) {
-  ngModule.component('emptyState', react2angular(EmptyState, Object.keys(EmptyState.propTypes), ['$translate']));
+  ngModule.component(
+    'emptyState',
+    react2angular(EmptyState, Object.keys(EmptyState.propTypes), ['$translate'])
+  );
 }
 
 init.init = true;

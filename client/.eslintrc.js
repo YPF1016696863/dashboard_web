@@ -61,6 +61,7 @@ module.exports = {
       }
     ],
     "no-else-return": ["error", { allowElseIf: true }],
-    "object-curly-newline": ["error", { consistent: true }]
+    "object-curly-newline": ["error", { consistent: true }],
+    "no-unused-vars": "warn"
   }
 };
