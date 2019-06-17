@@ -12,7 +12,7 @@
         <span class="icon-bar"></span>
       </button>
       <!-- REDASH LOGO -->
-      <a class="navbar-brand" ng-href="{{ $ctrl.basePath }}"
+      <a class="navbar-brand" ng-href="."
         ><img ng-src="{{ $ctrl.logoUrl }}"
       /></a>
     </div>
@@ -25,7 +25,9 @@
           ng-show="$ctrl.showDashboardsMenu"
           uib-dropdown
         >
-          <a class="btn" href="dashboards">{{'HEADER.DASHBOARDS' | translate}}</a>
+          <a class="btn" href="dashboards">{{
+            'HEADER.DASHBOARDS' | translate
+          }}</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -36,7 +38,7 @@
                   <span class="btn-favourite">
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
-                  {{'HEADER.FAVORITE_DASHBOARD' | translate}}
+                  {{ 'HEADER.FAVORITE_DASHBOARD' | translate }}
                 </em>
               </a>
             </li>
@@ -52,7 +54,7 @@
           ng-show="$ctrl.showQueriesMenu"
           uib-dropdown
         >
-          <a class="btn" href="queries">{{'HEADER.QUERIES' | translate}}</a>
+          <a class="btn" href="queries">{{ 'HEADER.QUERIES' | translate }}</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -63,7 +65,7 @@
                   <span class="btn-favourite">
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
-                  {{'HEADER.FAVORITE_QUERY' | translate}}
+                  {{ 'HEADER.FAVORITE_QUERY' | translate }}
                 </em>
               </a>
             </li>
@@ -75,7 +77,7 @@
           </ul>
         </li>
         <li ng-if="$ctrl.showAlertsLink">
-          <a href="alerts">{{'HEADER.ALERTS' | translate}}</a>
+          <a href="alerts">{{ 'HEADER.ALERTS' | translate }}</a>
         </li>
       </ul>
 
@@ -93,7 +95,8 @@
           uib-dropdown-toggle
           ng-disabled="disabled"
         >
-          {{'HEADER.CREATE' | translate}} <span class="caret caret--nav"></span>
+          {{ 'HEADER.CREATE' | translate }}
+          <span class="caret caret--nav"></span>
         </button>
         <ul
           class="dropdown-menu"
@@ -102,16 +105,19 @@
           aria-labelledby="create-button"
         >
           <li role="menuitem" ng-show="$ctrl.showNewQueryMenu">
-            <a href="queries/new">{{'HEADER.QUERIES' | translate}}</a>
+            <a href="queries/new">{{ 'HEADER.QUERIES' | translate }}</a>
           </li>
           <li role="menuitem">
             <a
               ng-show="$ctrl.currentUser.hasPermission('create_dashboard')"
-              ng-click="$ctrl.newDashboard()">
-              {{'HEADER.DASHBOARDS' | translate}}
+              ng-click="$ctrl.newDashboard()"
+            >
+              {{ 'HEADER.DASHBOARDS' | translate }}
             </a>
           </li>
-          <li role="menuitem"><a href="alerts/new">{{'HEADER.ALERTS' | translate}}</a></li>
+          <li role="menuitem">
+            <a href="alerts/new">{{ 'HEADER.ALERTS' | translate }}</a>
+          </li>
         </ul>
       </div>
 
@@ -124,7 +130,7 @@
           ></help-trigger>
         </li>
         <li ng-show="$ctrl.currentUser.isAdmin">
-          <a href="data_sources" title="{{'HEADER.SETTINGS' | translate}}"
+          <a href="data_sources" title="{{ 'HEADER.SETTINGS' | translate }}"
             ><i class="fa fa-sliders" aria-hidden="true"></i
           ></a>
         </li>
@@ -158,19 +164,29 @@
             ></li>
 
             <li ng-show="$ctrl.currentUser.isAdmin">
-              <a href="data_sources" title="Data Sources">{{ 'HEADER.DATA_SOURCE' | translate }}</a>
+              <a href="data_sources" title="Data Sources">{{
+                'HEADER.DATA_SOURCE' | translate
+              }}</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="groups" title="Settings">{{ 'HEADER.GROUPS' | translate }}</a>
+              <a href="groups" title="Settings">{{
+                'HEADER.GROUPS' | translate
+              }}</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="users" title="Settings">{{ 'HEADER.USERS' | translate }}</a>
+              <a href="users" title="Settings">{{
+                'HEADER.USERS' | translate
+              }}</a>
             </li>
             <li>
-              <a ng-href="query_snippets">{{ 'HEADER.QUERY_SNIPPETS' | translate }}</a>
+              <a ng-href="query_snippets">{{
+                'HEADER.QUERY_SNIPPETS' | translate
+              }}</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="destinations" title="Settings">{{ 'HEADER.ALERT_DESTINATIONS' | translate }}</a>
+              <a href="destinations" title="Settings">{{
+                'HEADER.ALERT_DESTINATIONS' | translate
+              }}</a>
             </li>
 
             <li
@@ -179,17 +195,23 @@
             ></li>
 
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="settings/system">{{ 'HEADER.SYSTEM_SETTINGS' | translate }}</a>
+              <a href="settings/system">{{
+                'HEADER.SYSTEM_SETTINGS' | translate
+              }}</a>
             </li>
 
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="admin/status">{{ 'HEADER.SYSTEM_STATUS' | translate }}</a>
+              <a href="admin/status">{{
+                'HEADER.SYSTEM_STATUS' | translate
+              }}</a>
             </li>
 
             <li class="divider"></li>
 
             <li>
-              <a ng-click="$ctrl.logout()">{{ 'HEADER.LOG_OUT' | translate }}</a>
+              <a ng-click="$ctrl.logout()">{{
+                'HEADER.LOG_OUT' | translate
+              }}</a>
             </li>
 
             <li class="divider"></li>
@@ -222,7 +244,7 @@
             type="text"
             ng-model="$ctrl.searchTerm"
             class="form-control navbar__search__input"
-            placeholder="{{'HEADER.SEARCH_PLACEHOLDER' | translate}}"
+            placeholder="{{ 'HEADER.SEARCH_PLACEHOLDER' | translate }}"
             data-test="AppHeaderSearch"
           />
           <span class="input-group-btn">
