@@ -249,71 +249,20 @@ function mapEditor() {
       $scope.columns = $scope.queryResult.getColumns();
       $scope.columnNames = _.map($scope.columns, i => i.name);
       $scope.classify_columns = $scope.columnNames.concat('none');
-      $scope.mapTiles = [
-        {
-          name: 'OpenStreetMap',
-          url: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'OpenStreetMap BW',
-          url: '//{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'OpenStreetMap DE',
-          url: '//{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'OpenStreetMap FR',
-          url: '//{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'OpenStreetMap Hot',
-          url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'Thunderforest',
-          url: '//{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'Thunderforest Spinal',
-          url: '//{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'OpenMapSurfer',
-          url: '//korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'
-        },
-        {
-          name: 'Stamen Toner',
-          url: '//stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'Stamen Toner Background',
-          url:
-            '//stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'Stamen Toner Lite',
-          url: '//stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png'
-        },
-        {
-          name: 'OpenTopoMap',
-          url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
-        }
-      ];
     }
   };
 }
 
 export default function init(ngModule) {
-  ngModule.directive('mapRenderer', mapRenderer);
-  ngModule.directive('mapEditor', mapEditor);
+  ngModule.directive('cesiumRenderer', mapRenderer);
+  ngModule.directive('cesiumEditor', mapEditor);
   ngModule.config(VisualizationProvider => {
     const renderTemplate =
-      '<map-renderer ' +
+      '<cesium-renderer ' +
       'options="visualization.options" query-result="queryResult">' +
-      '</map-renderer>';
+      '</cesium-renderer>';
 
-    const editTemplate = '<map-editor></map-editor>';
+    const editTemplate = '<cesium-editor></cesium-editor>';
     const defaultOptions = {
       defaultColumns: 3,
       defaultRows: 8,
@@ -323,8 +272,8 @@ export default function init(ngModule) {
     };
 
     VisualizationProvider.registerVisualization({
-      type: 'MAP',
-      name: 'Map (Markers)',
+      type: 'CESIUM_MAP',
+      name: 'Map (Cesium)',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions
