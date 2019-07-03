@@ -12,9 +12,11 @@ export const appSettingsConfig = {
 };
 
 // for debug with container
-if (window.location.hostname.startsWith("localhost")) {
-    appSettingsConfig.server.backendUrl = "http://localhost:5000";
-    appSettingsConfig.app.login = "http://localhost:8092";
+if (window.location.hostname.startsWith("localhost") ||
+    window.location.hostname.startsWith("docker-internal") ||
+    window.location.hostname.startsWith("192.168")) {
+    appSettingsConfig.server.backendUrl = "http://" + window.location.hostname + ":5000";
+    appSettingsConfig.app.login = "http://" + window.location.hostname + ":8092";
 }
 
 export default function init(ngModule) {
