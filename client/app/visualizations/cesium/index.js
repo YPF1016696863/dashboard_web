@@ -1676,16 +1676,11 @@ function mapRenderer() {
         }
       ];
 
-      
-      var dataSourcePromise = Cesium.CzmlDataSource.load(czml).then(
-        function() {
-          console.log("success...");
-        }
-      );
-
-      ctrl.cesium.dataSources.add(dataSourcePromise);
-
-      ctrl.cesium.zoomTo(dataSourcePromise);
+      ctrl.cesium.dataSources
+        .add(Cesium.CzmlDataSource.load(czml))
+        .then(function() {
+          console.log('success...');
+        });
       /*
       // Xi'an
       const startingLocation = {
