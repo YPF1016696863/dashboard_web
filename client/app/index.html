@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html ng-app="app" ng-strict-di>
   <head lang="en">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <base href="/" />
     <title>DataVis - 数据可视化及BI</title>
     <script>
       function onIE() {
@@ -12,15 +12,41 @@
       if (
         navigator.userAgent.match('MSIE') || // IE10
         navigator.appVersion.match('Trident/') // IE11
-      ){
+      ) {
         onIE();
       }
     </script>
-    <!--[if IE]><script>onIE()</script><![endif]-->
+    <!--[if IE
+      ]><script>
+        onIE();
+      </script><!
+    [endif]-->
 
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/static/images/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
+    <script src="http://cesiumjs.org/Cesium/Build/CesiumUnminified/Cesium.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="http://cesiumjs.org/Cesium/Build/CesiumUnminified/Widgets/widgets.css"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/static/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/static/images/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/images/favicon-16x16.png"
+    />
   </head>
 
   <body ng-class="bodyClass">

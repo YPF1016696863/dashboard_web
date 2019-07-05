@@ -8,14 +8,17 @@ function VisualizationProvider() {
   const defaultConfig = {
     defaultOptions: {},
     skipTypes: false,
-    editorTemplate: null,
+    editorTemplate: null
   };
 
-  this.registerVisualization = (config) => {
+  this.registerVisualization = config => {
     const visualization = Object.assign({}, defaultConfig, config);
 
     // TODO: this is prone to errors; better refactor.
-    if (this.defaultVisualization === undefined && !visualization.name.match(/Deprecated/)) {
+    if (
+      this.defaultVisualization === undefined &&
+      !visualization.name.match(/Deprecated/)
+    ) {
       this.defaultVisualization = visualization;
     }
 
@@ -26,7 +29,7 @@ function VisualizationProvider() {
     }
   };
 
-  this.getSwitchTemplate = (property) => {
+  this.getSwitchTemplate = property => {
     const pattern = /(<[a-zA-Z0-9-]*?)( |>)/;
 
     let mergedTemplates = reduce(
@@ -41,7 +44,7 @@ function VisualizationProvider() {
 
         return templates;
       },
-      '',
+      ''
     );
 
     mergedTemplates = `<div ng-switch on="visualization.type">${mergedTemplates}</div>`;
@@ -50,10 +53,15 @@ function VisualizationProvider() {
   };
 
   this.$get = ($resource, appSettings) => {
-    const Visualization = $resource(appSettings.server.backendUrl + '/api/visualizations/:id', { id: '@id' });
+    const Visualization = $resource(
+      appSettings.server.backendUrl + '/api/visualizations/:id',
+      { id: '@id' }
+    );
     Visualization.visualizations = this.visualizations;
     Visualization.visualizationTypes = this.visualizationTypes;
-    Visualization.renderVisualizationsTemplate = this.getSwitchTemplate('renderTemplate');
+    Visualization.renderVisualizationsTemplate = this.getSwitchTemplate(
+      'renderTemplate'
+    );
     Visualization.editorTemplate = this.getSwitchTemplate('editorTemplate');
     Visualization.defaultVisualization = this.defaultVisualization;
 
@@ -65,18 +73,19 @@ function VisualizationName(Visualization) {
   return {
     restrict: 'E',
     scope: {
-      visualization: '=',
+      visualization: '='
     },
     template: '{{name}}',
     replace: false,
     link(scope) {
       if (Visualization.visualizations[scope.visualization.type]) {
-        const defaultName = Visualization.visualizations[scope.visualization.type].name;
+        const defaultName =
+          Visualization.visualizations[scope.visualization.type].name;
         if (defaultName !== scope.visualization.name) {
           scope.name = scope.visualization.name;
         }
       }
-    },
+    }
   };
 }
 
@@ -85,20 +94,22 @@ function VisualizationRenderer(Visualization) {
     restrict: 'E',
     scope: {
       visualization: '=',
-      queryResult: '=',
+      queryResult: '='
     },
     // TODO: using switch here (and in the options editor) might introduce errors and bad
     // performance wise. It's better to eventually show the correct template based on the
     // visualization type and not make the browser render all of them.
-    template: `<filters filters="filters"></filters>\n${Visualization.renderVisualizationsTemplate}`,
+    template: `<filters filters="filters"></filters>\n${
+      Visualization.renderVisualizationsTemplate
+    }`,
     replace: false,
     link(scope) {
-      scope.$watch('queryResult && queryResult.getFilters()', (filters) => {
+      scope.$watch('queryResult && queryResult.getFilters()', filters => {
         if (filters) {
           scope.filters = filters;
         }
       });
-    },
+    }
   };
 }
 
@@ -110,8 +121,8 @@ function VisualizationOptionsEditor(Visualization) {
     scope: {
       visualization: '=',
       query: '=',
-      queryResult: '=',
-    },
+      queryResult: '='
+    }
   };
 }
 
