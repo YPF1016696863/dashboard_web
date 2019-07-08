@@ -3,8 +3,7 @@ import _ from 'lodash';
 import template from './map.html';
 import editorTemplate from './map-editor.html';
 
-require('../../../../node_modules/cesium/Build/Cesium/Widgets/widgets.css');
-require('../../../../node_modules/cesium/Build/Cesium/Cesium.js');
+const Cesium = window.Cesium
 
 function mapRenderer() {
   return {

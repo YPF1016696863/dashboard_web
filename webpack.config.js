@@ -3,6 +3,7 @@
 const fs = require("fs");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 const ManifestPlugin = require("webpack-manifest-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -61,6 +62,10 @@ const config = {
       filename: "multi_org.html",
       excludeChunks: ["server"]
     }),
+    new HtmlWebpackIncludeAssetsPlugin({
+      append: false,
+      assets: ["cesium/Widgets/widgets.css", "cesium/Cesium.js"],
+    }),
     new MiniCssExtractPlugin({
       filename: "[name].[chunkhash].css"
     }),
@@ -72,8 +77,12 @@ const config = {
       { from: "client/app/assets/robots.txt" },
       { from: "client/app/unsupported.html" },
       { from: "client/app/assets/css/*.css", to: "styles/", flatten: true },
-      { from: "node_modules/jquery/dist/jquery.min.js", to: "js/jquery.min.js" }
-    ])
+      { from: "node_modules/jquery/dist/jquery.min.js", to: "js/jquery.min.js" },
+      { from: "node_modules/cesium/Build/CesiumUnminified", to: "cesium"},
+    ]),
+    new webpack.DefinePlugin({
+      CESIUM_BASE_URL: JSON.stringify("/cesium"),
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -196,6 +205,9 @@ const config = {
       modules: false,
       chunkModules: false
     }
+  },
+  externals: {
+    cesium: "Cesium"
   }
 };
 
