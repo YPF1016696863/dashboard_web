@@ -39,13 +39,14 @@ function DashboardCtrl(
   $q,
   $uibModal,
   $scope,
+  $rootScope,
   Title,
   AlertDialog,
   Dashboard,
   currentUser,
   clientConfig,
   Events,
-  appSettings,
+  appSettings
 ) {
   this.saveInProgress = false;
   this.saveDelay = false;
@@ -102,6 +103,25 @@ function DashboardCtrl(
   this.globalParameters = [];
   this.isDashboardOwner = false;
   this.isLayoutDirty = false;
+
+  // Dashboard Header default style
+  $rootScope.theme = {
+    theme: 'light',
+    bodyBackgroundColor: 'dashboard-light-theme',
+    dashboardHeaderBackgroundColor: "widget-light-theme",
+    dashboardHeaderTitleColor: "header-title-light-theme",
+    widgetBackgroundColor: "widget-light-theme",
+    queryLinkTextColor:"query-link-light-theme",
+    widgetHeaderTextColor: "widget-header-text-light-theme",
+    widgetFooterTextColor: "widget-footer-text-light-theme",
+    widgetActionPanelBackgroundColor:"widget-action-panel-light-theme",
+    dashboardFooterFontColor:"dashboard-footer-font-color-light-theme",
+    dashboardTableTextColor:'dashboard-widget-table-text-light-theme',
+    dashboardTableHeaderTextColor:'dashboard-widget-table-header-text-light-theme',
+    dashboardWidgetScrollBar: 'dashboard-widget-scrollbox-light',
+    dashboardHeaderButtonColor: false
+  };
+  //
 
   this.refreshRates = clientConfig.dashboardRefreshIntervals.map(interval => ({
     name: durationHumanize(interval),
@@ -475,7 +495,7 @@ export default function init(ngModule) {
   return {
     '/dashboard/:dashboardSlug': {
       template: '<dashboard-page></dashboard-page>',
-      reloadOnSearch: false,
+      reloadOnSearch: false
     },
   };
 }

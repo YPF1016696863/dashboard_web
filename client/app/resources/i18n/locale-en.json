@@ -62,5 +62,19 @@
   },
   "CREATE_SOURCE_DIALOG": {
     "SETUP_INSTRUCTIONS": "Setup Instructions"
+  },
+  "DASHBOARD": {
+    "SETTINGS": {
+      "THEME": {
+        "TIP": "Switch to Dark Theme",
+        "DESC": "Switch between two different themes, color schema of different charts will be also changed according to the new theme.",
+        "DARK": "Dark",
+        "BRIGHT": "Bright"
+      }
+    },
+    "CONNECTION_LIGHT": {
+      "ON": "Online",
+      "OFF": "Offline"
+    }
   }
 }

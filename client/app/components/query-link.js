@@ -7,8 +7,8 @@ export default function init(ngModule) {
     },
     template: `
       <a ng-href="{{$ctrl.readonly ? undefined : $ctrl.getUrl()}}" class="query-link">
-        <visualization-name visualization="$ctrl.visualization"/>
-        <span>{{$ctrl.query.name}}</span>
+        <visualization-name ng-class="$root.theme.widgetHeaderTextColor" class="widget-frame-header-font" visualization="$ctrl.visualization"/>
+        <span class="query-link-font" ng-class="$root.theme.queryLinkTextColor">{{$ctrl.query.name}}</span>
       </a>
     `,
     controller() {

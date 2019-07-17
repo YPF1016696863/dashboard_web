@@ -155,6 +155,11 @@
         </label>
       </div>
     </div>
+
+    <div class="form-group" ng-if="options.globalSeriesType == 'pie'">
+      <label class="control-label">Pie Chart Hole Size</label>
+      <input ng-model="options.pieChartHoleSize" type="text" class="form-control" placeholder="0.4">
+    </div>
   </div>
 
   <div ng-if="options.globalSeriesType == 'custom'">
