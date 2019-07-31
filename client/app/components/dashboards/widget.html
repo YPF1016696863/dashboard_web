@@ -1,18 +1,18 @@
-<div class="widget-wrapper">
-  <div class="tile body-container widget-visualization" ng-if="$ctrl.type=='visualization'" ng-class="$ctrl.type"
+<div class="widget-wrapper" ng-class="$root.theme.widgetBackgroundColor">
+  <div class="tile body-container widget-visualization" ng-if="$ctrl.type=='visualization'" ng-class="[$ctrl.type,$root.theme.widgetBackgroundColor]"
     ng-switch="$ctrl.widget.getQueryResult().getStatus()">
     <div class="body-row">
-      <div class="t-header widget clearfix">
+      <div class="t-header widget clearfix" style="padding: 5px">
         <div class="dropdown pull-right widget-menu-remove"  ng-if="!$ctrl.public && $ctrl.dashboard.canEdit()">
           <div class="actions">
-            <a ng-click="$ctrl.deleteWidget()" title="Remove From Dashboard"><i class="zmdi zmdi-close"></i></a>
+            <a ng-click="$ctrl.deleteWidget()" title="Remove From Dashboard"><i class="zmdi zmdi-close" style="font-size: 18px !important;"></i></a>
           </div>
         </div>
         <div class="dropdown pull-right widget-menu-regular" ng-if="!$ctrl.public"
           uib-dropdown dropdown-append-to-body="true"
         >
           <div class="actions">
-            <a data-toggle="dropdown" uib-dropdown-toggle><i class="zmdi zmdi-more-vert"></i></a>
+            <a data-toggle="dropdown" uib-dropdown-toggle><i class="zmdi zmdi-more-vert" style="font-size: 18px !important;"></i></a>
           </div>
 
           <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
@@ -30,7 +30,7 @@
           </ul>
         </div>
         <div class="th-title">
-          <p>
+          <p style="margin: 0 0 5px !important;">
             <query-link query="$ctrl.widget.getQuery()" visualization="$ctrl.widget.visualization"
               readonly="!$ctrl.canViewQuery"></query-link>
           </p>
@@ -45,7 +45,7 @@
     <div ng-switch-when="failed" class="body-row-auto scrollbox">
       <div class="alert alert-danger m-5" ng-show="$ctrl.widget.getQueryResult().getError()">Error running query: <strong>{{$ctrl.widget.getQueryResult().getError()}}</strong></div>
     </div>
-    <div ng-switch-when="done" class="body-row-auto scrollbox">
+    <div ng-switch-when="done" class="body-row-auto scrollbox" ng-class="$root.theme.dashboardWidgetScrollBar">
       <visualization-renderer visualization="$ctrl.widget.visualization" query-result="$ctrl.widget.getQueryResult()" class="t-body"></visualization-renderer>
     </div>
     <div ng-switch-default class="body-row-auto spinner-container">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="body-row clearfix tile__bottom-control">
-      <a class="small hidden-print" ng-click="$ctrl.refresh()" ng-if="!$ctrl.public" data-test="RefreshIndicator">
+      <a class="small hidden-print" ng-click="$ctrl.refresh()" ng-if="!$ctrl.public" data-test="RefreshIndicator" ng-class="$root.theme.widgetFooterTextColor">
         <i ng-class='{"zmdi-hc-spin": $ctrl.widget.loading}' class="zmdi zmdi-refresh"></i>
         <span am-time-ago="$ctrl.widget.getQueryResult().getUpdatedAt()" ng-if="!$ctrl.widget.loading"></span>
         <rd-timer from="$ctrl.widget.refreshStartedAt" ng-if="$ctrl.widget.loading"></rd-timer>
@@ -83,16 +83,16 @@
     </div>
   </div>
 
-  <div class="tile body-container widget-text" ng-hide="$ctrl.widget.width === 0" ng-if="$ctrl.type=='textbox'" ng-class="$ctrl.type">
+  <div class="tile body-container widget-text" ng-hide="$ctrl.widget.width === 0" ng-if="$ctrl.type=='textbox'" ng-class="[$ctrl.type,$root.theme.widgetBackgroundColor]">
     <div class="body-row clearfix t-body">
       <div class="dropdown pull-right widget-menu-remove" ng-if="!$ctrl.public && $ctrl.dashboard.canEdit()">
         <div class="dropdown-header">
-          <a class="actions" ng-click="$ctrl.deleteWidget()" title="Remove From Dashboard"><i class="zmdi zmdi-close"></i></a>
+          <a class="actions" ng-click="$ctrl.deleteWidget()" title="Remove From Dashboard"><i class="zmdi zmdi-close" style="font-size: 18px !important;"></i></a>
         </div>
       </div>
       <div class="dropdown pull-right widget-menu-regular" ng-if="!$ctrl.public && $ctrl.dashboard.canEdit()" uib-dropdown>
         <div class="dropdown-header">
-          <a data-toggle="dropdown" uib-dropdown-toggle class="actions"><i class="zmdi zmdi-more"></i></a>
+          <a data-toggle="dropdown" uib-dropdown-toggle class="actions"><i class="zmdi zmdi-more" style="font-size: 18px !important;"></i></a>
         </div>
 
         <ul class="dropdown-menu pull-right" uib-dropdown-menu style="z-index:1000000">
@@ -101,6 +101,6 @@
         </ul>
       </div>
     </div>
-    <div class="body-row-auto scrollbox tiled t-body p-15 markdown" ng-bind-html="$ctrl.widget.text | markdown"></div>
+    <div class="body-row-auto scrollbox tiled t-body p-15 markdown" ng-bind-html="$ctrl.widget.text | markdown" ng-class="$root.theme.dashboardHeaderTitleColor"></div>
   </div>
 </div>

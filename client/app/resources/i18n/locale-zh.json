@@ -62,5 +62,19 @@
   },
   "CREATE_SOURCE_DIALOG": {
     "SETUP_INSTRUCTIONS": "设置说明"
+  },
+  "DASHBOARD": {
+    "SETTINGS": {
+      "THEME": {
+        "TIP": "切换深色主题",
+        "DESC": "在不同主题之间切换，主题切换之后每个图表上的指示颜色也会随之改变.",
+        "DARK": "深色",
+        "BRIGHT": "明亮"
+      }
+    },
+    "CONNECTION_LIGHT": {
+      "ON": "在线",
+      "OFF": "掉线"
+    }
   }
 }

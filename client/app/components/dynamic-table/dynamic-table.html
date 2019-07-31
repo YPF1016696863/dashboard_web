@@ -1,9 +1,9 @@
 <div class="dynamic-table-container">
-  <table class="table table-condensed table-hover" data-test="DynamicTable">
-    <thead>
-      <tr>
+  <table class="table table-condensed table-hover" data-test="DynamicTable" ng-class="$root.theme.widgetBackgroundColor">
+    <thead ng-class="$root.theme.widgetBackgroundColor">
+      <tr ng-class="$root.theme.dashboardTableTextColor">
         <th ng-repeat="column in $ctrl.columns" ng-click="$ctrl.onColumnHeaderClick($event, column)"
-          class="sortable-column" ng-class="'content-align-' + column.alignContent + ' display-as-' + column.displayAs">
+          class="sortable-column" ng-class="['content-align-' + column.alignContent + ' display-as-' + column.displayAs, $root.theme.dashboardTableHeaderTextColor]">
           <span ng-if="($ctrl.orderBy.length > 1) && ($ctrl.orderByColumnsIndex[column.name] > 0)"
             class="sort-order-indicator">{{ $ctrl.orderByColumnsIndex[column.name] }}</span>
           <span>{{column.title}}</span>
@@ -17,17 +17,18 @@
         <th class="dynamic-table-spacer"></th>
       </tr>
     </thead>
-    <thead ng-if="$ctrl.searchColumns.length > 0">
+    <thead ng-if="$ctrl.searchColumns.length > 0" ng-class="$root.theme.widgetBackgroundColor">
       <th class="p-t-10 p-b-10 p-l-15 p-r-15" colspan="{{ $ctrl.columns.length + 1 }}">
         <input type="text" class="form-control" placeholder="Search..."
           ng-model="$ctrl.searchTerm" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-          ng-change="$ctrl.onSearchTermChanged()">
+          ng-change="$ctrl.onSearchTermChanged()" ng-class="$root.theme.widgetBackgroundColor">
       </th>
     </thead>
     <tbody>
       <tr ng-repeat="row in $ctrl.rowsToDisplay"
         dynamic-table-row columns="$ctrl.columns" row="row"
         render="$ctrl.renderSingleRow"
+          ng-class="$root.theme.dashboardTableTextColor"
       ></tr>
     </tbody>
   </table>

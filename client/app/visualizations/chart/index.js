@@ -136,6 +136,10 @@ function ChartEditor(ColorPalette, clientConfig) {
 // Plotly examples and docs: https://plot.ly/javascript/`;
       }
 
+      if (scope.options.customCode === undefined) {
+        scope.options.pieChartHoleSize = 0.4;
+      }
+
       function refreshColumns() {
         scope.columns = scope.queryResult.getColumns();
         scope.columnNames = map(scope.columns, i => i.name);

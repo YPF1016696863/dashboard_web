@@ -21,7 +21,7 @@ Plotly.setPlotConfig({
   modeBarButtonsToRemove: ['sendDataToCloud'],
 });
 
-const PlotlyChart = () => ({
+const PlotlyChart = ($rootScope,$timeout) => ({
   restrict: 'E',
   template: '<div class="plotly-chart-container" resize-event="handleResize()"></div>',
   scope: {
@@ -29,12 +29,24 @@ const PlotlyChart = () => ({
     series: '=',
   },
   link(scope, element) {
+
     const plotlyElement = element[0].querySelector('.plotly-chart-container');
     const plotlyOptions = { showLink: false, displaylogo: false };
+    let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
     let layout = {};
     let data = [];
 
-    function update() {
+    $rootScope.$watch('theme', function() {
+      theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
+      updateLayoutByTheme(theme);
+    });
+
+    function updateLayoutByTheme(_theme) {
+      layout = prepareLayout(plotlyElement, scope.series, scope.options, data, _theme);
+      Plotly.relayout(plotlyElement, layout);
+    }
+
+    function update(_theme) {
       if (['normal', 'percent'].indexOf(scope.options.series.stacking) >= 0) {
         // Backward compatibility
         scope.options.series.percentValues = scope.options.series.stacking === 'percent';
@@ -43,9 +55,11 @@ const PlotlyChart = () => ({
 
       data = prepareData(scope.series, scope.options);
       updateData(data, scope.options);
-      layout = prepareLayout(plotlyElement, scope.series, scope.options, data);
+
+      layout = prepareLayout(plotlyElement, scope.series, scope.options, data, _theme);
 
       // It will auto-purge previous graph
+
       Plotly.newPlot(plotlyElement, data, layout, plotlyOptions).then(() => {
         updateLayout(plotlyElement, layout, (e, u) => Plotly.relayout(e, u));
       });
@@ -59,16 +73,16 @@ const PlotlyChart = () => ({
         }
       });
     }
-    update();
+    update(theme);
 
     scope.$watch('series', (oldValue, newValue) => {
       if (oldValue !== newValue) {
-        update();
+        update(theme);
       }
     });
     scope.$watch('options', (oldValue, newValue) => {
       if (oldValue !== newValue) {
-        update();
+        update(theme);
       }
     }, true);
 

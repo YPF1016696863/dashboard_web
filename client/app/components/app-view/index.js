@@ -11,14 +11,17 @@ const layouts = {
   default: {
     showHeader: true,
     bodyClass: false,
+    bodyClassBackgroundColor: ''
   },
   fixed: {
     showHeader: true,
     bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
   },
   defaultSignedOut: {
     showHeader: false,
-  },
+    bodyClassBackgroundColor:''
+  }
 };
 
 function selectLayout(route) {
@@ -73,6 +76,22 @@ class AppViewComponent {
   applyLayout(route) {
     this.layout = selectLayout(route);
     this.$rootScope.bodyClass = this.layout.bodyClass;
+    this.$rootScope.theme = {
+      theme: 'light',
+      bodyBackgroundColor: 'dashboard-light-theme',
+      dashboardHeaderBackgroundColor: "widget-light-theme",
+      dashboardHeaderTitleColor: "header-title-light-theme",
+      widgetBackgroundColor: "widget-light-theme",
+      queryLinkTextColor:"query-link-light-theme",
+      widgetHeaderTextColor: "widget-header-text-light-theme",
+      widgetFooterTextColor: "widget-footer-text-light-theme",
+      widgetActionPanelBackgroundColor:"widget-action-panel-light-theme",
+      dashboardFooterFontColor:"dashboard-footer-font-color-light-theme",
+      dashboardTableTextColor:'dashboard-widget-table-text-light-theme',
+      dashboardTableHeaderTextColor:'dashboard-widget-table-header-text-light-theme',
+      dashboardWidgetScrollBar: 'dashboard-widget-scrollbox-light',
+      dashboardHeaderButtonColor: false
+    };
   }
 }
 

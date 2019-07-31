@@ -20,7 +20,6 @@ const WidgetDialog = {
 
 function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, $timeout, Events, currentUser) {
   this.canViewQuery = currentUser.hasPermission('view_query');
-
   this.editTextBox = () => {
     TextboxDialog.showModal({
       dashboard: this.dashboard,

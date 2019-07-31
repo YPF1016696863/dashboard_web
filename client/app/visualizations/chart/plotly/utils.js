@@ -9,20 +9,31 @@ import { createFormatter, formatSimpleTemplate } from '@/lib/value-format';
 
 // The following colors will be used if you pick "Automatic" color.
 const BaseColors = {
-  Blue: '#356AFF',
-  Red: '#E92828',
-  Green: '#3BD973',
-  Purple: '#604FE9',
-  Cyan: '#50F5ED',
-  Orange: '#FB8D3D',
-  'Light Blue': '#799CFF',
-  Lilac: '#B554FF',
-  'Light Green': '#8CFFB4',
-  Brown: '#A55F2A',
-  Black: '#000000',
-  Gray: '#494949',
-  Pink: '#FF7DE3',
-  'Dark Blue': '#002FB4',
+  "DataVis-红色":"#ed4d50",
+  "DataVis-绿色":"#6eb37a",
+  "DataVis-蓝色":"#5290e9",
+  "DataVis-橘色":"#ee941b",
+  "DataVis-紫色":"#985896",
+  "深蓝色": '#003f5c',
+  "灰蓝色": '#2f4b7c',
+  "深紫色": '#665191',
+  "紫红色": '#a05195',
+  "玫红色": '#d45087',
+  "桃红色": '#f95d6a',
+  "橙色": '#ff7c43',
+  "橘黄色": '#ffa600',
+  "绿色": '#53aa46'
+};
+
+const GridStrokeColor = {
+  "dark":{
+    "grid":"#2c4059",
+    "font":"#f2f5fa"
+  },
+  "light":{
+    "grid":"#e8e8e8",
+    "font":"#515151"
+  }
 };
 
 // Additional colors for the user to choose from:
@@ -281,7 +292,7 @@ function preparePieData(seriesList, options) {
       values: map(serie.data, i => i.y),
       labels: map(serie.data, row => (hasX ? normalizeValue(row.x) : `Slice ${index}`)),
       type: 'pie',
-      hole: 0.4,
+      hole: options.pieChartHoleSize?options.pieChartHoleSize:0.4,
       marker: {
         colors: map(serie.data, row => valuesColors[row.x] || getDefaultColor(row.x)),
       },
@@ -523,23 +534,54 @@ export function prepareData(seriesList, options) {
   return prepareChartData(seriesList, options);
 }
 
-export function prepareLayout(element, seriesList, options, data) {
+export function prepareLayout(element, seriesList, options, data, theme) {
   const {
     cellsInRow, cellWidth, cellHeight, xPadding, hasY2,
   } = calculateDimensions(seriesList, options);
 
   const result = {
     margin: {
-      l: 10,
+      l: options.globalSeriesType === 'pie'?10:45,
       r: 10,
-      b: 10,
-      t: 25,
-      pad: 4,
+      b: 0,
+      t: 0,
+      pad: 0,
     },
     width: Math.floor(element.offsetWidth),
     height: Math.floor(element.offsetHeight),
     autosize: true,
     showlegend: has(options, 'legend') ? options.legend.enabled : true,
+    "template": {
+      "layout": {
+        "font": {
+          "color": GridStrokeColor[theme].font,
+          "size": 8
+        },
+        "title": {
+          "x": 0.05
+        },
+        "xaxis": {
+          "ticks": "",
+          "gridcolor": GridStrokeColor[theme].grid,
+          "linecolor": "#506784",
+          "automargin": true,
+          "zerolinecolor": GridStrokeColor[theme].grid,
+          "zerolinewidth": 1
+        },
+        "yaxis": {
+          "ticks": "",
+          "gridcolor": GridStrokeColor[theme].grid,
+          "linecolor": "#506784",
+          "automargin": true,
+          "zerolinecolor": GridStrokeColor[theme].grid,
+          "zerolinewidth": 1
+        },
+        "hovermode": "closest"
+      },
+    },
+
+    plot_bgcolor: "rgba(0,0,0,0)",
+    paper_bgcolor: "rgba(0,0,0,0)"
   };
 
   if (options.globalSeriesType === 'pie') {
@@ -554,8 +596,8 @@ export function prepareLayout(element, seriesList, options, data) {
         return {
           x: xPosition + ((cellWidth - xPadding) / 2),
           y: yPosition + cellHeight - 0.015,
-          xanchor: 'center',
-          yanchor: 'top',
+          "xanchor": "center",
+          "yanchor": "auto",
           text: options.seriesOptions[series.name].name || series.name,
           showarrow: false,
         };
