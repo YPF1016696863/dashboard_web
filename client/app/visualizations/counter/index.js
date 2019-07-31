@@ -16,7 +16,7 @@ function getRowNumber(index, size) {
   return size + index;
 }
 
-function CounterRenderer($timeout) {
+function CounterRenderer($timeout,$rootScope) {
   return {
     restrict: 'E',
     template: counterTemplate,
@@ -80,6 +80,14 @@ function CounterRenderer($timeout) {
           }
         }
 
+        $scope.trendStyle = $rootScope.theme.dashboardHeaderTitleColor;
+        if ($scope.targetValue && $scope.trendPositive) {
+          $scope.trendStyle = 'positive';
+        }
+        if($scope.targetValue && !$scope.trendPositive) {
+          $scope.trendStyle = 'negative';
+        }
+
         $timeout(() => {
           $scope.handleResize();
         });
@@ -87,6 +95,7 @@ function CounterRenderer($timeout) {
 
       $scope.$watch('visualization.options', refreshData, true);
       $scope.$watch('queryResult && queryResult.getData()', refreshData);
+      $rootScope.$watch('theme.theme', refreshData);
     },
   };
 }
