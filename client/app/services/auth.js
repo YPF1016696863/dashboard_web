@@ -45,7 +45,7 @@ function AuthService($window, $location, $q, $http, appSettings) {
     },
     logout() {
       logger('Logout.');
-      $window.location.href = 'logout';
+      $window.location.href = appSettings.app.logout;
     },
     loadSession() {
       logger('Loading session');
