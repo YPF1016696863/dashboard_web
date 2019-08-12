@@ -29,17 +29,17 @@
                 </span>
             </span>
             <span ng-switch-default>
-              <span class="save-status">Saved</span>
+              <span class="save-status">{{'DASHBOARD.SAVED' | translate}}</span>
               <button class="btn btn-primary btn-sm"
                       ng-disabled="$ctrl.isGridDisabled"
                       ng-click="$ctrl.editLayout(false)">
-                <i class="fa fa-check"></i> Done Editing
+                <i class="fa fa-check"></i> {{'DASHBOARD.DONE_EDITING' | translate}}
               </button>
             </span>
           </div>
 
           <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.togglePublished()" tooltip="Publish Dashboard" ng-if="$ctrl.dashboard.is_draft && !$ctrl.layoutEditing">
-            <span class="fa fa-paper-plane"></span> Publish
+            <span class="fa fa-paper-plane"></span> {{'DASHBOARD.PUBLISH' | translate}}
           </button>
 
           <div class="btn-group" uib-dropdown ng-if="!$ctrl.layoutEditing">
@@ -77,10 +77,10 @@
                     <span class="zmdi zmdi-more"></span>
                 </button>
                 <ul class="dropdown-menu pull-right" uib-dropdown-menu>
-                    <li ng-if="!$ctrl.dashboard.is_archived" ng-class="{hidden: $ctrl.isGridDisabled}"><a ng-click="$ctrl.editLayout(true)">Edit</a></li>
-                    <li ng-if="$ctrl.showPermissionsControl"><a ng-click="$ctrl.showManagePermissionsModal()">Manage Permissions</a></li>
-                    <li ng-if="!$ctrl.dashboard.is_draft"><a ng-click="$ctrl.togglePublished()">Unpublish</a></li>
-                    <li ng-if="!$ctrl.dashboard.is_archived"><a ng-click="$ctrl.archiveDashboard()">Archive</a></li>
+                    <li ng-if="!$ctrl.dashboard.is_archived" ng-class="{hidden: $ctrl.isGridDisabled}"><a ng-click="$ctrl.editLayout(true)">{{'DASHBOARD.EDIT' | translate}}</a></li>
+                    <li ng-if="$ctrl.showPermissionsControl"><a ng-click="$ctrl.showManagePermissionsModal()">管理权限</a></li>
+                    <li ng-if="!$ctrl.dashboard.is_draft"><a ng-click="$ctrl.togglePublished()">{{'DASHBOARD.UNPUBLISH' | translate}}</a></li>
+                    <li ng-if="!$ctrl.dashboard.is_archived"><a ng-click="$ctrl.archiveDashboard()">{{'DASHBOARD.ARCHIVE'|translate}}</a></li>
                 </ul>
             </div>
         </div>
@@ -97,6 +97,7 @@
     <div class="m-b-10 p-15 bg-white tiled" ng-if="$ctrl.globalParameters.length > 0">
         <parameters parameters="$ctrl.globalParameters"></parameters>
     </div>
+
 
     <div class="m-b-10 p-15 bg-white tiled" ng-if="$ctrl.filters | notEmpty">
         <filters filters="$ctrl.filters" on-change="$ctrl.filtersOnChange(filter, $modal)"></filters>
@@ -122,6 +123,7 @@
             <a class="btn btn-primary m-l-10" ng-click="$ctrl.showAddWidgetDialog()">Add Widget</a>
         </div>
     </div>
+
 
 </div>
 <div class="dashboard-footer" ng-class="$root.theme.dashboardFooterFontColor">

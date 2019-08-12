@@ -54,54 +54,60 @@ class DashboardList extends React.Component {
     }
   ];
 
-  listColumns = [
-    Columns.favorites({ className: 'p-r-0' }),
-    Columns.custom.sortable(
-      (text, item) => (
-        <React.Fragment>
-          <a
-            className="table-main-title"
-            href={'dashboard/' + item.slug}
-            data-test={item.slug}
-          >
-            {item.name}
-          </a>
-          <DashboardTagsControl
-            className="d-block"
-            tags={item.tags}
-            isDraft={item.is_draft}
-            isArchived={item.is_archived}
-          />
-        </React.Fragment>
+  listColumns = [];
+
+  componentDidMount() {
+    const translate = this.props.$translate ? this.props.$translate : null;
+    this.listColumns = [
+      Columns.favorites({ className: 'p-r-0' }),
+      Columns.custom.sortable(
+        (text, item) => (
+          <React.Fragment>
+            <a
+              className="table-main-title"
+              href={'dashboard/' + item.slug}
+              data-test={item.slug}
+            >
+              {item.name}
+            </a>
+            <DashboardTagsControl
+              className="d-block"
+              tags={item.tags}
+              isDraft={item.is_draft}
+              isArchived={item.is_archived}
+            />
+          </React.Fragment>
+          ),
+          {
+            title: translate.instant('DASHBOARDLIST.DASNBOARDS_TABLE.NAME'),
+            field: 'name',
+            width: null
+          }
       ),
-      {
-        title: 'Name',
-        field: 'name',
-        width: null
-      }
-    ),
-    Columns.avatar(
-      { field: 'user', className: 'p-l-0 p-r-0' },
-      name => `Created by ${name}`
-    ),
-    Columns.dateTime.sortable({
-      title: 'Created At',
-      field: 'created_at',
-      className: 'text-nowrap',
-      width: '1%'
-    })
-  ];
+      Columns.avatar(
+          { field: 'user', className: 'p-l-0 p-r-0' },
+          name => `Created by ${name}`
+      ),
+      Columns.dateTime.sortable({
+        title: translate.instant('DASHBOARDLIST.DASNBOARDS_TABLE.CREATED_AT'),
+        field: 'created_at',
+        className: 'text-nowrap',
+        width: '1%'
+      })
+    ];
+  }
 
   render() {
     const { controller } = this.props;
+    const {$translate} = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div className="container">
-        <PageHeader title={controller.params.title} />
+        <PageHeader title={translate.instant(controller.params.title)} />
         <Layout className="m-l-15 m-r-15">
           <Layout.Sidebar className="m-b-0">
             <Sidebar.SearchInput
-              placeholder="Search Dashboards..."
+              placeholder={$translate.instant("DASHBOARD.SAERCH_DASHBOARD")}
               value={controller.searchTerm}
               onChange={controller.updateSearch}
             />
@@ -196,12 +202,12 @@ export default function init(ngModule) {
     [
       {
         path: '/dashboards',
-        title: 'Dashboards',
+        title: 'DASHBOARDLIST.DASHBOARDS',
         key: 'all'
       },
       {
         path: '/dashboards/favorites',
-        title: 'Favorite Dashboards',
+        title: 'DASHBOARDLIST.FAVORITE',
         key: 'favorites'
       }
     ],

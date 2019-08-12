@@ -1,7 +1,7 @@
 <div data-test="EditDashboardDialog">
   <div class="modal-header">
     <button type="button" class="close" ng-click="$ctrl.dismiss()" ng-disabled="$ctrl.saveInProgress" aria-hidden="true">&times;</button>
-    <h4 class="modal-title">New Dashboard</h4>
+    <h4 class="modal-title">{{'DASHBOARD.NEW_DASHBOARD' | translate}}</h4>
   </div>
   <div class="modal-body" ng-if="$ctrl.policy.isCreateDashboardEnabled()">
     <p>

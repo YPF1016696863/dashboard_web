@@ -1,27 +1,27 @@
 <div>
   <ul class="tab-nav">
     <li ng-class="{active: currentTab == 'general'}">
-      <a ng-click="changeTab('general')">General</a>
+      <a ng-click="changeTab('general')">{{'CHART_EDITOR.GENERAL' | translate}}</a>
     </li>
     <li ng-class="{active: currentTab == 'xAxis'}" ng-if="options.globalSeriesType != 'custom'">
-      <a ng-click="changeTab('xAxis')">X Axis</a>
+      <a ng-click="changeTab('xAxis')">{{'CHART_EDITOR.X_AXIS' | translate}}</a>
     </li>
     <li ng-class="{active: currentTab == 'yAxis'}" ng-if="options.globalSeriesType != 'custom'">
-      <a ng-click="changeTab('yAxis')">Y Axis</a>
+      <a ng-click="changeTab('yAxis')">{{'CHART_EDITOR.Y_AXIS' | translate}}</a>
     </li>
     <li ng-class="{active: currentTab == 'series'}" ng-if="options.globalSeriesType != 'custom'">
-      <a ng-click="changeTab('series')">Series</a>
+      <a ng-click="changeTab('series')">{{'CHART_EDITOR.SERIES' | translate}}</a>
     </li>
     <li ng-class="{active: currentTab == 'colors'}" ng-if="options.globalSeriesType != 'custom'">
-      <a ng-click="changeTab('colors')">Colors</a>
+      <a ng-click="changeTab('colors')">{{'CHART_EDITOR.COLORS' | translate}}</a>
     </li>
     <li ng-class="{active: currentTab == 'dataLabels'}" ng-if="options.globalSeriesType != 'custom'">
-      <a ng-click="changeTab('dataLabels')">Data Labels</a>
+      <a ng-click="changeTab('dataLabels')">{{'CHART_EDITOR.DATA_LABELS' | translate}}</a>
     </li>
   </ul>
   <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
     <div class="form-group">
-      <label class="control-label">Chart Type</label>
+      <label class="control-label">{{'CHART_EDITOR.CHART_TYPE' | translate}}</label>
       <div ng-if="chartTypes">
         <!--the if is a weird workaround-->
         <ui-select ng-model="options.globalSeriesType" on-select="chartTypeChanged()">
@@ -43,7 +43,7 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error': chartEditor.xAxisColumn.$invalid}">
-      <label class="control-label">X Column</label>
+      <label class="control-label">{{'CHART_EDITOR.X_COLUMN' | translate}}</label>
 
       <ui-select name="xAxisColumn" required ng-model="form.xAxisColumn">
         <ui-select-match placeholder="Choose column...">{{$select.selected}}</ui-select-match>
@@ -57,7 +57,7 @@
 
     <!-- not using regular validation (chartEditor.yAxisColumns.$invalid) due to a bug in ui-select with multiple choices-->
     <div class="form-group" ng-class="{'has-error': !form.yAxisColumns || form.yAxisColumns.length == 0}">
-      <label class="control-label">Y Columns</label>
+      <label class="control-label">{{'CHART_EDITOR.Y_COLUMNS' | translate}}</label>
 
       <ui-select multiple name="yAxisColumns" required ng-model="form.yAxisColumns">
         <ui-select-match placeholder="Choose columns...">{{$item}}</ui-select-match>
@@ -71,7 +71,7 @@
     </div>
 
     <div class="form-group" ng-if="['custom', 'heatmap'].indexOf(options.globalSeriesType) == -1">
-      <label class="control-label">Group by</label>
+      <label class="control-label">{{'CHART_EDITOR.GROUP_BY' | translate}}</label>
       <ui-select name="groupby" ng-model="form.groupby" class="clearable">
         <ui-select-match allow-clear="true" placeholder="Choose column...">
           {{$select.selected}}
@@ -85,7 +85,7 @@
     </div>
 
     <div class="form-group" ng-if="showSizeColumnPicker()">
-      <label class="control-label">Bubble size column</label>
+      <label class="control-label">{{'CHART_EDITOR.BUBBLE_SIZE_COLUMN' | translate}}</label>
 
       <ui-select name="sizeColumn" ng-model="form.sizeColumn">
         <ui-select-match allow-clear="true" placeholder="Choose column...">{{$select.selected}}</ui-select-match>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="form-group" ng-if="showZColumnPicker()">
-      <label class="control-label">Color Column</label>
+      <label class="control-label">{{'CHART_EDITOR.COLOR_COLUMN' | translate}}</label>
 
       <ui-select name="zValColumn" ng-model="form.zValColumn">
         <ui-select-match allow-clear="true" placeholder="Choose column...">{{$select.selected}}</ui-select-match>
@@ -110,7 +110,7 @@
     </div>
 
     <div class="form-group" ng-if="['custom', 'heatmap'].indexOf(options.globalSeriesType) == -1">
-      <label class="control-label">Errors column</label>
+      <label class="control-label">{{'CHART_EDITOR.ERRORS_COLUMN' | translate}}</label>
 
       <ui-select name="errorColumn" ng-model="form.errorColumn">
         <ui-select-match allow-clear="true" placeholder="Choose column...">{{$select.selected}}</ui-select-match>
@@ -125,19 +125,19 @@
     <div class="checkbox" ng-if="['custom', 'heatmap'].indexOf(options.globalSeriesType) == -1">
       <label>
         <input type="checkbox" ng-model="options.legend.enabled">
-        <i class="input-helper"></i> Show Legend
+        <i class="input-helper"></i> {{'CHART_EDITOR.SHOW_LEGEND' | translate}}
       </label>
     </div>
 
     <div class="checkbox" ng-if="options.globalSeriesType == 'box'">
       <label>
         <input type="checkbox" ng-model="options.showpoints">
-        <i class="input-helper"></i> Show All Points
+        <i class="input-helper"></i>  {{'CHART_EDITOR.SHOW_ALL_POINTS' | translate}}
       </label>
     </div>
 
     <div class="form-group" ng-if="['custom', 'heatmap'].indexOf(options.globalSeriesType) == -1">
-      <label class="control-label">Stacking</label>
+      <label class="control-label">{{'CHART_EDITOR.STACKING' | translate}}</label>
 
       <div ng-if="stackingOptions">
         <!--the if is a weird workaround-->
@@ -151,7 +151,7 @@
 
       <div ng-if="['line', 'area', 'column'].indexOf(options.globalSeriesType) >= 0" class="checkbox">
         <label class="control-label">
-          <input type="checkbox" ng-model="options.series.percentValues"> Normalize values to percentage
+          <input type="checkbox" ng-model="options.series.percentValues"> {{'CHART_EDITOR.NORMAL' | translate}}
         </label>
       </div>
     </div>
@@ -164,7 +164,7 @@
 
   <div ng-if="options.globalSeriesType == 'custom'">
     <div class="form-group">
-      <label class="control-label">Custom code</label>
+      <label class="control-label">{{'CHART_EDITOR.COLUMN_CODE' | translate}}</label>
       <textarea ng-model="options.customCode" class="form-control v-resizable" rows="10">
       </textarea>
     </div>
@@ -172,21 +172,21 @@
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="options.enableConsoleLogs">
-        <i class="input-helper"></i> Show errors in the console
+        <i class="input-helper"></i> {{'CHART_EDITOR.SHOW_ERRORS' | translate}}
       </label>
     </div>
 
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="options.autoRedraw">
-        <i class="input-helper"></i> Auto update graph
+        <i class="input-helper"></i> {{'CHART_EDITOR.AUTO_UPDATE' | translate}}
       </label>
     </div>
   </div>
 
   <div ng-if="currentTab == 'xAxis'" class="m-t-10 m-b-10">
     <div class="form-group">
-      <label class="control-label">Scale</label>
+      <label class="control-label">{{'CHART_EDITOR.SCALE' | translate}}</label>
       <ui-select ng-model="options.xAxis.type">
         <ui-select-match placeholder="Choose Scale...">{{$select.selected.label}}</ui-select-match>
         <ui-select-choices repeat="scaleType.value as scaleType in xAxisScales">
@@ -196,38 +196,38 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label">Name</label>
+      <label class="control-label">{{'CHART_EDITOR.NAME' | translate}}</label>
       <input ng-model="options.xAxis.title.text" type="text" class="form-control">
     </div>
 
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="options.sortX">
-        <i class="input-helper"></i> Sort Values
+        <i class="input-helper"></i> {{'CHART_EDITOR.SORT_VALUES' | translate}}
       </label>
     </div>
 
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="options.reverseX">
-        <i class="input-helper"></i> Reverse Order
+        <i class="input-helper"></i> {{'CHART_EDITOR.REVERSE_ORDER' | translate}}
       </label>
     </div>
 
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="options.xAxis.labels.enabled">
-        <i class="input-helper"></i> Show Labels
+        <i class="input-helper"></i> {{'CHART_EDITOR.SHOW_LABELS' | translate}}
       </label>
     </div>
   </div>
 
   <div ng-if="currentTab == 'yAxis'" class="m-t-10 m-b-10">
     <div ng-repeat="yAxis in options.yAxis">
-      <h4>{{$index == 0 ? 'Left' : 'Right'}} Y Axis</h4>
+      <h4>{{$index == 0 ? 'Left' : 'Right'}} {{'CHART_EDITOR.Y_AXIS' | translate}}</h4>
 
       <div class="form-group">
-        <label class="control-label">Scale</label>
+        <label class="control-label">{{'CHART_EDITOR.SCALE' | translate}}</label>
         <ui-select ng-model="yAxis.type">
           <ui-select-match placeholder="Choose Scale...">{{$select.selected | capitalize}}</ui-select-match>
           <ui-select-choices repeat="scaleType in yAxisScales">
@@ -236,29 +236,29 @@
         </ui-select>
       </div>
       <div class="form-group">
-        <label class="control-label">Name</label>
+        <label class="control-label">{{'CHART_EDITOR.NAME' | translate}}</label>
         <input ng-model="yAxis.title.text" type="text" class="form-control">
       </div>
       <div class="form-group">
-        <label class="control-label">Min Value</label>
+        <label class="control-label">{{'CHART_EDITOR.MIN_VALUE' | translate}}</label>
         <input ng-model="yAxis.rangeMin" type="number" step="any" placeholder="Auto" class="form-control">
       </div>
       <div class="form-group">
-        <label class="control-label">Max Value</label>
+        <label class="control-label">{{'CHART_EDITOR.MAX_VALUE' | translate}}</label>
         <input ng-model="yAxis.rangeMax" type="number" step="any" placeholder="Auto" class="form-control">
       </div>
 
       <div class="checkbox" ng-if="options.globalSeriesType == 'heatmap'">
         <label>
           <input type="checkbox" ng-model="options.sortY">
-          <i class="input-helper"></i> Sort Values
+          <i class="input-helper"></i> {{'CHART_EDITOR.SORT_VALUES' | translate}}
         </label>
       </div>
 
       <div class="checkbox">
         <label>
           <input type="checkbox" ng-model="options.reverseY">
-          <i class="input-helper"></i> Reverse Order
+          <i class="input-helper"></i> {{'CHART_EDITOR.REVERSE_ORDER' | translate}}
         </label>
       </div>
 
@@ -269,10 +269,10 @@
     <table class="table table-condensed col-table">
       <thead>
         <th style="width: 1%;">zIndex</th>
-        <th ng-if="options.globalSeriesType != 'pie'">Left Y Axis</th>
-        <th ng-if="options.globalSeriesType != 'pie'">Right Y Axis</th>
-        <th>Label</th>
-        <th ng-if="options.globalSeriesType != 'pie'">Type</th>
+        <th ng-if="options.globalSeriesType != 'pie'">{{'CHART_EDITOR.LEFT_Y_AXIS' | translate}}</th>
+        <th ng-if="options.globalSeriesType != 'pie'">{{'CHART_EDITOR.RIGHT_Y_AXIS' | translate}}</th>
+        <th>{{'CHART_EDITOR.LABEL' | translate}}</th>
+        <th ng-if="options.globalSeriesType != 'pie'">{{'CHART_EDITOR.TYPE' | translate}}</th>
       </thead>
       <tbody ui-sortable ng-model="form.seriesList">
         <tr ng-repeat="name in form.seriesList">
@@ -336,7 +336,7 @@
 
   <div ng-if="(currentTab == 'colors') && (options.globalSeriesType == 'heatmap')" class="m-t-10 m-b-10">
     <div class="form-group" ng-if="options.globalSeriesType == 'heatmap'">
-      <label class="control-label">Color Scheme</label>
+      <label class="control-label">{{'CHART_EDITOR.COLOR_SCHEME' | translate}}</label>
 
       <ui-select ng-model="options.colorScheme">
         <ui-select-match allow-clear="true" placeholder="Choose Color Scheme...">{{$select.selected | capitalize}}</ui-select-match>
@@ -349,7 +349,7 @@
     <div class="row">
       <div class="col-xs-6">
         <div class="form-group" ng-if="options.colorScheme == 'Custom...'">
-          <label class="control-label">Min Color</label>
+          <label class="control-label">{{'CHART_EDITOR.MIN_COLOR' | translate}}</label>
           <ui-select ng-model="options.heatMinColor">
             <ui-select-match>
               <color-box color="$select.selected.value"></color-box>
@@ -363,7 +363,7 @@
       </div>
       <div class="col-xs-6">
         <div class="form-group" ng-if="options.colorScheme == 'Custom...'">
-          <label class="control-label">Max Color</label>
+          <label class="control-label">{{'CHART_EDITOR.MAX_COLOR' | translate}}</label>
           <ui-select ng-model="options.heatMaxColor">
             <ui-select-match>
               <color-box color="$select.selected.value"></color-box>
@@ -404,12 +404,12 @@
   <div ng-if="currentTab == 'dataLabels'" class="m-t-10 m-b-10">
     <div ng-if="['line', 'area', 'column', 'scatter', 'pie', 'heatmap'].indexOf(options.globalSeriesType) >= 0" class="checkbox">
       <label>
-        <input type="checkbox" ng-model="options.showDataLabels"> Show Data Labels</label>
+        <input type="checkbox" ng-model="options.showDataLabels"> {{'CHART_EDITOR.SHOW_DATA_LABELS' | translate}}</label>
     </div>
 
     <div class="form-group">
       <label for="chart-editor-number-format">
-        Number Values Format
+        {{'CHART_EDITOR.NUMBER_V_F' | translate}}
         <span class="m-l-5" uib-popover-html="'Format <a href=&quot;https://redash.io/help/user-guide/visualizations/formatting-numbers&quot; target=&quot;_blank&quot;>specs.</a>'"
           popover-trigger="'click outsideClick'">
           <i class="fa fa-question-circle"></i>
@@ -420,7 +420,7 @@
 
     <div class="form-group">
       <label for="chart-editor-percent-format">
-        Percent Values Format
+        {{'CHART_EDITOR.PERCENT_V_F' | translate}}
         <span class="m-l-5" uib-popover-html="'Format <a href=&quot;https://redash.io/help/user-guide/visualizations/formatting-numbers&quot; target=&quot;_blank&quot;>specs.</a>'"
           popover-trigger="'click outsideClick'">
           <i class="fa fa-question-circle"></i>
@@ -431,7 +431,7 @@
 
     <div class="form-group">
       <label for="chart-editor-datetime-format">
-        Date/Time Values Format
+        {{'CHART_EDITOR.DATA_TIME_V_F' | translate}}
         <span class="m-l-5" uib-popover-html="'Format <a href=&quot;https://momentjs.com/docs/#/displaying/format/&quot; target=&quot;_blank&quot;>specs.</a>'"
           popover-trigger="'click outsideClick'">
           <i class="fa fa-question-circle"></i>
@@ -442,7 +442,7 @@
 
     <div class="form-group">
       <label for="chart-editor-text">
-        Data Labels
+        {{'CHART_EDITOR.DATA_LABELS' | translate}}
         <i class="fa fa-question-circle m-l-5" uib-popover-html="templateHint" popover-trigger="'click outsideClick'" popover-placement="top-left"></i>
       </label>
       <input class="form-control" ng-model="options.textFormat" ng-model-options="{ allowInvalid: true, debounce: 200 }" id="chart-editor-text"

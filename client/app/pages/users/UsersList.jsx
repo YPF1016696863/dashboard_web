@@ -86,49 +86,52 @@ class UsersList extends React.Component {
     },
   ];
 
-  listColumns = [
-    Columns.custom.sortable((text, user) => (
-      <UserPreviewCard user={user} withLink />
-    ), {
-      title: 'Name',
-      field: 'name',
-      width: null,
-    }),
-    Columns.custom.sortable((text, user) => map(user.groups, group => (
-      <a key={'group' + group.id} className="label label-tag" href={'groups/' + group.id}>{group.name}</a>
-    )), {
-      title: 'Groups',
-      field: 'groups',
-    }),
-    Columns.timeAgo.sortable({
-      title: 'Joined',
-      field: 'created_at',
-      className: 'text-nowrap',
-      width: '1%',
-    }),
-    Columns.timeAgo.sortable({
-      title: 'Last Active At',
-      field: 'active_at',
-      className: 'text-nowrap',
-      width: '1%',
-    }),
-    Columns.custom((text, user) => (
-      <UsersListActions
-        user={user}
-        enableUser={this.enableUser}
-        disableUser={this.disableUser}
-        deleteUser={this.deleteUser}
-      />
-    ), {
-      width: '1%',
-      isAvailable: () => policy.canCreateUser(),
-    }),
-  ];
+  listColumns = [];
 
   componentDidMount() {
+    const translate = this.props.$translate ? this.props.$translate : null;
     if (this.props.controller.params.isNewUserPage) {
       this.showCreateUserDialog();
     }
+
+    this.listColumns = [
+      Columns.custom.sortable((text, user) => (
+        <UserPreviewCard user={user} withLink />
+      ), {
+        title: translate.instant('USERLIST.USERS_TABLE.NAME'),
+        field: 'name',
+        width: null,
+      }),
+      Columns.custom.sortable((text, user) => map(user.groups, group => (
+        <a key={'group' + group.id} className="label label-tag" href={'groups/' + group.id}>{group.name}</a>
+      )), {
+        title: translate.instant('USERLIST.USERS_TABLE.GROUPS'),
+        field: 'groups',
+      }),
+      Columns.timeAgo.sortable({
+        title:  translate.instant('USERLIST.USERS_TABLE.JOINED'),
+        field: 'created_at',
+        className: 'text-nowrap',
+        width: '1%',
+      }),
+      Columns.timeAgo.sortable({
+        title:  translate.instant('USERLIST.USERS_TABLE.LAST_ACTIVE_AT'),
+        field: 'active_at',
+        className: 'text-nowrap',
+        width: '1%',
+      }),
+      Columns.custom((text, user) => (
+        <UsersListActions
+          user={user}
+          enableUser={this.enableUser}
+          disableUser={this.disableUser}
+          deleteUser={this.deleteUser}
+        />
+      ), {
+        width: '1%',
+        isAvailable: () => policy.canCreateUser(),
+      }),
+    ];
   }
 
   createUser = values => User.create(values).$promise.then((user) => {
@@ -172,6 +175,7 @@ class UsersList extends React.Component {
 
   // eslint-disable-next-line class-methods-use-this
   renderPageHeader() {
+    const {$translate} = this.props;
     if (!policy.canCreateUser()) {
       return null;
     }
@@ -179,7 +183,7 @@ class UsersList extends React.Component {
       <div className="m-b-15">
         <Button type="primary" disabled={!policy.isCreateUserEnabled()} onClick={this.showCreateUserDialog}>
           <i className="fa fa-plus m-r-5" />
-          New User
+          {$translate.instant("USERLIST.NEW_USER")}
         </Button>
         <DynamicComponent name="UsersListExtra" />
       </div>
@@ -239,7 +243,7 @@ class UsersList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'list_users',
-    title: 'Users',
+    title: 'USERLIST.USERS',
     path: 'users',
     isActive: path => path.startsWith('/users') && (path !== '/users/me'),
     order: 2,

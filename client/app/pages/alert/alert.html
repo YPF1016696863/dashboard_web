@@ -1,19 +1,19 @@
 <div class="container">
-  <page-header title="$ctrl.alert.name || $ctrl.getDefaultName() || 'New Alert'"></page-header>
+  <page-header title="$ctrl.alert.name || $ctrl.getDefaultName() || 'ALERT.NEW_ALERT' | translate"></page-header>
 
-  <email-settings-warning feature-name="'alert emails'"></email-settings-warning>
 
   <div class="container">
     <div class="row bg-white tiled p-10">
+        <email-settings-warning feature-name="'ALERT.FEATURE_NAME' | translate"></email-settings-warning>
       <div class="col-md-8">
         <form name="alertForm" class="form">
           <div class="form-group">
-            <label>Query</label>
+            <label>{{'ALERT.QUERY' | translate}}</label>
             <query-selector type="'select'" selected-query="$ctrl.alert.query" on-change="$ctrl.onQuerySelected" disabled="!$ctrl.canEdit" />
           </div>
 
           <div class="form-group" ng-show="$ctrl.selectedQuery">
-            <label>Name</label>
+            <label>{{'ALERT.NAME' | translate}}</label>
             <input type="string" placeholder="{{$ctrl.getDefaultName()}}" class="form-control" ng-model="$ctrl.alert.name" ng-disabled="!$ctrl.canEdit">
           </div>
 

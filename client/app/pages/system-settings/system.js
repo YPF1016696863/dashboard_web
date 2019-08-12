@@ -25,7 +25,7 @@ function SystemSettingsCtrl(localStorageService, $translate) {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'System Settings',
+    title: 'HEADER.SYSTEM_SETTINGS',
     path: 'settings/system',
     order: 8,
   });

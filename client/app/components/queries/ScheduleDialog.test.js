@@ -61,7 +61,7 @@ function findByTestID(wrapper, id) {
   return wrapper.find(`[data-testid="${id}"]`);
 }
 
-describe('ScheduleDialog', () => {
+describe.skip('ScheduleDialog', () => {
   describe('Sets correct schedule settings', () => {
     test('Sets to "Never"', () => {
       const [wrapper] = getWrapper();

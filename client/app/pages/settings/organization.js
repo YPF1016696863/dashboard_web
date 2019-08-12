@@ -34,7 +34,7 @@ function OrganizationSettingsCtrl($http, clientConfig, Events, appSettings) {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'Settings',
+    title: 'HEADER.SETTINGS',
     path: 'settings/organization',
     order: 6,
   });

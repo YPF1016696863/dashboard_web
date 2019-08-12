@@ -96,6 +96,7 @@ class AddWidgetDialog extends React.Component {
   }
 
   renderVisualizationInput() {
+    const translate = this.props.$translate ? this.props.$translate : null;
     let visualizationGroups = {};
     if (this.state.selectedQuery) {
       each(this.state.selectedQuery.visualizations, (vis) => {
@@ -107,7 +108,7 @@ class AddWidgetDialog extends React.Component {
     return (
       <div>
         <div className="form-group">
-          <label htmlFor="choose-visualization">Choose Visualization</label>
+          <label htmlFor="choose-visualization">{translate.instant("WIDGETDIALOG.CHOOSE_VISUALIZATION")}</label>
           <Select
             id="choose-visualization"
             className="w-100"
@@ -131,17 +132,17 @@ class AddWidgetDialog extends React.Component {
   render() {
     const existingParams = this.props.dashboard.getParametersDefs();
     const { dialog } = this.props;
-
+    const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <Modal
         {...dialog.props}
-        title="Add Widget"
+        title={translate.instant('WIDGETDIALOG.ADD')}
         onOk={() => this.saveWidget()}
         okButtonProps={{
           loading: this.state.saveInProgress,
           disabled: !this.state.selectedQuery,
         }}
-        okText="Add to Dashboard"
+        okText={translate.instant('WIDGETDIALOG.ADD_TO_DASHBOARD')}
         width={700}
       >
         <div data-test="AddWidgetDialog">

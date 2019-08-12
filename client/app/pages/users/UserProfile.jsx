@@ -15,13 +15,6 @@ import PromiseRejectionError from '@/lib/promise-rejection-error';
 import './settings.less';
 
 class UserProfile extends React.Component {
-  static propTypes = {
-    onError: PropTypes.func,
-  };
-
-  static defaultProps = {
-    onError: () => {},
-  };
 
   constructor(props) {
     super(props);
@@ -42,12 +35,14 @@ class UserProfile extends React.Component {
   }
 
   render() {
+    const {$translate} = this.props;
     const { user } = this.state;
     const canEdit = user && (currentUser.isAdmin || currentUser.id === user.id);
     const UserComponent = canEdit ? UserEdit : UserShow;
+
     return (
       <React.Fragment>
-        <EmailSettingsWarning featureName="invite emails" />
+        <EmailSettingsWarning featureName={$translate.instant("USERPROFILE.INVITE_EMAILS")} $translate={$translate} />
         <div className="row">
           {user ? <UserComponent user={user} /> : <LoadingState className="" />}
         </div>
@@ -56,14 +51,22 @@ class UserProfile extends React.Component {
   }
 }
 
+UserProfile.propTypes = {
+  onError: PropTypes.func,
+};
+
+UserProfile.defaultProps = {
+  onError: () => {},
+};
+
 export default function init(ngModule) {
   settingsMenu.add({
-    title: 'Account',
+    title: 'USERPROFILE.ACCOUNT',
     path: 'users/me',
     order: 7,
   });
 
-  ngModule.component('pageUserProfile', react2angular(UserProfile));
+  ngModule.component('pageUserProfile', react2angular(UserProfile, Object.keys(UserProfile.propTypes), ['$translate']));
 }
 
 init.init = true;

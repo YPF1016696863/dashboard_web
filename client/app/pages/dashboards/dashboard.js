@@ -46,7 +46,8 @@ function DashboardCtrl(
   currentUser,
   clientConfig,
   Events,
-  appSettings
+  appSettings,
+  $translate
 ) {
   this.saveInProgress = false;
   this.saveDelay = false;
@@ -357,6 +358,7 @@ function DashboardCtrl(
     TextboxDialog.showModal({
       dashboard: this.dashboard,
       onConfirm: this.addTextbox,
+      $translate
     });
   };
 
@@ -387,6 +389,7 @@ function DashboardCtrl(
     AddWidgetDialog.showModal({
       dashboard: this.dashboard,
       onConfirm: this.addWidget,
+      $translate
     });
   };
 

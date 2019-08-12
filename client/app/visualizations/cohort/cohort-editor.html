@@ -1,9 +1,9 @@
 <ul class="tab-nav">
   <li ng-class="{active: currentTab == 'columns'}">
-    <a ng-click="setCurrentTab('columns')">Columns</a>
+    <a ng-click="setCurrentTab('columns')">{{'COHORT_EDITOR.COLUMNS' | translate}}</a>
   </li>
   <li ng-class="{active: currentTab == 'options'}">
-    <a ng-click="setCurrentTab('options')">Options</a>
+    <a ng-click="setCurrentTab('options')">{{'COHORT_EDITOR.OPTIONS' | translate}}</a>
   </li>
 </ul>
 
@@ -11,17 +11,17 @@
   <div class="form-group">
     <label class="control-label">Time Interval</label>
     <select class="form-control" ng-model="visualization.options.timeInterval">
-      <option value="daily">Daily</option>
-      <option value="weekly">Weekly</option>
-      <option value="monthly">Monthly</option>
+      <option value="daily">{{'COHORT_EDITOR.DAILY' | translate}}</option>
+      <option value="weekly">{{'COHORT_EDITOR.WEEKLY' | translate}}</option>
+      <option value="monthly">{{'COHORT_EDITOR.MONTHLY' | translate}}</option>
     </select>
   </div>
 
   <div class="form-group">
-    <label class="control-label">Mode</label>
+    <label class="control-label">{{'COHORT_EDITOR.MODE' | translate}}</label>
     <select class="form-control" ng-model="visualization.options.mode">
-      <option value="diagonal">Fill gaps with zeros</option>
-      <option value="simple">Show data as is</option>
+      <option value="diagonal">{{'COHORT_EDITOR.FILL_GAPS_WITH_ZEROS' | translate}}</option>
+      <option value="simple">{{'COHORT_EDITOR.SHOW_DATA_AS_IS' | translate}}</option>
     </select>
   </div>
 </div>

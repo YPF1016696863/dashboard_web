@@ -1,5 +1,7 @@
-import { includes, map } from 'lodash';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { includes, map } from 'lodash';
+
 import { react2angular } from 'react2angular';
 import Button from 'antd/lib/button';
 
@@ -25,12 +27,12 @@ import { Group } from '@/services/group';
 import { User } from '@/services/user';
 import navigateTo from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
-import PropTypes from 'prop-types';
+
 
 class GroupMembers extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
-    $translate: PropTypes.func,
+    $translate: PropTypes.func
   };
 
   static defaultProps = {
@@ -45,12 +47,12 @@ class GroupMembers extends React.Component {
     {
       key: 'users',
       href: `groups/${this.groupId}`,
-      title: 'Members',
+      title: 'SIDEBAR.MEMBERS',
     },
     {
       key: 'datasources',
       href: `groups/${this.groupId}/data_sources`,
-      title: 'Data Sources',
+      title: 'SIDEBAR.DATA_SOURCE',
       isAvailable: () => currentUser.isAdmin,
     },
   ];

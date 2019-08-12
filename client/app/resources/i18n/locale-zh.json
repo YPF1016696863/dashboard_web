@@ -51,7 +51,9 @@
     "ARCHIVED": "归档的项目",
     "ACTIVE_USERS": "正常用户",
     "PENDING_INVITATIONS": "等验证用户",
-    "DISABLED_USERS": "禁用用户"
+    "DISABLED_USERS": "禁用用户",
+    "MEMBERS": "成员",
+    "DATA_SOURCE": "数据源"
   },
   "SETTINGS": {
     "SYSTEM": {
@@ -62,6 +64,22 @@
   },
   "CREATE_SOURCE_DIALOG": {
     "SETUP_INSTRUCTIONS": "设置说明"
+  },
+  "ALERT": {
+    "NEW_ALERT": "新建警报",
+    "FEATURE_NAME": "警报电子邮件",
+    "QUERY": "查询结果",
+    "NAME":"名称",
+    "EMAIL_SETTINGS_WARNING": {
+      "MESSAGE": "您的邮件服务器未配置。 确保在系统设置中配置邮件服务以使{{featureName}}正常工作."
+    },
+    "NOTIFICATION":{
+      "NOTIFICATIONS": "通知"
+    }
+  },
+  "USERPROFILE": {
+    "INVITE_EMAILS": "邀请邮件",
+    "ACCOUNT": "账户"
   },
   "DASHBOARD": {
     "SETTINGS": {
@@ -75,6 +93,211 @@
     "CONNECTION_LIGHT": {
       "ON": "在线",
       "OFF": "掉线"
+    },
+    "NEW_DASHBOARD": "新建数据可视化面板",
+    "SAERCH_DASHBOARD": "查询可视化面板",
+    "PUBLISH": "发布",
+    "UNPUBLISH": "不发布",
+    "ARCHIVE": "回收",
+    "EDIT": "编辑",
+    "DONE_EDITING": "完成编辑",
+    "MESSAGE": "小部件是单独的查询可视化或文本框，您可以按各种安排放置在仪表板上。",
+    "TEXTBOX": "添加文本框",
+    "WIDGETS": "添加部件",
+    "FILTERS": "使用可视化面板级过滤器",
+    "SAVED": "保存"
+  },
+  "DATASOURCELIST": {
+    "DATA_SOURCES": "所有数据源",
+    "NEW_DATA_SOURCE": "新建数据源",
+    "MESSAGE": {
+      "EMPTY": "现在还没有设置数据源",
+      "CLICK": "点击此处",
+      "ADD": "添加一个数据源"
     }
+  },
+  "GROUPLIST": {
+    "GROUPS": "所有组",
+    "NEW_GROUP": "新建组"
+  },
+  "USERLIST": {
+    "USERS": "所有用户",
+    "NEW_USER": "新建用户",
+    "USERS_TABLE": {
+      "NAME": "名称",
+      "GROUPS": "所在组",
+      "JOINED": "加入于",
+      "LAST_ACTIVE_AT": "上次回收于"
+    }
+  },
+  "DESTINATIONLIST": {
+    "ALERT_DESTINATIONS": "预警推送设置",
+    "NEW_ALERT_DESTINATION": "新建报警点",
+    "MESSAGE": {
+      "EMPTY": "现在还没有设置预警推送",
+      "CLICK": "点击此处",
+      "ADD": "添加一个"
+    }
+  },
+  "VISUALIZATION":{
+    "NEW_VISUALIZATION": "新建可视化",
+    "VISUALIZATION_EDITOR": "数据可视化编辑器",
+    "VISUALIZATION_TYPE": "可视化类型",
+    "VISUALIZATION_NAME": "可视化名称",
+    "EDIT_VISUALIZATION": "编辑可视化",
+    "ADD_TO_DASHBOARD": "添加到数据可视化面板",
+    "EMBED_ELSEWHERE": "嵌入到其他地方",
+    "CSV": "下载成CSV文件",
+    "EXC": "下载成Excel文件",
+    "DESCRIPTION": "添加描述",
+    "REFRESH": "刷新目录"
+
+  },
+  "QUERIESLIST":{
+    "QUERIES":"所有查询",
+    "FAVORITE_QUERIES":"加星标查询",
+    "ARCHIVED_QUERIES":"存档查询",
+    "MY_QUERIES":"我的查询",
+    "QUERIES_TABLE":{
+      "NAME":"名称",
+      "CREATED_AT":"创建于",
+      "RUNTIME":"执行时间",
+      "LAST_EXECUTED_AT":"上次执行时间",
+      "UPDATE_SCHEDULE":"更新频率"
+    }
+  },
+  "DASHBOARDLIST": {
+    "DASHBOARDS": "所有可视化面板",
+    "FAVORITE": "加星标的可视化面板",
+    "DASNBOARDS_TABLE": {
+      "NAME": "名称",
+      "CREATED_AT": "创建于"
+    }
+  },
+  "ALERTSLIST": {
+    "ALERTS": "所有警报",
+    "ALERTS_TABLE": {
+      "NAME": "名称",
+      "STATE": "状态",
+      "LAST_UPDATE_AT": "上次更新时间",
+      "CREATED_AT": "创建于"
+    }
+  },
+  "CREATESOURCEDIALOG": {
+    "TYPE_SELECTION": "选择类型",
+    "CONFIGRATION": "配置",
+    "DONE": "完成",
+    "CREATE_A_NEW": "创建一个新的{{sourceType}}"
+  },
+  "CREATEUSERDIALOG": {
+    "CREATE": "创建一个新用户",
+    "NAME": "名称",
+    "EMAIL": "邮箱"
+  },
+  "QUERYSNIPPETIS": {
+    "NEW_SNIPPET": "新建片段",
+    "TRIGGER": "触发",
+    "DESCRIPTION": "描述",
+    "SNIPPET": "片段",
+    "CREATED_BY": "创建于",
+    "UPDATED_AT": "上次更新时间"
+  },
+  "WIDGETDIALOG": {
+    "ADD": "添加部件",
+    "ADD_TO_DASHBOARD": "添加到可视化界面",
+    "CHOOSE_VISUALIZATION": "选择可视化"
+  },
+  "TEXTBOXDIALOG": {
+    "ADD": "添加文本框",
+    "EDIT": "编辑文本框",
+    "PLACEHOLDER": "在此输入你想输入的文本",
+    "ADD_TO_DASHBOARD": "添加到可视化面板",
+    "SAVE": "保存",
+    "PREVIEW": "预览:"
+  },
+  "QUERY": {
+    "FORK": "分叉",
+    "ARCHIVE": "收回",
+    "UNPUBLISH": "不发布",
+    "API": "展示API密钥",
+    "EDIT": "编辑资源",
+    "SHOW_DATA_ONLY": "仅展示数据"
+  },
+  "CHART_EDITOR": {
+    "GENERAL": "常规",
+    "X_AXIS": "X轴",
+    "Y_AXIS": "Y轴",
+    "SERIES": "系列",
+    "COLORS": "颜色",
+    "DATA_LABELS": "数据标签",
+    "CHART_TYPE": "表格类型",
+    "X_COLUMN": "X所在纵列",
+    "Y_COLUMNS": "Y所在各纵列",
+    "GROUP_BY": "组",
+    "BUBBLE_SIZE_COLUMN": "气泡尺寸纵列",
+    "COLOR_COLUMN": "颜色纵列",
+    "ERRORS_COLUMN": "错误纵列",
+    "SHOW_LEGEND": "展示图例",
+    "SHOW_ALL_POINTS": "展示所有的点",
+    "STACKING": "是否叠放",
+    "NORMAL": "将值正常化为百分比",
+    "COLUMN_CODE": "纵列代码",
+    "SHOW_ERRORS": "在控制台展示错误",
+    "AUTO_UPDATE": "自动更新图表",
+    "SCALE": "比例",
+    "NAME": "名称",
+    "SORT_VALUES": "排序值",
+    "REVERSE_ORDER": "倒序",
+    "SHOW_LABELS": "展示标签",
+    "MIN_VALUE": "最小值",
+    "MAX_VALUE": "最大值",
+    "LEFT_Y_AXIS": "左侧Y轴",
+    "RIGHT_Y_AXIS": "右侧Y轴",
+    "LABEL": "标签",
+    "TYPE": "类型",
+    "COLOR_SCHEME": "色彩设计",
+    "SHOW_DATA_LABELS": "展示数据标签",
+    "NUMBER_V_F": "数字数值格式",
+    "PERCENT_V_F": "百分数数值格式",
+    "DATA/TIME_V_F": "数据/时间数值格式"
+  },
+  "BOX_PLOT_EDITOR": {
+    "X_AXIS_LABEL": "X轴标签",
+    "Y_AXIS_LABEL": "Y轴标签"
+  },
+  "CHOROPLETH": {
+    "GENERAL": "常规",
+    "COLORS": "所有颜色",
+    "BOUNDS": "界限",
+    "COUNTRY_CODE_COLUMN": "国家代码所在纵列",
+    "COUNTRY_CODE_TYPE": "国家代码类型",
+    "VALUE_COLUMN": "数值纵列",
+    "VALUE_FORMAT": "数值格式",
+    "VALUE_PLACEHOLDER": "数值占位符",
+    "SHOW_LEGEND": "展示图例",
+    "LEGEND_POSITION":"图例位置",
+    "LEGEND_TEXT_ALIGNMENT": "图例文字对齐",
+    "SHOW_TOOLTIP": "显示提示",
+    "TOOLTIP_TEMPLATE": "提示案例",
+    "SHOW_POPUP": "显示弹出式菜单",
+    "POPUP_TEMPLATE": "弹出模块",
+    "CLUSTERING_MODE": "聚类模式",
+    "MIN_COLOR": "最小颜色值",
+    "MAX_COLOR": "最大颜色值",
+    "NO_VALUE_COLOR": "无颜色值",
+    "BACKGROUND_COLOR": "背景颜色",
+    "BORDERS_COLOR": "边框颜色",
+    "NORTH_EAST": "东北经纬度",
+    "SOUTH_WEST": "西南纬度和经度"
+  },
+  "COHORT_EDITOR": {
+    "COLUMNS": "纵列",
+    "OPTIONS": "选项",
+    "DAILY": "每天",
+    "WEEKLY": "每周",
+    "MONTHLY": "每周",
+    "MODE": "模式",
+    "FILL_GAPS_WITH_ZEROS": "用零填补空白 ",
+    "SHOW_DATA_AS_IS": "按原样显示数据 "
   }
 }
