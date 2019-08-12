@@ -4,7 +4,7 @@ export const appSettingsConfig = {
     },
     app: {
         login: 'http://login.chinambse.com',
-        logout: 'http://login.chinambse.com/logout',
+        logout: 'http://login.chinambse.com/logout?email=current',
         setup: '',
         help: ''
     },
