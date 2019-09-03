@@ -102,13 +102,25 @@ function spreadNodes(height, data) {
   });
 }
 
-function createSankey(element, data) {
+function createSankey(element, data, _theme) {
   const margin = {
     top: 10,
     right: 10,
     bottom: 10,
     left: 10,
   };
+
+  const theme = _theme !== undefined ?_theme:"light";
+
+  const fontColorTheme = {
+    "light":{
+      textColor: "#23272a"
+    },
+    "dark":{
+      textColor: "#fffff2"
+    }
+  };
+
   const width = element.offsetWidth - margin.left - margin.right;
   const height = element.offsetHeight - margin.top - margin.bottom;
 
@@ -221,19 +233,20 @@ function createSankey(element, data) {
     .attr('dy', '.35em')
     .attr('text-anchor', 'end')
     .attr('transform', null)
+    .attr('fill',fontColorTheme[theme].textColor)
     .text(d => d.name)
     .filter(d => d.x < width / 2)
     .attr('x', 6 + sankey.nodeWidth())
     .attr('text-anchor', 'start');
 }
 
-function sankeyRenderer() {
+function sankeyRenderer($rootScope) {
   return {
     restrict: 'E',
     template: '<div class="sankey-visualization-container" resize-event="handleResize()"></div>',
     link(scope, element) {
       const container = element[0].querySelector('.sankey-visualization-container');
-
+      let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
       function refreshData() {
         const queryData = scope.queryResult.getData();
         if (queryData) {
@@ -243,12 +256,25 @@ function sankeyRenderer() {
         }
       }
 
+      function refreshDataByTheme(_theme) {
+        const queryData = scope.queryResult.getData();
+        if (queryData) {
+          // do the render logic.
+          angular.element(container).empty();
+          createSankey(container, queryData,_theme);
+        }
+      }
+
       scope.handleResize = _.debounce(refreshData, 50);
       scope.$watch('queryResult && queryResult.getData()', refreshData);
       scope.$watch('visualization.options.height', (oldValue, newValue) => {
         if (oldValue !== newValue) {
           refreshData();
         }
+      });
+      $rootScope.$watch('theme', function() {
+        theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
+        refreshDataByTheme(theme);
       });
     },
   };
