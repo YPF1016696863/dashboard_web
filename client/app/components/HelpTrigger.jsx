@@ -130,7 +130,12 @@ export class HelpTrigger extends React.Component {
     return (
       <React.Fragment>
         <Tooltip title={this.props.text ? this.props.text : this.translate('HEADER.HELP')}>
+          {/*
           <a href="javascript: void(0)" onClick={this.openDrawer} className={className}>
+            {this.props.children}
+          </a>
+          */}
+          <a href="javascript: void(0)" className={className}>
             {this.props.children}
           </a>
         </Tooltip>
