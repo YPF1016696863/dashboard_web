@@ -5,7 +5,8 @@ COPY package.json /frontend/
 RUN npm install
 
 COPY . /frontend
-RUN npm run build
+RUN npm run build --nomaps
+RUN rm -Rf /frontend/client/dist/*.map
 
 FROM nginx
 COPY --from=frontend-builder /frontend/client/dist/*.html /usr/share/nginx/html/
