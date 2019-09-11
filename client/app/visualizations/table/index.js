@@ -224,7 +224,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'TABLE',
-      name: 'Table',
+      name: '表格',
       renderTemplate: '<grid-renderer options="visualization.options" query-result="queryResult"></grid-renderer>',
       editorTemplate: '<grid-editor></grid-editor>',
       defaultOptions,
