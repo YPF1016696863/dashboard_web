@@ -1,16 +1,16 @@
 <div>
   <ul class="tab-nav">
     <li ng-class="{active: currentTab == 'general'}">
-      <a ng-click="currentTab='general'">General</a>
+      <a ng-click="currentTab='general'">常规</a>
     </li>
     <li ng-class="{active: currentTab == 'map'}">
-      <a ng-click="currentTab='map'">Map Settings</a>
+      <a ng-click="currentTab='map'">地图设置</a>
     </li>
   </ul>
 
   <div ng-show="currentTab == 'general'" class="m-t-10 m-b-10">
     <div class="form-group">
-      <label class="control-label">Latitude Column Name</label>
+      <label class="control-label">纬度列名称</label>
       <ui-select
         name="form-control"
         required
@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label">Longitude Column Name</label>
+      <label class="control-label">经度列名称</label>
       <ui-select
         name="form-control"
         required
@@ -50,7 +50,7 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label">Some other Settings</label>
+      <label class="control-label">其他设置</label>
     </div>
   </div>
 

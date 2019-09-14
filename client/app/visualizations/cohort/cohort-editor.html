@@ -9,7 +9,7 @@
 
 <div ng-if="currentTab == 'options'" class="m-t-10 m-b-10">
   <div class="form-group">
-    <label class="control-label">Time Interval</label>
+    <label class="control-label">时间间隔</label>
     <select class="form-control" ng-model="visualization.options.timeInterval">
       <option value="daily">{{'COHORT_EDITOR.DAILY' | translate}}</option>
       <option value="weekly">{{'COHORT_EDITOR.WEEKLY' | translate}}</option>
@@ -28,13 +28,13 @@
 
 <div ng-if="currentTab == 'columns'" class="m-t-10 m-b-10">
   <div class="form-group">
-    <label class="control-label">Date (Bucket)</label>
+    <label class="control-label">数据（容器）</label>
     <select class="form-control" ng-model="visualization.options.dateColumn"
       ng-options="column for column in columnNames"></select>
   </div>
 
   <div class="form-group">
-    <label class="control-label">Stage</label>
+    <label class="control-label">阶段</label>
     <select class="form-control" ng-model="visualization.options.stageColumn"
       ng-options="column for column in columnNames"></select>
   </div>

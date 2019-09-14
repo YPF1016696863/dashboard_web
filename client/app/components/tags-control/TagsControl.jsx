@@ -59,11 +59,11 @@ function modelTagsControl({ archivedTooltip }) {
     return (
       <TagsControl {...props}>
         {!isArchived && isDraft && (
-          <span className="label label-tag-unpublished">Unpublished</span>
+          <span className="label label-tag-unpublished">未发布</span>
         )}
         {isArchived && (
           <Tooltip placement="right" title={archivedTooltip}>
-            <span className="label label-tag-archived">Archived</span>
+            <span className="label label-tag-archived">已回收</span>
           </Tooltip>
         )}
       </TagsControl>
