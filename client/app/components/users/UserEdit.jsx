@@ -122,28 +122,28 @@ export default class UserEdit extends React.Component {
     const formFields = [
       {
         name: 'name',
-        title: 'Name',
+        title: '名称',
         type: 'text',
         initialValue: user.name,
       },
       {
         name: 'email',
-        title: 'Email',
+        title: '邮箱',
         type: 'email',
         initialValue: user.email,
       },
       (!user.isDisabled && currentUser.id !== user.id) ? {
         name: 'group_ids',
-        title: 'Groups',
+        title: '组',
         type: 'select',
         mode: 'multiple',
         options: groups,
         initialValue: groups.filter(group => includes(user.groupIds, group.value)).map(group => group.value),
         loading: loadingGroups,
-        placeholder: loadingGroups ? 'Loading...' : '',
+        placeholder: loadingGroups ? '加载中...' : '',
       } : {
         name: 'group_ids',
-        title: 'Groups',
+        title: '组',
         type: 'content',
         content: this.renderUserGroups(),
       },
@@ -161,7 +161,7 @@ export default class UserEdit extends React.Component {
   renderUserGroups() {
     const { user, groups, loadingGroups } = this.state;
 
-    return loadingGroups ? 'Loading...' : (
+    return loadingGroups ? '加载中...' : (
       <div data-test="Groups">
         {groups.filter(group => includes(user.groupIds, group.value)).map((group => (
           <Tag className="m-b-5 m-r-5" key={group.value}>
@@ -178,7 +178,7 @@ export default class UserEdit extends React.Component {
     return (
       <Form layout="vertical">
         <hr />
-        <Form.Item label="API Key" className="m-b-10">
+        <Form.Item label="API 密钥" className="m-b-10">
           <InputWithCopy id="apiKey" className="hide-in-percy" value={user.apiKey} data-test="ApiKey" readOnly />
         </Form.Item>
         <Button
@@ -187,7 +187,7 @@ export default class UserEdit extends React.Component {
           loading={regeneratingApiKey}
           data-test="RegenerateApiKey"
         >
-          Regenerate
+          重新生成
         </Button>
       </Form>
     );
@@ -198,12 +198,12 @@ export default class UserEdit extends React.Component {
 
     return (
       <Alert
-        message="Email not sent!"
+        message="邮件未发出!"
         description={(
           <Fragment>
             <p>
-              The mail server is not configured, please send the following link
-              to <b>{user.name}</b>:
+              邮箱服务器未配置，请发送以下链接
+              至 <b>{user.name}</b>:
             </p>
             <InputWithCopy value={absoluteUrl(passwordLink)} readOnly />
           </Fragment>
@@ -223,7 +223,7 @@ export default class UserEdit extends React.Component {
         onClick={this.resendInvitation}
         loading={this.state.resendingInvitation}
       >
-        Resend Invitation
+        重新发送邀请
       </Button>
     );
   }
@@ -238,7 +238,7 @@ export default class UserEdit extends React.Component {
           onClick={this.sendPasswordReset}
           loading={sendingPasswordEmail}
         >
-          Send Password Reset Email
+          发送密码重置邮箱
         </Button>
       </Fragment>
     );
@@ -249,11 +249,11 @@ export default class UserEdit extends React.Component {
 
     return user.isDisabled ? (
       <Button className="w-100 m-t-10" type="primary" onClick={this.toggleUser} loading={togglingUser}>
-        Enable User
+        有效用户
       </Button>
     ) : (
       <Button className="w-100 m-t-10" type="danger" onClick={this.toggleUser} loading={togglingUser}>
-        Disable User
+        无效用户
       </Button>
     );
   }
@@ -276,10 +276,10 @@ export default class UserEdit extends React.Component {
           <Fragment>
             {this.renderApiKey()}
             <hr />
-            <h5>Password</h5>
+            <h5>密码</h5>
             {user.id === currentUser.id && (
               <Button className="w-100 m-t-10" onClick={this.changePassword} data-test="ChangePassword">
-                Change Password
+                变更密码
               </Button>
             )}
             {(currentUser.isAdmin && user.id !== currentUser.id) && (

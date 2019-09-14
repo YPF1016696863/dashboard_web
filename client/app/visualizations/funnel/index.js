@@ -230,7 +230,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'FUNNEL',
-      name: 'Funnel',
+      name: '漏斗',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions,

@@ -33,7 +33,7 @@ class SelectItemsDialog extends React.Component {
 
   static defaultProps = {
     dialogTitle: 'Add Items',
-    inputPlaceholder: 'Search...',
+    inputPlaceholder: '搜索...',
     selectedItemsTitle: 'Selected items',
     itemKey: item => item.id,
     renderItem: () => '',

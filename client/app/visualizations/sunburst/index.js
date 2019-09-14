@@ -48,7 +48,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'SUNBURST_SEQUENCE',
-      name: 'Sunburst Sequence',
+      name: '旭日图',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions,

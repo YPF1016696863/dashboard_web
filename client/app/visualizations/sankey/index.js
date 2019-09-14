@@ -302,7 +302,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'SANKEY',
-      name: 'Sankey',
+      name: '桑基图',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions,

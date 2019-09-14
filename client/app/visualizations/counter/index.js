@@ -149,7 +149,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'COUNTER',
-      name: 'Counter',
+      name: '计数器',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions,

@@ -1,10 +1,10 @@
 <settings-screen>
     <div class="row" data-test="OrganizationSettings">
         <div class="col-md-offset-4 col-md-4">
-            <h3 class="m-t-0">General</h3>
+            <h3 class="m-t-0">常规</h3>
             <p>
                 <label>
-                    Date Format
+                    数据格式
                 </label>
                 <select class="form-control" ng-model="$ctrl.settings.date_format" ng-change="$ctrl.update('date_format')">
                     <option ng-repeat="date_format in $ctrl.dateFormatList" value="{{date_format}}">{{date_format}}</option>

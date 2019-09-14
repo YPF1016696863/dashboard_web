@@ -324,7 +324,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'MAP',
-      name: 'Map (Markers)',
+      name: '地图 (Markers)',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions

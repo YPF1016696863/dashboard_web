@@ -364,7 +364,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'CHART',
-      name: 'Chart',
+      name: '图表',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions: DEFAULT_OPTIONS,

@@ -153,10 +153,10 @@ class CreateSourceDialog extends React.Component {
         {...dialog.props}
         title={$translate("CREATESOURCEDIALOG.CREATE_A_NEW",{sourceType})}
         footer={(currentStep === StepEnum.SELECT_TYPE) ? [
-          (<Button key="cancel" onClick={() => dialog.dismiss()}>Cancel</Button>),
-          (<Button key="submit" type="primary" disabled>Create</Button>),
+          (<Button key="cancel" onClick={() => dialog.dismiss()}>取消</Button>),
+          (<Button key="submit" type="primary" disabled>创建</Button>),
         ] : [
-          (<Button key="previous" onClick={this.resetType}>Previous</Button>),
+          (<Button key="previous" onClick={this.resetType}>返回</Button>),
           (
             <Button
               key="submit"
@@ -166,7 +166,7 @@ class CreateSourceDialog extends React.Component {
               loading={savingSource}
               data-test="CreateSourceButton"
             >
-              Create
+              创建
             </Button>
           ),
         ]}

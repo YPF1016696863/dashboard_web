@@ -7,7 +7,7 @@ import { EmptyState } from '@/components/empty-state/EmptyState';
 export default function QueriesListEmptyState({ page, searchTerm, selectedTags, $translate }) {
   if (searchTerm !== '') {
     return (
-      <BigMessage message="Sorry, we couldn't find anything." icon="fa-search" />
+      <BigMessage message="抱歉，我们未找到任何结果。" icon="fa-search" />
     );
   }
   if (selectedTags.length > 0) {

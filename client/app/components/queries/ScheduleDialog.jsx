@@ -200,9 +200,9 @@ class ScheduleDialog extends React.Component {
     } = this.state;
 
     return (
-      <Modal {...dialog.props} title="Refresh Schedule" className="schedule" onOk={() => this.save()}>
+      <Modal {...dialog.props} title="刷新目录" className="schedule" onOk={() => this.save()}>
         <div className="schedule-component">
-          <h5>Refresh every</h5>
+          <h5>刷新周期</h5>
           <div data-testid="interval">
             <Select className="input" value={seconds} onChange={this.setInterval} dropdownMatchSelectWidth={false}>
               <Option value={null} key="never">

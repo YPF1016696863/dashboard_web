@@ -1733,7 +1733,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'CESIUM_MAP',
-      name: 'Map (Cesium)',
+      name: '地图 (Cesium)',
       renderTemplate,
       editorTemplate: editoTemplate,
       defaultOptions
