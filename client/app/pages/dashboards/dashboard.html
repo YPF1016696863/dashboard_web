@@ -18,13 +18,13 @@
                 <span ng-switch-when="true">
                   <span class="save-status" data-saving>Saving</span>
                   <button class="btn btn-primary btn-sm" ng-disabled="$ctrl.editBtnClickedWhileSaving" ng-click="$ctrl.editBtnClickedWhileSaving = true">
-                    <i class="fa fa-check" ng-class="{'fa-spinner fa-pulse': $ctrl.editBtnClickedWhileSaving}"></i> Done Editing
+                    <i class="fa fa-check" ng-class="{'fa-spinner fa-pulse': $ctrl.editBtnClickedWhileSaving}"></i> 完成编辑
                   </button>
                 </span>
                 <span ng-switch-default>
-                  <span class="save-status" data-error>Saving Failed</span>
+                  <span class="save-status" data-error>保存失败</span>
                   <button class="btn btn-primary btn-sm" ng-click="$ctrl.saveDashboardLayout()">
-                    Retry
+                    重试
                   </button>
                 </span>
             </span>
@@ -58,7 +58,7 @@
                 <a href="javascript:void(0)" ng-click="$ctrl.setRefreshRate(refreshRate)">{{refreshRate.name}}</a>
               </li>
               <li role="menuitem" ng-if="$ctrl.refreshRate !== null">
-                <a href="#" ng-click="$ctrl.setRefreshRate(null)">Stop auto refresh</a>
+                <a href="#" ng-click="$ctrl.setRefreshRate(null)">关闭自动刷新</a>
               </li>
             </ul>
           </div>
@@ -119,8 +119,8 @@
 
     <div class="add-widget-container" ng-class="$root.theme.widgetActionPanelBackgroundColor" ng-if="$ctrl.layoutEditing">
         <div>
-            <a class="btn btn-info" ng-click="$ctrl.showAddTextboxDialog()">Add Textbox</a>
-            <a class="btn btn-primary m-l-10" ng-click="$ctrl.showAddWidgetDialog()">Add Widget</a>
+            <a class="btn btn-info" ng-click="$ctrl.showAddTextboxDialog()">添加文本框</a>
+            <a class="btn btn-primary m-l-10" ng-click="$ctrl.showAddWidgetDialog()">添加可视化部件</a>
         </div>
     </div>
 
