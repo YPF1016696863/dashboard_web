@@ -50,6 +50,7 @@ const config = {
     new WebpackBuildNotifierPlugin({ title: "Redash" }),
     // Enforce angular to use jQuery instead of jqLite
     new webpack.ProvidePlugin({ "window.jQuery": "jquery" }),
+    new webpack.ProvidePlugin({ echarts: 'echarts' }),
     // bundle only default `moment` locale (`en`)
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     new HtmlWebpackPlugin({
@@ -61,10 +62,6 @@ const config = {
       template: "./client/app/multi_org.html",
       filename: "multi_org.html",
       excludeChunks: ["server"]
-    }),
-    new HtmlWebpackIncludeAssetsPlugin({
-      append: false,
-      assets: ["cesium/Widgets/widgets.css", "cesium/Cesium.js"],
     }),
     new MiniCssExtractPlugin({
       filename: "[name].[chunkhash].css"
@@ -78,11 +75,7 @@ const config = {
       { from: "client/app/unsupported.html" },
       { from: "client/app/assets/css/*.css", to: "styles/", flatten: true },
       { from: "node_modules/jquery/dist/jquery.min.js", to: "js/jquery.min.js" },
-      { from: "node_modules/cesium/Build/CesiumUnminified", to: "cesium"},
     ]),
-    new webpack.DefinePlugin({
-      CESIUM_BASE_URL: JSON.stringify("/cesium"),
-    }),
   ],
   optimization: {
     splitChunks: {
@@ -205,9 +198,6 @@ const config = {
       modules: false,
       chunkModules: false
     }
-  },
-  externals: {
-    cesium: "Cesium"
   }
 };
 

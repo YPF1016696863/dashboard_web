@@ -70,6 +70,7 @@
           </button>
 
           <dashboard-theme-switch ng-if="!$ctrl.dashboard.is_draft && !$ctrl.layoutEditing"></dashboard-theme-switch>
+          <dashboard-background-switch ng-if="!$ctrl.dashboard.is_draft && !$ctrl.layoutEditing" ng-class="{'header-title-dark-theme':$root.theme.dashboardHeaderButtonColor}"></dashboard-background-switch>
       </span>
 
             <div class="btn-group hidden-print hidden-xs" role="group" ng-show="$ctrl.dashboard.canEdit()" uib-dropdown ng-if="!$ctrl.dashboard.is_archived && !$ctrl.layoutEditing" data-test="DashboardMoreMenu">

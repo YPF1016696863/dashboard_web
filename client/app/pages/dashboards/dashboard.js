@@ -106,12 +106,17 @@ function DashboardCtrl(
   this.isLayoutDirty = false;
 
   // Dashboard Header default style
+
+  const bodyBackgroundImage = $rootScope.theme.bodyBackgroundImage?$rootScope.theme.bodyBackgroundImage:"";
+  const widgetBackgroundColor = bodyBackgroundImage?"widget-dark-theme-bg2 ":"widget-light-theme";
+
   $rootScope.theme = {
     theme: 'light',
     bodyBackgroundColor: 'dashboard-light-theme',
+    bodyBackgroundImage,
     dashboardHeaderBackgroundColor: "widget-light-theme",
     dashboardHeaderTitleColor: "header-title-light-theme",
-    widgetBackgroundColor: "widget-light-theme",
+    widgetBackgroundColor,
     queryLinkTextColor:"query-link-light-theme",
     widgetHeaderTextColor: "widget-header-text-light-theme",
     widgetFooterTextColor: "widget-footer-text-light-theme",

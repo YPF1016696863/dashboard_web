@@ -73,6 +73,7 @@ const EditVisualizationDialog = {
             }
           }
           this.close();
+          document.location.reload(true);
         },
         () => {
           notification.error('Visualization could not be saved');
