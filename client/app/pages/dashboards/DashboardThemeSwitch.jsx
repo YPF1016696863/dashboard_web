@@ -39,12 +39,21 @@ class DashboardThemeSwitch extends React.Component {
     this.setState({isDarkTheme});
 
     if($rootScope) {
+      
+      const bodyBackgroundImage = $rootScope.theme.bodyBackgroundImage?$rootScope.theme.bodyBackgroundImage:"";
+      let widgetBackgroundColor = isDarkTheme?"widget-dark-theme":"widget-light-theme";   
+      let dashboardHeaderBackgroundColor = isDarkTheme?"widget-dark-theme":"widget-light-theme";   
+      if(bodyBackgroundImage) {
+        widgetBackgroundColor = "widget-dark-theme-bg2";
+        dashboardHeaderBackgroundColor = "widget-dark-theme-bg2";
+      }
       $rootScope.theme = {
         theme: isDarkTheme?'dark':'light',
+        bodyBackgroundImage,
         bodyBackgroundColor: isDarkTheme?"dashboard-dark-theme":"dashboard-light-theme",
-        dashboardHeaderBackgroundColor: isDarkTheme?"widget-dark-theme":"widget-light-theme",
+        dashboardHeaderBackgroundColor,
         dashboardHeaderTitleColor: isDarkTheme?"header-title-dark-theme":"header-title-light-theme",
-        widgetBackgroundColor: isDarkTheme?"widget-dark-theme":"widget-light-theme",
+        widgetBackgroundColor,
         queryLinkTextColor: isDarkTheme?"query-link-dark-theme":"query-link-light-theme",
         widgetHeaderTextColor: isDarkTheme?"widget-header-text-dark-theme":"widget-header-text-light-theme",
         widgetFooterTextColor: isDarkTheme?"widget-footer-text-dark-theme":"widget-footer-text-light-theme",

@@ -79,6 +79,7 @@ class AppViewComponent {
     this.$rootScope.theme = {
       theme: 'light',
       bodyBackgroundColor: 'dashboard-light-theme',
+      bodyBackgroundImage: "",
       dashboardHeaderBackgroundColor: "widget-light-theme",
       dashboardHeaderTitleColor: "header-title-light-theme",
       widgetBackgroundColor: "widget-light-theme",

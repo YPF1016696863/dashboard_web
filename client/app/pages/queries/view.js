@@ -403,15 +403,14 @@ function QueryViewCtrl(
   $scope.setVisualizationTab = visualization => {
     $scope.selectedTab = visualization.id;
     $location.hash(visualization.id);
-    console.log(visualization);
   };
 
   $scope.deleteVisualization = ($e, vis) => {
     $e.preventDefault();
 
     const title = undefined;
-    const message = `Are you sure you want to delete ${vis.name} ?`;
-    const confirm = { class: 'btn-danger', title: 'Delete' };
+    const message = `确认删除 ${vis.name} ?`;
+    const confirm = { class: 'btn-danger', title: '删除' };
 
     AlertDialog.open(title, message, confirm).then(() => {
       Visualization.delete(
@@ -427,8 +426,8 @@ function QueryViewCtrl(
         },
         () => {
           notification.error(
-            'Error deleting visualization.',
-            "Maybe it's used in a dashboard?"
+            '删除图表时出现错误.',
+            "获取该图表正在被Dashboard使用当中?"
           );
         }
       );
@@ -460,10 +459,10 @@ function QueryViewCtrl(
         $scope.query.queryResult = $scope.queryResult;
       }
 
-      Notifications.showNotification('Redash', `${$scope.query.name} updated.`);
+      Notifications.showNotification('DataVis', `${$scope.query.name} updated.`);
     } else if (status === 'failed') {
       Notifications.showNotification(
-        'Redash',
+        'DataVis',
         `${$scope.query.name} failed to run: ${$scope.queryResult.getError()}`
       );
     }
@@ -484,7 +483,6 @@ function QueryViewCtrl(
 
   $scope.openVisualizationEditor = visId => {
     const visualization = getVisualization(visId);
-
     function openModal() {
       $uibModal.open({
         windowClass: 'modal-xl',

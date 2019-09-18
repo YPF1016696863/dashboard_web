@@ -1,16 +1,40 @@
 import * as _ from 'lodash';
+import UUIDv4 from 'uuid/v4';
 
 export function defaultBasicChartOptions() {
     return {
+        id: UUIDv4(),
+        form:{
+            xAxisColumn: "",
+            yAxisColumns:[]
+        },
+        size:{
+            responsive: true,
+            width:"600px",
+            height:"400px"
+        },
         title: {
             text: '',
-            subtext: ''
+            subtext: '',
+            x: 'center'
         },
         tooltip: {
-            trigger: 'axis'
+            show: true,
+            axisPointer:{
+                show: true,
+                type : 'cross',
+                lineStyle: {
+                    type : 'dashed',
+                    width : 1
+                }
+            }
+        },
+        grid:{
         },
         legend: {
-            data: ['最高气温', '最低气温']
+            show: true,
+            x: 'left',
+            data: []
         },
         toolbox: {
             show: true,
@@ -18,7 +42,6 @@ export function defaultBasicChartOptions() {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: { readOnly: false },
                 magicType: { type: ['line', 'bar'] },
                 restore: {},
                 saveAsImage: {}
@@ -27,67 +50,21 @@ export function defaultBasicChartOptions() {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            data: ["-"]
         },
         yAxis: {
+            name: '',
             type: 'value',
             axisLabel: {
-                formatter: '{value} °C'
+                formatter: ''
             }
         },
         series: [
-            {
-                name: '最高气温',
-                type: 'line',
-                data: [11, 11, 15, 13, 12, 13, 10],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: '最大值' },
-                        { type: 'min', name: '最小值' }
-                    ]
-                },
-                markLine: {
-                    data: [
-                        { type: 'average', name: '平均值' }
-                    ]
-                }
-            },
-            {
-                name: '最低气温',
-                type: 'line',
-                data: [1, -2, 2, 5, 3, 2, 0],
-                markPoint: {
-                    data: [
-                        { name: '周最低', value: -2, xAxis: 1, yAxis: -1.5 }
-                    ]
-                },
-                markLine: {
-                    data: [
-                        { type: 'average', name: '平均值' },
-                        [{
-                            symbol: 'none',
-                            x: '90%',
-                            yAxis: 'max'
-                        }, {
-                            symbol: 'circle',
-                            label: {
-                                normal: {
-                                    position: 'start',
-                                    formatter: '最大值'
-                                }
-                            },
-                            type: 'max',
-                            name: '最高点'
-                        }]
-                    ]
-                }
-            }
         ]
     };
 };
 
 export function setChartType(options, type) {
-    console.log(type);
     switch (type) {
         case "area": {
             _.each(options.series, (series) => {
@@ -99,12 +76,45 @@ export function setChartType(options, type) {
         default: {
             _.each(options.series, (series) => {
                 _.set(series, 'type', type);
+                delete series.areaStyle;
             });
         }
     }
-    console.log(options);
+};
+
+export function parseChartType(type) {
+    switch (type) {
+        case undefined:{
+            return "line";
+        }
+        case "area": {
+            return "line";
+        }
+        default: {
+            return type;
+        }
+    }
 };
 
 export function getChartType(options) {
     return _.get(options, ['series', '0', 'type'], null);
+}
+
+export function returnDataVisColors() {
+    return {
+        "DataVis-红色":"#ed4d50",
+        "DataVis-绿色":"#6eb37a",
+        "DataVis-蓝色":"#5290e9",
+        "DataVis-橘色":"#ee941b",
+        "DataVis-紫色":"#985896",
+        "深蓝色": '#003f5c',
+        "灰蓝色": '#2f4b7c',
+        "深紫色": '#665191',
+        "紫红色": '#a05195',
+        "玫红色": '#d45087',
+        "桃红色": '#f95d6a',
+        "橙色": '#ff7c43',
+        "橘黄色": '#ffa600',
+        "绿色": '#53aa46'
+      };
 }
