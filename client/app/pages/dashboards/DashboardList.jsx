@@ -31,14 +31,6 @@ import DashboardListEmptyState from './DashboardListEmptyState';
 import './dashboard-list.css';
 
 class DashboardList extends React.Component {
-  static propTypes = {
-    controller: ControllerType.isRequired,
-    $translate: PropTypes.func
-  };
-
-  static defaultProps = {
-    $translate: text => text
-  };
 
   sidebarMenu = [
     {
@@ -55,6 +47,15 @@ class DashboardList extends React.Component {
   ];
 
   listColumns = [];
+
+  static propTypes = {
+    controller: ControllerType.isRequired,
+    $translate: PropTypes.func
+  };
+
+  static defaultProps = {
+    $translate: text => text
+  };
 
   componentDidMount() {
     const translate = this.props.$translate ? this.props.$translate : null;

@@ -14,17 +14,18 @@ import { HelpTrigger } from '@/components/HelpTrigger';
 const API_SHARE_URL = 'api/dashboards/{id}/share';
 
 class ShareDashboardDialog extends React.Component {
-  static propTypes = {
-    dashboard: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-    hasQueryParams: PropTypes.bool.isRequired,
-    dialog: DialogPropType.isRequired,
-  };
 
   formItemProps = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
     style: { marginBottom: 7 },
-  }
+  };
+
+  static propTypes = {
+    dashboard: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    hasQueryParams: PropTypes.bool.isRequired,
+    dialog: DialogPropType.isRequired,
+  };
 
   constructor(props) {
     super(props);

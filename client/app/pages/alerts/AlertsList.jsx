@@ -24,6 +24,9 @@ const STATE_CLASS = {
 };
 
 class AlertsList extends React.Component {
+
+  listColumns = [];
+
   static propTypes = {
     controller: ControllerType.isRequired,
     $translate: PropTypes.func,
@@ -32,12 +35,6 @@ class AlertsList extends React.Component {
   static defaultProps = {
     $translate: text => text,
   };
-
-  static defaultProps = {
-    $translate: text => text,
-  };
-
-  listColumns = [];
 
   componentDidMount() {
     const translate = this.props.$translate ? this.props.$translate : null;

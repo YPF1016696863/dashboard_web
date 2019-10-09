@@ -61,6 +61,11 @@ export const TYPES = {
 };
 
 export class HelpTrigger extends React.Component {
+
+  iframeRef = null
+
+  iframeLoadingTimeout = null
+
   static propTypes = {
     type: PropTypes.oneOf(Object.keys(TYPES)).isRequired,
     className: PropTypes.string,
@@ -75,10 +80,6 @@ export class HelpTrigger extends React.Component {
     text: 'Help',
     $translate: text => text,
   };
-
-  iframeRef = null
-
-  iframeLoadingTimeout = null
 
   constructor(props) {
     super(props);

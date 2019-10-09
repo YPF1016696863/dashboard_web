@@ -22,9 +22,6 @@ import navigateTo from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 class GroupsList extends React.Component {
-  static propTypes = {
-    controller: ControllerType.isRequired,
-  };
 
   listColumns = [
     Columns.custom((text, group) => (
@@ -66,6 +63,10 @@ class GroupsList extends React.Component {
       isAvailable: () => currentUser.isAdmin,
     }),
   ];
+
+  static propTypes = {
+    controller: ControllerType.isRequired,
+  };
 
   createGroup = () => {
     CreateGroupDialog.showModal().result.then((group) => {

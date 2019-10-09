@@ -12,6 +12,14 @@ import notification from '@/services/notification';
 import './TextboxDialog.less';
 
 class TextboxDialog extends React.Component {
+
+  updatePreview = debounce(() => {
+    const text = this.state.text;
+    this.setState({
+      preview: markdown.toHTML(text),
+    });
+  }, 100);
+
   static propTypes = {
     dashboard: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     dialog: DialogPropType.isRequired,
@@ -22,13 +30,6 @@ class TextboxDialog extends React.Component {
   static defaultProps = {
     text: '',
   };
-
-  updatePreview = debounce(() => {
-    const text = this.state.text;
-    this.setState({
-      preview: markdown.toHTML(text),
-    });
-  }, 100);
 
   constructor(props) {
     super(props);

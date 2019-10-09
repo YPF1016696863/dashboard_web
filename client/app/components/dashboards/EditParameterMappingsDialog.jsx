@@ -33,13 +33,14 @@ export function getParamValuesSnapshot(mappings, dashboardParameters) {
 }
 
 class EditParameterMappingsDialog extends React.Component {
+
+  originalParamValuesSnapshot = null;
+
   static propTypes = {
     dashboard: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     widget: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
     dialog: DialogPropType.isRequired,
   };
-
-  originalParamValuesSnapshot = null
 
   constructor(props) {
     super(props);

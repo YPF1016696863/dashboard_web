@@ -12,34 +12,6 @@ import LoadingState from '@/components/items-list/components/LoadingState';
 import notification from '@/services/notification';
 
 class SelectItemsDialog extends React.Component {
-  static propTypes = {
-    dialog: DialogPropType.isRequired,
-    dialogTitle: PropTypes.string,
-    inputPlaceholder: PropTypes.string,
-    selectedItemsTitle: PropTypes.string,
-    searchItems: PropTypes.func.isRequired, // (searchTerm: string): Promise<Items[]> if `searchTerm === ''` load all
-    itemKey: PropTypes.func, // (item) => string|number - return key of item (by default `id`)
-    // left list
-    // (item, { isSelected }) => {
-    //   content: node, // item contents
-    //   className: string = '', // additional class for item wrapper
-    //   isDisabled: bool = false, // is item clickable or disabled
-    // }
-    renderItem: PropTypes.func,
-    // right list; args/results save as for `renderItem`. if not specified - `renderItem` will be used
-    renderStagedItem: PropTypes.func,
-    save: PropTypes.func, // (selectedItems[]) => Promise<any>
-  };
-
-  static defaultProps = {
-    dialogTitle: 'Add Items',
-    inputPlaceholder: 'Search...',
-    selectedItemsTitle: 'Selected items',
-    itemKey: item => item.id,
-    renderItem: () => '',
-    renderStagedItem: null, // use `renderItem` by default
-    save: items => items,
-  };
 
   state = {
     searchTerm: '',
@@ -68,6 +40,35 @@ class SelectItemsDialog extends React.Component {
   };
 
   search = debounce(this.loadItems, 200);
+
+  static propTypes = {
+    dialog: DialogPropType.isRequired,
+    dialogTitle: PropTypes.string,
+    inputPlaceholder: PropTypes.string,
+    selectedItemsTitle: PropTypes.string,
+    searchItems: PropTypes.func.isRequired, // (searchTerm: string): Promise<Items[]> if `searchTerm === ''` load all
+    itemKey: PropTypes.func, // (item) => string|number - return key of item (by default `id`)
+    // left list
+    // (item, { isSelected }) => {
+    //   content: node, // item contents
+    //   className: string = '', // additional class for item wrapper
+    //   isDisabled: bool = false, // is item clickable or disabled
+    // }
+    renderItem: PropTypes.func,
+    // right list; args/results save as for `renderItem`. if not specified - `renderItem` will be used
+    renderStagedItem: PropTypes.func,
+    save: PropTypes.func, // (selectedItems[]) => Promise<any>
+  };
+
+  static defaultProps = {
+    dialogTitle: 'Add Items',
+    inputPlaceholder: 'Search...',
+    selectedItemsTitle: 'Selected items',
+    itemKey: item => item.id,
+    renderItem: () => '',
+    renderStagedItem: null, // use `renderItem` by default
+    save: items => items,
+  };
 
   componentDidMount() {
     this.loadItems();

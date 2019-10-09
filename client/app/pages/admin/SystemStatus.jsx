@@ -14,13 +14,6 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import './system-status.less';
 
 class SystemStatus extends React.Component {
-  static propTypes = {
-    onError: PropTypes.func,
-  };
-
-  static defaultProps = {
-    onError: () => {},
-  };
 
   state = {
     queues: [],
@@ -30,6 +23,14 @@ class SystemStatus extends React.Component {
   };
 
   _refreshTimer = null;
+
+  static propTypes = {
+    onError: PropTypes.func,
+  };
+
+  static defaultProps = {
+    onError: () => {},
+  };
 
   componentDidMount() {
     recordEvent('view', 'page', 'admin/status');

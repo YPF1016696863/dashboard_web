@@ -555,7 +555,8 @@ export function prepareLayout(element, seriesList, options, data, theme) {
       "layout": {
         "font": {
           "color": GridStrokeColor[theme].font,
-          "size": 8
+          "size": 12,
+          "family": "Alibaba-PuHuiTi-Regular"
         },
         "title": {
           "x": 0.05

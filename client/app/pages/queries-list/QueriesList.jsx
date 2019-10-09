@@ -25,14 +25,6 @@ import QueriesListEmptyState from './QueriesListEmptyState';
 import './queries-list.css';
 
 class QueriesList extends React.Component {
-  static propTypes = {
-    controller: ControllerType.isRequired,
-    $translate: PropTypes.func,
-  };
-
-  static defaultProps = {
-    $translate: text => text,
-  };
 
   listColumns = [];
 
@@ -62,6 +54,15 @@ class QueriesList extends React.Component {
       isAvailable: () => currentUser.hasPermission('create_query'),
     },
   ];
+
+  static propTypes = {
+    controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
+  };
 
   componentDidMount() {
     const translate = this.props.$translate ? this.props.$translate : null; 

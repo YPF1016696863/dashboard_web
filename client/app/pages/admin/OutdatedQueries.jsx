@@ -24,9 +24,6 @@ import recordEvent from '@/services/recordEvent';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 class OutdatedQueries extends React.Component {
-  static propTypes = {
-    controller: ControllerType.isRequired,
-  };
 
   listColumns = [
     {
@@ -66,6 +63,10 @@ class OutdatedQueries extends React.Component {
   };
 
   _updateTimer = null;
+
+  static propTypes = {
+    controller: ControllerType.isRequired,
+  };
 
   componentDidMount() {
     recordEvent('view', 'page', 'admin/queries/outdated');

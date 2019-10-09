@@ -32,14 +32,6 @@ import navigateTo from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 class GroupDataSources extends React.Component {
-  static propTypes = {
-    controller: ControllerType.isRequired,
-    $translate: PropTypes.func,
-  };
-
-  static defaultProps = {
-    $translate: text => text,
-  };
 
   groupId = parseInt(this.props.controller.params.groupId, 10);
 
@@ -95,6 +87,15 @@ class GroupDataSources extends React.Component {
       isAvailable: () => currentUser.isAdmin,
     }),
   ];
+
+  static propTypes = {
+    controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
+  };
 
   componentDidMount() {
     Group.get({ id: this.groupId }).$promise

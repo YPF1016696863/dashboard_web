@@ -116,6 +116,13 @@ export function synchronizeWidgetTitles(sourceMappings, widgets) {
 }
 
 export class ParameterMappingInput extends React.Component {
+
+  formItemProps = {
+    labelCol: { span: 5 },
+    wrapperCol: { span: 16 },
+    className: 'form-item',
+  };
+
   static propTypes = {
     mapping: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     existingParamNames: PropTypes.arrayOf(PropTypes.string),
@@ -132,12 +139,6 @@ export class ParameterMappingInput extends React.Component {
     clientConfig: null,
     Query: null,
     inputError: null,
-  };
-
-  formItemProps = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 16 },
-    className: 'form-item',
   };
 
   updateSourceType = (type) => {

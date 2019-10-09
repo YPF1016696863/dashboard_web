@@ -58,14 +58,6 @@ UsersListActions.propTypes = {
 };
 
 class UsersList extends React.Component {
-  static propTypes = {
-    controller: ControllerType.isRequired,
-    $translate: PropTypes.func,
-  };
-
-  static defaultProps = {
-    $translate: text => text,
-  };
 
   sidebarMenu = [
     {
@@ -87,6 +79,15 @@ class UsersList extends React.Component {
   ];
 
   listColumns = [];
+
+  static propTypes = {
+    controller: ControllerType.isRequired,
+    $translate: PropTypes.func,
+  };
+
+  static defaultProps = {
+    $translate: text => text,
+  };
 
   componentDidMount() {
     const translate = this.props.$translate ? this.props.$translate : null;
