@@ -50,7 +50,17 @@ export function defaultBasicChartOptions() {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ["-"]
+            data: ["-"],
+            nameLocation:"end",
+            axisLine:{
+                show: true
+            },
+            axisTick: {
+                show:true
+            },
+            axisLabel: {
+                show:true
+            }
         },
         yAxis: {
             name: '',

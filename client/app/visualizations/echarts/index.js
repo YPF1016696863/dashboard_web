@@ -34,10 +34,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
           _.set($scope.options, "series", []);
           _.set($scope.options, "yAxis", {
-            name: "测试数值案例",
+            name: "xxxxxxxxxxxx",
             type: 'value',
             axisLabel: {
-                formatter: '{value}单位'
+                formatter: '{value}xxxxxxxxx'
             }
           });
 
@@ -50,6 +50,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 return row[yAxisColumn];
               }),
               areaStyle: _.get($scope.options,"form.chartType") === "area"?{}:undefined,
+              /*
               markPoint: {
                 data: [
                   { type: 'max', name: '最大值' },
@@ -79,6 +80,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                   yAxis: 'max'
                 }]]
               },
+              */
               itemStyle: { }
             });
           });
@@ -159,6 +161,19 @@ function EchartsEditor() {
         bar: { name: 'Echarts柱状图', icon: 'bar-chart' },
         area: { name: 'Echarts线形面积图', icon: 'area-chart' }
       };
+
+      $scope.xAxisScales = [
+        { label: '类目轴(类目轴，适用于离散的类目数据)', value: 'category' },
+        { label: ' 数值轴(适用于连续数据)', value: 'value' },
+        { label: '时间轴(适用于连续的时序数据，与数值轴相比时间轴带有时间的格式化)', value: 'time' },
+        { label: '对数轴(适用于对数数据)', value: 'log' }
+      ];
+
+      $scope.xAxisLocations = [
+        { label: '数据轴起始位置', value: 'start' },
+        { label: '数据轴居中位置', value: 'center' },
+        { label: '数据轴末端位置', value: 'end' }
+      ];
 
       $scope.$watch('options', () => {
       }, true);
