@@ -13,7 +13,7 @@ export const appSettingsConfig = {
     "logging": {},
     "env": {}
 };
-/*
+
 function checkIsIPV4(entry) {
     const blocks = entry.split(".");
     if (blocks.length === 4) {
@@ -43,7 +43,7 @@ if (hostname.startsWith("localhost") ||
     appSettingsConfig.app.logout = appSettingsConfig.app.logout.replace(DOMAIN_TO_REPLACE, primary);
     appSettingsConfig.app.activate = appSettingsConfig.app.activate.replace(DOMAIN_TO_REPLACE, primary);
 }
-*/
+
 export default function init(ngModule) {
     ngModule.constant('appSettings', appSettingsConfig);
 }
