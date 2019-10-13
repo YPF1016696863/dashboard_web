@@ -197,7 +197,7 @@ class GroupDataSources extends React.Component {
                 {$translate.instant("DATASOURCELIST.MESSAGE.EMPTY")}
                 {currentUser.isAdmin && (
                   <div className="m-t-5">
-                    <a href="javascript:void(0)" onClick={this.addDataSources}>{$translate.instant("DATASOURCELIST.MESSAGE.CLICK")}</a>
+                    <a href="" onClick={this.addDataSources}>{$translate.instant("DATASOURCELIST.MESSAGE.CLICK")}</a>
                     {' '} {$translate.instant("DATASOURCELIST.MESSAGE.ADD")}
                   </div>
                 )}

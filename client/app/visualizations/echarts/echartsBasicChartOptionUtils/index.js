@@ -33,8 +33,7 @@ export function defaultBasicChartOptions() {
         },
         legend: {
             show: true,
-            x: 'left',
-            data: []
+            x: 'left'
         },
         toolbox: {
             show: true,
@@ -65,8 +64,16 @@ export function defaultBasicChartOptions() {
         yAxis: {
             name: '',
             type: 'value',
+            nameLocation:"end",
             axisLabel: {
-                formatter: ''
+                formatter: '{value}',
+                show:true
+            },
+            axisLine:{
+                show: true
+            },
+            axisTick: {
+                show:true
             }
         },
         series: [
@@ -105,6 +112,14 @@ export function parseChartType(type) {
         }
     }
 };
+
+export function getChartTypeForSeries(options, name) {
+    console.log(_.find(options.series, {name}));
+    if(undefined !== _.find(options.series, {name})) {
+        return _.get(_.find(options.series, {name}),"type","line");
+    }
+    return parseChartType(name, _.get(options,"form.chartType","line"));
+}
 
 export function getChartType(options) {
     return _.get(options, ['series', '0', 'type'], null);

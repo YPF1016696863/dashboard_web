@@ -24,7 +24,7 @@ function Step({ show, completed, text, url, urlText, onClick }) {
 
   return (
     <li className={classNames({ done: completed })}>
-      <a href={url || 'javascript:void(0)'} onClick={onClick}>
+      <a href={url || ''} onClick={onClick}>
         {urlText}
       </a>{' '}
       {text}

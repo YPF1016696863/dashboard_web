@@ -162,7 +162,7 @@ class GroupMembers extends React.Component {
                 There are no members in this group yet.
                 {currentUser.isAdmin && (
                   <div className="m-t-5">
-                    <a href="javascript:void(0)" onClick={this.addMembers}>Click here</a>
+                    <a href="" onClick={this.addMembers}>Click here</a>
                     {' '} to add members.
                   </div>
                 )}

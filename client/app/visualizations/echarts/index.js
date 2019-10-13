@@ -33,23 +33,16 @@ function EchartsRenderer($timeout, $rootScope, $window) {
           }));
 
           _.set($scope.options, "series", []);
-          _.set($scope.options, "yAxis", {
-            name: "xxxxxxxxxxxx",
-            type: 'value',
-            axisLabel: {
-                formatter: '{value}xxxxxxxxx'
-            }
-          });
 
           // setChartType($scope.options, selected);
           _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
             $scope.options.series.push({
               name: yAxisColumn,
-              type: parseChartType(_.get($scope.options,"form.chartType")),
+              type: parseChartType(_.get($scope.options.form.yAxisColumnTypes,yAxisColumn)),
               data:  _.map(_.get($scope.queryResult,"filteredData",[]),(row)=>{
                 return row[yAxisColumn];
               }),
-              areaStyle: _.get($scope.options,"form.chartType") === "area"?{}:undefined,
+              areaStyle: _.get($scope.options.form.yAxisColumnTypes,yAxisColumn) === "area"?{}:undefined,
               /*
               markPoint: {
                 data: [
@@ -86,7 +79,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
           });
 
           let myChart = null;
-
 
           if(document.getElementById("main")) {
             document.getElementById("main").id = $scope.options.id;

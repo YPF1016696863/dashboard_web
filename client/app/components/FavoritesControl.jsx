@@ -37,7 +37,7 @@ export class FavoritesControl extends React.Component {
     const title = item.is_favorite ? 'Remove from favorites' : 'Add to favorites';
     return (
       <a
-        href="javascript:void(0)"
+        href=""
         title={title}
         className="btn-favourite"
         onClick={event => this.toggleItem(event, item, onChange)}
