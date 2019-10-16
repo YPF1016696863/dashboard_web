@@ -118,9 +118,20 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         }
       };
 
+       //新添加方法
+       const ngbind = () =>{
+        if(_.get($scope.options,"title.text",false).indexOf("DEMO2019")>=0){
+        
+          _.set($scope.options, "title.text", "测试成功");
+  
+        }
+  
+        };
       $scope.$watch('options', refreshData, true);
       $scope.$watch('queryResult && queryResult.getData()', refreshData);
       $rootScope.$watch('theme.theme', refreshData);
+      //新添加监听事件
+      $scope.$watch('options.title.text', ngbind, true);
     },
   };
 }
