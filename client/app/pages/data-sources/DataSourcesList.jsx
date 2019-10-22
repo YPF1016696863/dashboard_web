@@ -24,19 +24,33 @@ class DataSourcesList extends React.Component {
     Promise.all([
       DataSource.query().$promise,
       DataSource.types().$promise,
-    ]).then(values => this.setState({
-      dataSources: values[0],
-      dataSourceTypes: values[1],
-      loading: false,
-    }, () => { // all resources are loaded in state
-      if ($route.current.locals.isNewDataSourcePage) {
-        if (policy.canCreateDataSource()) {
-          this.showCreateSourceDialog();
-        } else {
-          navigateTo('/data_sources');
+    ]).then(values => {
+
+      values[1].push({
+        name: "Excel(上传)",
+        type: "excel_upload",
+        configuration_schema:{
+          order: [],
+          properties: [],
+          secret: [],
+          type: "object"
         }
-      }
-    }));
+      });
+
+      this.setState({
+        dataSources: values[0],
+        dataSourceTypes: values[1],
+        loading: false,
+      }, () => { // all resources are loaded in state
+        if ($route.current.locals.isNewDataSourcePage) {
+          if (policy.canCreateDataSource()) {
+            this.showCreateSourceDialog();
+          } else {
+            navigateTo('/data_sources');
+          }
+        }
+      });
+    });
   }
 
   createDataSource = (selectedType, values) => {

@@ -92,8 +92,10 @@
         </ui-select>
       </div>
 
-      <div class="editor__left__schema" ng-if="sourceMode">
-        <schema-browser class="schema-container" schema="schema" on-refresh="refreshSchema()"></schema-browser>
+      <div class="editor__left__schema" >
+        <schema-browser class="schema-container" schema="schema" on-refresh="refreshSchema()" ng-if="sourceMode && getQueryType() !== 'excelupload'"></schema-browser>
+
+        <file-uploader fileurl="query.query" disabled="!isQueryOwner || !sourceMode" ng-if="getQueryType() === 'excelupload'" update-url="updateQuery"/>
       </div>
       <div ng-if="!sourceMode" style="flex-grow: 1;">&nbsp;</div>
 
@@ -149,6 +151,7 @@
                style="min-height: 11px; max-height: 70vh;" ng-if="sourceMode">
             <query-editor
               style="width: 100%; height: 100%;"
+              file-upload="getQueryType() === 'excelupload'"
               query-text="query.query"
               schema="schema"
               syntax="dataSource.syntax"

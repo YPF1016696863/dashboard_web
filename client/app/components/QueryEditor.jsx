@@ -50,6 +50,7 @@ class QueryEditor extends React.Component {
     addNewParameter: PropTypes.func.isRequired,
     dataSources: PropTypes.arrayOf(DataSource),
     dataSource: DataSource,
+    fileUpload: PropTypes.bool.isRequired,
     canEdit: PropTypes.bool.isRequired,
     isDirty: PropTypes.bool.isRequired,
     isQueryOwner: PropTypes.bool.isRequired,
@@ -225,18 +226,20 @@ class QueryEditor extends React.Component {
 
   render() {
     const modKey = KeyboardShortcuts.modKey;
-
     const isExecuteDisabled = this.props.queryExecuting || !this.props.canExecuteQuery();
+
+    const queryText = this.props.fileUpload?this.props.queryText:this.state.queryText;
 
     return (
       <section style={{ height: '100%' }} data-test="QueryEditor">
         <div className="container p-15 m-b-10" style={{ height: '100%' }}>
           <div data-executing={this.props.queryExecuting} style={{ height: 'calc(100% - 40px)', marginBottom: '0px' }} className="editor__container">
             <AceEditor
+              readOnly={this.props.fileUpload}
               ref={this.refEditor}
               theme="textmate"
               mode={this.props.dataSource.syntax || 'sql'}
-              value={this.state.queryText}
+              value={queryText}
               editorProps={{ $blockScrolling: Infinity }}
               width="100%"
               height="100%"

@@ -76,6 +76,9 @@
             </li>
           </ul>
         </li>
+        <li ng-show="$ctrl.showQueriesMenu">
+          <a href="data_sources">数据源</a>
+        </li>
         <li ng-if="$ctrl.showAlertsLink">
           <a href="alerts">{{ 'HEADER.ALERTS' | translate }}</a>
         </li>
@@ -114,6 +117,9 @@
             >
               {{ 'HEADER.DASHBOARDS' | translate }}
             </a>
+          </li>
+          <li role="menuitem">
+            <a href="data_sources">数据源</a>
           </li>
           <li role="menuitem">
             <a href="alerts/new">{{ 'HEADER.ALERTS' | translate }}</a>

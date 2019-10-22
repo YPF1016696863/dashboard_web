@@ -187,6 +187,8 @@ function QueryViewCtrl(
     (currentUser.hasPermission('execute_query') &&
       !$scope.dataSource.view_only);
 
+  $scope.getQueryType = () => $scope.dataSource && $scope.dataSource.type;
+
   $scope.canForkQuery = () =>
     currentUser.hasPermission('edit_query') && !$scope.dataSource.view_only;
 
@@ -396,6 +398,7 @@ function QueryViewCtrl(
       $scope.dataSources,
       ds => ds.id === $scope.query.data_source_id
     );
+
     getSchema();
     $scope.executeQuery();
   };
@@ -588,6 +591,7 @@ function QueryViewCtrl(
       }
     });
   };
+
 }
 
 export default function init(ngModule) {
