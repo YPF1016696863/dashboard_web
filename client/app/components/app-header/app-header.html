@@ -20,6 +20,36 @@
       <!-- Main Left Nav-->
 
       <ul class="nav navbar-nav nav__main">
+        <li ng-show="$ctrl.showQueriesMenu">
+          <a href="data_sources">数据源</a>
+        </li>
+        <li
+                class="dropdown btn-group"
+                ng-show="$ctrl.showQueriesMenu"
+                uib-dropdown
+        >
+          <a class="btn" href="queries">{{ 'HEADER.QUERIES' | translate }}</a>
+          <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
+            <span class="caret caret--nav"></span>
+          </a>
+          <ul class="dropdown-menu" uib-dropdown-menu>
+            <li ng-if="$ctrl.queries.length == 0">
+              <a>
+                <em>
+                  <span class="btn-favourite">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                  </span>
+                  {{ 'HEADER.FAVORITE_QUERY' | translate }}
+                </em>
+              </a>
+            </li>
+            <li ng-repeat="query in $ctrl.queries">
+              <a href="queries/{{ query.id }}">
+                {{ query.name }}
+              </a>
+            </li>
+          </ul>
+        </li>
         <li
           class="dropdown btn-group"
           ng-show="$ctrl.showDashboardsMenu"
@@ -49,36 +79,6 @@
             </li>
           </ul>
         </li>
-        <li
-          class="dropdown btn-group"
-          ng-show="$ctrl.showQueriesMenu"
-          uib-dropdown
-        >
-          <a class="btn" href="queries">{{ 'HEADER.QUERIES' | translate }}</a>
-          <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
-            <span class="caret caret--nav"></span>
-          </a>
-          <ul class="dropdown-menu" uib-dropdown-menu>
-            <li ng-if="$ctrl.queries.length == 0">
-              <a>
-                <em>
-                  <span class="btn-favourite">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                  </span>
-                  {{ 'HEADER.FAVORITE_QUERY' | translate }}
-                </em>
-              </a>
-            </li>
-            <li ng-repeat="query in $ctrl.queries">
-              <a href="queries/{{ query.id }}">
-                {{ query.name }}
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li ng-show="$ctrl.showQueriesMenu">
-          <a href="data_sources">数据源</a>
-        </li>
         <li ng-if="$ctrl.showAlertsLink">
           <a href="alerts">{{ 'HEADER.ALERTS' | translate }}</a>
         </li>
@@ -107,6 +107,9 @@
           role="menu"
           aria-labelledby="create-button"
         >
+          <li role="menuitem">
+            <a href="data_sources">数据源</a>
+          </li>
           <li role="menuitem" ng-show="$ctrl.showNewQueryMenu">
             <a href="queries/new">{{ 'HEADER.QUERIES' | translate }}</a>
           </li>
@@ -117,9 +120,6 @@
             >
               {{ 'HEADER.DASHBOARDS' | translate }}
             </a>
-          </li>
-          <li role="menuitem">
-            <a href="data_sources">数据源</a>
           </li>
           <li role="menuitem">
             <a href="alerts/new">{{ 'HEADER.ALERTS' | translate }}</a>
