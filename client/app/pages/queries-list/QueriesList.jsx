@@ -177,7 +177,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/queries',
-      title: 'QUERIESLIST.QUERIES',
+      title: '所有查询',
       key: 'all',
     },
     {

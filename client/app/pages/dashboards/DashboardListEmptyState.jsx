@@ -24,7 +24,7 @@ export default function DashboardListEmptyState({ page, searchTerm, selectedTags
         icon="zmdi zmdi-view-quilt"
         description="See the big picture"
         illustration="dashboard"
-        helpLink="https://help.redash.io/category/22-dashboards"
+        helpLink=""
         showDashboardStep
         $translate={$translate}
       />

@@ -99,7 +99,7 @@ function ShowOnBoarding({
       </ol>
       <p>
         {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
-        <a href={helpLink} target="_blank" rel="noopener noreferrer">
+        <a href="" target="" rel="noopener noreferrer">
           {translate('HOME.EMPTY_STATE.SEE_OUR_HELP')}
           <i className="fa fa-external-link m-l-5" aria-hidden="true" />
         </a>
