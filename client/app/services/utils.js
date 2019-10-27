@@ -18,7 +18,7 @@ export function absoluteUrl(url) {
 	if (hostname.startsWith("localhost") ||
 		hostname.startsWith("docker-internal") ||
 		checkIsIPV4(hostname)) {
-		activate = "http://" + hostname + ":8092/active";
+		activate = "http://" + hostname + ":30092/active";
 	} else {
 		const blocks = hostname.split(".");
 		const primaryBlocks = blocks.length >= 3 ? blocks.slice(1) : blocks;
