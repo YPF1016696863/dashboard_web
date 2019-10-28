@@ -19,7 +19,7 @@ function createDashboard() {
 
 function Step({ show, completed, text, url, urlText, onClick }) {
   if (!show) {
-    return null;
+    // return null;
   }
 
   return (
@@ -45,72 +45,52 @@ function ShowOnBoarding({
     some(keys(isAvailable), step => isAvailable[step] && !isCompleted[step]);
 
   if (!shouldShow) {
-    return null;
+    // return null;
   }
 
   return (
     <div className="empty-state__steps">
-      <h4>{translate('HOME.EMPTY_STATE.LETS_GET_STARTED')}</h4>
+      <br />
+      <h4>可视化面板创建向导:</h4>
       <ol>
         {currentUser.isAdmin && (
           <Step
-            show={isAvailable.dataSource}
-            completed={isCompleted.dataSource}
             url="data_sources/new"
             urlText={translate('HOME.EMPTY_STATE.CONNECT')}
-            text={translate('HOME.EMPTY_STATE.A_DATA_SOURCE')}
+            text="新的数据源"
           />
         )}
         {!currentUser.isAdmin && (
           <Step
-            show={isAvailable.dataSource}
-            completed={isCompleted.dataSource}
-            text="Ask an account admin to connect a data source"
+            text="请系统管理员权限用户连接一个数据源"
           />
         )}
         <Step
-          show={isAvailable.query}
-          completed={isCompleted.query}
           url="queries/new"
           urlText={translate('HOME.EMPTY_STATE.CREATE')}
-          text={translate('HOME.EMPTY_STATE.YOUR_FIRST_QUERY')}
+          text="可视化组件"
         />
         <Step
-          show={isAvailable.alert}
-          completed={isCompleted.alert}
-          url="alerts/new"
-          urlText={translate('HOME.EMPTY_STATE.CREATE')}
-          text={translate('HOME.EMPTY_STATE.YOUR_FIRST_ALERT')}
-        />
-        <Step
-          show={isAvailable.dashboard}
-          completed={isCompleted.dashboard}
           onClick={createDashboard}
           urlText={translate('HOME.EMPTY_STATE.CREATE')}
-          text={translate('HOME.EMPTY_STATE.YOUR_FIRST_DASHBOARD')}
+          text="可视化面板"
         />
         <Step
-          show={isAvailable.inviteUsers}
-          completed={isCompleted.inviteUsers}
           url="users/new"
-          urlText={translate('HOME.EMPTY_STATE.INVITE')}
+          urlText="添加"
           text={translate('HOME.EMPTY_STATE.YOUR_TEAM_MEMBERS')}
         />
       </ol>
       <p>
         {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
-        <a href="" target="" rel="noopener noreferrer">
-          {translate('HOME.EMPTY_STATE.SEE_OUR_HELP')}
-          <i className="fa fa-external-link m-l-5" aria-hidden="true" />
-        </a>
+        {"请查阅DataVis使用文档."}
+        <i className="fa fa-external-link m-l-5" aria-hidden="true" />
       </p>
     </div>
   );
 }
 
 Step.propTypes = {
-  show: PropTypes.bool.isRequired,
-  completed: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
   url: PropTypes.string,
   urlText: PropTypes.string,
@@ -172,8 +152,6 @@ export function EmptyState({
 
       <ShowOnBoarding
         translate={translate}
-        isAvailable={isAvailable}
-        isCompleted={isCompleted}
         helpLink={helpLink}
         onboardingMode={onboardingMode}
       />

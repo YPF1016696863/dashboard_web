@@ -1,7 +1,7 @@
 {
   "HEADER": {
     "DASHBOARDS": "数据可视化面板",
-    "QUERIES": "查询",
+    "QUERIES": "可视化组件",
     "ALERTS": "系统警报",
     "EDIT_PROFILE": "编辑个人资料",
     "CREATE": "创建",
