@@ -26,17 +26,6 @@ class DataSourcesList extends React.Component {
       DataSource.types().$promise,
     ]).then(values => {
 
-      values[1].push({
-        name: "Excel(上传)",
-        type: "excel_upload",
-        configuration_schema:{
-          order: [],
-          properties: [],
-          secret: [],
-          type: "object"
-        }
-      });
-
       this.setState({
         dataSources: values[0],
         dataSourceTypes: values[1],
