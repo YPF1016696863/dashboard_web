@@ -42,9 +42,9 @@ class ShareDashboardDialog extends React.Component {
   static get headerContent() {
     return (
       <React.Fragment>
-        Share Dashboard
+        分享可视化面板
         <div className="modal-header-desc">
-          Allow public access to this dashboard with a secret address.{' '}
+          允许公众通过一个私密地址访问这个可视化面板。{' '}
           <HelpTrigger type="SHARE_DASHBOARD" />
         </div>
       </React.Fragment>
@@ -62,7 +62,7 @@ class ShareDashboardDialog extends React.Component {
         dashboard.public_url = data.public_url;
       })
       .error(() => {
-        notification.error('Failed to turn on sharing for this dashboard');
+        notification.error('未能打开此可视化面板的共享');
       })
       .finally(() => {
         this.setState({ saving: false });
@@ -80,7 +80,7 @@ class ShareDashboardDialog extends React.Component {
         delete dashboard.public_url;
       })
       .error(() => {
-        notification.error('Failed to turn off sharing for this dashboard');
+        notification.error('未能关闭此可视化面板的共享');
       })
       .finally(() => {
         this.setState({ saving: false });
@@ -108,12 +108,12 @@ class ShareDashboardDialog extends React.Component {
           {this.props.hasQueryParams && (
             <Form.Item>
               <Alert
-                message="Sharing is currently not supported for dashboards containing queries with parameters."
+                message="包含参数查询的可视化面板目前不支持共享。"
                 type="error"
               />
             </Form.Item>
           )}
-          <Form.Item label="Allow public access" {...this.formItemProps}>
+          <Form.Item label="允许公众访问" {...this.formItemProps}>
             <Switch
               checked={dashboard.publicAccessEnabled}
               onChange={this.onChange}
@@ -122,7 +122,7 @@ class ShareDashboardDialog extends React.Component {
             />
           </Form.Item>
           {dashboard.public_url && (
-            <Form.Item label="Secret address" {...this.formItemProps}>
+            <Form.Item label="私密地址" {...this.formItemProps}>
               <InputWithCopy value={dashboard.public_url} />
             </Form.Item>
           )}

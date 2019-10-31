@@ -366,9 +366,9 @@ function QueryViewCtrl(
       );
     }
 
-    const title = 'Archive Query';
+    const title = '收回查询';
     const message =
-      'Are you sure you want to archive this query?<br/> All alerts and dashboard widgets created with its visualizations will be deleted.';
+      '你确定想要收回这个查询吗？<br/> 所有的用到这个可视化部件的警报与可视化面板都会被删除';
     const confirm = { class: 'btn-warning', title: 'Archive' };
 
     AlertDialog.open(title, message, confirm).then(archive);

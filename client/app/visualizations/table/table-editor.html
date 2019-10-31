@@ -1,16 +1,16 @@
 <div class="table-editor-container">
   <ul class="tab-nav">
     <li ng-class="{active: currentTab == 'columns'}" ng-if="options.globalSeriesType != 'custom'">
-      <a ng-click="setCurrentTab('columns')">Columns</a>
+      <a ng-click="setCurrentTab('columns')">列信息</a>
     </li>
     <li ng-class="{active: currentTab == 'grid'}">
-      <a ng-click="setCurrentTab('grid')">Grid</a>
+      <a ng-click="setCurrentTab('grid')">网格</a>
     </li>
   </ul>
 
   <div ng-if="currentTab == 'grid'" class="m-t-10 m-b-10">
     <div class="form-group">
-      <label>Items per page</label>
+      <label>每页项目个数</label>
       <select ng-options="value for value in allowedItemsPerPage"
         ng-model="visualization.options.itemsPerPage" class="form-control">
       </select>
@@ -41,11 +41,11 @@
       </div>
 
       <div class="form-group">
-        <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.allowSearch"> Use for search</label>
+        <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.allowSearch"> 作为用于搜索的列</label>
       </div>
 
       <div class="form-group">
-        <label>Display as:</label>
+        <label>显示形式</label>
         <select ng-options="item.value as item.name for item in displayAsOptions"
           ng-model="column.displayAs" class="form-control">
         </select>
@@ -53,17 +53,17 @@
 
       <div ng-if="column.displayAs == 'string'">
         <div class="form-group">
-          <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.allowHTML"> Allow HTML content</label>
+          <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.allowHTML"> 允许 HTML 内容</label>
         </div>
         <div ng-if="column.allowHTML" class="form-group">
-          <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.highlightLinks"> Highlight links</label>
+          <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.highlightLinks"> 高亮链接</label>
         </div>
       </div>
 
       <div ng-if="column.displayAs == 'number'">
         <div class="form-group">
           <label for="table-editor-{{ column.name }}-number-format">
-            Number format
+            数字格式
             <span class="m-l-5"
               uib-popover-html="'Format <a href=&quot;https://redash.io/help/user-guide/visualizations/formatting-numbers&quot; target=&quot;_blank&quot;>specs.</a>'"
               popover-trigger="'click outsideClick'"><i class="fa fa-question-circle"></i></span>
@@ -76,7 +76,7 @@
       <div ng-if="column.displayAs == 'datetime'">
         <div class="form-group">
           <label for="table-editor-{{ column.name }}-datetime-format">
-            Date/Time format
+            日期/时间 格式
             <span class="m-l-5"
               uib-popover-html="'Format <a href=&quot;https://momentjs.com/docs/#/displaying/format/&quot; target=&quot;_blank&quot;>specs.</a>'"
               popover-trigger="'click outsideClick'"><i class="fa fa-question-circle"></i></span>
@@ -88,12 +88,12 @@
 
       <div ng-if="column.displayAs == 'boolean'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-boolean-false">Value for <code>false</code></label>
+          <label for="table-editor-{{ column.name }}-boolean-false">表示 <code>错误</code> 的值</label>
           <input class="form-control" ng-model="column.booleanValues[0]" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-boolean-false">
         </div>
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-boolean-true">Value for <code>true</code></label>
+          <label for="table-editor-{{ column.name }}-boolean-true">表示 <code>正确</code> 的值</label>
           <input class="form-control" ng-model="column.booleanValues[1]" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-boolean-true">
         </div>
@@ -101,14 +101,14 @@
 
       <div ng-if="column.displayAs == 'image'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-image-url-template">URL template</label>
+          <label for="table-editor-{{ column.name }}-image-url-template">URL 例子</label>
           <input class="form-control" ng-model="column.imageUrlTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-image-url-template">
         </div>
 
         <div class="form-group">
           <label>
-            Size
+            大小
             <span class="m-l-5"
               uib-popover-html="'Any positive integer value that specifies size in pixels. Leave empty to use default value.'"
               popover-trigger="'click outsideClick'" popover-placement="top-left"><i class="fa fa-question-circle"></i></span>
@@ -123,7 +123,7 @@
         </div>
 
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-image-title-template">Title template</label>
+          <label for="table-editor-{{ column.name }}-image-title-template">标题例子</label>
           <input class="form-control" ng-model="column.imageTitleTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-image-title-template">
         </div>
@@ -132,39 +132,39 @@
           <label class="ui-sortable-bypass text-muted" style="font-weight: normal; cursor: pointer;"
             uib-popover-html="templateHint"
             popover-trigger="'click outsideClick'" popover-placement="top-left">
-            Format specs <i class="fa fa-question-circle m-l-5"></i>
+            格式规格 <i class="fa fa-question-circle m-l-5"></i>
           </label>
         </div>
       </div>
 
       <div ng-if="column.displayAs == 'link'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-link-url-template">URL template</label>
+          <label for="table-editor-{{ column.name }}-link-url-template">URL 例子</label>
           <input class="form-control" ng-model="column.linkUrlTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-link-url-template">
         </div>
 
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-link-text-template">Text template</label>
+          <label for="table-editor-{{ column.name }}-link-text-template">文本例子</label>
           <input class="form-control" ng-model="column.linkTextTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-link-text-template">
         </div>
 
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-link-title-template">Title template</label>
+          <label for="table-editor-{{ column.name }}-link-title-template">标题例子</label>
           <input class="form-control" ng-model="column.linkTitleTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
             id="table-editor-{{ column.name }}-link-title-template">
         </div>
 
         <div class="form-group">
-          <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.linkOpenInNewTab"> Open in new tab</label>
+          <label class="ui-sortable-bypass"><input type="checkbox" ng-model="column.linkOpenInNewTab"> 在新表中打开</label>
         </div>
 
         <div class="form-group">
           <label class="ui-sortable-bypass text-muted" style="font-weight: normal; cursor: pointer;"
             uib-popover-html="templateHint"
             popover-trigger="'click outsideClick'" popover-placement="top-left">
-            Format specs <i class="fa fa-question-circle m-l-5"></i>
+            格式规格 <i class="fa fa-question-circle m-l-5"></i>
           </label>
         </div>
       </div>

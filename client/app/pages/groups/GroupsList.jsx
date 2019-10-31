@@ -27,7 +27,7 @@ class GroupsList extends React.Component {
     Columns.custom((text, group) => (
       <div>
         <a href={'groups/' + group.id}>{group.name}</a>
-        {(group.type === 'builtin') && <span className="label label-default m-l-10">built-in</span>}
+        {(group.type === 'builtin') && <span className="label label-default m-l-10">固有</span>}
       </div>
     ), {
       field: 'name',
@@ -35,9 +35,9 @@ class GroupsList extends React.Component {
     }),
     Columns.custom((text, group) => (
       <Button.Group>
-        <Button href={`groups/${group.id}`}>Members</Button>
+        <Button href={`groups/${group.id}`}>成员</Button>
         {currentUser.isAdmin && (
-          <Button href={`groups/${group.id}/data_sources`}>Data Sources</Button>
+          <Button href={`groups/${group.id}/data_sources`}>数据源</Button>
         )}
       </Button.Group>
     ), {
@@ -54,7 +54,7 @@ class GroupsList extends React.Component {
           title={canRemove ? null : 'Cannot delete built-in group'}
           onClick={() => this.onGroupDeleted()}
         >
-          Delete
+          删除
         </DeleteGroupButton>
       );
     }, {

@@ -129,7 +129,7 @@ function EditParameterSettingsDialog(props) {
       title={isNew ? 'Add Parameter' : param.name}
       width={600}
       footer={[(
-        <Button key="cancel" onClick={props.dialog.dismiss}>Cancel</Button>
+        <Button key="cancel" onClick={props.dialog.dismiss}>取消</Button>
       ), (
         <Button key="submit" htmlType="submit" disabled={!isFulfilled()} type="primary" form="paramForm" data-test="SaveParameterSettings">
           {isNew ? 'Add Parameter' : 'OK'}

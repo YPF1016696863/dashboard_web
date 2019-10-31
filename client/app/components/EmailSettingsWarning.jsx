@@ -9,11 +9,7 @@ export class EmailSettingsWarning extends React.Component {
 
   render() {
     const {featureName,$translate} = this.props;
-    return (clientConfig.mailSettingsMissing && currentUser.isAdmin) ? (
-      <p className="alert alert-danger">
-        {$translate.instant("ALERT.EMAIL_SETTINGS_WARNING.MESSAGE",{featureName})}
-      </p>
-    ) : null;
+    return null;
   }
 }
 

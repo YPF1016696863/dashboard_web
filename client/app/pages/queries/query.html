@@ -35,7 +35,7 @@
 
           <div class="p-0 source-control text-right text-nowrap align-self-start m-t-5">
             <button class="btn btn-default btn-publish" ng-click="togglePublished()" ng-if="query.is_draft && query.id != undefined && (isQueryOwner || currentUser.hasPermission('admin'))">
-              <span class="fa fa-paper-plane"></span> Publish
+              <span class="fa fa-paper-plane"></span> 发布
             </button>
 
             <span ng-show="query.id && canViewSource">

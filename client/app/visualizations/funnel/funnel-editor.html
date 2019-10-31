@@ -1,0 +1,43 @@
+<div class="form-horizontal">
+  <div style="margin-bottom: 20px;">
+    这个可视化编辑用于制作漏斗图，请注意数值列只接受数字
+  </div>
+  <div class="form-group">
+    <label class="col-lg-6">步长所在列名称</label>
+    <div class="col-lg-6">
+      <select ng-options="name for name in queryResult.getColumnNames()" ng-model="visualization.options.stepCol.colName" class="form-control"></select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-6">步长所在列显示名称</label>
+    <div class="col-lg-6">
+      <input type="text" ng-model="visualization.options.stepCol.displayAs" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-6">漏斗图数值所在列名称</label>
+    <div class="col-lg-6">
+      <select ng-options="name for name in queryResult.getColumnNames()" ng-model="visualization.options.valueCol.colName" class="form-control"></select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-6">漏斗图数值所在列显示名称</label>
+    <div class="col-lg-6">
+      <input type="text" ng-model="visualization.options.valueCol.displayAs" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-6">根据数值自动分类记录</label>
+    <div class="col-lg-6">
+      <input type="checkbox" ng-model="visualization.options.autoSort">
+    </div>
+  </div>
+  <div ng-show="!visualization.options.autoSort">
+    <div class="form-group">
+      <label class="col-lg-6">漏斗图数值所在列名称</label>
+      <div class="col-lg-6">
+        <select ng-options="name for name in queryResult.getColumnNames()" ng-model="visualization.options.sortKeyCol.colName" class="form-control"></select>
+      </div>
+    </div>
+  </div>
+</div>
