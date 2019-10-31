@@ -1,17 +1,17 @@
 const DOMAIN_TO_REPLACE = "chinambse.com";
-
 export const appSettingsConfig = {
     server: {
-        backendUrl: 'http://datavis-api.chinambse.com'
+        "backendUrl": "http://datavis-api." + DOMAIN_TO_REPLACE
     },
     app: {
-        login: 'http://login.chinambse.com',
-		logout:'http://login.chinambse.com/logout',
-        setup: '',
-        help: ''
+        "login": "http://datavis-login." + DOMAIN_TO_REPLACE,
+        "logout": "http://datavis-login." + DOMAIN_TO_REPLACE + "/logout?email=current",
+        "activate": "http://datavis-login." + DOMAIN_TO_REPLACE + "/active",
+        "setup": '',
+        "help": ''
     },
-    logging: {},
-    env: {}
+    "logging": {},
+    "env": {}
 };
 
 function checkIsIPV4(entry) {
