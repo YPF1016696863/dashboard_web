@@ -427,7 +427,7 @@ function QueryResource(
   QueryService.newQuery = function newQuery() {
     return new QueryService({
       query: '',
-      name: 'New Query',
+      name: '新建查询',
       schedule: null,
       user: currentUser,
       options: {},

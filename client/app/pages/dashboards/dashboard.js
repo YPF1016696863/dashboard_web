@@ -269,9 +269,9 @@ function DashboardCtrl(
       this.dashboard.$delete();
     };
 
-    const title = 'Archive Dashboard';
-    const message = `Are you sure you want to archive the "${this.dashboard.name}" dashboard?`;
-    const confirm = { class: 'btn-warning', title: 'Archive' };
+    const title = '收回可视化面板';
+    const message = `你确定你想要回收这个可视化面板 "${this.dashboard.name}" ?`;
+    const confirm = { class: 'btn-warning', title: '收回' };
 
     AlertDialog.open(title, message, confirm).then(archive);
   };
@@ -314,11 +314,11 @@ function DashboardCtrl(
       },
       (error) => {
         if (error.status === 403) {
-          notification.error('Dashboard update failed', 'Permission Denied.');
+          notification.error('可视化面板更新失败', '许可拒绝。');
         } else if (error.status === 409) {
           notification.error(
-            'It seems like the dashboard has been modified by another user. ',
-            'Please copy/backup your changes and reload this page.',
+            '此可视化面板似乎已经被另一个用户修改了。',
+            '请复制/备份您的更改并重新加载此页。 ',
             { duration: null },
           );
         }
@@ -347,11 +347,11 @@ function DashboardCtrl(
       },
       (error) => {
         if (error.status === 403) {
-          notification.error('Name update failed', 'Permission denied.');
+          notification.error('名称修改失败', '许可拒绝。');
         } else if (error.status === 409) {
           notification.error(
-            'It seems like the dashboard has been modified by another user. ',
-            'Please copy/backup your changes and reload this page.',
+            '此可视化面板似乎已经被另一个用户修改了。 ',
+            '请复制/备份您的更改并重新加载此页。 ',
             { duration: null },
           );
         }

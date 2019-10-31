@@ -61,9 +61,9 @@ class SelectItemsDialog extends React.Component {
   };
 
   static defaultProps = {
-    dialogTitle: 'Add Items',
-    inputPlaceholder: 'Search...',
-    selectedItemsTitle: 'Selected items',
+    dialogTitle: '添加项目',
+    inputPlaceholder: '搜索...',
+    selectedItemsTitle: '选中的项目',
     itemKey: item => item.id,
     renderItem: () => '',
     renderStagedItem: null, // use `renderItem` by default
@@ -101,7 +101,7 @@ class SelectItemsDialog extends React.Component {
         })
         .catch(() => {
           this.setState({ saveInProgress: false });
-          notification.error('Failed to save some of selected items.');
+          notification.error('无法保存某些选定项目.');
         });
     });
   }
@@ -157,7 +157,7 @@ class SelectItemsDialog extends React.Component {
           <div className="w-50 m-r-10 scrollbox">
             {loading && <LoadingState className="" />}
             {!loading && !hasResults && (
-              <BigMessage icon="fa-search" message="No items match your search." className="" />
+              <BigMessage icon="fa-search" message="没有符合您搜索条件的项目." className="" />
             )}
             {!loading && hasResults && (
               <List

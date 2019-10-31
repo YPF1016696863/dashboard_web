@@ -300,7 +300,7 @@ class QueryEditor extends React.Component {
                     title="Save"
                   >
                     <span className="fa fa-floppy-o" />
-                    <span className="hidden-xs m-l-5">Save</span>
+                    <span className="hidden-xs m-l-5">保存</span>
                     {this.props.isDirty ? '*' : null}
                   </button>
                 </Tooltip>
@@ -321,7 +321,7 @@ class QueryEditor extends React.Component {
                   data-test="ExecuteButton"
                 >
                   <span className="zmdi zmdi-play" />
-                  <span className="hidden-xs m-l-5">{ (this.state.selectedQueryText == null) ? 'Execute' : 'Execute Selected' }</span>
+                  <span className="hidden-xs m-l-5">{ (this.state.selectedQueryText == null) ? '执行' : '执行被选项' }</span>
                 </button>
               </Tooltip>
             </div>

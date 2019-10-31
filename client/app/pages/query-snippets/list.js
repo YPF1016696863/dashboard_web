@@ -10,12 +10,6 @@ function SnippetsCtrl($location, currentUser, QuerySnippet) {
 }
 
 export default function init(ngModule) {
-  settingsMenu.add({
-    permission: 'create_query',
-    title: 'HEADER.QUERY_SNIPPETS',
-    path: 'query_snippets',
-    order: 5,
-  });
 
   ngModule.component('snippetsListPage', {
     template,

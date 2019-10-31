@@ -97,7 +97,7 @@
     "NEW_DASHBOARD": "新建数据可视化面板",
     "SAERCH_DASHBOARD": "查询可视化面板",
     "PUBLISH": "发布",
-    "UNPUBLISH": "不发布",
+    "UNPUBLISH": "撤回发布",
     "ARCHIVE": "回收",
     "EDIT": "编辑",
     "DONE_EDITING": "完成编辑",
@@ -218,7 +218,7 @@
   "QUERY": {
     "FORK": "分叉",
     "ARCHIVE": "收回",
-    "UNPUBLISH": "不发布",
+    "UNPUBLISH": "撤回发布",
     "API": "展示API密钥",
     "EDIT": "编辑资源",
     "SHOW_DATA_ONLY": "仅展示数据"
