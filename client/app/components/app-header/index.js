@@ -12,6 +12,8 @@ function controller($rootScope, $location, $route, $uibModal,
   this.logoUrl = logoUrl;
   this.basePath = clientConfig.basePath;
   this.currentUser = currentUser;
+
+  this.showSourcesMenu = currentUser.isAdmin;
   this.showQueriesMenu = currentUser.hasPermission('view_query');
   this.showAlertsLink = currentUser.hasPermission('list_alerts');
   this.showNewQueryMenu = currentUser.hasPermission('create_query');
