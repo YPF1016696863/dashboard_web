@@ -203,7 +203,7 @@ export default function init(ngModule) {
     [
       {
         path: '/dashboards',
-        title: 'DASHBOARDLIST.DASHBOARDS',
+        title: '数据可视化面板',
         key: 'all'
       },
       {

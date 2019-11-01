@@ -144,7 +144,7 @@ export function EmptyState({
         </h2>
         <p>{description}</p>
         <img
-          src={'/static/images/illustrations/' + illustration + '.svg'}
+          src='/static/images/illustrations/main.png'
           alt={illustration + ' Illustration'}
           width="75%"
         />

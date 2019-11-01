@@ -6,31 +6,32 @@
         class="navbar-toggle"
         ng-click="isNavOpen = !isNavOpen"
       >
-        <span class="sr-only">Toggle navigation</span>
+        <span class="sr-only"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <!-- REDASH LOGO -->
-      <a class="navbar-brand" ng-href="."
-        ><img ng-src="{{ $ctrl.logoUrl }}"
-      /></a>
+
+
     </div>
     <div class="collapse navbar-collapse" uib-collapse="!isNavOpen">
       <!-- Main Left Nav-->
 
+      <a class="navbar-brand" ng-href="."
+      ><img ng-src="{{ $ctrl.logoUrl }}"
+      /></a>
       <ul class="nav navbar-nav nav__main">
         <li ng-show="$ctrl.showSourcesMenu">
-          <a href="data_sources">数据源</a>
+          <a href="data_sources" style="color: #fff">数据源</a>
         </li>
         <li
                 class="dropdown btn-group"
                 ng-show="$ctrl.showQueriesMenu"
                 uib-dropdown
         >
-          <a class="btn" href="queries">{{ 'HEADER.QUERIES' | translate }}</a>
-          <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
-            <span class="caret caret--nav"></span>
+          <a class="btn" href="queries" style="color: #fff">{{ 'HEADER.QUERIES' | translate }}</a>
+          <a type="button" class="btn hidden-xs" uib-dropdown-toggle >
+            <i class="fa fa-caret-down " style="color: #fff; margin-left: 5px"></i>
           </a>
           <ul class="dropdown-menu" uib-dropdown-menu>
             <li ng-if="$ctrl.queries.length == 0">
@@ -55,11 +56,11 @@
           ng-show="$ctrl.showDashboardsMenu"
           uib-dropdown
         >
-          <a class="btn" href="dashboards">{{
+          <a class="btn" href="dashboards" style="color: #fff">{{
             'HEADER.DASHBOARDS' | translate
           }}</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
-            <span class="caret caret--nav"></span>
+            <i class="fa fa-caret-down " style="color: #fff"></i>
           </a>
           <ul class="dropdown-menu" uib-dropdown-menu>
             <li ng-if="$ctrl.dashboards.length == 0">
@@ -78,9 +79,6 @@
               </a>
             </li>
           </ul>
-        </li>
-        <li ng-if="$ctrl.showAlertsLink">
-          <a href="alerts">{{ 'HEADER.ALERTS' | translate }}</a>
         </li>
       </ul>
 
@@ -121,9 +119,6 @@
               {{ 'HEADER.DASHBOARDS' | translate }}
             </a>
           </li>
-          <li role="menuitem">
-            <a href="alerts/new">{{ 'HEADER.ALERTS' | translate }}</a>
-          </li>
         </ul>
       </div>
 
@@ -136,7 +131,7 @@
           ></help-trigger>
         </li>
         <li ng-show="$ctrl.currentUser.isAdmin">
-          <a href="data_sources" title="{{ 'HEADER.SETTINGS' | translate }}"
+          <a href="data_sources" title="{{ 'HEADER.SETTINGS' | translate }}" style="color: #fff"
             ><i class="fa fa-sliders" aria-hidden="true"></i
           ></a>
         </li>
@@ -155,14 +150,15 @@
               class="profile__image--navbar"
               width="20"/>
             <span
+                    style="color: #fff"
               class="dropdown--profile__username"
               ng-bind="$ctrl.currentUser.name"
             ></span>
-            <span class="caret caret--nav"></span
-          ></a>
+            <i class="fa fa-caret-down " style="color: #fff"></i>
+          </a>
           <ul class="dropdown-menu dropdown-menu--profile">
             <li>
-              <a ng-href="users/me">{{ 'HEADER.EDIT_PROFILE' | translate }}</a>
+              <a ng-href="users/me" >{{ 'HEADER.EDIT_PROFILE' | translate }}</a>
             </li>
             <li
               class="divider"
@@ -184,16 +180,6 @@
                 'HEADER.USERS' | translate
               }}</a>
             </li>
-            <li>
-              <a ng-href="query_snippets">{{
-                'HEADER.QUERY_SNIPPETS' | translate
-              }}</a>
-            </li>
-            <li ng-show="$ctrl.showSettingsMenu">
-              <a href="destinations" title="Settings">{{
-                'HEADER.ALERT_DESTINATIONS' | translate
-              }}</a>
-            </li>
 
             <li
               ng-if="$ctrl.currentUser.hasPermission('super_admin')"
@@ -203,12 +189,6 @@
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
               <a href="settings/system">{{
                 'HEADER.SYSTEM_SETTINGS' | translate
-              }}</a>
-            </li>
-
-            <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="admin/status">{{
-                'HEADER.SYSTEM_STATUS' | translate
               }}</a>
             </li>
 
@@ -254,7 +234,7 @@
             data-test="AppHeaderSearch"
           />
           <span class="input-group-btn">
-            <button type="submit" class="btn btn-default">
+            <button type="submit" class="btn btn-default" style="color: #fff">
               <span class="zmdi zmdi-search"></span>
             </button>
           </span>

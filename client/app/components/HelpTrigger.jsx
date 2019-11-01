@@ -76,7 +76,7 @@ export class HelpTrigger extends React.Component {
 
   static defaultProps = {
     className: null,
-    children: <i className="fa fa-question-circle" />,
+    children: <i className="fa fa-question-circle" style={{color:"#fff"}} />,
     text: 'Help',
     $translate: text => text,
   };
