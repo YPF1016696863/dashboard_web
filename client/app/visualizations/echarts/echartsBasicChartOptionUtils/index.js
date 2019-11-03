@@ -4,14 +4,20 @@ import UUIDv4 from 'uuid/v4';
 export function defaultBasicChartOptions() {
     return {
         id: UUIDv4(),
-        form:{
+        // 保存每个serie配置的数组
+        series_SymbolSize: [],
+        series_Symbol: [],
+
+        useSerie: '',// 选中的系列
+        useSerie_Index: -1,
+        form: {
             xAxisColumn: "",
-            yAxisColumns:[]
+            yAxisColumns: []
         },
-        size:{
+        size: {
             responsive: true,
-            width:"600px",
-            height:"400px"
+            width: "600px",
+            height: "400px"
         },
         title: {
             text: '',
@@ -20,16 +26,16 @@ export function defaultBasicChartOptions() {
         },
         tooltip: {
             show: true,
-            axisPointer:{
+            axisPointer: {
                 show: true,
-                type : 'cross',
+                type: 'cross',
                 lineStyle: {
-                    type : 'dashed',
-                    width : 1
+                    type: 'dashed',
+                    width: 1
                 }
             }
         },
-        grid:{
+        grid: {
         },
         legend: {
             show: true,
@@ -50,30 +56,30 @@ export function defaultBasicChartOptions() {
             type: 'category',
             boundaryGap: false,
             data: ["-"],
-            nameLocation:"end",
-            axisLine:{
+            nameLocation: "end",
+            axisLine: {
                 show: true
             },
             axisTick: {
-                show:true
+                show: true
             },
             axisLabel: {
-                show:true
+                show: true
             }
         },
         yAxis: {
             name: '',
             type: 'value',
-            nameLocation:"end",
+            nameLocation: "end",
             axisLabel: {
                 formatter: '{value}',
-                show:true
+                show: true
             },
-            axisLine:{
+            axisLine: {
                 show: true
             },
             axisTick: {
-                show:true
+                show: true
             }
         },
         series: [
@@ -101,7 +107,7 @@ export function setChartType(options, type) {
 
 export function parseChartType(type) {
     switch (type) {
-        case undefined:{
+        case undefined: {
             return "line";
         }
         case "area": {
@@ -115,10 +121,10 @@ export function parseChartType(type) {
 
 export function getChartTypeForSeries(options, name) {
     // console.log(_.find(options.series, {name}));
-    if(undefined !== _.find(options.series, {name})) {
-        return _.get(_.find(options.series, {name}),"type","line");
+    if (undefined !== _.find(options.series, { name })) {
+        return _.get(_.find(options.series, { name }), "type", "line");
     }
-    return parseChartType(name, _.get(options,"form.chartType","line"));
+    return parseChartType(name, _.get(options, "form.chartType", "line"));
 }
 
 export function getChartType(options) {
@@ -127,11 +133,11 @@ export function getChartType(options) {
 
 export function returnDataVisColors() {
     return {
-        "DataVis-红色":"#ed4d50",
-        "DataVis-绿色":"#6eb37a",
-        "DataVis-蓝色":"#5290e9",
-        "DataVis-橘色":"#ee941b",
-        "DataVis-紫色":"#985896",
+        "DataVis-红色": "#ed4d50",
+        "DataVis-绿色": "#6eb37a",
+        "DataVis-蓝色": "#5290e9",
+        "DataVis-橘色": "#ee941b",
+        "DataVis-紫色": "#985896",
         "深蓝色": '#003f5c',
         "灰蓝色": '#2f4b7c',
         "深紫色": '#665191',
@@ -141,5 +147,5 @@ export function returnDataVisColors() {
         "橙色": '#ff7c43',
         "橘黄色": '#ffa600',
         "绿色": '#53aa46'
-      };
+    };
 }
