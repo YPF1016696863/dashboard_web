@@ -18,69 +18,50 @@ function EchartsRenderer($timeout, $rootScope, $window) {
       $scope.chartSeries = [];
 
       const refreshData = () => {
-
+        console.log(_.get($scope.options, "series_Symbol", ":::")[0] + "sybo" + _.get($scope.options, "series_Symbol", ":::")[1]);
+        // 找到选中serise的下标        
+        _.set($scope.options, 'useSerie_Index', _.findIndex(_.get($scope.options, "form.yAxisColumns", []), function (o) { return o === _.get($scope.options, 'useSerie', ''); }));
+        console.log(_.get($scope.options, "series_SymbolSize", ":::")[0] + "+++" + _.get($scope.options, "series_SymbolSize", ":::")[1]);
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           const data = $scope.queryResult.getData();
 
-          _.set($scope.options, "title.textStyle.color",_.get($rootScope,"theme.theme","light") === "light" ? "#333":"#fff");
+          _.set($scope.options, "title.textStyle.color", _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
 
-          _.set($scope.options, "title.subtextStyle.color",_.get($rootScope,"theme.theme","light") === "light" ? "#333":"#fff");
+          _.set($scope.options, "title.subtextStyle.color", _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
 
-          _.set($scope.options, "textStyle.color",_.get($rootScope,"theme.theme","light") === "light" ? "#333":"#fff");
+          _.set($scope.options, "textStyle.color", _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
 
           _.set($scope.options, "xAxis.data", _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
             return row[_.get($scope.options, "form.xAxisColumn", "-")];
           }));
 
-          _.set($scope.options, "series", []);
+          _.set($scope.options, "series", []);// 清空设置
 
+          // 遍历时的初始化下标
+          let symbolSizeIndex = 0;
+          let symbolIndex = 0;
           // setChartType($scope.options, selected);
           _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
             $scope.options.series.push({
               name: yAxisColumn,
-              type: parseChartType(_.get($scope.options.form.yAxisColumnTypes,yAxisColumn)),
-              data:  _.map(_.get($scope.queryResult,"filteredData",[]),(row)=>{
+              type: parseChartType(_.get($scope.options.form.yAxisColumnTypes, yAxisColumn)),
+              data: _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                 return row[yAxisColumn];
               }),
-              areaStyle: _.get($scope.options.form.yAxisColumnTypes,yAxisColumn) === "area"?{}:undefined,
-              /*
-              markPoint: {
-                data: [
-                  { type: 'max', name: '最大值' },
-                  { type: 'min', name: '最小值' }
-                ]
-              },
-              markLine: {
-                data: [
-                  { type: 'average', name: '平均值' }
-                ]
-              },
-              markArea: {
-                silent: true,
-                itemStyle: {
-                  normal: {
-                    color: 'transparent',
-                    borderWidth: 1,
-                    borderType: 'dashed'
-                  }
-                },
-                data: [[{
-                  name: '分布区间:'+yAxisColumn,
-                  xAxis: 'max',
-                  yAxis: 'min'
-                }, {
-                  xAxis: 'min',
-                  yAxis: 'max'
-                }]]
-              },
-              */
-              itemStyle: { }
+              areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
+              symbolSize: _.get($scope.options, "series_SymbolSize", [])[symbolSizeIndex],// 下标传入配置数组找到相应的配置
+              symbol: _.get($scope.options, "series_Symbol", [])[symbolIndex],
+              itemStyle: {}
             });
+
+            // 遍历时的下标++ 选到下一条系列
+            symbolSizeIndex += 1;
+            symbolIndex += 1;
           });
 
           let myChart = null;
 
-          if(document.getElementById("main")) {
+          if (document.getElementById("main")) {
             document.getElementById("main").id = $scope.options.id;
             // eslint-disable-next-line
             myChart = echarts.init(document.getElementById($scope.options.id));
@@ -91,8 +72,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
           // use configuration item and data specified to show chart
 
-          if(_.get($scope.options,"form.isCodeEnabled",false)) {
-            myChart.setOption(JSON.parse(_.replace($scope.options.form.code,"'",'"')), true);
+          if (_.get($scope.options, "form.isCodeEnabled", false)) {
+            myChart.setOption(JSON.parse(_.replace($scope.options.form.code, "'", '"')), true);
           } else {
             myChart.setOption($scope.options, true);
           }
@@ -165,6 +146,30 @@ function EchartsEditor() {
         { label: '数据轴起始位置', value: 'start' },
         { label: '数据轴居中位置', value: 'center' },
         { label: '数据轴末端位置', value: 'end' }
+      ];
+
+      $scope.markPointSymbols = [
+        { label: '圆形', value: 'circle' },
+        { label: '空心圆', value: 'emptyCircle' },
+        { label: '圆角矩形', value: 'roundRect' },
+        { label: '三角形', value: 'triangle' },
+        { label: '菱形', value: 'diamond' }
+      ];
+      $scope.markPointLablePositions = [
+        { label: '标注点上', value: 'top' },
+        { label: '标注点左', value: 'left' },
+        { label: '标注点右', value: 'right' },
+        { label: '标注点下', value: 'bottom' },
+        { label: '标注点内', value: 'inside' },
+        { label: '标注点内左', value: 'insideLeft' },
+        { label: '标注点内右', value: 'insideRight' },
+        { label: '标注点内上', value: 'insideTop' },
+        { label: '标注点内上', value: 'insideBottom' },
+        { label: '标注点内左上', value: 'insideTopLeft' },
+        { label: '标注点内左下', value: 'insideBottomLeft' },
+        { label: '标注点内右上', value: 'insideTopRight' },
+        { label: '标注点内右下', value: 'insideBottomRight' }
+
       ];
 
       $scope.$watch('options', () => {

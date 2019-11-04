@@ -79,23 +79,24 @@
             <label class="control-label">图表纵轴所在数据集</label>
 
             <ui-select multiple name="yAxisColumns" required ng-model="options.form.yAxisColumns">
-              <ui-select-match placeholder="选择列...">{{$item}}</ui-select-match>
-              <ui-select-choices repeat="column in columnNames | remove:form.groupby | remove:options.form.xAxisColumn">
-                <span ng-bind-html="column | highlight: $select.search"></span>
-                <span> </span>
-                <small class="text-muted" ng-bind="columns[column].type"></small>
-              </ui-select-choices>
+                <ui-select-match placeholder="选择列...">{{$item}}</ui-select-match>
+                <ui-select-choices
+                    repeat="column in columnNames | remove:form.groupby | remove:options.form.xAxisColumn">
+                    <span ng-bind-html="column | highlight: $select.search"></span>
+                    <span> </span>
+                    <small class="text-muted" ng-bind="columns[column].type"></small>
+                </ui-select-choices>
             </ui-select>
         </div>
     </div>
 
     <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
-            <div class="form-group">
-                    <label>
-                        <input type="checkbox" ng-model="options.size.responsive">
-                        图表尺寸自适应
-                    </label>
-                </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-model="options.size.responsive">
+                图表尺寸自适应
+            </label>
+        </div>
         <div class="form-group" ng-if="!options.size.responsive">
             <label class="control-label">图表宽度(单位:px)</label>
             <input name="name" type="text" class="form-control" ng-model="options.size.width" placeholder="600" />
@@ -137,6 +138,41 @@
         <div class="form-group">
             <textarea rows="15" style="width:100%;resize: none;" ng-model="options.form.code"></textarea>
         </div>
+    </div>
+
+    <div ng-if="currentTab == 'markpoint'" class="m-t-10 m-b-10">
+        <div class="form-group">
+            <label class="control-label">选择系列</label>
+            <ui-select name="symbolSize" required ng-model="options.useSerie">
+                <ui-select-match placeholder="选择系列...">{{$select.selected}}</ui-select-match>
+                <ui-select-choices repeat="column in options.form.yAxisColumns ">
+                    <span ng-bind-html="column | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <!-- 把对应系列的配置放到相应的数组下标存放 -->
+        <div class="form-group">
+            <label class="control-label">标记点大小(单位:px)</label>
+            <input name="name" type="text" class="form-control"
+                ng-model="options.series_SymbolSize[options.useSerie_Index]" placeholder="9" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">标记点形状</label>
+            <ui-select ng-model="options.series_Symbol[options.useSerie_Index]">
+                <ui-select-match placeholder="选择标记点形状...">{{$select.selected.label}}</ui-select-match>
+                <ui-select-choices repeat="markPointSymbolType.value as markPointSymbolType in markPointSymbols">
+                    <div ng-bind-html="markPointSymbolType.label | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <!-- <div class="form-group">
+            <label class="control-label">选中的名称</label>
+            <input name="name" type="text" class="form-control" ng-model="options.useSerie" placeholder="4" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">选中的下标</label>
+            <input name="name" type="text" class="form-control" ng-model="options.useSerie_Index" placeholder="" />
+        </div> -->
     </div>
 
     <div ng-if="currentTab == 'xaxis'" class="m-t-10 m-b-10">
