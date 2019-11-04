@@ -20,13 +20,14 @@
       <a class="navbar-brand" ng-href="."
       ><img ng-src="{{ $ctrl.logoUrl }}"
       /></a>
+      <span class="brand-title">DataVis数据可视化与BI工具</span>
       <ul class="nav navbar-nav nav__main">
-        <li ng-show="$ctrl.showSourcesMenu">
+        <li ng-show="false">
           <a href="data_sources" style="color: #fff">数据源</a>
         </li>
         <li
                 class="dropdown btn-group"
-                ng-show="$ctrl.showQueriesMenu"
+                ng-show="false"
                 uib-dropdown
         >
           <a class="btn" href="queries" style="color: #fff">{{ 'HEADER.QUERIES' | translate }}</a>
@@ -53,7 +54,7 @@
         </li>
         <li
           class="dropdown btn-group"
-          ng-show="$ctrl.showDashboardsMenu"
+          ng-show="false"
           uib-dropdown
         >
           <a class="btn" href="dashboards" style="color: #fff">{{
@@ -84,6 +85,7 @@
 
       <!-- Add New Button -->
       <div
+              ng-show="false"
         class="btn-group navbar-btn navbar-left btn__new hidden-xs"
         uib-dropdown
         is-open="status.isopen"

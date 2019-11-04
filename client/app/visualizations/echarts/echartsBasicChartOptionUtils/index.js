@@ -115,9 +115,7 @@ export function parseChartType(type) {
 
 export function getChartTypeForSeries(options, name) {
     // console.log(_.find(options.series, {name}));
-    if(undefined !== _.find(options.series, {name})) {
-        return _.get(_.find(options.series, {name}),"type","line");
-    }
+
     return parseChartType(name, _.get(options,"form.chartType","line"));
 }
 

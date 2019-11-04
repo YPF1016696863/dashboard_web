@@ -61,9 +61,7 @@ function ShowOnBoarding({
           />
         )}
         {!currentUser.isAdmin && (
-          <Step
-            text="请系统管理员权限用户连接一个数据源"
-          />
+          <Step text="请系统管理员权限用户连接一个数据源" />
         )}
         <Step
           url="queries/new"
@@ -83,7 +81,7 @@ function ShowOnBoarding({
       </ol>
       <p>
         {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
-        {"请查阅DataVis使用文档."}
+        {'请查阅DataVis使用文档.'}
         <i className="fa fa-external-link m-l-5" aria-hidden="true" />
       </p>
     </div>
@@ -135,7 +133,7 @@ export function EmptyState({
   };
 
   return (
-    <div className="empty-state bg-white tiled">
+    <div className="empty-state bg-white">
       <div className="empty-state__summary">
         {title && <h5>{title}</h5>}
         {header && <h4>{header}</h4>}
@@ -144,12 +142,11 @@ export function EmptyState({
         </h2>
         <p>{description}</p>
         <img
-          src='/static/images/illustrations/main.png'
+          src="/static/images/illustrations/main.png"
           alt={illustration + ' Illustration'}
           width="75%"
         />
       </div>
-
       <ShowOnBoarding
         translate={translate}
         helpLink={helpLink}

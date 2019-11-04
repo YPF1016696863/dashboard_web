@@ -3,7 +3,7 @@ import PromiseRejectionError from '@/lib/promise-rejection-error';
 import { ErrorHandler } from './error-handler';
 import template from './template.html';
 
-const logger = debug('redash:app-view');
+const logger = debug('datavis:app-view');
 
 const handler = new ErrorHandler();
 

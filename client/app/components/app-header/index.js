@@ -1,11 +1,11 @@
 import debug from 'debug';
 
-import logoUrl from '@/assets/images/redash_icon_small.png';
+import logoUrl from '@/assets/images/brandImg.png';
 import frontendVersion from '@/version.json';
 import template from './app-header.html';
 import './app-header.css';
 
-const logger = debug('redash:appHeader');
+const logger = debug('datavis:appHeader');
 
 function controller($rootScope, $location, $route, $uibModal,
   Auth, currentUser, clientConfig, Dashboard, Query) {

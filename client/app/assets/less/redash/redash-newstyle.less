@@ -74,7 +74,7 @@ body {
 @media (min-width: 1200px) {
   settings-screen, home-page, page-dashboard-list, page-queries-list, page-alerts-list, alert-page, queries-search-results-page, .fixed-container {
     .container {
-      width: 1170px;
+      width: 98%;
     }
   }
 }
@@ -585,11 +585,11 @@ body {
 .navbar {
   min-height: initial;
   height: 50px;
-  border: 1px solid #fff;
+  border: 0px !important;
   border-top: none;
   border-radius: 0;
   background: #fff;
-  margin-bottom: 10px;
+  margin-bottom: 0px !important;
 
   .btn-group.open .dropdown-toggle {
     -webkit-box-shadow: none;
@@ -939,4 +939,15 @@ text.slicetext {
 
 .widget-frame-header-font {
   font-size: 9pt;
+}
+
+.main-section-left {
+  float: left;
+  width: 256px;
+}
+.main-section-right {
+  margin-left: 256px;
+  width: calc(100vw - 256px);
+  min-height: calc(100vh - 50px);
+  background-color: #fff !important;
 }

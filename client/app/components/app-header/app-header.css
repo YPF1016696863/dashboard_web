@@ -15,3 +15,11 @@
 .app-header {
     background: #2f5d91 !important;
 }
+
+.brand-title {
+    display:inline-block;
+    color: #fff !important;
+    font-size: 16px;
+    margin-top: 14px !important;
+    margin-left: 8px !important;
+}
