@@ -4,7 +4,10 @@ import UUIDv4 from 'uuid/v4';
 export function defaultPieChartOptions() {
     return {
         backgroundColor: '#2c343c',
-
+        form:{
+            xAxisColumn: "",
+            yAxisColumns:[]
+        },
         title: {
             text: '饼图测试案例',
             left: 'center',
@@ -28,76 +31,76 @@ export function defaultPieChartOptions() {
             }
         },
         series : [
-            {
-                name:'访问来源',
-                type:'pie',
-                radius : '55%',
-                center: ['50%', '50%'],
-                data:[
-                    {value:335, name:'直接访问'},
-                    {value:310, name:'邮件营销'},
-                    {value:274, name:'联盟广告'},
-                    {value:235, name:'视频广告'},
-                    {value:400, name:'搜索引擎'}
-                ].sort(function (a, b) { return a.value - b.value; }),
-                roseType: 'radius',
-                label: {
-                    normal: {
-                        textStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
-                        }
-                    }
-                },
-                labelLine: {
-                    normal: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
-                        },
-                        smooth: 0.2,
-                        length: 10,
-                        length2: 20
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        color: '#c23531',
-                        shadowBlur: 200,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                },
+            // {
+            //     name:'访问来源',
+            //     type:'pie',
+            //     radius : '55%',
+            //     center: ['50%', '50%'],
+            //     data:[
+            //         {value:335, name:'直接访问'},
+            //         {value:310, name:'邮件营销'},
+            //         {value:274, name:'联盟广告'},
+            //         {value:235, name:'视频广告'},
+            //         {value:400, name:'搜索引擎'}
+            //     ].sort(function (a, b) { return a.value - b.value; }),
+            //     roseType: 'radius',
+            //     label: {
+            //         normal: {
+            //             textStyle: {
+            //                 color: 'rgba(255, 255, 255, 0.3)'
+            //             }
+            //         }
+            //     },
+            //     labelLine: {
+            //         normal: {
+            //             lineStyle: {
+            //                 color: 'rgba(255, 255, 255, 0.3)'
+            //             },
+            //             smooth: 0.2,
+            //             length: 10,
+            //             length2: 20
+            //         }
+            //     },
+            //     itemStyle: {
+            //         normal: {
+            //             color: '#c23531',
+            //             shadowBlur: 200,
+            //             shadowColor: 'rgba(0, 0, 0, 0.5)'
+            //         }
+            //     },
 
-                animationType: 'scale',
-                animationEasing: 'elasticOut'
-            }
+            //     animationType: 'scale',
+            //     animationEasing: 'elasticOut'
+            // }
         ]
     };
 };
 
-export function setChartType(options, type) {
-    switch (type) {
-        case "area": {
-            _.each(options.series, (series) => {
-                _.set(series, 'type', 'line');
-                _.set(series, 'areaStyle', {});
-            });
-            break;
-        }
-        default: {
-            _.each(options.series, (series) => {
-                _.set(series, 'type', type);
-                delete series.areaStyle;
-            });
-        }
-    }
-};
+// export function setChartType(options, type) {
+//     switch (type) {
+//         case "area": {
+//             _.each(options.series, (series) => {
+//                 _.set(series, 'type', 'line');
+//                 _.set(series, 'areaStyle', {});
+//             });
+//             break;
+//         }
+//         default: {
+//             _.each(options.series, (series) => {
+//                 _.set(series, 'type', type);
+//                 delete series.areaStyle;
+//             });
+//         }
+//     }
+// };
 
 export function parseChartType(type) {
     switch (type) {
         case undefined:{
-            return "line";
+            return "pie";
         }
-        case "area": {
-            return "line";
+        case "rose": {
+            return "pie";
         }
         default: {
             return type;
@@ -108,9 +111,9 @@ export function parseChartType(type) {
 export function getChartTypeForSeries(options, name) {
     // console.log(_.find(options.series, {name}));
     if(undefined !== _.find(options.series, {name})) {
-        return _.get(_.find(options.series, {name}),"type","line");
+        return _.get(_.find(options.series, {name}),"type","pie");
     }
-    return parseChartType(name, _.get(options,"form.chartType","line"));
+    return parseChartType(name, _.get(options,"form.chartType","pie"));
 }
 
 export function getChartType(options) {
