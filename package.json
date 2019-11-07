@@ -79,6 +79,7 @@
     "qs": "^6.7.0",
     "react": "^16.8.3",
     "react-ace": "^6.1.0",
+    "react-color": "^2.17.3",
     "react-dom": "^16.8.3",
     "react2angular": "^3.2.1",
     "resium": "^1.5.0",
