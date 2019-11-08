@@ -56,7 +56,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
           _.set($scope.options, "series", []);// 清空设置
 
-          // 遍历时的初始化下标 下标命名方式 根据echarts文档 忽略series . 驼峰形式
+          
           // series下的
           // let seriesItemStyleColor = 0;
           let seriesNameIndex = 0;
