@@ -102,6 +102,9 @@ export function parseChartType(type) {
         case "rose": {
             return "pie";
         }
+        case "doughnut": {
+            return "pie";
+        }
         default: {
             return type;
         }

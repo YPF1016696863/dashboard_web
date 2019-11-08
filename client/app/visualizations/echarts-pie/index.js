@@ -25,7 +25,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             {
               name:'访问来源',
               type:'pie',
-              radius : '55%', 
+              radius : _.get($scope.options.form.yAxisColumnTypes) === "rose" || _.get($scope.options.form.yAxisColumnTypes) ==="pie"?  '85%':['50%', '70%'], 
               center: ['50%', '50%'],
               data:[
                   {value:335, name:'直接访问'},
@@ -135,7 +135,8 @@ function EchartsPieEditor() {
       };
       $scope.chartTypes = {
         pie: { name: 'Echarts饼图', icon: 'pie-chart' },
-        rose: { name: 'Echarts玫瑰图', icon: 'pie-chart' }
+        rose: { name: 'Echarts玫瑰图', icon: 'pie-chart' },
+        doughnut: { name: 'Echarts环形图', icon: 'pie-chart' }
       };
 
       $scope.xAxisScales = [
