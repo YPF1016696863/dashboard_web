@@ -1,20 +1,14 @@
-<div class="main-section-left">
-  <nav-sidebar />
-</div>
-<div class="main-section-right">
-  <empty-state
-          header="'HOME.WELCOME' | translate"
-          description="'HOME.DESCRIPTION' | translate"
-          illustration="'dashboard'"
-          help-link="'https://redash.io/help/user-guide/getting-started'"
-          show-dashboard-step="true"
-          show-invite-step="true"
-          onboarding-mode="true"
-          $translate="$ctrl.$translate"
-  ></empty-state>
-
-  <home-extra></home-extra>
-</div>
+<page-head></page-head>
+<empty-state
+        header="'HOME.WELCOME' | translate"
+        description="'HOME.DESCRIPTION' | translate"
+        illustration="'dashboard'"
+        help-link="'https://redash.io/help/user-guide/getting-started'"
+        show-dashboard-step="true"
+        show-invite-step="true"
+        onboarding-mode="true"
+        $translate="$ctrl.$translate"
+></empty-state>
 
 <!--
 

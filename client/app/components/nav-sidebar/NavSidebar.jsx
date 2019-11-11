@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
-import { Upload, Icon, Layout, Menu } from 'antd';
+import { Icon, Layout, Menu, Sider } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 
 import './nav-sidebar.less';
+
+const { SubMenu } = Menu;
 
 class NavSidebar extends React.Component {
   constructor(props) {
@@ -23,48 +25,77 @@ class NavSidebar extends React.Component {
   };
 
   render() {
+    const { $location, $scope } = this.props;
+
     return (
-      <Layout>
+      <Layout className="full-height">
+        <div className="nav-logo" />
         <Menu
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={[]}
+          mode="inline"
           theme="dark"
           className="full-height-nav"
-          defaultOpenKeys={['sub1']}
-          selectedKeys={[0]}
-          mode="inline"
+          inlineCollapsed={this.state.collapsed}
         >
-          <Menu.Item key="5">
+          <Menu.Item key="1">
+            <Icon type="home" />
+            <span>首页</span>
+          </Menu.Item>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              $location.path('/data_sources');
+              $scope.$apply();
+            }}
+          >
             <Icon type="database" />
             <span>数据源</span>
           </Menu.Item>
-          <Menu.SubMenu
-            key="sub2"
+          <SubMenu
+            key="queries"
             title={
               <span>
-                <Icon type="appstore" />
+                <Icon type="file-search" />
+                <span>查询配置</span>
+              </span>
+            }
+          >
+            <Menu.Item key="15">Option 5</Menu.Item>
+            <Menu.Item key="26">Option 6</Menu.Item>
+            <Menu.Item key="37">Option 7</Menu.Item>
+            <Menu.Item key="48">Option 8</Menu.Item>
+          </SubMenu>
+          <SubMenu
+            key="widgets"
+            title={
+              <span>
+                <Icon type="pie-chart" />
                 <span>可视化组件</span>
               </span>
             }
           >
-            <Menu.Item key="5">新建可视化组件</Menu.Item>
-            <Menu.SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="7">Option 7</Menu.Item>
-              <Menu.Item key="8">Option 8</Menu.Item>
-            </Menu.SubMenu>
-          </Menu.SubMenu>
-          <Menu.SubMenu
-            key="sub4"
+            <Menu.Item key="5">Option 5</Menu.Item>
+            <Menu.Item key="6">Option 6</Menu.Item>
+            <Menu.Item key="7">Option 7</Menu.Item>
+            <Menu.Item key="8">Option 8</Menu.Item>
+          </SubMenu>
+          <SubMenu
+            key="dashboards"
             title={
               <span>
-                <Icon type="setting" />
-                <span>数据可视化面板</span>
+                <Icon type="desktop" />
+                <span>可视化大屏</span>
               </span>
             }
           >
             <Menu.Item key="9">Option 9</Menu.Item>
             <Menu.Item key="10">Option 10</Menu.Item>
-            <Menu.Item key="11">Option 11</Menu.Item>
-            <Menu.Item key="12">Option 12</Menu.Item>
-          </Menu.SubMenu>
+            <SubMenu key="dashboardSubs" title="Submenu">
+              <Menu.Item key="11">Option 11</Menu.Item>
+              <Menu.Item key="12">Option 12</Menu.Item>
+            </SubMenu>
+          </SubMenu>
         </Menu>
       </Layout>
     );
@@ -72,7 +103,6 @@ class NavSidebar extends React.Component {
 }
 
 NavSidebar.propTypes = {};
-
 NavSidebar.defaultProps = {};
 
 export default function init(ngModule) {
@@ -80,7 +110,8 @@ export default function init(ngModule) {
     'navSidebar',
     react2angular(NavSidebar, Object.keys(NavSidebar.propTypes), [
       '$rootScope',
-      '$scope'
+      '$scope',
+      '$location'
     ])
   );
 }

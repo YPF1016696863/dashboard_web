@@ -1,6 +1,7 @@
 import { keys, some } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Empty } from 'antd';
 import { react2angular } from 'react2angular';
 import classNames from 'classnames';
 import { $uibModal } from '@/services/ng';
@@ -79,11 +80,6 @@ function ShowOnBoarding({
           text={translate('HOME.EMPTY_STATE.YOUR_TEAM_MEMBERS')}
         />
       </ol>
-      <p>
-        {translate('HOME.EMPTY_STATE.NEED_MORE_SUPPORT')}{' '}
-        {'请查阅DataVis使用文档.'}
-        <i className="fa fa-external-link m-l-5" aria-hidden="true" />
-      </p>
     </div>
   );
 }
@@ -134,7 +130,7 @@ export function EmptyState({
 
   return (
     <div className="empty-state bg-white">
-      <div className="empty-state__summary">
+      <div className="empty-state__summary center">
         {title && <h5>{title}</h5>}
         {header && <h4>{header}</h4>}
         <h2>
@@ -147,11 +143,6 @@ export function EmptyState({
           width="75%"
         />
       </div>
-      <ShowOnBoarding
-        translate={translate}
-        helpLink={helpLink}
-        onboardingMode={onboardingMode}
-      />
     </div>
   );
 }
