@@ -5,9 +5,9 @@ import {
   Descriptions,
   Breadcrumb,
   Icon,
-  List,
   Avatar,
-  Skeleton,
+  Table,
+  Divider,
   Tag
 } from 'antd';
 import { react2angular } from 'react2angular';
@@ -23,21 +23,13 @@ import helper from '@/components/dynamic-form/dynamicFormHelper';
 
 import template from './data-sources.html';
 
+const { Column, ColumnGroup } = Table;
+
 class DataSourcesList extends React.Component {
   state = {
     dataSourceTypes: [],
     dataSources: [],
-    loading: true,
-    routes: [
-      {
-        path: '/xxx',
-        breadcrumbName: 'DataVis'
-      },
-      {
-        path: 'data_sources',
-        breadcrumbName: 'DataVis 数据源'
-      }
-    ]
+    loading: true
   };
 
   componentDidMount() {
@@ -106,10 +98,19 @@ class DataSourcesList extends React.Component {
       name: dataSource.name,
       imgSrc: `${IMG_ROOT}/${dataSource.type}.png`,
       href: `data_sources/${dataSource.id}`,
-      loading: false,
       desc: dataSource.type,
       viewOnly: dataSource.view_only
     }));
+
+    const data = [
+      {
+        name: 'John',
+        imgSrc: 'Brown',
+        desc: 'desc',
+        href: 'www.google.com',
+        viewOnly: true
+      }
+    ];
 
     return isEmpty(dataSources) ? (
       <div className="text-center">
@@ -124,46 +125,41 @@ class DataSourcesList extends React.Component {
         )}
       </div>
     ) : (
-      <List
-        className="demo-loadmore-list"
-        itemLayout="horizontal"
-        dataSource={items}
-        renderItem={item => (
-          <List.Item
-            actions={[
-              <a href={item.href}>
-                <Icon type="edit" style={{ fontSize: '18px' }} />
-                编辑
-              </a>
-            ]}
-          >
-            <Skeleton avatar title={false} loading={item.loading} active>
-              <List.Item.Meta
-                avatar={<Avatar size={52} src={item.imgSrc} />}
-                title={item.name}
-                description={
-                  <>
-                    {item.desc}
-                  </>
-                }
-              />
-              {item.viewOnly ? (
-                <Tag color="#2db7f5">只读权限</Tag>
-              ) : (
-                <Tag color="#108ee9">读写权限</Tag>
-              )}
-            </Skeleton>
-          </List.Item>
-        )}
-      />
+      <Table dataSource={items} pagination={{ position: 'bottom' }}>
+        <Column
+          title=""
+          dataIndex="imgSrc"
+          key="imgSrc"
+          render={(text, record, index) => (
+            <Avatar size={68} src={record.imgSrc} />
+          )}
+        />
+        <Column title="数据源名称" dataIndex="name" key="name" />
+        <Column title="数据源类型" dataIndex="desc" key="desc" />
+        <Column
+          title="权限"
+          dataIndex="viewOnly"
+          key="viewOnly"
+          render={(text, record, index) => <Tag color="#108ee9">读写权限</Tag>}
+        />
+        <Column
+          title="操作"
+          key="action"
+          render={(text, record, index) => (
+            <Button type="primary" href={record.href}>
+              修改
+            </Button>
+          )}
+        />
+      </Table>
     );
   }
 
   render() {
     const { $translate } = this.props;
-    const { routes } = this.state;
     const newDataSourceProps = {
       type: 'primary',
+      ghost:true,
       onClick: policy.isCreateDataSourceEnabled()
         ? this.showCreateSourceDialog
         : null,
@@ -186,8 +182,8 @@ class DataSourcesList extends React.Component {
               </Breadcrumb.Item>
             </Breadcrumb>
             <PageHeader
-              title="数据源"
-              subTitle="添加并管理数据源"
+              title={<span style={{fontSize:'18px'}}>数据源</span>}
+              subTitle={<span style={{fontSize:'13px'}}>添加并管理数据源</span>}
               extra={[
                 <Button {...newDataSourceProps}>
                   <i className="fa fa-plus m-r-5" />

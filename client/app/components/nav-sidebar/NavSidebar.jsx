@@ -57,7 +57,7 @@ class NavSidebar extends React.Component {
             title={
               <span>
                 <Icon type="file-search" />
-                <span>查询配置</span>
+                <span>数据查询</span>
               </span>
             }
           >
