@@ -105,7 +105,7 @@ export function defaultBasicChartOptions() {
         },
         legend: {
             show: true,
-            x: 'left'
+            // x: 'left'
         },
         toolbox: {
             show: true,

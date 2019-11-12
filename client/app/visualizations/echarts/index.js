@@ -42,6 +42,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             return row[_.get($scope.options, "form.xAxisColumn", "-")];
           }));
 
+
           //  提示框文字格式
           const formatterString = `${_.get($scope.options, "Text_a", "")}
           {a}${_.get($scope.options, "a_Text", "")}
@@ -56,59 +57,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
           _.set($scope.options, "series", []);// 清空设置
 
-          
+
           // series下的
-          // let seriesItemStyleColor = 0;
           let seriesNameIndex = 0;
-          // let symbolSizeIndex = 0;
-          // let symbolIndex = 0;
-          // let symbolRotateIndex = 0;
-          // let labelShowIndex = 0;
-          // let labelPositionIndex = 0;
-          // let labelColor = 0;
-          // let labelFontWeight = 0;
-          // let labelFontSize = 0;
-          // let labelFontFamily = 0;
-          // markLine 下的
-          // max
-          // let markLineDataMaxType = 0;
-          // let markLineDataMaxLineStyleColor = 0;
-          // let markLineDataMaxLineStyleWidth = 0;
-          // let markLineDataMaxLineStyleType = 0;
-
-          // markPoint 下的
-          // max
-          // let markPointDataMaxType = 0;
-          // let markPointMaxSymbolIndex = 0;
-          // let markPointMaxSymbolSizeIndex = 0;
-          // let markPointMaxLabelShowIndex = 0;
-          // let markPointMaxLabelPositionIndex = 0;
-          // let markPointMaxLabelColor = 0;
-          // let markPointMaxLabelFontWeight = 0;
-          // let markPointMaxLabelFontSize = 0;
-          // let markPointMaxLabelFontFamily = 0;
-          // min
-          // let markPointDataMinType = 0;
-          // let markPointMinSymbolIndex = 0;
-          // let markPointMinSymbolSizeIndex = 0;
-          // let markPointMinLabelShowIndex = 0;
-          // let markPointMinLabelPositionIndex = 0;
-          // let markPointMinLabelColor = 0;
-          // let markPointMinLabelFontWeight = 0;
-          // let markPointMinLabelFontSize = 0;
-          // let markPointMinLabelFontFamily = 0;
-          // min
-          // let markPointDataAverageType = 0;
-          // let markPointAverageSymbolIndex = 0;
-          // let markPointAverageSymbolSizeIndex = 0;
-          // let markPointAverageLabelShowIndex = 0;
-          // let markPointAverageLabelPositionIndex = 0;
-          // let markPointAverageLabelColor = 0;
-          // let markPointAverageLabelFontWeight = 0;
-          // let markPointAverageLabelFontSize = 0;
-          // let markPointAverageLabelFontFamily = 0;
-
-
 
           // setChartType($scope.options, selected);
           _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
@@ -122,8 +73,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 return row[yAxisColumn];
               }),
               areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
-              symbolSize: _.get($scope.options, "series_SymbolSize", [])[seriesNameIndex],// 下标传入配置数组找到相应的配置
-              symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
+              symbolSize: _.get($scope.options, "series_SymbolSize", [])[seriesNameIndex] === undefined ?
+                25 : _.get($scope.options, "series_SymbolSize", [])[seriesNameIndex],// 下标传入配置数组找到相应的配置
+              symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
+                'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
               symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
               label: {
                 show: _.get($scope.options, "series_Show", [])[seriesNameIndex],
@@ -216,53 +169,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             });
 
             // 遍历时的下标++ 选到下一条系列
-            // seriesItemStyleColor += 1;
             seriesNameIndex += 1;
-            // symbolSizeIndex += 1;
-            // symbolIndex += 1;
-            // symbolRotateIndex += 1;
-            // labelShowIndex += 1;
-            // labelPositionIndex += 1;
-            // labelColor += 1;
-            // labelFontWeight += 1;
-            // labelFontSize += 1;
-            // labelFontFamily += 1;
-            // markPoint max
-            // markPointDataMaxType += 1;
-            // markPointMaxSymbolIndex += 1;
-            // markPointMaxSymbolSizeIndex += 1;
-            // markPointMaxLabelShowIndex += 1;
-            // markPointMaxLabelPositionIndex += 1;
-            // markPointMaxLabelColor += 1;
-            // markPointMaxLabelFontWeight += 1;
-            // markPointMaxLabelFontSize += 1;
-            // markPointMaxLabelFontFamily += 1;
-            // markPoint min
-            // markPointDataMinType += 1;
-            // markPointMinSymbolIndex += 1;
-            // markPointMinSymbolSizeIndex += 1;
-            // markPointMinLabelShowIndex += 1;
-            // markPointMinLabelPositionIndex += 1;
-            // markPointMinLabelColor += 1;
-            // markPointMinLabelFontWeight += 1;
-            // markPointMinLabelFontSize += 1;
-            // markPointMinLabelFontFamily += 1;
-            // markPoint average
-            // markPointDataAverageType += 1;
-            // markPointAverageSymbolIndex += 1;
-            // markPointAverageSymbolSizeIndex += 1;
-            // markPointAverageLabelShowIndex += 1;
-            // markPointAverageLabelPositionIndex += 1;
-            // markPointAverageLabelColor += 1;
-            // markPointAverageLabelFontWeight += 1;
-            // markPointAverageLabelFontSize += 1;
-            // markPointAverageLabelFontFamily += 1;
 
-
-            // markLineDataMaxType += 1;
-            // markLineDataMaxLineStyleColor += 1;
-            // markLineDataMaxLineStyleWidth += 1;
-            // markLineDataMaxLineStyleType += 1;
           });
 
           let myChart = null;
@@ -335,6 +243,7 @@ function EchartsEditor() {
       $scope.changeTab = (tab) => {
         $scope.currentTab = tab;
       };
+      // 选项库
       $scope.chartTypes = {
         line: { name: 'Echarts线形图', icon: 'line-chart' },
         bar: { name: 'Echarts柱状图', icon: 'bar-chart' },
@@ -384,7 +293,6 @@ function EchartsEditor() {
         { label: 'normal', value: 'normal' },
         { label: 'bold', value: 'bold' },
         { label: 'bolder', value: 'bolder' },
-        { label: 'triangle', value: 'triangle' },
         { label: 'lighter', value: 'lighter' },
         { label: '100 ', value: '100 ' },
         { label: '200 ', value: '200 ' },
