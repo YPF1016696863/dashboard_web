@@ -11,10 +11,11 @@ import {
   Row,
   Col,
   Tree,
-  Popover,
+  Table,
+  Alert,
   Empty,
   BackTop,
-  Text
+  Tabs
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -50,9 +51,12 @@ import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
-
+const { TabPane } = Tabs;
 class QueriesList extends React.Component {
   state = {
+    isLoaded: false,
+    queryResult: null,
+    test: null
   };
 
   listColumns = [];
@@ -94,6 +98,21 @@ class QueriesList extends React.Component {
   };
 
   componentDidMount() {
+    const data = [];
+    for (let i = 0; i < 100; ) {
+      data.push({
+        key: i,
+        name: `Edward King ${i}`,
+        age: 32,
+        address: `London, Park Lane no. ${i}`
+      });
+      i += 1;
+    }
+    this.setState({
+      test: data
+    });
+
+    const { controller } = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
     this.listColumns = [
       Columns.favorites({ className: 'p-r-0' }),
@@ -144,6 +163,20 @@ class QueriesList extends React.Component {
         }
       )
     ];
+
+    this.setState({
+      isLoaded: controller.isLoaded,
+      queryResult: null
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.controller.isLoaded !== prevProps.controller.isLoaded) {
+      // eslint-disable-next-line
+      this.setState({
+        isLoaded: this.props.controller.isLoaded
+      });
+    }
   }
 
   render() {
@@ -190,70 +223,131 @@ class QueriesList extends React.Component {
           </Descriptions>
         </PageHeader>
         <Divider className="header-divider" />
-        <div className="main-control-section">
-          <Row>
-            <Col span={4} style={{ borderRight: '1px solid #e8e8e8' }}>
-              <Row>
-                <Col>
-                  <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
-                    数据列表:
-                  </div>
-                  <Row>
-                    <Col span={18}>
-                      <Sidebar.SearchInput
-                        placeholder="搜索查询..."
-                        value={controller.searchTerm}
-                        onChange={controller.updateSearch}
-                      />
-                    </Col>
-                    <Col span={5} offset={1}>
-                      <Dropdown
-                        overlay={
-                          <Menu>
-                            <Menu.Item key="1">
-                              <Icon type="sort-ascending" />
-                              按名称排序
-                            </Menu.Item>
-                            <Menu.Item key="2">
-                              <Icon type="clock-circle" />
-                              按创建时间排序
-                            </Menu.Item>
-                          </Menu>
+        <Row>
+          <Col
+            className="main-control-section"
+            span={4}
+            style={{ borderRight: '1px solid #e8e8e8' }}
+          >
+            <Row>
+              <Col>
+                <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
+                  数据列表:
+                </div>
+                <Row>
+                  <Col span={18}>
+                    <Sidebar.SearchInput
+                      placeholder="搜索查询..."
+                      value={controller.searchTerm}
+                      onChange={controller.updateSearch}
+                    />
+                  </Col>
+                  <Col span={5} offset={1}>
+                    <Dropdown
+                      overlay={
+                        <Menu>
+                          <Menu.Item key="1">
+                            <Icon type="sort-ascending" />
+                            按名称排序
+                          </Menu.Item>
+                          <Menu.Item key="2">
+                            <Icon type="clock-circle" />
+                            按创建时间排序
+                          </Menu.Item>
+                        </Menu>
+                      }
+                    >
+                      <Button icon="menu-fold" size="small" />
+                    </Dropdown>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ paddingRight: '10px' }}>
+                <DirectoryTree
+                  defaultExpandAll
+                  onSelect={(value, node, extra) => {
+                    this.setState({
+                      isLoaded: false
+                    });
+                    Query.resultById({ id: value })
+                      .$promise.then(data =>
+                        this.setState({
+                          queryResult: data.query_result
+                        })
+                      )
+                      .finally(() =>
+                        this.setState({
+                          isLoaded: true
+                        })
+                      );
+                  }}
+                >
+                  <TreeNode title="数据查询(无分组)" key="ungrouped">
+                    {_.map(controller.pageItems, item => (
+                      <TreeNode
+                        icon={
+                          <Icon
+                            type="file-search"
+                            style={{ color: '#FAAA39' }}
+                          />
                         }
-                      >
-                        <Button icon="menu-fold" size="small" />
-                      </Dropdown>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-              <Row>
-                <Col style={{ paddingRight: '10px' }}>
-                  <DirectoryTree defaultExpandAll>
-                    <TreeNode title="数据查询(无分组)" key="ungrouped">
-                      {_.map(controller.pageItems, item => (
-                        <TreeNode
-                          icon={
-                            <Icon
-                              type="file-search"
-                              style={{ color: '#FAAA39' }}
-                            />
-                          }
-                          title={item.name}
-                          key={item.id}
-                          isLeaf
-                        />
-                      ))}
-                    </TreeNode>
-                  </DirectoryTree>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={20}>
-              <Empty description="请从左侧点击选择数据集" />
-            </Col>
-          </Row>
-        </div>
+                        title={item.name}
+                        key={item.id}
+                        isLeaf
+                      />
+                    ))}
+                  </TreeNode>
+                </DirectoryTree>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={20} className="main-control-section">
+            {!this.state.isLoaded && <LoadingState />}
+            {this.state.isLoaded && this.state.queryResult == null && (
+              <Empty
+                description="请从左侧点击选择数据集"
+                style={{ paddingTop: '10%' }}
+              />
+            )}
+            {this.state.isLoaded && this.state.queryResult != null && (
+              <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+                <TabPane tab="数据预览" key="1">
+                  <Alert
+                    message="预览数据为该数据集的部分数据."
+                    type="warning"
+                    closable
+                  />
+                  <Table
+                    columns={[
+                      {
+                        title: 'Name',
+                        dataIndex: 'name'
+                      },
+                      {
+                        title: 'Age',
+                        dataIndex: 'age'
+                      },
+                      {
+                        title: 'Address',
+                        dataIndex: 'address'
+                      }
+                    ]}
+                    dataSource={this.state.test}
+                    scroll={{ y: 'max-content' }}
+                  />
+                </TabPane>
+                <TabPane tab="数据集设置" key="2">
+                  Content of Tab Pane 2
+                </TabPane>
+                <TabPane tab="关联图表" key="3">
+                  Content of Tab Pane 3
+                </TabPane>
+              </Tabs>
+            )}
+          </Col>
+        </Row>
       </>
     );
   }
