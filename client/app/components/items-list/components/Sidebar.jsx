@@ -13,8 +13,9 @@ import { TagsList } from '@/components/TagsList';
 export function SearchInput({ placeholder, value, showIcon, onChange }) {
   const InputControl = showIcon ? Input.Search : Input;
   return (
-    <div className="m-b-10">
+    <div style={{margin:'0px',padding:'0px'}}>
       <InputControl
+        size="small"
         className="form-control"
         placeholder={placeholder}
         defaultValue={value}
@@ -29,12 +30,12 @@ SearchInput.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   showIcon: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 SearchInput.defaultProps = {
   placeholder: '搜索...',
-  showIcon: false,
+  showIcon: false
 };
 
 /*
@@ -44,9 +45,8 @@ SearchInput.defaultProps = {
 export function Menu({ items, selected, $translate }) {
   const translate = key => ($translate ? $translate.instant(key) : key);
 
-  items = filter(
-    items,
-    item => (isFunction(item.isAvailable) ? item.isAvailable() : true),
+  items = filter(items, item =>
+    isFunction(item.isAvailable) ? item.isAvailable() : true
   );
   if (items.length === 0) {
     return null;
@@ -57,12 +57,15 @@ export function Menu({ items, selected, $translate }) {
         <a
           key={item.key}
           href={item.href}
-          className={classNames('list-group-item', { active: selected === item.key })}
+          className={classNames('list-group-item', {
+            active: selected === item.key
+          })}
         >
-          {
-            isString(item.icon) && (item.icon !== '') &&
-            <span className="btn-favourite m-r-5"><i className={item.icon} aria-hidden="true" /></span>
-          }
+          {isString(item.icon) && item.icon !== '' && (
+            <span className="btn-favourite m-r-5">
+              <i className={item.icon} aria-hidden="true" />
+            </span>
+          )}
           {isFunction(item.icon) && (item.icon(item) || null)}
           {translate(item.title)}
         </a>
@@ -72,21 +75,23 @@ export function Menu({ items, selected, $translate }) {
 }
 
 Menu.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string.isRequired,
-    href: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    icon: PropTypes.func, // function to render icon
-    isAvailable: PropTypes.func, // return `true` to show item and `false` to hide; if omitted: show item
-  })),
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      href: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      icon: PropTypes.func, // function to render icon
+      isAvailable: PropTypes.func // return `true` to show item and `false` to hide; if omitted: show item
+    })
+  ),
   selected: PropTypes.string,
-  $translate: PropTypes.func,
+  $translate: PropTypes.func
 };
 
 Menu.defaultProps = {
   items: [],
   selected: null,
-  $translate: text => text,
+  $translate: text => text
 };
 
 /*
@@ -94,11 +99,15 @@ Menu.defaultProps = {
  */
 
 export function MenuIcon({ icon }) {
-  return <span className="btn-favourite m-r-5"><i className={icon} aria-hidden="true" /></span>;
+  return (
+    <span className="btn-favourite m-r-5">
+      <i className={icon} aria-hidden="true" />
+    </span>
+  );
 }
 
 MenuIcon.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired
 };
 
 /*
@@ -106,17 +115,24 @@ MenuIcon.propTypes = {
  */
 
 export function ProfileImage({ user }) {
-  if (!isString(user.profile_image_url) || (user.profile_image_url === '')) {
+  if (!isString(user.profile_image_url) || user.profile_image_url === '') {
     return null;
   }
-  return <img src={user.profile_image_url} className="profile__image--navbar m-r-5" width="13" alt={user.name} />;
+  return (
+    <img
+      src={user.profile_image_url}
+      className="profile__image--navbar m-r-5"
+      width="13"
+      alt={user.name}
+    />
+  );
 }
 
 ProfileImage.propTypes = {
   user: PropTypes.shape({
     profile_image_url: PropTypes.string,
-    name: PropTypes.string,
-  }).isRequired,
+    name: PropTypes.string
+  }).isRequired
 };
 
 /*
@@ -136,7 +152,7 @@ export function Tags({ url, onChange }) {
 
 Tags.propTypes = {
   url: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 /*
@@ -146,13 +162,11 @@ Tags.propTypes = {
 export function PageSizeSelect({ options, value, onChange, ...props }) {
   return (
     <div {...props}>
-      <Select
-        className="w-100"
-        defaultValue={value}
-        onChange={onChange}
-      >
+      <Select className="w-100" defaultValue={value} onChange={onChange}>
         {map(options, option => (
-          <Select.Option key={option} value={option}>{ option } 个结果</Select.Option>
+          <Select.Option key={option} value={option}>
+            {option} 个结果
+          </Select.Option>
         ))}
       </Select>
     </div>
@@ -162,5 +176,5 @@ export function PageSizeSelect({ options, value, onChange, ...props }) {
 PageSizeSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.number).isRequired,
   value: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 };
