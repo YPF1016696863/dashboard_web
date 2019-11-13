@@ -4,7 +4,7 @@ import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
-import { defaultPieChartOptions, parseChartType, getChartType } from './echartsPieChartOptionUtils';
+import { defaultPieChartOptions, parseChartType, getChartType, getRadius } from './echartsPieChartOptionUtils';
 
 function EchartsPieRenderer($timeout, $rootScope, $window) {
   return {
@@ -19,84 +19,148 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+
+          // 找到选中serise的下标        
+          _.set($scope.options, 'useSerie_Index',
+            _.findIndex(
+              _.get($scope.options, "form.yAxisColumns", []),
+              function (o) { return o === _.get($scope.options, 'useSerie', ''); }
+            ));
+
+
+
+
           const data = $scope.queryResult.getData();
-           // 设置图表数据
-          _.set($scope.options, "series", [
-            {
-              name:'访问来源',
-              type:'pie',
-              radius : _.get($scope.options.form.yAxisColumnTypes) === "rose" || _.get($scope.options.form.yAxisColumnTypes) ==="pie"?  '85%':['50%', '70%'], 
+          // 输入的数据格式转换 
+          const seriesData = [];
+          let pieData = [];
+          let xDataValue = [];
+          const yData = _.get($scope.options, "form.yAxisColumns", ":::");  // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
+          const xData = _.get($scope.options, "form.xAxisColumn", "::");    // name string 这一列  AGENT_NAME          
+          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+            pieData = [];
+            xDataValue = [];
+            _.forEach(data, function (value, key) {// [{0},{1}...] 筛选出每一个{0} {1} ...
+              const onesValue = value;
+              _.forEach(onesValue, function (oneXvalue, oneXkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                if (oneXkey === xData) { // x
+                  const xValue = oneXvalue;
+                  xDataValue.push(xValue);
+                  _.forEach(onesValue, function (oneYvalue, oneYkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                    if (oneYkey === yAxisColumn) { // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                      pieData.push({ name: xValue, value: oneYvalue, itemStyle: { color: '' } });
+                    }
+                  });
+                }
+              });
+            });
+            seriesData.push(pieData);
+
+          });
+          // console.log(seriesData);
+
+
+
+
+          // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
+          _.set($scope.options, "Fans", xDataValue);                        // 遍历x轴选中列 对应的所有值
+          const selectFan = _.get($scope.options, "useFan", []);            // 保存选中的扇瓣
+          console.log(selectFan);
+          _.forEach(pieData, function (value, key) {                        // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
+            const onesValue = value;                              // name: "王小斌", value: 50}           
+            _.forEach(onesValue, function (oneXvalue, oneXkey) {  // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+              if (oneXvalue === selectFan) { // 找到选中的x的数据 王小斌===选择的王小斌
+                onesValue.itemStyle.color = _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
+              }
+            });
+          });
+
+
+          let seriesIndex = 0;
+          _.set($scope.options, "series", []);// 清空设置
+          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+
+            $scope.options.series.push({
+              name: _.get($scope.options, "series_Name", ''),
+              type: 'pie',
+              radius: getRadius($scope.options, _.get($scope.options.form.yAxisColumnTypes, yAxisColumn), seriesIndex),// 内外半径修改 多系列需动态
               center: ['50%', '50%'],
-              data:[
-                  {value:335, name:'直接访问'},
-                  {value:310, name:'邮件营销'},
-                  {value:274, name:'联盟广告'},
-                  {value:235, name:'视频广告'},
-                  {value:400, name:'搜索引擎'}
-              ].sort(function (a, b) { return a.value - b.value; }),
+              data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }),// 多系列需动态
               // 判断是玫瑰图
-              roseType: _.get($scope.options.form.yAxisColumnTypes) === "rose"? 'radius':undefined,
+              roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "rose" ? 'radius' : undefined,
               label: {
-                  normal: {
-                      textStyle: {
-                          color: 'rgba(255, 255, 255, 0.3)'
-                      }
+                normal: {
+                  show: _.get($scope.options, "series_Label_Position", '')[seriesIndex] !== 'center',
+                  position: _.get($scope.options, "series_Label_Position", '')[seriesIndex],
+                  fontSize: _.get($scope.options, "series_Label_FontSize", 25)[seriesIndex],
+                  formatter: `{b}${_.get($scope.options, "show_Persant", false) ? `{d}%` : ``} `,
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: _.get($scope.options, "series_Label_Normal_FontSize", 25)[seriesIndex],
+                    fontWeight: _.get($scope.options, "series_Label_Normal_FontWeights", '')[seriesIndex],
                   }
+                },
+                color: _.get($scope.options, "series_Label_Color", ''),// 引导线名称颜色
               },
               labelLine: {
-                  normal: {
-                      lineStyle: {
-                          color: 'rgba(255, 255, 255, 0.3)'
-                      },
-                      smooth: 0.2,
-                      length: 10,
-                      length2: 20
-                  }
+                normal: {
+                  lineStyle: {
+                    color: _.get($scope.options, "series_LabelLine_LineStyle_Color", ''),// 引导线的颜色
+                  },
+                  smooth: 0.2,
+                  length: 10,
+                  length2: 20
+                }
               },
-              itemStyle: {
-                  normal: {
-                      color: '#c23531',
-                      shadowBlur: 200,
-                      shadowColor: 'rgba(0, 0, 0, 0.5)'
-                  }
-              },
+              // itemStyle: {
+              //   // normal: {
+              //   color: _.get($scope.options, "series_ItemStyle_Color", ''),
+              //   // }
+              // },
               animationType: 'scale',
               animationEasing: 'elasticOut'
-          }
-           ]);
+
+
+
+            });
+            seriesIndex += 1;
+          });
+
 
           let myChart = null;
 
-          if(document.getElementById("pie-main")) {
-               document.getElementById("pie-main").id = $scope.options.id;
-               // eslint-disable-next-line
-               myChart = echarts.init(document.getElementById($scope.options.id));
+          if (document.getElementById("pie-main")) {
+            document.getElementById("pie-main").id = $scope.options.id;
+            // eslint-disable-next-line
+            myChart = echarts.init(document.getElementById($scope.options.id));
           } else {
-              // eslint-disable-next-line
-               myChart = echarts.init(document.getElementById($scope.options.id));
+            // eslint-disable-next-line
+            myChart = echarts.init(document.getElementById($scope.options.id));
           }
-         
-          if(_.get($scope.options,"form.isCodeEnabled",false)) {
-               myChart.setOption(JSON.parse(_.replace($scope.options.form.code,"'",'"')), true);
+
+          if (_.get($scope.options, "form.isCodeEnabled", false)) {
+            myChart.setOption(JSON.parse(_.replace($scope.options.form.code, "'", '"')), true);
           } else {
-               myChart.setOption($scope.options, true);
+            myChart.setOption($scope.options, true);
           }
           // Resize - Responsive
           if (_.get($scope.options, "size.responsive", false)) {
- 
-          // Find widget and resize
-          let height = "100%";
-          if ($($element[0]).closest('.widget-container').length === 0) {
-            // Set a default height for widget.
-               height = "400px";
-             }
- 
-             _.set($scope.options, "size", {
-               responsive: true,
-               width: Math.floor($element.parent().width()) + "px",
-               height
-             });
-           }
+
+            // Find widget and resize
+            let height = "100%";
+            if ($($element[0]).closest('.widget-container').length === 0) {
+              // Set a default height for widget.
+              height = "400px";
+            }
+
+            _.set($scope.options, "size", {
+              responsive: true,
+              width: Math.floor($element.parent().width()) + "px",
+              height
+            });
+          }
           //  myChart.setOption(defaultPieChartOptions(), true);
           myChart.resize($scope.options.size.width, $scope.options.size.height);
 
@@ -139,18 +203,67 @@ function EchartsPieEditor() {
         doughnut: { name: 'Echarts环形图', icon: 'pie-chart' }
       };
 
-      $scope.xAxisScales = [
-        { label: '类目轴(类目轴，适用于离散的类目数据)', value: 'category' },
-        { label: ' 数值轴(适用于连续数据)', value: 'value' },
-        { label: '时间轴(适用于连续的时序数据，与数值轴相比时间轴带有时间的格式化)', value: 'time' },
-        { label: '对数轴(适用于对数数据)', value: 'log' }
+
+      $scope.LablePositions = [
+        { label: '饼图扇区外侧', value: 'outside' },
+        { label: '饼图扇区内部', value: 'inside' },
+        { label: '饼图中心位置', value: 'center' }
       ];
 
-      $scope.xAxisLocations = [
-        { label: '数据轴起始位置', value: 'start' },
-        { label: '数据轴居中位置', value: 'center' },
-        { label: '数据轴末端位置', value: 'end' }
+
+      $scope.LabelFontWeights = [
+        { label: 'normal', value: 'normal' },
+        { label: 'bold', value: 'bold' },
+        { label: 'bolder', value: 'bolder' },
+        { label: 'lighter', value: 'lighter' },
+        { label: '100 ', value: '100 ' },
+        { label: '200 ', value: '200 ' },
+        { label: '300 ', value: '300 ' },
+        { label: '400 ', value: '400 ' },
+        { label: '600 ', value: '600 ' },
+        { label: '800 ', value: '800 ' },
+        { label: '1000 ', value: '1000 ' }
       ];
+      $scope.LabelFontFamilys = [
+        { label: 'serif', value: 'serif' },
+        { label: 'monospace', value: 'monospace' },
+        { label: 'Arial', value: 'Arial' },
+        { label: 'Courier New', value: 'Courier New' },
+        { label: 'Microsoft YaHei', value: 'Microsoft YaHei' }
+      ];
+      $scope.FontStyles = [
+        { label: 'normal', value: 'normal' },
+        { label: 'italic', value: 'italic' },
+        { label: 'oblique', value: 'oblique' }
+      ];
+      $scope.Colors = [
+        { label: '默认', value: '' },
+        { label: 'DataVis-红色', value: '#ed4d50' },
+        { label: 'DataVis-绿色', value: '#6eb37a' },
+        { label: 'DataVis-蓝色', value: '#5290e9' },
+        { label: 'DataVis-橘色', value: '#ee941b' },
+        { label: 'DataVis-紫色', value: '#985896' }
+      ];
+
+      $scope.BackgroundColors = [
+        { label: '暗绿色', value: '#84AF9B' },
+        { label: '白色', value: '#ffffff' },
+        { label: '黑色', value: '#2C3E50' }
+      ];
+      $scope.TextAligns = [
+        { label: '默认', value: '' },
+        { label: '自动', value: 'auto' },
+        { label: '左对齐', value: 'left' },
+        { label: '右对齐', value: 'right' },
+        { label: '居中', value: 'center' }
+      ];
+      $scope.LegendAliNumbs = [
+        { label: '默认', value: '' },
+        { label: '左对齐', value: '5%' },
+        { label: '居中', value: '35%' },
+        { label: '右对齐', value: '65%' }
+      ];
+
 
       $scope.$watch('options', () => {
       }, true);
