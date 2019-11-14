@@ -27,11 +27,7 @@ class PageHead extends React.Component {
           ghost="true"
           title="首页"
           subTitle="数据可视化平台"
-          extra={[
-            <Button key="1" type="primary">
-              Primary
-            </Button>
-          ]}
+          extra={[]}
         />
       </div>
     );

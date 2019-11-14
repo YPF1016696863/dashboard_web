@@ -81,6 +81,8 @@
     "react-ace": "^6.1.0",
     "react-dom": "^16.8.3",
     "react2angular": "^3.2.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.1",
     "ui-select": "^0.19.8",
     "underscore.string": "^3.3.4",
     "uuid": "^3.3.3"

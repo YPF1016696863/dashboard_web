@@ -990,14 +990,18 @@ text.slicetext {
 }
 
 .main-section-left {
-  float: left;
-  width: 256px;
+  min-height: calc(100vh - 50px) !important;
+  height: calc(100vh - 50px) !important;
+  max-height: calc(100vh - 50px) !important;
+  background-color: #2a3b5a !important;
 }
 .main-section-right {
-  margin-left: 256px;
-  min-height: calc(100vh);
-  height: calc(100vh);
-  max-height: calc(100vh);
+  min-height: calc(100vh - 50px) !important;
+  height: calc(100vh - 50px) !important;
+  max-height: calc(100vh - 50px) !important;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
   background-color: #fff !important;
 }
 
@@ -1036,10 +1040,8 @@ text.slicetext {
 }
 
 .datavis-frame-container {
-  padding-top: 55px !important;
-  min-height: calc(100vh);
-  height: calc(100vh);
-  max-height: calc(100vh);
+  padding-left: 20px !important;
+  padding-right: 20px !important;
 }
 
 .datasource-list-item {

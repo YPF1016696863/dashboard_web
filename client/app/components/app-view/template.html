@@ -1,7 +1,22 @@
 <app-header ng-if="$ctrl.layout.showHeader"></app-header>
-<div class="main-section-left">
-    <nav-sidebar />
-</div>
-<div class="main-section-right">
-    <div ng-if="!$ctrl.handler.error" ng-view></div>
+<div style="display: flex; flex-direction: row;">
+    <div class="main-section-left">
+        <div class="ui compact vertical labeled icon menu">
+            <a class="item" href="/data_sources">
+                <i class="gamepad icon"></i>
+                Games
+            </a>
+            <a class="item" href="/queries">
+                <i class="video camera icon"></i>
+                Channels
+            </a>
+            <a class="item">
+                <i class="video play icon"></i>
+                Videos
+            </a>
+        </div>
+    </div>
+    <div class="main-section-right">
+        <div ng-if="!$ctrl.handler.error" ng-view></div>
+    </div>
 </div>

@@ -13,11 +13,8 @@
 }
 
 .app-header {
-    position: fixed !important;
-    left: 0;
-    right: 0;
+
     background: #2f5d91 !important;
-    z-index: 999 !important;
 }
 
 .brand-title {

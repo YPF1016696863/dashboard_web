@@ -56,7 +56,7 @@ class QueriesList extends React.Component {
   state = {
     isLoaded: false,
     queryResult: null,
-    test: null
+    queryId: null
   };
 
   listColumns = [];
@@ -98,20 +98,6 @@ class QueriesList extends React.Component {
   };
 
   componentDidMount() {
-    const data = [];
-    for (let i = 0; i < 100; ) {
-      data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London, Park Lane no. ${i}`
-      });
-      i += 1;
-    }
-    this.setState({
-      test: data
-    });
-
     const { controller } = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
     this.listColumns = [
@@ -179,13 +165,28 @@ class QueriesList extends React.Component {
     }
   }
 
+  normalizedTableData(data) {
+    this.setState({
+      queryResult: {
+        columns: _.map(data.data.columns, column => ({
+          title: column.friendly_name,
+          dataIndex: column.name,
+          sorter: true
+        })),
+        rows: data.data.rows
+      }
+    });
+  }
+
   render() {
     const { controller } = this.props;
     const { appSettings } = this.props;
     const { $translate } = this.props;
+
     const newDataSourceProps = {
       type: 'primary',
       ghost: true,
+      size: 'small',
       onClick: policy.isCreateDataSourceEnabled()
         ? this.showCreateSourceDialog
         : null,
@@ -207,12 +208,23 @@ class QueriesList extends React.Component {
         <PageHeader
           title={<span style={{ fontSize: '18px' }}>数据查询</span>}
           subTitle={
-            <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
+            <>
+              <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Button {...newDataSourceProps}>
+                <i className="fa fa-plus m-r-5" />
+                新建数据查询
+              </Button>
+            </>
           }
           extra={[
-            <Button {...newDataSourceProps}>
+            <Button type="primary" disabled={this.state.queryId==null} href={'/queries/'+this.state.queryId} target="_blank">
+              <i className="fa fa-edit m-r-5" />
+              编辑数据集
+            </Button>,
+            <Button ghost type="primary" disabled={this.state.queryId==null}>
               <i className="fa fa-plus m-r-5" />
-              新建数据查询
+              新建可视化组件
             </Button>
           ]}
         >
@@ -272,14 +284,20 @@ class QueriesList extends React.Component {
                       isLoaded: false
                     });
                     Query.resultById({ id: value })
-                      .$promise.then(data =>
+                      .$promise.then(data => {
+                        this.normalizedTableData(data.query_result);
+                      })
+                      .catch(err => {
                         this.setState({
-                          queryResult: data.query_result
-                        })
-                      )
+                          isLoaded: true,
+                          queryResult: null,
+                          queryId: null
+                        });
+                      })
                       .finally(() =>
                         this.setState({
-                          isLoaded: true
+                          isLoaded: true,
+                          queryId: value
                         })
                       );
                   }}
@@ -320,22 +338,9 @@ class QueriesList extends React.Component {
                     closable
                   />
                   <Table
-                    columns={[
-                      {
-                        title: 'Name',
-                        dataIndex: 'name'
-                      },
-                      {
-                        title: 'Age',
-                        dataIndex: 'age'
-                      },
-                      {
-                        title: 'Address',
-                        dataIndex: 'address'
-                      }
-                    ]}
-                    dataSource={this.state.test}
-                    scroll={{ y: 'max-content' }}
+                    columns={this.state.queryResult.columns}
+                    dataSource={this.state.queryResult.rows}
+                    scroll={{ y: 'max-content', x: '100%' }}
                   />
                 </TabPane>
                 <TabPane tab="数据集设置" key="2">

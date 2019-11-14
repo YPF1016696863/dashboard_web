@@ -231,6 +231,15 @@
                   </div>
                   <ul class="tab-nav">
                     <rd-tab ng-if="!query.visualizations.length" tab-id="table" name="Table" base-path="query.getUrl(sourceMode)"></rd-tab>
+                    <rd-tab tab-id="{{vis.id}}" name="{{vis.name}}" base-path="query.getUrl(sourceMode)" ng-repeat="vis in query.visualizations | orderBy:'id'">
+                      <span class="remove hidden-xs" ng-click="deleteVisualization($event, vis)" ng-if="canEdit && !($first && (vis.type === 'TABLE'))">
+                        <i class="zmdi zmdi-close"></i>
+                      </span>
+                    </rd-tab>
+                    <li class="rd-tab tab-new-vis">
+                      <a ng-click="openVisualizationEditor()" class="btn btn-default" ng-if="canEdit">
+                        <i class="zmdi zmdi-plus"></i>{{'VISUALIZATION.NEW_VISUALIZATION'| translate}}</a>
+                    </li>
                   </ul>
                   <div ng-if="!query.visualizations.length" class="query__vis m-t-15 p-b-15 scrollbox">
                     <filters filters="filters"></filters>
@@ -249,15 +258,46 @@
       <div class="bottom-controller-container" ng-if="showDataset">
         <div class="bottom-controller">
 
+          <button class="m-r-5 btn btn-default btn-edit-visualisation" ng-click="openVisualizationEditor(selectedTab)" ng-if="!query.isNew() && canEdit"><span class="fa fa-edit"></span><span class="hidden-xs hidden-s hidden-m"> {{'VISUALIZATION.EDIT_VISUALIZATION' | translate}}</span></button>
+
+          <div class="m-r-5 btn-group dropup" uib-dropdown>
+            <button type="button" class="btn btn-default dropup-toggle" aria-haspopup="true"
+              uib-dropdown-toggle aria-expanded="false">
+              <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+              <li>
+                <a target="_self" ng-click="openAddToDashboardForm(selectedTab)" ng-if="!query.isNew() && (!query.is_draft || !query.is_archived)">
+                  <span class="fa fa-plus-circle"></span> {{'VISUALIZATION.ADD_TO_DASHBOARD' | translate}}
+                </a>
+              </li>
+              <li>
+                <a ng-click="showEmbedDialog(query, selectedTab)" ng-if="!query.isNew()" data-test="ShowEmbedDialogButton">
+                  <span class="zmdi zmdi-code"></span> {{'VISUALIZATION.EMBED_ELSEWHERE' | translate}}
+                </a>
+              </li>
+              <li>
+                <a query-result-link target="_self" ng-disabled="queryExecuting || !queryResult.getData()">
+                  <span class="fa fa-file-o"></span> {{'VISUALIZATION.CSV' | translate}}
+                </a>
+              </li>
+              <li>
+                <a query-result-link file-type="xlsx" target="_self" ng-disabled="queryExecuting || !queryResult.getData()">
+                  <span class="fa fa-file-excel-o"></span> {{'VISUALIZATION.EXC' | translate}}
+                </a>
+              </li>
+            </ul>
+          </div>
+
           <span class="query-metadata__bottom" ng-if="queryResult.getData()">
             <span class="query-metadata__property">
               <strong>{{queryResult.getData().length}}</strong>
-              <ng-pluralize count="queryResult.getData().length" when="{'0': ' 行', 'one': ' 行', 'other': ' 行'}"></ng-pluralize>
+              <ng-pluralize count="queryResult.getData().length" when="{'0': ' rows', 'one': ' row', 'other': ' rows'}"></ng-pluralize>
             </span>
             <span class="query-metadata__property">
               <strong ng-show="!queryExecuting">{{queryResult.getRuntime() | durationHumanize}}</strong>
-              <span ng-show="queryExecuting">执行&hellip;</span>
-              <span class="hidden-xs">执行时间</span>
+              <span ng-show="queryExecuting">Running&hellip;</span>
+              <span class="hidden-xs">runtime</span>
             </span>
             <span class="query-metadata__property" ng-if="queryResult.query_result.data.metadata.data_scanned">Data Scanned
               <strong>{{ queryResult.query_result.data.metadata.data_scanned | prettySize}}</strong>
@@ -266,11 +306,11 @@
 
           <div>
             <span class="query-metadata__property hidden-xs">
-              <span class="hidden-xs">更新 </span>
+              <span class="hidden-xs">Updated </span>
               <rd-time-ago value="queryResult.query_result.retrieved_at"></rd-time-ago>
             </span>
 
-            <button class="m-l-5 btn btn-primary" ng-click="executeQuery()" ng-disabled="queryExecuting || !canExecuteQuery()" title="刷新数据集"
+            <button class="m-l-5 btn btn-primary" ng-click="executeQuery()" ng-disabled="queryExecuting || !canExecuteQuery()" title="Refresh Dataset"
               ng-if="!sourceMode">
               <span class="zmdi zmdi-play"></span>
             </button>
