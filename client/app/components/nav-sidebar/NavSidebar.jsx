@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import { Icon, Menu } from 'semantic-ui-react';
 import { appSettingsConfig } from '@/config/app-settings';
+import navigateTo from '@/services/navigateTo';
 import 'semantic-ui-css/semantic.min.css';
 import './nav-sidebar.less';
 
@@ -11,47 +12,78 @@ class NavSidebar extends React.Component {
     super(props);
     // const {$rootScope} = props;
     // Get theme flag from rootScope first, if not exist, set to false, which means use light theme.
-    this.state = { collapsed: false };
+    this.state = { activeItem: null };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+      const { $location, $scope } = this.props;
+      this.setState({
+          activeItem: $location.path().split("/")[1]||"Unknown"
+      });
+  }
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
-
-    render() {
+  render() {
     const { $location, $scope } = this.props;
-    const activeItem = 'gamepad';
     return (
-      <Menu icon="labeled" vertical size="small" color="#0A1733">
+      <Menu icon="labeled" vertical size="datavis">
         <Menu.Item
-          name="gamepad"
-          active={activeItem === 'gamepad'}
-          onClick={()=>{console.log('gamepad')}}
+          name="data_sources"
+          active={this.state.activeItem === 'data_sources'}
+          onClick={() => {
+            this.setState({
+              activeItem: 'data_sources'
+            });
+            navigateTo('/data_sources');
+          }}
         >
-          <Icon name="gamepad" />
-          Games
+          <Icon name="database" style={{ fontSize: '4em !important' }} />
+          <br />
+          <span className="navbar-font">数据源</span>
         </Menu.Item>
 
         <Menu.Item
-          name="video camera"
-          active={activeItem === 'video camera'}
-          onClick={()=>{console.log('gamepad')}}
+          name="queries"
+          active={this.state.activeItem === 'queries'}
+          onClick={() => {
+            this.setState({
+              activeItem: 'queries'
+            });
+            navigateTo('/queries');
+          }}
         >
-          <Icon name="video camera" />
-          Channels
+          <Icon name="filter" style={{ fontSize: '4em !important' }} />
+          <br />
+          <span className="navbar-font">数据集</span>
         </Menu.Item>
 
         <Menu.Item
-          name="video play"
-          active={activeItem === 'video play'}
-          onClick={()=>{console.log('gamepad')}}
+          name="queries2"
+          active={this.state.activeItem === 'queries2'}
+          onClick={() => {
+            this.setState({
+              activeItem: 'queries'
+            });
+            navigateTo('/queries');
+          }}
         >
-          <Icon name="video play" />
-          Videos
+          <Icon name="chart pie" style={{ fontSize: '4em !important' }} />
+          <br />
+          <span className="navbar-font">可视化组件</span>
+        </Menu.Item>
+
+        <Menu.Item
+          name="dashboards"
+          active={this.state.activeItem === 'dashboards'}
+          onClick={() => {
+            this.setState({
+              activeItem: 'dashboards'
+            });
+            navigateTo('/dashboards');
+          }}
+        >
+          <Icon name="dashboard" style={{ fontSize: '4em !important' }} />
+          <br />
+          <span className="navbar-font">仪表盘</span>
         </Menu.Item>
       </Menu>
     );

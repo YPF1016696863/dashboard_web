@@ -267,10 +267,11 @@ a.label-tag {
 .query-fullscreen {
   background: #fff;
   padding: 0;
-  box-shadow: rgba(102, 136, 153, 0.15) 0 4px 9px -3px;
   flex-grow: 1;
   display: flex;
-  width: 100vw;
+  width: calc(100vw - 70px) !important;
+  max-width: calc(100vw - 70px) !important;
+  min-width: calc(100vw - 70px) !important;
 
   .tile, .tiled {
     box-shadow: none;
