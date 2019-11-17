@@ -57,13 +57,13 @@ class NavSidebar extends React.Component {
         </Menu.Item>
 
         <Menu.Item
-          name="queries2"
-          active={this.state.activeItem === 'queries2'}
+          name="queries"
+          active={this.state.activeItem === 'charts'}
           onClick={() => {
             this.setState({
-              activeItem: 'queries'
+              activeItem: 'charts'
             });
-            navigateTo('/queries');
+            navigateTo('/charts');
           }}
         >
           <Icon name="chart pie" style={{ fontSize: '4em !important' }} />

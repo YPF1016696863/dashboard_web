@@ -218,7 +218,7 @@ class QueriesList extends React.Component {
             </>
           }
           extra={[
-            <Button type="primary" disabled={this.state.queryId==null} href={'/queries/'+this.state.queryId} target="_blank">
+            <Button type="primary" disabled={this.state.queryId==null} href={'/queries/'+this.state.queryId+'/source'} target="_blank">
               <i className="fa fa-edit m-r-5" />
               编辑数据集
             </Button>,

@@ -200,13 +200,13 @@ class ScheduleDialog extends React.Component {
     } = this.state;
 
     return (
-      <Modal {...dialog.props} title="刷新目录" className="schedule" onOk={() => this.save()}>
+      <Modal {...dialog.props} title="刷新周期" className="schedule" onOk={() => this.save()} okText="确认" cancelText="取消">
         <div className="schedule-component">
           <h5>刷新周期</h5>
           <div data-testid="interval">
             <Select className="input" value={seconds} onChange={this.setInterval} dropdownMatchSelectWidth={false}>
               <Option value={null} key="never">
-                Never
+                从不
               </Option>
               {Object.keys(this.intervals).map(int => (
                 <OptGroup label={capitalize(pluralize(int))} key={int}>
@@ -250,7 +250,7 @@ class ScheduleDialog extends React.Component {
             <h5>Ends</h5>
             <div className="ends" data-testid="ends">
               <Radio.Group size="medium" value={!!until} onChange={this.setUntilToggle}>
-                <Radio value={false}>Never</Radio>
+                <Radio value={false}>从不</Radio>
                 <Radio value>On</Radio>
               </Radio.Group>
               {until ? (
