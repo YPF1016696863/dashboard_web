@@ -5,7 +5,7 @@ import { BigMessage } from '@/components/BigMessage';
 // Default "loading" message for list pages
 export default function LoadingState(props) {
   return (
-    <div className="loading-center">
+    <div style={{textAlign:"center"}}>
       <img className="loading-img" src="/static/images/loading.gif" alt="Loading..." />
     </div>
   );

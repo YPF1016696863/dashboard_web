@@ -40,6 +40,7 @@ function QueryViewCtrl(
     Visualization,
     appSettings
 ) {
+  console.log($route.current.locals.query);
   function getQueryResult(maxAge, selectedQueryText) {
     if (maxAge === undefined) {
       maxAge = $location.search().maxAge;

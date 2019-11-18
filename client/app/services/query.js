@@ -10,7 +10,7 @@ Mustache.escape = identity; // do not html-escape values
 
 export let Query = null; // eslint-disable-line import/no-mutable-exports
 
-const logger = debug('redash:services:query');
+const logger = debug('datavis:services:query');
 
 const DATETIME_FORMATS = {
   // eslint-disable-next-line quote-props
@@ -383,6 +383,11 @@ function QueryResource(
         isArray: false,
         url: appSettings.server.backendUrl + '/api/queries/my',
       },
+      allQueries: {
+        method: 'get',
+        isArray: true,
+        url: appSettings.server.backendUrl + '/api/queries?all',
+      },
       fork: {
         method: 'post',
         isArray: false,
@@ -531,6 +536,11 @@ function QueryResource(
   QueryService.prototype.getQueryResult = function getQueryResult(maxAge) {
     const execute = () => QueryResult.getByQueryId(this.id, this.getParameters().getValues(), maxAge);
     return this.prepareQueryResultExecution(execute, maxAge);
+  };
+
+  QueryService.prototype.getQueryResultById = function getQueryResultById(id) {
+    const execute = () => QueryResult.getByQueryId(id, this.getParameters().getValues(), -1);
+    return this.prepareQueryResultExecution(execute, -1);
   };
 
   QueryService.prototype.getQueryResultByText = function getQueryResultByText(maxAge, selectedQueryText) {

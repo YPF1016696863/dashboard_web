@@ -1,0 +1,99 @@
+<div class="layout-content-wrapper">
+  <query-page-header query="query"></query-page-header>
+  <main class="query-fullscreen">
+    <nav
+      resizable
+      r-directions="['right']"
+      r-flex="true"
+      resizable-toggle
+      toggle-shortcut="Alt+Shift+D, Alt+D"
+    >
+      <div class="editor__left__schema" style="background-color: #673AB7">
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="flex-fill p-relative">
+        <div
+          class="p-absolute d-flex flex-column p-l-10 p-r-10"
+          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto"
+        >
+          <section
+            class="flex-fill p-relative t-body query-visualizations-wrapper"
+          >
+            <div
+              class="d-flex flex-column p-b-15 p-absolute static-position__mobile"
+              style="left: 0; top: 0; right: 0; bottom: 0;"
+            >
+
+              <!-- Query Execution Status -->
+
+              <!-- End of Query Execution Status -->
+
+              <!-- tabs and data -->
+              <div class="flex-fill p-relative">
+                <div
+                  class="d-flex flex-column p-absolute static-position__mobile"
+                  style="left: 0; top: 0; right: 0; bottom: 0;"
+                >
+                  <div class="query__vis p-b-15 scrollbox">
+                    <queries-list-tabs query-result="queryResult"></queries-list-tabs>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div class="bottom-controller-container" ng-if="showDataset">
+        <div class="bottom-controller">
+
+          <span class="query-metadata__bottom" ng-if="queryResult.getData()">
+            <span class="query-metadata__property">
+              <strong>{{queryResult.getData().length}}</strong>
+              <ng-pluralize
+                count="queryResult.getData().length"
+                when="{'0': ' 行', 'one': ' 行', 'other': ' 行'}"
+              ></ng-pluralize>
+            </span>
+            <span class="query-metadata__property">
+              <strong ng-show="!queryExecuting"
+                >{{queryResult.getRuntime() | durationHumanize}}</strong
+              >
+              <span ng-show="queryExecuting">Running&hellip;</span>
+              <span class="hidden-xs">运行时间</span>
+            </span>
+            <span
+              class="query-metadata__property"
+              ng-if="queryResult.query_result.data.metadata.data_scanned"
+              >Data Scanned
+              <strong
+                >{{ queryResult.query_result.data.metadata.data_scanned |
+                prettySize}}</strong
+              >
+            </span>
+          </span>
+
+          <div>
+            <span class="query-metadata__property hidden-xs">
+              <span class="hidden-xs">更新于: </span>
+              <rd-time-ago
+                value="queryResult.query_result.retrieved_at"
+              ></rd-time-ago>
+            </span>
+
+            <button
+              class="m-l-5 btn btn-primary"
+              ng-click="executeQuery()"
+              ng-disabled="queryExecuting || !canExecuteQuery()"
+              title="Refresh Dataset"
+              ng-if="!sourceMode"
+            >
+              <span class="zmdi zmdi-play"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
