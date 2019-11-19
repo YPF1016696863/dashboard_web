@@ -1,0 +1,59 @@
+<div class="layout-content-wrapper">
+  <source-list-header-page></source-list-header-page>
+  <main class="query-fullscreen">
+    <nav
+      resizable
+      r-directions="['right']"
+      r-flex="true"
+      resizable-toggle
+      toggle-shortcut="Alt+Shift+D, Alt+D"
+    >
+      <div class="editor__left__schema">
+        <div
+          class="d-flex flex-column p-absolute"
+          style="left: 20px; top: 0; right: 0; bottom: 0;"
+        >
+          <div class="scrollbox" style="height: 100% !important;">
+            <source-list-search
+              source-search-cb="sourceSearchCb"
+            ></source-list-search>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="flex-fill p-relative">
+        <div
+          class="p-absolute d-flex flex-column p-l-10 p-r-10"
+          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto"
+        >
+          <section
+            class="flex-fill p-relative t-body query-visualizations-wrapper"
+          >
+            <div
+              class="d-flex flex-column p-b-15 p-absolute static-position__mobile"
+              style="left: 0; top: 0; right: 0; bottom: 0;"
+            >
+              <!-- Query Execution Status -->
+
+              <!-- End of Query Execution Status -->
+
+              <!-- tabs and data -->
+              <div class="flex-fill p-relative">
+                <div
+                  class="d-flex flex-column p-absolute static-position__mobile"
+                  style="left: 0; top: 0; right: 0; bottom: 0;"
+                >
+                  <div class="query__vis p-b-15 scrollbox">
+                    <source-tabs source-id="20"></source-tabs>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

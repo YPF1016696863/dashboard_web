@@ -21,11 +21,10 @@ class QueriesListPageHeader extends React.Component {
   }
   */
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-    const {query} = this.props;
+    const { query } = this.props;
     const newDataSourceProps = {
       type: 'primary',
       ghost: true,
@@ -41,8 +40,8 @@ class QueriesListPageHeader extends React.Component {
       ghost: true,
       size: 'small',
       onClick: policy.isCreateDataSourceEnabled()
-          ? this.showCreateSourceDialog
-          : null,
+        ? this.showCreateSourceDialog
+        : null,
       disabled: !policy.isCreateDataSourceEnabled()
     };
 
@@ -52,26 +51,40 @@ class QueriesListPageHeader extends React.Component {
           <Breadcrumb.Item href="/">
             <Icon type="home" />
           </Breadcrumb.Item>
-          <Breadcrumb.Item href="/queries">
+          <Breadcrumb.Item>
             <Icon type="file-search" />
             <span>数据集</span>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <span>{query.name}</span>
           </Breadcrumb.Item>
         </Breadcrumb>
         <PageHeader
           className="content-layout-header"
-          title={<span style={{ fontSize: '18px' }}>{query.name}</span>}
+          title={<span style={{ fontSize: '18px' }}>数据集</span>}
           subTitle={
             <>
-              <span style={{ fontSize: '13px' }}>管理并配置数据查询</span>
+              <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
             </>
           }
           extra={[
-            <Button ghost type="primary" size="small">
+            <Button
+              ghost
+              type="primary"
+              size="small"
+              disabled={this.props.queryId == null}
+              href={'/queries/' + this.props.queryId + '/source'}
+              target="_blank"
+            >
+              <i className="fa fa-edit m-r-5" />
+              编辑数据集
+            </Button>,
+            <Button
+              ghost
+              type="primary"
+              size="small"
+              href="/queries/new"
+              target="_blank"
+            >
               <i className="fa fa-plus m-r-5" />
-              新建可视化组件
+              新建数据集
             </Button>
           ]}
         >
@@ -88,18 +101,18 @@ class QueriesListPageHeader extends React.Component {
 }
 
 QueriesListPageHeader.propTypes = {
-  query: PropTypes.object.isRequired
+  queryId: PropTypes.string.isRequired
 };
-QueriesListPageHeader.defaultProps = {
-};
+QueriesListPageHeader.defaultProps = {};
 
 export default function init(ngModule) {
   ngModule.component(
     'queriesListPageHeader',
-    react2angular(QueriesListPageHeader, Object.keys(QueriesListPageHeader.propTypes), [
-      '$rootScope',
-      '$scope'
-    ])
+    react2angular(
+      QueriesListPageHeader,
+      Object.keys(QueriesListPageHeader.propTypes),
+      ['$rootScope', '$scope']
+    )
   );
 }
 

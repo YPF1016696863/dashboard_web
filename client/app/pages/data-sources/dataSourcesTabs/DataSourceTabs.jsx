@@ -42,8 +42,6 @@ import { Query } from '@/services/query';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
-import QueriesListEmptyState from './QueriesListEmptyState';
-
 import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
@@ -51,7 +49,7 @@ const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
-class QueriesListTabs extends React.Component {
+class DataSourceTabs extends React.Component {
   state = {};
 
   componentDidMount() {
@@ -63,15 +61,15 @@ class QueriesListTabs extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (
-      !_.isEqual(this.props.queryId, prevProps.queryId) &&
-      this.props.queryId > 0
+      !_.isEqual(this.props.sourceId, prevProps.sourceId) &&
+      this.props.sourceId > 0
     ) {
-      this.getQuery(this.props.queryId);
+      this.getQuery(this.props.sourceId);
     }
 
     if (
-        !_.isEqual(this.props.queryId, prevProps.queryId) &&
-        this.props.queryId == null
+        !_.isEqual(this.props.sourceId, prevProps.sourceId) &&
+        this.props.sourceId == null
     ) {
       // eslint-disable-next-line
       this.setState({
@@ -119,20 +117,9 @@ class QueriesListTabs extends React.Component {
         {!this.state.isLoaded && <LoadingState />}
         {this.state.isLoaded && this.state.queryResult == null && (
           <Empty
-            description="请从左侧点击选择数据集"
+            description="请从左侧点击选择数据源"
             style={{ paddingTop: '10%' }}
           />
-        )}
-        {this.state.isLoaded && this.state.queryResult === 'empty' && (
-          <Empty description="该数据集暂无数据" style={{ paddingTop: '10%' }}>
-            <Button
-              type="primary"
-              href={'/queries/' + this.props.queryId + '/source'}
-              target="_blank"
-            >
-              设置数据
-            </Button>
-          </Empty>
         )}
         {this.state.isLoaded &&
           this.state.queryResult != null &&
@@ -161,18 +148,18 @@ class QueriesListTabs extends React.Component {
   }
 }
 
-QueriesListTabs.propTypes = {
-  queryId: PropTypes.string
+DataSourceTabs.propTypes = {
+  sourceId: PropTypes.string
 };
 
-QueriesListTabs.defaultProps = {
-  queryId: null
+DataSourceTabs.defaultProps = {
+  sourceId: null
 };
 
 export default function init(ngModule) {
   ngModule.component(
-    'queriesListTabs',
-    react2angular(QueriesListTabs, Object.keys(QueriesListTabs.propTypes), [
+    'sourceTabs',
+    react2angular(DataSourceTabs, Object.keys(DataSourceTabs.propTypes), [
       '$scope',
       'appSettings'
     ])

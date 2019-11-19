@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { get, find, toUpper } from 'lodash';
 import { react2angular } from 'react2angular';
 import Modal from 'antd/lib/modal';
-import { DataSource, IMG_ROOT } from '@/services/data-source';
-import navigateTo from '@/services/navigateTo';
-import { $route } from '@/services/ng';
-import notification from '@/services/notification';
-import PromiseRejectionError from '@/lib/promise-rejection-error';
-import LoadingState from '@/components/items-list/components/LoadingState';
-import DynamicForm from '@/components/dynamic-form/DynamicForm';
-import helper from '@/components/dynamic-form/dynamicFormHelper';
-import { HelpTrigger, TYPES as HELP_TRIGGER_TYPES } from '@/components/HelpTrigger';
+import { DataSource, IMG_ROOT } from '../../services/data-source';
+import navigateTo from '../../services/navigateTo';
+import { $route } from '../../services/ng';
+import notification from '../../services/notification';
+import PromiseRejectionError from '../../lib/promise-rejection-error';
+import LoadingState from '../../components/items-list/components/LoadingState';
+import DynamicForm from '../../components/dynamic-form/DynamicForm';
+import helper from '../../components/dynamic-form/dynamicFormHelper';
+import { HelpTrigger, TYPES as HELP_TRIGGER_TYPES } from '../../components/HelpTrigger';
 
 class EditDataSource extends React.Component {
   static propTypes = {
@@ -149,4 +149,4 @@ export default function init(ngModule) {
   };
 }
 
-init.init = true;
+init.init = false;

@@ -20,7 +20,7 @@ import notification from '@/services/notification';
 
 import template from './content-layout.html';
 
-function QueriesListViewCtrl(
+function DataSourcesViewCtrl(
   $scope,
   Events,
   $route,
@@ -40,41 +40,25 @@ function QueriesListViewCtrl(
   appSettings
 ) {
   $scope.currentUser = currentUser;
-  $scope.queryId = null;
-  $scope.queries = $route.current.locals.queries;
-  $scope.query = $route.current.locals.query;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
-  $scope.querySearchCb = (id) => {
-    $scope.queryId = id&&id.length?id[0]:null;
+  $scope.sourceSearchCb = (id) => {
+    $scope.sourceId = id&&id.length?id[0]:null;
     $scope.$apply();
   };
-
   // currentUser.hasPermission('admin');
 
 }
 
 export default function init(ngModule) {
-  ngModule.controller('QueriesListViewCtrl', QueriesListViewCtrl);
+  ngModule.controller('DataSourcesViewCtrl', DataSourcesViewCtrl);
 
   return {
-    '/queries': {
+    '/data_sources': {
       template,
       layout: 'fixed',
-      controller: 'QueriesListViewCtrl',
-      reloadOnSearch: false,
-      resolve: {
-        queries: (Query, $route) => {
-          'ngInject';
-
-          return Query.allQueries().$promise;
-        },
-        query: (Query, $route) => {
-          'ngInject';
-
-          return Query.get().$promise;
-        }
-      }
+      controller: 'DataSourcesViewCtrl',
+      reloadOnSearch: false
     }
   };
 }

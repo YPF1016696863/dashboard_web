@@ -1,5 +1,5 @@
 <div class="layout-content-wrapper">
-  <query-page-header query="query"></query-page-header>
+  <queries-list-page-header query-id="queryId"></queries-list-page-header>
   <main class="query-fullscreen">
     <nav
       resizable
@@ -8,7 +8,15 @@
       resizable-toggle
       toggle-shortcut="Alt+Shift+D, Alt+D"
     >
-      <div class="editor__left__schema" style="background-color: #673AB7">
+      <div class="editor__left__schema">
+        <div
+          class="d-flex flex-column p-absolute"
+          style="left: 20px; top: 0; right: 0; bottom: 0;"
+        >
+          <div class="scrollbox">
+            <queries-list-search query-search-cb="querySearchCb"></queries-list-search>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -25,7 +33,6 @@
               class="d-flex flex-column p-b-15 p-absolute static-position__mobile"
               style="left: 0; top: 0; right: 0; bottom: 0;"
             >
-
               <!-- Query Execution Status -->
 
               <!-- End of Query Execution Status -->
@@ -37,7 +44,9 @@
                   style="left: 0; top: 0; right: 0; bottom: 0;"
                 >
                   <div class="query__vis p-b-15 scrollbox">
-                    <queries-list-tabs query-result="queryResult"></queries-list-tabs>
+                    <queries-list-tabs
+                      query-id="queryId"
+                    ></queries-list-tabs>
                   </div>
                 </div>
               </div>
@@ -47,7 +56,6 @@
       </div>
       <div class="bottom-controller-container" ng-if="showDataset">
         <div class="bottom-controller">
-
           <span class="query-metadata__bottom" ng-if="queryResult.getData()">
             <span class="query-metadata__property">
               <strong>{{queryResult.getData().length}}</strong>

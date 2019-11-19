@@ -21,11 +21,10 @@ class QueryPageHeader extends React.Component {
   }
   */
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-    const {query} = this.props;
+    const { query } = this.props;
     const newDataSourceProps = {
       type: 'primary',
       ghost: true,
@@ -41,8 +40,8 @@ class QueryPageHeader extends React.Component {
       ghost: true,
       size: 'small',
       onClick: policy.isCreateDataSourceEnabled()
-          ? this.showCreateSourceDialog
-          : null,
+        ? this.showCreateSourceDialog
+        : null,
       disabled: !policy.isCreateDataSourceEnabled()
     };
 
@@ -52,23 +51,26 @@ class QueryPageHeader extends React.Component {
           <Breadcrumb.Item href="/">
             <Icon type="home" />
           </Breadcrumb.Item>
-          <Breadcrumb.Item>
+          <Breadcrumb.Item href="/queries">
             <Icon type="file-search" />
             <span>数据集</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span>{query.name}</span>
           </Breadcrumb.Item>
         </Breadcrumb>
         <PageHeader
           className="content-layout-header"
-          title={<span style={{ fontSize: '18px' }}>数据集</span>}
+          title={<span style={{ fontSize: '18px' }}>{query.name}</span>}
           subTitle={
             <>
-              <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
+              <span style={{ fontSize: '13px' }}>管理并配置数据查询</span>
             </>
           }
           extra={[
             <Button ghost type="primary" size="small">
               <i className="fa fa-plus m-r-5" />
-              新建数据集
+              新建可视化组件
             </Button>
           ]}
         >
@@ -85,9 +87,9 @@ class QueryPageHeader extends React.Component {
 }
 
 QueryPageHeader.propTypes = {
+  query: PropTypes.object.isRequired
 };
-QueryPageHeader.defaultProps = {
-};
+QueryPageHeader.defaultProps = {};
 
 export default function init(ngModule) {
   ngModule.component(
