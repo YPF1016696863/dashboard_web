@@ -5,64 +5,15 @@ export function defaultBasicChartOptions() {
     return {
         id: UUIDv4(),
         yAxisOptionsShow: false,
-        // 保存每个serie配置的数组 数组命名方式 echarts文档路径 . 用 _ 代替
-        series_ReName: [],
-        series_ItemStyle_Color: [],
-        series_SymbolSize: [],
-        series_Symbol: [],
-        series_SymbolRotate: [],
-        series_Show: [],
-        series_Label_Position: [],
-        series_Label_Color: [],
-        series_Label_FontWeight: [],
-        series_Label_FontSize: [],
-        series_Label_FontFamily: [],
-        // 标记点配置
-        // 标记max点配置
-        series_MarkPoint_Data_MaxType: [],
-        series_MarkPoint_Data_MaxSymbol: [],
-        series_MarkPoint_Data_MaxSymbolSize: [],
-        series_MarkPoint_Data_Label_MaxShow: [],
-        series_MarkPoint_Data_Label_MaxPosition: [],
-        series_MarkPoint_Data_Label_MaxColor: [],
-        series_MarkPoint_Data_Label_MaxFontWeight: [],
-        series_MarkPoint_Data_Label_MaxFontSize: [],
-        series_MarkPoint_Data_Label_MaxFontFamily: [],
-        // 标记min点配置
-        series_MarkPoint_Data_MinType: [],
-        series_MarkPoint_Data_MinSymbol: [],
-        series_MarkPoint_Data_MinSymbolSize: [],
-        series_MarkPoint_Data_Label_MinShow: [],
-        series_MarkPoint_Data_Label_MinPosition: [],
-        series_MarkPoint_Data_Label_MinColor: [],
-        series_MarkPoint_Data_Label_MinFontWeight: [],
-        series_MarkPoint_Data_Label_MinFontSize: [],
-        series_MarkPoint_Data_Label_MinFontFamily: [],
-        // 标记average点配置
-        series_MarkPoint_Data_AverageType: [],
-        series_MarkPoint_Data_AverageSymbol: [],
-        series_MarkPoint_Data_AverageSymbolSize: [],
-        series_MarkPoint_Data_Label_AverageShow: [],
-        series_MarkPoint_Data_Label_AveragePosition: [],
-        series_MarkPoint_Data_Label_AverageColor: [],
-        series_MarkPoint_Data_Label_AverageFontWeight: [],
-        series_MarkPoint_Data_Label_AverageFontSize: [],
-        series_MarkPoint_Data_Label_AverageFontFamily: [],
-
-        // MarkLine 配置
-        // max
-        series_MarkLine_Data_MarkValue: [],
-        series_MarkLine_Data_MarkName: [],
-        series_MarkLine_Data_Mark: [],
-        series_MarkLine_Data_LineStyle_Color: [],
-        series_MarkLine_Data_LineStyle_Width: [],
-        series_MarkLine_Data_LineStyle_Type: [],
 
 
 
 
         useSerie: '',           // 选中的系列名称
         useSerie_Index: -1,     // 选中的系列下标
+        bar2Flag: false,
+
+
         form: {
             xAxisColumn: "",
             yAxisColumns: []
@@ -76,7 +27,7 @@ export function defaultBasicChartOptions() {
             text: '',
             subtext: '',
             x: 'center',
-            backgroundColor: '#ff0',
+            backgroundColor: 'transparent',
             textStyle: {
                 color: '#333',
                 fontStyle: 'normal',
@@ -148,6 +99,11 @@ export function defaultBasicChartOptions() {
                 show: true
             }
         },
+
+        dataZoom: [{
+            type: 'inside',
+            disabled: true,
+        }],
         series: [
         ]
     };
@@ -179,11 +135,48 @@ export function parseChartType(type) {
         case "area": {
             return "line";
         }
+        case "bar2": {
+            return "bar";
+        }
+        case "scatter2": {
+            return "scatter";
+        }
         default: {
             return type;
         }
     }
 };
+
+
+export function setxAxis(options, flag, seriesNameIndex) {// 获取类型 下标  bar2? 是：返回 设置相应的值  否：返回undefined 去禁用xy轴标记线
+    if (flag) {// 是横向柱状图 开启x
+        if (_.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex] === '') {// 数据线填了之后清空的判断，让数据线放到最下边隐藏
+            return -10000;
+        }
+        return _.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex] === undefined ?
+            -10000 : _.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex];
+    }
+    return undefined;
+};
+export function setyAxis(options, flag, seriesNameIndex) {
+    if (flag) {// 不是横向柱状图 关闭x
+        return undefined;
+    }
+    if (_.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex] === '') {// 数据线填了之后清空的判断，让数据线放到最下边隐藏
+        return -10000;
+    }
+    return _.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex] === undefined ?
+        -10000 : _.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex];
+};
+
+
+export function setScatter(symbolSize) {
+    if (symbolSize === undefined)
+        return 25;
+    return symbolSize;
+}
+
+
 
 export function getChartTypeForSeries(options, name) {
     // console.log(_.find(options.series, {name}));

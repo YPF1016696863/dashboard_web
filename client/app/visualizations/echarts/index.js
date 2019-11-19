@@ -4,7 +4,7 @@ import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
-import { defaultBasicChartOptions, parseChartType, getChartType } from './echartsBasicChartOptionUtils';
+import { defaultBasicChartOptions, parseChartType, getChartType, setxAxis, setyAxis, setScatter } from './echartsBasicChartOptionUtils';
 
 function EchartsRenderer($timeout, $rootScope, $window) {
   return {
@@ -26,6 +26,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             function (o) { return o === _.get($scope.options, 'useSerie', ''); }
           ));
 
+
+
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           const data = $scope.queryResult.getData();
           //  主题整体修改 样式全变 如何在切换主题时更换颜色 但在默认主题或人为修改颜色时修改颜色？
@@ -38,9 +40,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
           // _.set($scope.options, "textStyle.color", 
           // _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
 
-          _.set($scope.options, "xAxis.data", _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-            return row[_.get($scope.options, "form.xAxisColumn", "-")];
-          }));
+
 
 
           //  提示框文字格式
@@ -52,17 +52,43 @@ function EchartsRenderer($timeout, $rootScope, $window) {
           {c}${_.get($scope.options, "c_Text", "")}`;
           _.set($scope.options, "tooltip.formatter", formatterString);
 
+          _.set($scope.options, "dataZoom", []);// 清空设置
+          $scope.options.dataZoom.push({
+            type: 'inside',
+            disabled: _.get($scope.options, "dataZoom_Disabled", true),
+          });
 
+
+
+          // 一旦选中了横向柱状图 x 为value y 为字符类型
+          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+            if (_.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === 'bar2') {// 横向柱状图
+              _.set($scope.options, "bar2Flag", true);
+              _.set($scope.options, "xAxis.type", 'value');
+              _.set($scope.options, "yAxis.type", 'category');
+              _.set($scope.options, "yAxis.data", _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                return row[_.get($scope.options, "form.xAxisColumn", "-")];
+              }));
+              _.set($scope.options, "xAxis.data", undefined);
+              return false;
+            }
+            _.set($scope.options, "bar2Flag", false);
+            // _.set($scope.options, "xAxis.type", 'category');
+            // _.set($scope.options, "yAxis.type", 'value');
+            _.set($scope.options, "yAxis.data", undefined);
+            _.set($scope.options, "xAxis.data", _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+              return row[_.get($scope.options, "form.xAxisColumn", "-")];
+            }));
+          });
 
 
           _.set($scope.options, "series", []);// 清空设置
-
-
           // series下的
           let seriesNameIndex = 0;
-
           // setChartType($scope.options, selected);
           _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+
+
 
             $scope.options.series.push({
               name: _.get($scope.options, "series_ReName", [])[seriesNameIndex] === undefined ?
@@ -72,9 +98,16 @@ function EchartsRenderer($timeout, $rootScope, $window) {
               data: _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                 return row[yAxisColumn];
               }),
+              // 下标传入配置数组找到相应的配置
               areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
-              symbolSize: _.get($scope.options, "series_SymbolSize", [])[seriesNameIndex] === undefined ?
-                25 : _.get($scope.options, "series_SymbolSize", [])[seriesNameIndex],// 下标传入配置数组找到相应的配置
+
+              symbolSize: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "scatter2" ?
+                // eslint-disable-next-line no-shadow
+                function bubble(data) { return data / 2; } :// 气泡图的大小变化
+                setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),// 散点图大小设置
+
+
+
               symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                 'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
               symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
@@ -94,8 +127,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     name: _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex] === undefined ?
                       '' : _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex],
 
-                    yAxis: _.get($scope.options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex] === undefined ?
-                      -10000 : _.get($scope.options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex],
+                    xAxis: setxAxis($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
+
+                    yAxis: setyAxis($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
 
                     lineStyle: {
                       color: _.get($scope.options, "series_MarkLine_Data_LineStyle_Color", [])[seriesNameIndex] === undefined ?
@@ -108,6 +142,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         'solid' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex],
 
                     },
+
                   }
                 ]
               },
@@ -247,8 +282,11 @@ function EchartsEditor() {
       $scope.chartTypes = {
         line: { name: 'Echarts线形图', icon: 'line-chart' },
         bar: { name: 'Echarts柱状图', icon: 'bar-chart' },
+        bar2: { name: 'Echarts横向柱状图', icon: 'bar-chart' },
         area: { name: 'Echarts线形面积图', icon: 'area-chart' },
-        scatter: { name: 'Echarts散点图', icon: 'area-chart' }
+        scatter: { name: 'Echarts散点图', icon: 'area-chart' },
+        scatter2: { name: 'Echarts气泡图', icon: 'area-chart' }
+
       };
 
       $scope.xAxisScales = [
@@ -315,16 +353,40 @@ function EchartsEditor() {
         { label: 'oblique', value: 'oblique' }
       ];
       $scope.Colors = [
-        { label: 'DataVis-红色', value: '#ed4d50' },
-        { label: 'DataVis-绿色', value: '#6eb37a' },
-        { label: 'DataVis-蓝色', value: '#5290e9' },
-        { label: 'DataVis-橘色', value: '#ee941b' },
-        { label: 'DataVis-紫色', value: '#985896' }
+        { label: '默认', value: '' },
+        { label: '透明', value: 'transparent' },
+        { label: '白色', value: '#fff' },
+        { label: '红色', value: '#ed4d50' },
+        { label: '绿色', value: '#6eb37a' },
+        { label: '蓝色', value: '#5290e9' },
+        { label: '橘色', value: '#ee941b' },
+        { label: '紫色', value: '#985896' },
+        { label: '瑠璃色', value: '#2a5caa' },
+        { label: '青蓝', value: '#102b6a' },
+        { label: '铁绀', value: '#181d4b' },
+        { label: '蔷薇色', value: '#f05b72' },
+        { label: '黄緑', value: '#b2d235' },
+        { label: '萌黄', value: '#a3cf62' },
+        { label: '赤丹', value: '#d64f44' }
       ];
       $scope.BackgroundColors = [
+        { label: '透明', value: 'transparent' },
         { label: '暗绿色', value: '#84AF9B' },
         { label: '白色', value: '#ffffff' },
-        { label: '黑色', value: '#2C3E50' }
+        { label: '黑色', value: '#2C3E50' },
+        { label: '白色', value: '#fff' },
+        { label: '红色', value: '#ed4d50' },
+        { label: '绿色', value: '#6eb37a' },
+        { label: '蓝色', value: '#5290e9' },
+        { label: '橘色', value: '#ee941b' },
+        { label: '紫色', value: '#985896' },
+        { label: '瑠璃色', value: '#2a5caa' },
+        { label: '青蓝', value: '#102b6a' },
+        { label: '铁绀', value: '#181d4b' },
+        { label: '蔷薇色', value: '#f05b72' },
+        { label: '黄緑', value: '#b2d235' },
+        { label: '萌黄', value: '#a3cf62' },
+        { label: '赤丹', value: '#d64f44' }
       ];
       $scope.TextAligns = [
         { label: '自动', value: 'auto' },
