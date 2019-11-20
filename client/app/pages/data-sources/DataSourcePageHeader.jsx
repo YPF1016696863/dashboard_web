@@ -9,17 +9,65 @@ import {
   Divider,
   Breadcrumb
 } from 'antd';
-
+import { get } from 'lodash';
 import './DataSourcesPageHeader.less';
+import { DataSource, IMG_ROOT } from '@/services/data-source';
+import { $route } from '@/services/ng';
+import { policy } from '@/services/policy';
+import navigateTo from '@/services/navigateTo';
+import helper from '@/components/dynamic-form/dynamicFormHelper';
 
+import CreateSourceDialog from '@/components/CreateSourceDialog';
+
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["createDataSource"] }] */
 class DataSourcePageHeader extends React.Component {
   /*
   constructor(props) {
     super(props);
   }
   */
+  state = {
+    dataSourceTypes: null
+  };
 
-  componentDidMount() {}
+  componentDidMount() {
+    Promise.all([DataSource.types().$promise]).then(values => {
+      this.setState({
+        dataSourceTypes: values[0]
+      });
+    });
+  }
+
+  showCreateSourceDialog = () => {
+    CreateSourceDialog.showModal({
+      $translate: this.props.$translate.instant,
+      types: this.state.dataSourceTypes,
+      sourceType: 'Data Source',
+      imageFolder: IMG_ROOT,
+      helpTriggerPrefix: 'DS_',
+      onCreate: this.createDataSource
+    }).result.then((result = {}) => {
+      if (result.success) {
+        this.props.$window.location.reload();
+      }
+    });
+  };
+
+  createDataSource(selectedType, values) {
+    const target = { options: {}, type: selectedType.type };
+    helper.updateTargetWithValues(target, values);
+
+    return DataSource.save(target)
+      .$promise.then(dataSource => {
+        return dataSource;
+      })
+      .catch(error => {
+        if (!(error instanceof Error)) {
+          error = new Error(get(error, 'data.message', '保存失败.'));
+        }
+        return Promise.reject(error);
+      });
+  }
 
   render() {
     return (
@@ -46,8 +94,12 @@ class DataSourcePageHeader extends React.Component {
               ghost
               type="primary"
               size="small"
-              href="/queries/new"
-              target="_blank"
+              onClick={
+                policy.isCreateDataSourceEnabled()
+                  ? this.showCreateSourceDialog
+                  : null
+              }
+              disabled={!policy.isCreateDataSourceEnabled()}
             >
               <i className="fa fa-plus m-r-5" />
               新建数据源
@@ -75,7 +127,7 @@ export default function init(ngModule) {
     react2angular(
       DataSourcePageHeader,
       Object.keys(DataSourcePageHeader.propTypes),
-      ['$rootScope', '$scope']
+      ['$rootScope', '$scope','$translate', '$window']
     )
   );
 }

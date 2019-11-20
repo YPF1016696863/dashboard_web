@@ -46,7 +46,6 @@ class DataSourceSearch extends React.Component {
       DataSource.query().$promise,
       DataSource.types().$promise
     ]).then(values => {
-      console.log(values[0]);
       this.setState({
         all: values[0],
         filtered: values[0],
@@ -63,10 +62,8 @@ class DataSourceSearch extends React.Component {
       loading: true
     });
     Promise.all([
-      DataSource.query().$promise,
-      DataSource.types().$promise
+      DataSource.query().$promise
     ]).then(values => {
-      console.log(values[0]);
       this.setState({
         all: values[0],
         filtered: values[0],
