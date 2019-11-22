@@ -35,20 +35,30 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
           const seriesData = [];
           let pieData = [];
           let xDataValue = [];
-          const yData = _.get($scope.options, "form.yAxisColumns", ":::");  // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
-          const xData = _.get($scope.options, "form.xAxisColumn", "::");    // name string 这一列  AGENT_NAME          
+          const yData = _.get($scope.options, "form.yAxisColumns", ":::");
+          // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
+          const xData = _.get($scope.options, "form.xAxisColumn", "::");
+          // name string 这一列  AGENT_NAME
           _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
             pieData = [];
             xDataValue = [];
-            _.forEach(data, function (value, key) {// [{0},{1}...] 筛选出每一个{0} {1} ...
+            _.forEach(data, function (value, key) {
+              // [{0},{1}...] 筛选出每一个{0} {1} ...
               const onesValue = value;
-              _.forEach(onesValue, function (oneXvalue, oneXkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+              _.forEach(onesValue, function (oneXvalue, oneXkey) {
+                // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                 if (oneXkey === xData) { // x
                   const xValue = oneXvalue;
                   xDataValue.push(xValue);
-                  _.forEach(onesValue, function (oneYvalue, oneYkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                    if (oneYkey === yAxisColumn) { // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
-                      pieData.push({ name: xValue, value: oneYvalue, itemStyle: { color: '' } });
+                  _.forEach(onesValue, function (oneYvalue, oneYkey) {
+                    // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                    if (oneYkey === yAxisColumn) {
+                      // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                      pieData.push({
+                        name: xValue,
+                        value: oneYvalue,
+                        itemStyle: { color: '' }
+                      });
                     }
                   });
                 }
@@ -60,17 +70,22 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
           // console.log(seriesData);
 
 
-
-
           // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
-          _.set($scope.options, "Fans", xDataValue);                        // 遍历x轴选中列 对应的所有值
-          const selectFan = _.get($scope.options, "useFan", []);            // 保存选中的扇瓣
+          _.set($scope.options, "Fans", xDataValue);
+          // 遍历x轴选中列 对应的所有值
+          const selectFan = _.get($scope.options, "useFan", []);
+          // 保存选中的扇瓣
           console.log(selectFan);
-          _.forEach(pieData, function (value, key) {                        // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
-            const onesValue = value;                              // name: "王小斌", value: 50}           
-            _.forEach(onesValue, function (oneXvalue, oneXkey) {  // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-              if (oneXvalue === selectFan) { // 找到选中的x的数据 王小斌===选择的王小斌
-                onesValue.itemStyle.color = _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
+          _.forEach(pieData, function (value, key) {
+            // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
+            const onesValue = value;
+            // name: "王小斌", value: 50}
+            _.forEach(onesValue, function (oneXvalue, oneXkey) {
+              // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+              if (oneXvalue === selectFan) {
+                // 找到选中的x的数据 王小斌===选择的王小斌
+                onesValue.itemStyle.color =
+                  _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
               }
             });
           });
@@ -83,8 +98,12 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             $scope.options.series.push({
               name: _.get($scope.options, "series_Name", ''),
               type: 'pie',
-              radius: getRadius($scope.options, _.get($scope.options.form.yAxisColumnTypes, yAxisColumn), seriesIndex),// 内外半径修改 多系列需动态
-              center: ['50%', '50%'],
+              radius: getRadius($scope.options,
+                _.get($scope.options.form.yAxisColumnTypes, yAxisColumn),
+                seriesIndex),// 内外半径修改 多系列需动态
+              center: [_.get($scope.options, "series_CenterX", "50%"),
+              _.get($scope.options, "series_CenterY", "50%")],
+
               data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }),// 多系列需动态
               // 判断是玫瑰图
               roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "rose" ? 'radius' : undefined,
@@ -238,11 +257,19 @@ function EchartsPieEditor() {
       ];
       $scope.Colors = [
         { label: '默认', value: '' },
+        { label: 'DataVis-白色', value: '#fff' },
         { label: 'DataVis-红色', value: '#ed4d50' },
         { label: 'DataVis-绿色', value: '#6eb37a' },
         { label: 'DataVis-蓝色', value: '#5290e9' },
         { label: 'DataVis-橘色', value: '#ee941b' },
-        { label: 'DataVis-紫色', value: '#985896' }
+        { label: 'DataVis-紫色', value: '#985896' },
+        { label: '瑠璃色', value: '#2a5caa' },
+        { label: '青蓝', value: '#102b6a' },
+        { label: '铁绀', value: '#181d4b' },
+        { label: '蔷薇色', value: '#f05b72' },
+        { label: '黄緑', value: '#b2d235' },
+        { label: '萌黄', value: '#a3cf62' },
+        { label: '赤丹', value: '#d64f44' }
       ];
 
       $scope.BackgroundColors = [
