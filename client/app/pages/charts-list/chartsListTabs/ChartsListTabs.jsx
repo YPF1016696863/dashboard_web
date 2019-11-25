@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
+import { angular2react } from 'angular2react';
 import * as _ from 'lodash';
 import { Paginator } from '@/components/Paginator';
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
@@ -44,32 +45,42 @@ import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
 
+import { ChartsPreview } from '@/components/charts-preview/charts-preview';
+
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 
+let ChartsPreviewDOM;
+
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
-class QueriesListTabs extends React.Component {
+class ChartsListTabs extends React.Component {
   state = {};
 
   componentDidMount() {
     this.setState({
       isLoaded: true,
-      queryResult: null
+      queryResult: null,
+      chartOptions: null
     });
+    ChartsPreviewDOM = angular2react(
+        'chartsPreview',
+        ChartsPreview,
+        window.$injector
+    );
   }
 
   componentDidUpdate(prevProps) {
     if (
-      !_.isEqual(this.props.queryId, prevProps.queryId) &&
-      this.props.queryId > 0
+      !_.isEqual(this.props.displayId, prevProps.displayId) &&
+      this.props.displayId
     ) {
-      this.getQuery(this.props.queryId);
+      this.getQuery(this.props.displayId);
     }
 
     if (
-        !_.isEqual(this.props.queryId, prevProps.queryId) &&
-        this.props.queryId == null
+      !_.isEqual(this.props.displayId, prevProps.displayId) &&
+      this.props.displayId == null
     ) {
       // eslint-disable-next-line
       this.setState({
@@ -79,36 +90,59 @@ class QueriesListTabs extends React.Component {
   }
 
   getQuery(id) {
+    const queryId = _.split(id, ':')[0];
+    const visualizationId = _.split(id, ':')[1];
+
     this.setState({
       isLoaded: false,
-      queryResult: null
+      queryResult: null,
+      chartOptions: null
     });
-    Query.resultById({ id })
-      .$promise.then(res => {
-        this.setState({
-          isLoaded: true,
-          queryResult: this.normalizedTableData(res.query_result)
-        });
+
+    Query.query({ id: queryId })
+      .$promise.then(query => {
+        query
+          .getQueryResultPromise()
+          .then(queryRes => {
+            this.setState({
+              isLoaded: true,
+              chartOptions: null,
+              queryResult: queryRes
+            });
+
+            if (visualizationId) {
+              this.setState({
+                chartOptions: _.find(
+                  query.visualizations,
+                  // eslint-disable-next-line eqeqeq
+                  visualization => visualization.id == visualizationId
+                )
+              });
+            }
+          })
+          .catch(err => {
+            this.setState({
+              isLoaded: true,
+              chartOptions: null,
+              queryResult: 'empty'
+            });
+          });
       })
       .catch(err => {
         this.setState({
           isLoaded: true,
+          chartOptions: null,
           queryResult: 'empty'
         });
       });
   }
 
-  normalizedTableData(data) {
-    if (data === 'empty') {
-      return null;
-    }
-    return {
-      columns: _.map(data.data.columns, column => ({
-        title: column.friendly_name,
-        dataIndex: column.name
-      })),
-      rows: data.data.rows
-    };
+  // eslint-disable-next-line class-methods-use-this
+  normalizedTableColumn(queryRes) {
+    return _.map(queryRes.getColumns(), column => ({
+      title: column.friendly_name,
+      dataIndex: column.name
+    }));
   }
 
   render() {
@@ -117,15 +151,15 @@ class QueriesListTabs extends React.Component {
         {!this.state.isLoaded && <LoadingState />}
         {this.state.isLoaded && this.state.queryResult == null && (
           <Empty
-            description="请从左侧点击选择数据集"
+            description="请从左侧点击选择图表组件"
             style={{ paddingTop: '10%' }}
           />
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
-          <Empty description="该数据集暂无数据" style={{ paddingTop: '10%' }}>
+          <Empty description="该图表组件暂无数据" style={{ paddingTop: '10%' }}>
             <Button
               type="primary"
-              href={'/queries/' + this.props.queryId + '/source'}
+              href={'/queries/' + this.props.displayId + '/source'}
               target="_blank"
             >
               设置数据
@@ -136,21 +170,19 @@ class QueriesListTabs extends React.Component {
           this.state.queryResult != null &&
           this.state.queryResult !== 'empty' && (
             <Tabs defaultActiveKey="1" type="card" className="queries-tab">
-              <TabPane tab="数据预览" key="1">
-                <Alert
-                  message="预览数据为该数据集的部分数据."
-                  type="warning"
-                  closable
-                />
-                <br />
-                <Table
-                  columns={this.state.queryResult.columns}
-                  dataSource={this.state.queryResult.rows}
-                  pagination={{ pageSize: 100 }}
-                />
-              </TabPane>
-              <TabPane tab="数据集设置" key="2">
-                正在开发
+              <TabPane tab="预览" key="1">
+                {this.state.chartOptions === null ? (
+                  <Table
+                    columns={this.normalizedTableColumn(this.state.queryResult)}
+                    dataSource={this.state.queryResult.getData()}
+                    pagination={{ pageSize: 100 }}
+                  />
+                ) : (
+                  <ChartsPreviewDOM
+                    visualization={this.state.chartOptions}
+                    queryResult={this.state.queryResult}
+                  />
+                )}
               </TabPane>
             </Tabs>
           )}
@@ -159,18 +191,20 @@ class QueriesListTabs extends React.Component {
   }
 }
 
-QueriesListTabs.propTypes = {
-  queryId: PropTypes.string
+ChartsListTabs.propTypes = {
+  displayId: PropTypes.string
+  // displayType: PropTypes.string
 };
 
-QueriesListTabs.defaultProps = {
-  queryId: null
+ChartsListTabs.defaultProps = {
+  displayId: null
+  // displayType: null
 };
 
 export default function init(ngModule) {
   ngModule.component(
-    'queriesListTabs',
-    react2angular(QueriesListTabs, Object.keys(QueriesListTabs.propTypes), [
+    'chartsListTabs',
+    react2angular(ChartsListTabs, Object.keys(ChartsListTabs.propTypes), [
       '$scope',
       'appSettings'
     ])

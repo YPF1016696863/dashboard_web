@@ -246,7 +246,7 @@ function sankeyRenderer($rootScope) {
     template: '<div class="sankey-visualization-container" resize-event="handleResize()"></div>',
     link(scope, element) {
       const container = element[0].querySelector('.sankey-visualization-container');
-      let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
+      let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"dark";
       function refreshData() {
         const queryData = scope.queryResult.getData();
         if (queryData) {
@@ -273,7 +273,7 @@ function sankeyRenderer($rootScope) {
         }
       });
       $rootScope.$watch('theme', function() {
-        theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
+        theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"dark";
         refreshDataByTheme(theme);
       });
     },

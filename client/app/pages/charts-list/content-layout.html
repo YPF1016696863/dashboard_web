@@ -1,5 +1,5 @@
 <div class="layout-content-wrapper">
-  <queries-list-page-header query-id="queryId"></queries-list-page-header>
+  <charts-list-page-header query-id="queryId"></charts-list-page-header>
   <main class="query-fullscreen">
     <nav
       resizable
@@ -14,7 +14,7 @@
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
           <div class="scrollbox">
-            <queries-list-search query-search-cb="querySearchCb"></queries-list-search>
+            <charts-list-search query-search-cb="querySearchCb"></charts-list-search>
           </div>
         </div>
       </div>
@@ -44,9 +44,10 @@
                   style="left: 0; top: 0; right: 0; bottom: 0;"
                 >
                   <div class="query__vis p-b-15 scrollbox">
-                    <queries-list-tabs
-                      query-id="queryId"
-                    ></queries-list-tabs>
+                    <charts-list-tabs
+                      display-id="displayId"
+                      display-type="displayType"
+                    ></charts-list-tabs>
                   </div>
                 </div>
               </div>

@@ -32,12 +32,12 @@ const PlotlyChart = ($rootScope,$timeout) => ({
 
     const plotlyElement = element[0].querySelector('.plotly-chart-container');
     const plotlyOptions = { showLink: false, displaylogo: false };
-    let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
+    let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"dark";
     let layout = {};
     let data = [];
 
     $rootScope.$watch('theme', function() {
-      theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"light";
+      theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"dark";
       updateLayoutByTheme(theme);
     });
 

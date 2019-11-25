@@ -61,9 +61,7 @@ class DataSourceSearch extends React.Component {
       filtered: null,
       loading: true
     });
-    Promise.all([
-      DataSource.query().$promise
-    ]).then(values => {
+    Promise.all([DataSource.query().$promise]).then(values => {
       this.setState({
         all: values[0],
         filtered: values[0],
@@ -73,10 +71,17 @@ class DataSourceSearch extends React.Component {
   }
 
   searchBy(value) {
+    const allItems = _.cloneDeep(this.state.all);
     // this.props.sourceSearchCb(null);
-    this.setState({
-      filtered: _.filter(this.state.all, item => item.name.includes(value))
-    });
+    if (value === '' || value === null) {
+      this.setState({
+        filtered: allItems
+      });
+    } else {
+      this.setState({
+        filtered: _.filter(allItems, item => item.name.includes(value))
+      });
+    }
   }
 
   orderBy(value) {

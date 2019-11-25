@@ -40,14 +40,14 @@ import { Query } from '@/services/query';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
-import './queries-search.css';
+import './charts-search.css';
 
 import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
-class QueriesListSearch extends React.Component {
+class ChartsListSearch extends React.Component {
   state = {
     all: null,
     filtered: null,
@@ -65,7 +65,7 @@ class QueriesListSearch extends React.Component {
   }
 
   reload() {
-    this.props.querySearchCb(null);
+    this.props.querySearchCb(null, null);
     this.setState({
       all: null,
       filtered: null,
@@ -82,20 +82,32 @@ class QueriesListSearch extends React.Component {
 
   searchBy(value) {
     const allItems = _.cloneDeep(this.state.all);
-    this.props.querySearchCb(null);
+    this.props.querySearchCb(null, null);
     if (value === '' || value === null) {
       this.setState({
         filtered: allItems
       });
     } else {
       this.setState({
-        filtered: _.filter(allItems, item => item.name.includes(value))
+        filtered: _.filter(allItems, item => {
+          if (!item.visualizations || item.visualizations.length < 1) {
+            return false;
+          }
+          item.visualizations = _.filter(item.visualizations, visualization =>
+            visualization.name.includes(value)
+          );
+          return (
+            _.filter(item.visualizations, visualization =>
+              visualization.name.includes(value)
+            ).length > 0
+          );
+        })
       });
     }
   }
 
   orderBy(value) {
-    this.props.querySearchCb(null);
+    this.props.querySearchCb(null, null);
     this.setState({
       filtered: _.orderBy(this.state.filtered, item => item[value])
     });
@@ -163,25 +175,58 @@ class QueriesListSearch extends React.Component {
             <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
-                  defaultExpandAll
+                  defaultExpandedKeys={['ungrouped']}
                   onSelect={(value, node, extra) => {
-                    this.props.querySearchCb(value);
+                    this.props.querySearchCb(
+                      node.node.isLeaf() ? 'V' : 'Q',
+                      value[0]
+                    );
                   }}
                 >
-                  <TreeNode title="数据查询(无分组)" key="ungrouped">
-                    {_.map(this.state.filtered, item => (
-                      <TreeNode
-                        icon={
-                          <Icon
-                            type="file-search"
-                            style={{ color: '#FAAA39' }}
-                          />
-                        }
-                        title={item.name + ', id: [' + item.id + ']'}
-                        key={item.id}
-                        isLeaf
-                      />
-                    ))}
+                  <TreeNode
+                    title="可视化组件(无分组)"
+                    key="ungrouped"
+                    selectable={false}
+                  >
+                    {_.map(this.state.filtered, item =>
+                      !(
+                        item.visualizations.length === 1 &&
+                        item.visualizations[0].name.includes('Table')
+                      ) || item.visualizations.length < 1 ? (
+                        <TreeNode
+                          icon={
+                            <Icon
+                              type="file-search"
+                              style={{ color: '#FAAA39' }}
+                            />
+                          }
+                          title={item.name}
+                          key={item.id}
+                          isLeaf={false}
+                        >
+                          {_.map(item.visualizations, visualization =>
+                            visualization.name.includes('Table') ? null : (
+                              <TreeNode
+                                icon={
+                                  <Icon
+                                    type="pie-chart"
+                                    style={{ color: '#428bca' }}
+                                  />
+                                }
+                                title={
+                                  visualization.name +
+                                  ', id: [' +
+                                  visualization.id +
+                                  ']'
+                                }
+                                key={item.id + ':' + visualization.id}
+                                isLeaf
+                              />
+                            )
+                          )}
+                        </TreeNode>
+                      ) : null
+                    )}
                   </TreeNode>
                 </DirectoryTree>
               </Col>
@@ -193,16 +238,18 @@ class QueriesListSearch extends React.Component {
   }
 }
 
-QueriesListSearch.propTypes = {
-  querySearchCb: PropTypes.func.isRequired
+ChartsListSearch.propTypes = {
+  querySearchCb: PropTypes.func
 };
 
-QueriesListSearch.defaultProps = {};
+ChartsListSearch.defaultProps = {
+  querySearchCb: (a, b) => {}
+};
 
 export default function init(ngModule) {
   ngModule.component(
-    'queriesListSearch',
-    react2angular(QueriesListSearch, Object.keys(QueriesListSearch.propTypes), [
+    'chartsListSearch',
+    react2angular(ChartsListSearch, Object.keys(ChartsListSearch.propTypes), [
       'appSettings'
     ])
   );

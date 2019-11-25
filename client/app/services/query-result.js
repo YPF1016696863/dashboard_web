@@ -2,7 +2,7 @@ import debug from 'debug';
 import moment from 'moment';
 import { sortBy, uniqBy, values, some, each, isArray, isNumber, isString, includes, forOwn } from 'lodash';
 
-const logger = debug('redash:services:QueryResult');
+const logger = debug('datavis:services:QueryResult');
 const filterTypes = ['filter', 'multi-filter', 'multiFilter'];
 
 const ALL_VALUES = '*';

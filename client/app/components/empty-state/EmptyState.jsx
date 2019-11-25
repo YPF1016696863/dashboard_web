@@ -1,7 +1,7 @@
 import { keys, some } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Empty } from 'antd';
+import { Result,Icon,Button,Descriptions } from 'antd';
 import { react2angular } from 'react2angular';
 import classNames from 'classnames';
 import { $uibModal } from '@/services/ng';
@@ -129,21 +129,11 @@ export function EmptyState({
   };
 
   return (
-    <div className="empty-state bg-white">
-      <div className="empty-state__summary center">
-        {title && <h5>{title}</h5>}
-        {header && <h4>{header}</h4>}
-        <h2>
-          <i className={icon} />
-        </h2>
-        <p>{description}</p>
-        <img
-          src="/static/images/illustrations/main.png"
-          alt={illustration + ' Illustration'}
-          width="75%"
-        />
-      </div>
-    </div>
+    <Result
+      icon={<img src="/static/images/illustrations/dashboard.png" style={{width:'15vw'}} alt="" />}
+      title="DataVis BI数据可视化系统"
+      extra={<h4>连接到任何数据源，轻松可视化和共享您的数据</h4>}
+    />
   );
 }
 

@@ -22,11 +22,11 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           const data = $scope.queryResult.getData();
 
-          _.set($scope.options, "title.textStyle.color",_.get($rootScope,"theme.theme","light") === "light" ? "#333":"#fff");
+          _.set($scope.options, "title.textStyle.color",_.get($rootScope,"theme.theme","dark") === "light" ? "#333":"#fff");
 
-          _.set($scope.options, "title.subtextStyle.color",_.get($rootScope,"theme.theme","light") === "light" ? "#333":"#fff");
+          _.set($scope.options, "title.subtextStyle.color",_.get($rootScope,"theme.theme","dark") === "light" ? "#333":"#fff");
 
-          _.set($scope.options, "textStyle.color",_.get($rootScope,"theme.theme","light") === "light" ? "#333":"#fff");
+          _.set($scope.options, "textStyle.color",_.get($rootScope,"theme.theme","dark") === "light" ? "#333":"#fff");
 
           _.set($scope.options, "xAxis.data", _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
             return row[_.get($scope.options, "form.xAxisColumn", "-")];

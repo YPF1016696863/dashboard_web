@@ -1,54 +1,53 @@
 // This polyfill is needed to support PhantomJS which we use to generate PNGs from embeds.
-import "core-js/fn/typed/array-buffer";
+import 'core-js/fn/typed/array-buffer';
 
 // Ensure that this image will be available in assets folder
-import "@/assets/images/avatar.svg";
+import '@/assets/images/avatar.svg';
 
-import * as Pace from "pace-progress";
-import debug from "debug";
-import angular from "angular";
-import ngSanitize from "angular-sanitize";
-import ngRoute from "angular-route";
-import ngCookies from "angular-cookies";
-import ngResource from "angular-resource";
+import * as Pace from 'pace-progress';
+import debug from 'debug';
+import angular from 'angular';
+import ngSanitize from 'angular-sanitize';
+import ngRoute from 'angular-route';
+import ngCookies from 'angular-cookies';
+import ngResource from 'angular-resource';
 // import mocke2e from 'angular-mocks/ngMockE2E';
-import "angular-translate";
-import "angular-translate-loader-static-files";
-import "angular-translate-storage-cookie";
-import "angular-translate-storage-local";
-import "angular-local-storage";
-import uiBootstrap from "angular-ui-bootstrap";
-import uiSelect from "ui-select";
-import ngMessages from "angular-messages";
-import ngUpload from "angular-base64-upload";
-import vsRepeat from "angular-vs-repeat";
-import "brace";
-import "angular-ui-ace";
-import "angular-resizable";
-import { each, isFunction, extend } from "lodash";
-import "angular-echarts/dist/angular-echarts";
+import 'angular-translate';
+import 'angular-translate-loader-static-files';
+import 'angular-translate-storage-cookie';
+import 'angular-translate-storage-local';
+import 'angular-local-storage';
+import uiBootstrap from 'angular-ui-bootstrap';
+import uiSelect from 'ui-select';
+import ngMessages from 'angular-messages';
+import ngUpload from 'angular-base64-upload';
+import vsRepeat from 'angular-vs-repeat';
+import 'brace';
+import 'angular-ui-ace';
+import 'angular-resizable';
+import { each, isFunction, extend } from 'lodash';
+import 'angular-echarts/dist/angular-echarts';
 
+import '@/lib/sortable';
 
-import "@/lib/sortable";
+import DialogWrapper from '@/components/DialogWrapper';
+import organizationStatus from '@/services/organizationStatus';
 
-import DialogWrapper from "@/components/DialogWrapper";
-import organizationStatus from "@/services/organizationStatus";
+import * as filters from '@/filters';
+import registerDirectives from '@/directives';
+import markdownFilter from '@/filters/markdown';
+import dateTimeFilter from '@/filters/datetime';
+import dashboardGridOptions from './dashboard-grid-options';
+import appSettings from './app-settings';
+import './antd-spinner';
 
-import * as filters from "@/filters";
-import registerDirectives from "@/directives";
-import markdownFilter from "@/filters/markdown";
-import dateTimeFilter from "@/filters/datetime";
-import dashboardGridOptions from "./dashboard-grid-options";
-import appSettings from "./app-settings";
-import "./antd-spinner";
-
-const logger = debug("redash:config");
+const logger = debug('redash:config');
 
 Pace.options.shouldHandlePushState = (prevUrl, newUrl) => {
   // Show pace progress bar only if URL path changed; when query params
   // or hash changed - ignore that history event
-  const [prevPrefix] = prevUrl.split("?");
-  const [newPrefix] = newUrl.split("?");
+  const [prevPrefix] = prevUrl.split('?');
+  const [newPrefix] = newUrl.split('?');
   return prevPrefix !== newPrefix;
 };
 
@@ -60,18 +59,20 @@ const requirements = [
   ngMessages,
   // mocke2e, // Disable mocked backend request.
   ngCookies,
-  "LocalStorageModule",
-  "pascalprecht.translate",
+  'LocalStorageModule',
+  'pascalprecht.translate',
   uiSelect,
-  "ui.ace",
+  'ui.ace',
   ngUpload,
-  "angularResizable",
+  'angularResizable',
   vsRepeat,
-  "ui.sortable",
-  "angular-echarts"
+  'ui.sortable',
+  'angular-echarts'
 ];
 
-const ngModule = angular.module("app", requirements);
+const ngModule = angular
+  .module('app', requirements)
+  .run($injector => {window.$injector = $injector;});
 
 dashboardGridOptions(ngModule);
 appSettings(ngModule);
@@ -91,7 +92,7 @@ function registerAll(context) {
 function requireImages() {
   // client/app/assets/images/<path> => /images/<path>
   const ctx = require.context(
-    "@/assets/images/",
+    '@/assets/images/',
     true,
     /\.(png|jpe?g|gif|svg)$/
   );
@@ -102,7 +103,7 @@ function registerComponents() {
   // We repeat this code in other register functions, because if we don't use a literal for the path
   // Webpack won't be able to statcily analyze our imports.
   const context = require.context(
-    "@/components",
+    '@/components',
     true,
     /^((?![\\/.]test[\\./]).)*\.jsx?$/
   );
@@ -111,7 +112,7 @@ function registerComponents() {
 
 function registerExtensions() {
   const context = require.context(
-    "extensions",
+    'extensions',
     true,
     /^((?![\\/.]test[\\./]).)*\.jsx?$/
   );
@@ -120,7 +121,7 @@ function registerExtensions() {
 
 function registerServices() {
   const context = require.context(
-    "@/services",
+    '@/services',
     true,
     /^((?![\\/.]test[\\./]).)*\.js$/
   );
@@ -129,7 +130,7 @@ function registerServices() {
 
 function registerVisualizations() {
   const context = require.context(
-    "@/visualizations",
+    '@/visualizations',
     true,
     /^((?![\\/.]test[\\./]).)*\.jsx?$/
   );
@@ -138,7 +139,7 @@ function registerVisualizations() {
 
 function registerPages() {
   const context = require.context(
-    "@/pages",
+    '@/pages',
     true,
     /^((?![\\/.]test[\\./]).)*\.jsx?$/
   );
@@ -146,7 +147,7 @@ function registerPages() {
   routesCollection.forEach(routes => {
     ngModule.config($routeProvider => {
       each(routes, (route, path) => {
-        logger("Registering route: %s", path);
+        logger('Registering route: %s', path);
         route.authenticated = true;
         route.resolve = extend(
           {

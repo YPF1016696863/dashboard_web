@@ -12,7 +12,8 @@ class DashboardThemeSwitch extends React.Component {
     super(props);
     const {$rootScope} = props;
     // Get theme flag from rootScope first, if not exist, set to false, which means use light theme.
-    this.state = { visible: false, isDarkTheme:_.get($rootScope,"theme.theme","light") === "dark" };// false: light theme, true: dark theme.
+    console.log($rootScope);
+    this.state = { visible: false, isDarkTheme:_.get($rootScope,"theme.theme","dark") === "dark" };// false: light theme, true: dark theme.
   }
 
   showModal = () => {
@@ -96,8 +97,8 @@ class DashboardThemeSwitch extends React.Component {
         >
 
           <Row type="flex" justify="center" align="middle">
-            <Col span={8}>
-              <Form layout="horizontal">
+            <Col span={12}>
+              <Form layout="inline">
                 <Form.Item label={$translate.instant("DASHBOARD.SETTINGS.THEME.TIP")} {...this.formItemProps}>
                   <Switch
                     checkedChildren={$translate.instant("DASHBOARD.SETTINGS.THEME.DARK")}
@@ -107,9 +108,6 @@ class DashboardThemeSwitch extends React.Component {
                   />
                 </Form.Item>
               </Form>
-            </Col>
-            <Col span={16}>
-              <img className="p-5" src={darkThemeSwitchImg} width="250" alt="darkThemeSwitch" />
             </Col>
           </Row>
         </Modal>

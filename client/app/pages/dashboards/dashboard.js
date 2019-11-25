@@ -108,24 +108,24 @@ function DashboardCtrl(
   // Dashboard Header default style
 
   const bodyBackgroundImage = $rootScope.theme.bodyBackgroundImage?$rootScope.theme.bodyBackgroundImage:"";
-  const widgetBackgroundColor = bodyBackgroundImage?"widget-dark-theme-bg2 ":"widget-light-theme";
+  const widgetBackgroundColor = bodyBackgroundImage?"widget-dark-theme-bg2 ":"widget-dark-theme";
 
   $rootScope.theme = {
-    theme: 'light',
-    bodyBackgroundColor: 'dashboard-light-theme',
+    theme: 'dark',
+    bodyBackgroundColor: 'dashboard-dark-theme',
     bodyBackgroundImage,
-    dashboardHeaderBackgroundColor: "widget-light-theme",
-    dashboardHeaderTitleColor: "header-title-light-theme",
+    dashboardHeaderBackgroundColor: "widget-dark-theme",
+    dashboardHeaderTitleColor: "header-title-dark-theme",
     widgetBackgroundColor,
-    queryLinkTextColor:"query-link-light-theme",
-    widgetHeaderTextColor: "widget-header-text-light-theme",
-    widgetFooterTextColor: "widget-footer-text-light-theme",
-    widgetActionPanelBackgroundColor:"widget-action-panel-light-theme",
-    dashboardFooterFontColor:"dashboard-footer-font-color-light-theme",
-    dashboardTableTextColor:'dashboard-widget-table-text-light-theme',
-    dashboardTableHeaderTextColor:'dashboard-widget-table-header-text-light-theme',
-    dashboardWidgetScrollBar: 'dashboard-widget-scrollbox-light',
-    dashboardHeaderButtonColor: false
+    queryLinkTextColor:"query-link-dark-theme",
+    widgetHeaderTextColor: "widget-header-text-dark-theme",
+    widgetFooterTextColor: "widget-footer-text-dark-theme",
+    widgetActionPanelBackgroundColor:"widget-action-panel-dark-theme",
+    dashboardFooterFontColor:"dashboard-footer-font-color-dark-theme",
+    dashboardTableTextColor:'dashboard-widget-table-text-dark-theme',
+    dashboardTableHeaderTextColor:'dashboard-widget-table-header-text-dark-theme',
+    dashboardWidgetScrollBar: 'dashboard-widget-scrollbox-dark',
+    dashboardHeaderButtonColor: true
   };
   //
 

@@ -70,7 +70,7 @@ function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, 
   };
 
   this.deleteWidget = () => {
-    if (!$window.confirm(`Are you sure you want to remove "${this.widget.getName()}" from the dashboard?`)) {
+    if (!$window.confirm(`你确定要删除 "${this.widget.getName()}" 吗?`)) {
       return;
     }
 

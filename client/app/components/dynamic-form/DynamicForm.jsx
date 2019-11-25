@@ -19,7 +19,7 @@ const fieldRules = ({ type, required, minLength }) => {
   const emailTypeRule = type === 'email';
 
   return [
-    requiredRule && { required, message: 'This field is required.' },
+    requiredRule && { required, message: '这是必填栏.' },
     minLengthRule && { min: minLength, message: 'This field is too short.' },
     emailTypeRule && { type: 'email', message: 'This field must be a valid email.' },
   ].filter(rule => rule);
@@ -43,7 +43,7 @@ class DynamicForm extends React.Component {
     actions: [],
     feedbackIcons: false,
     hideSubmitButton: false,
-    saveText: 'Save',
+    saveText: '保存',
     onSubmit: () => {},
   };
 
