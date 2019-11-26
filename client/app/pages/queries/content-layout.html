@@ -8,7 +8,19 @@
       resizable-toggle
       toggle-shortcut="Alt+Shift+D, Alt+D"
     >
+
+      <form style="padding-left: 15px;padding-right: 15px" ng-if="query.isNew()">
+        <div class="form-group" style="margin-bottom:0px">
+          <label for="newQueryName">名称:</label>
+          <input type="text" class="form-control" id="newQueryName" placeholder="新建查询" ng-model="query.name">
+          <small id="textHelp" class="form-text text-muted">新建查询名称</small>
+        </div>
+      </form>
+
       <div class="editor__left__data-source">
+        <div class="form-group" style="margin-bottom:3px">
+          <label for="newQueryName">选择数据源:</label>
+        </div>
         <ui-select
           ng-model="query.data_source_id"
           remove-selected="false"
@@ -16,7 +28,7 @@
           on-select="updateDataSource()"
           data-test="SelectDataSource"
         >
-          <ui-select-match placeholder="Select Data Source..."
+          <ui-select-match placeholder="选择数据源..."
             >{{$select.selected.name}}</ui-select-match
           >
           <ui-select-choices
@@ -44,7 +56,7 @@
       </div>
       <div ng-if="!sourceMode" style="flex-grow: 1;">&nbsp;</div>
 
-      <div class="query-metadata " ng-if="!query.isNew()">
+      <div class="query-metadata ">
         <button type="button" class="btn btn-primary btn-sm btn-block">
           <i class="fa fa-book"></i>&nbsp;&nbsp;切换为简单查询模式
         </button>

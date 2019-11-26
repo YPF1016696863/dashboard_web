@@ -211,7 +211,7 @@ function DashboardCtrl(
 
   this.loadDashboard = _.throttle((force) => {
     Dashboard.get(
-      { slug: $routeParams.dashboardSlug },
+      { slug: '-20191101' },
       (dashboard) => {
         this.dashboard = dashboard;
         this.isDashboardOwner = currentUser.id === dashboard.user.id || currentUser.hasPermission('admin');
@@ -501,11 +501,11 @@ export default function init(ngModule) {
   });
 
   return {
-    '/dashboard/:dashboardSlug': {
+    '/dashboard2': {
       template: '<dashboard-page></dashboard-page>',
       reloadOnSearch: false
     },
   };
 }
 
-init.init = true;
+init.init = false;

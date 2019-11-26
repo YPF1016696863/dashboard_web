@@ -3,7 +3,8 @@ import { copy } from 'angular';
 import notification from '@/services/notification';
 import template from './edit-visualization-dialog.html';
 
-const EditVisualizationDialog = {
+// eslint-disable-next-line import/prefer-default-export
+export const EditVisualizationDialog = {
   template,
   bindings: {
     resolve: '<',
@@ -97,4 +98,4 @@ export default function init(ngModule) {
   ngModule.component('editVisualizationDialog', EditVisualizationDialog);
 }
 
-init.init = false;
+init.init = true;

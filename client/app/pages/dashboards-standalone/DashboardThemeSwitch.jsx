@@ -128,4 +128,4 @@ export default function init(ngModule) {
     ['$translate','$rootScope','$scope']));
 }
 
-init.init = true;
+init.init = false;

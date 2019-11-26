@@ -12,9 +12,9 @@ import {
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
-import './QueriesListPageHeader.less';
+import './DashboardsListPageHeader.less';
 
-class QueriesListPageHeader extends React.Component {
+class DashboardsListPageHeader extends React.Component {
   /*
   constructor(props) {
     super(props);
@@ -24,27 +24,6 @@ class QueriesListPageHeader extends React.Component {
   componentDidMount() {}
 
   render() {
-    const { query } = this.props;
-    const newDataSourceProps = {
-      type: 'primary',
-      ghost: true,
-      size: 'small',
-      onClick: policy.isCreateDataSourceEnabled()
-        ? this.showCreateSourceDialog
-        : null,
-      disabled: !policy.isCreateDataSourceEnabled()
-    };
-
-    const switchToSimpleQueryProps = {
-      type: 'danger',
-      ghost: true,
-      size: 'small',
-      onClick: policy.isCreateDataSourceEnabled()
-        ? this.showCreateSourceDialog
-        : null,
-      disabled: !policy.isCreateDataSourceEnabled()
-    };
-console.log(this.props.queryId);
     return (
       <>
         <Breadcrumb className="content-layout-Breadcrumb">
@@ -53,15 +32,15 @@ console.log(this.props.queryId);
           </Breadcrumb.Item>
           <Breadcrumb.Item>
             <Icon type="file-search" />
-            <span>数据集</span>
+            <span>可视化仪表盘</span>
           </Breadcrumb.Item>
         </Breadcrumb>
         <PageHeader
           className="content-layout-header"
-          title={<span style={{ fontSize: '18px' }}>数据集</span>}
+          title={<span style={{ fontSize: '18px' }}>可视化仪表盘</span>}
           subTitle={
             <>
-              <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
+              <span style={{ fontSize: '13px' }}>新建并管理可视化仪表盘</span>
             </>
           }
           extra={[
@@ -69,18 +48,17 @@ console.log(this.props.queryId);
               ghost
               type="primary"
               size="small"
-              disabled={this.props.queryId == null || this.props.queryId.includes('datavis-group#')}
-              href={'/queries/' + this.props.queryId + '/source'}
+              disabled={this.props.slugId == null}
               target="_blank"
             >
               <i className="fa fa-edit m-r-5" />
-              编辑数据集
+              编辑可视化仪表盘
             </Button>
           ]}
         >
           <Descriptions size="small" column={3}>
             <Descriptions.Item label="备注">
-              用户可在该页面新建和管理数据集,数据集稍后将被应用于图表组件的创建当中
+              用户可在该页面新建和管理可视化仪表盘
             </Descriptions.Item>
           </Descriptions>
         </PageHeader>
@@ -90,17 +68,19 @@ console.log(this.props.queryId);
   }
 }
 
-QueriesListPageHeader.propTypes = {
-  queryId: PropTypes.string.isRequired
+DashboardsListPageHeader.propTypes = {
+  slugId: PropTypes.string
 };
-QueriesListPageHeader.defaultProps = {};
+DashboardsListPageHeader.defaultProps = {
+  slugId: null
+};
 
 export default function init(ngModule) {
   ngModule.component(
-    'queriesListPageHeader',
+    'dashboardsListPageHeader',
     react2angular(
-      QueriesListPageHeader,
-      Object.keys(QueriesListPageHeader.propTypes),
+      DashboardsListPageHeader,
+      Object.keys(DashboardsListPageHeader.propTypes),
       ['$rootScope', '$scope']
     )
   );

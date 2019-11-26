@@ -97,7 +97,7 @@ class QueriesListSearch extends React.Component {
   orderBy(value) {
     this.props.querySearchCb(null);
     this.setState({
-      filtered: _.orderBy(this.state.filtered, item => item[value])
+      filtered: _.reverse(_.orderBy(this.state.filtered, item => item[value]))
     });
   }
 
@@ -111,9 +111,25 @@ class QueriesListSearch extends React.Component {
           <>
             <Row>
               <Col>
-                <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
-                  数据列表:
-                </div>
+                <Row>
+                  <Col span={12}>
+                    <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
+                      数据列表:
+                    </div>
+                  </Col>
+                  <Col span={11} align="right">
+                    <Button
+                      ghost
+                      type="primary"
+                      size="small"
+                      target="_blank"
+                      href="/queries/new"
+                    >
+                      <i className="fa fa-plus m-r-5" />
+                      新建数据查询
+                    </Button>
+                  </Col>
+                </Row>
                 <Row>
                   <Col span={18}>
                     <Search
@@ -168,7 +184,7 @@ class QueriesListSearch extends React.Component {
                     this.props.querySearchCb(value);
                   }}
                 >
-                  <TreeNode title="数据查询(无分组)" key="ungrouped">
+                  <TreeNode title="数据查询(无分组)" key="datavis-group#ungrouped">
                     {_.map(this.state.filtered, item => (
                       <TreeNode
                         icon={

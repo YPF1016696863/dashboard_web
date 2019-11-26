@@ -69,22 +69,12 @@ class ChartsListPageHeader extends React.Component {
               ghost
               type="primary"
               size="small"
-              disabled={this.props.queryId == null}
+              disabled={this.props.queryId == null  || this.props.queryId.includes('datavis-group#')}
               href={'/queries/' + this.props.queryId + '/source'}
               target="_blank"
             >
               <i className="fa fa-edit m-r-5" />
               编辑可视化组件
-            </Button>,
-            <Button
-              ghost
-              type="primary"
-              size="small"
-              href="/queries/new"
-              target="_blank"
-            >
-              <i className="fa fa-plus m-r-5" />
-              新建可视化组件
             </Button>
           ]}
         >

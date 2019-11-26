@@ -100,6 +100,11 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
         url: apiServerUrl + '/api/dashboards/:slug/favorite',
         transformRequest: [() => ''], // body not needed
       },
+      allDashboards: {
+        method: 'get',
+        isArray: true,
+        url: apiServerUrl + '/api/dashboards?all',
+      }
     },
   );
 

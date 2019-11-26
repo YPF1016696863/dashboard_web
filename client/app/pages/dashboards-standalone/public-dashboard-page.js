@@ -70,4 +70,4 @@ export default function init(ngModule) {
   return [];
 }
 
-init.init = true;
+init.init = false;

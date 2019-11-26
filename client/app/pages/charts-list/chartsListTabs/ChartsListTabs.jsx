@@ -46,12 +46,14 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import { policy } from '@/services/policy';
 
 import { ChartsPreview } from '@/components/charts-preview/charts-preview';
+import { EditVisualizationDialog } from '@/components/edit-visualization-dialog/edit-visualization-dialog';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 
 let ChartsPreviewDOM;
+let EditVisualizationDialogDOM;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
 class ChartsListTabs extends React.Component {
@@ -61,12 +63,19 @@ class ChartsListTabs extends React.Component {
     this.setState({
       isLoaded: true,
       queryResult: null,
-      chartOptions: null
+      visualization: null,
+      query: null
     });
     ChartsPreviewDOM = angular2react(
-        'chartsPreview',
-        ChartsPreview,
-        window.$injector
+      'chartsPreview',
+      ChartsPreview,
+      window.$injector
+    );
+
+    EditVisualizationDialogDOM = angular2react(
+      'editVisualizationDialog',
+      EditVisualizationDialog,
+      window.$injector
     );
   }
 
@@ -96,23 +105,27 @@ class ChartsListTabs extends React.Component {
     this.setState({
       isLoaded: false,
       queryResult: null,
-      chartOptions: null
+      visualization: null,
+      query: null
     });
 
     Query.query({ id: queryId })
       .$promise.then(query => {
+        this.setState({
+          query
+        });
         query
           .getQueryResultPromise()
           .then(queryRes => {
             this.setState({
               isLoaded: true,
-              chartOptions: null,
+              visualization: null,
               queryResult: queryRes
             });
 
             if (visualizationId) {
               this.setState({
-                chartOptions: _.find(
+                visualization: _.find(
                   query.visualizations,
                   // eslint-disable-next-line eqeqeq
                   visualization => visualization.id == visualizationId
@@ -123,7 +136,7 @@ class ChartsListTabs extends React.Component {
           .catch(err => {
             this.setState({
               isLoaded: true,
-              chartOptions: null,
+              visualization: null,
               queryResult: 'empty'
             });
           });
@@ -131,7 +144,7 @@ class ChartsListTabs extends React.Component {
       .catch(err => {
         this.setState({
           isLoaded: true,
-          chartOptions: null,
+          visualization: null,
           queryResult: 'empty'
         });
       });
@@ -151,12 +164,15 @@ class ChartsListTabs extends React.Component {
         {!this.state.isLoaded && <LoadingState />}
         {this.state.isLoaded && this.state.queryResult == null && (
           <Empty
-            description="请从左侧点击选择图表组件"
+            description="请从左侧点击选择可视化组件"
             style={{ paddingTop: '10%' }}
           />
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
-          <Empty description="该图表组件暂无数据" style={{ paddingTop: '10%' }}>
+          <Empty
+            description="该可视化组件暂无数据"
+            style={{ paddingTop: '10%' }}
+          >
             <Button
               type="primary"
               href={'/queries/' + this.props.displayId + '/source'}
@@ -171,7 +187,7 @@ class ChartsListTabs extends React.Component {
           this.state.queryResult !== 'empty' && (
             <Tabs defaultActiveKey="1" type="card" className="queries-tab">
               <TabPane tab="预览" key="1">
-                {this.state.chartOptions === null ? (
+                {this.state.visualization === null ? (
                   <Table
                     columns={this.normalizedTableColumn(this.state.queryResult)}
                     dataSource={this.state.queryResult.getData()}
@@ -179,11 +195,24 @@ class ChartsListTabs extends React.Component {
                   />
                 ) : (
                   <ChartsPreviewDOM
-                    visualization={this.state.chartOptions}
+                    visualization={this.state.visualization}
                     queryResult={this.state.queryResult}
                   />
                 )}
               </TabPane>
+              {this.state.visualization === null ? null : (
+                <TabPane tab="设置" key="2">
+                  {this.state.visualization === null ? null : (
+                    <EditVisualizationDialogDOM
+                      resolve={{
+                        query: this.state.query,
+                        queryResult: this.state.queryResult,
+                        visualization: this.state.visualization
+                      }}
+                    />
+                  )}
+                </TabPane>
+              )}
             </Tabs>
           )}
       </>

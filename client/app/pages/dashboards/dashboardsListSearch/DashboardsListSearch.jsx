@@ -36,18 +36,18 @@ import ItemsTable, {
   Columns
 } from '@/components/items-list/components/ItemsTable';
 
-import { Query } from '@/services/query';
+import { Dashboard } from '@/services/dashboard';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
-import './charts-search.css';
+import './dashboards-search.css';
 
 import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
-class ChartsListSearch extends React.Component {
+class DashboardsListSearch extends React.Component {
   state = {
     all: null,
     filtered: null,
@@ -55,7 +55,7 @@ class ChartsListSearch extends React.Component {
   };
 
   componentDidMount() {
-    Query.allQueries().$promise.then(res => {
+    Dashboard.allDashboards().$promise.then(res => {
       this.setState({
         all: res,
         filtered: res,
@@ -65,13 +65,13 @@ class ChartsListSearch extends React.Component {
   }
 
   reload() {
-    this.props.querySearchCb(null, null);
+    this.props.dashboardSearchCb(null);
     this.setState({
       all: null,
       filtered: null,
       loading: true
     });
-    Query.allQueries().$promise.then(res => {
+    Dashboard.allDashboards().$promise.then(res => {
       this.setState({
         all: res,
         filtered: res,
@@ -82,34 +82,22 @@ class ChartsListSearch extends React.Component {
 
   searchBy(value) {
     const allItems = _.cloneDeep(this.state.all);
-    this.props.querySearchCb(null, null);
+    this.props.dashboardSearchCb(null);
     if (value === '' || value === null) {
       this.setState({
         filtered: allItems
       });
     } else {
       this.setState({
-        filtered: _.filter(allItems, item => {
-          if (!item.visualizations || item.visualizations.length < 1) {
-            return false;
-          }
-          item.visualizations = _.filter(item.visualizations, visualization =>
-            visualization.name.includes(value)
-          );
-          return (
-            _.filter(item.visualizations, visualization =>
-              visualization.name.includes(value)
-            ).length > 0
-          );
-        })
+        filtered: _.filter(allItems, item => item.name.includes(value))
       });
     }
   }
 
   orderBy(value) {
-    this.props.querySearchCb(null, null);
+    this.props.dashboardSearchCb(null);
     this.setState({
-      filtered: _.reverse(_.orderBy(this.state.filtered, item => item[value]))
+      filtered: _.orderBy(this.state.filtered, item => item[value])
     });
   }
 
@@ -126,20 +114,20 @@ class ChartsListSearch extends React.Component {
                 <Row>
                   <Col span={12}>
                     <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
-                      可视化组件列表:
+                      可视化仪表板列表:
                     </div>
                   </Col>
                   <Col span={11} align="right">
-                    <Button ghost disabled type="primary" size="small" target="_blank">
+                    <Button ghost type="primary" size="small" target="_blank">
                       <i className="fa fa-plus m-r-5" />
-                      新建可视化组件
+                      新建仪表盘
                     </Button>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={18}>
                     <Search
-                      placeholder="搜索可视化组件..."
+                      placeholder="搜索可视化仪表板..."
                       size="small"
                       onChange={e => {
                         this.searchBy(e.target.value);
@@ -185,58 +173,22 @@ class ChartsListSearch extends React.Component {
             <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
-                  defaultExpandedKeys={['datavis-group#ungrouped']}
+                  defaultExpandAll
                   onSelect={(value, node, extra) => {
-                    this.props.querySearchCb(
-                      node.node.isLeaf() ? 'V' : 'Q',
-                      value[0]
-                    );
+                    this.props.dashboardSearchCb(value);
                   }}
                 >
-                  <TreeNode
-                    title="可视化组件(无分组)"
-                    key="datavis-group#ungrouped"
-                    selectable={false}
-                  >
-                    {_.map(this.state.filtered, item =>
-                      !(
-                        item.visualizations.length === 1 &&
-                        item.visualizations[0].name.includes('Table')
-                      ) || item.visualizations.length < 1 ? (
-                        <TreeNode
-                          icon={
-                            <Icon
-                              type="file-search"
-                              style={{ color: '#FAAA39' }}
-                            />
-                          }
-                          title={item.name}
-                          key={item.id}
-                          isLeaf={false}
-                        >
-                          {_.map(item.visualizations, visualization =>
-                            visualization.name.includes('Table') ? null : (
-                              <TreeNode
-                                icon={
-                                  <Icon
-                                    type="pie-chart"
-                                    style={{ color: '#428bca' }}
-                                  />
-                                }
-                                title={
-                                  visualization.name +
-                                  ', id: [' +
-                                  visualization.id +
-                                  ']'
-                                }
-                                key={item.id + ':' + visualization.id}
-                                isLeaf
-                              />
-                            )
-                          )}
-                        </TreeNode>
-                      ) : null
-                    )}
+                  <TreeNode title="可视化仪表板(无分组)" key="ungrouped">
+                    {_.map(this.state.filtered, item => (
+                      <TreeNode
+                        icon={
+                          <Icon type="dashboard" style={{ color: '#801336' }} />
+                        }
+                        title={item.name + ', id: [' + item.id + ']'}
+                        key={item.slug}
+                        isLeaf
+                      />
+                    ))}
                   </TreeNode>
                 </DirectoryTree>
               </Col>
@@ -248,20 +200,20 @@ class ChartsListSearch extends React.Component {
   }
 }
 
-ChartsListSearch.propTypes = {
-  querySearchCb: PropTypes.func
+DashboardsListSearch.propTypes = {
+  dashboardSearchCb: PropTypes.func.isRequired
 };
 
-ChartsListSearch.defaultProps = {
-  querySearchCb: (a, b) => {}
-};
+DashboardsListSearch.defaultProps = {};
 
 export default function init(ngModule) {
   ngModule.component(
-    'chartsListSearch',
-    react2angular(ChartsListSearch, Object.keys(ChartsListSearch.propTypes), [
-      'appSettings'
-    ])
+    'dashboardsListSearch',
+    react2angular(
+      DashboardsListSearch,
+      Object.keys(DashboardsListSearch.propTypes),
+      ['appSettings']
+    )
   );
 }
 
