@@ -54,6 +54,7 @@ const { TabPane } = Tabs;
 
 let ChartsPreviewDOM;
 let EditVisualizationDialogDOM;
+const emptyChartImg = '/static/images/emptyChart.png';
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
 class ChartsListTabs extends React.Component {
@@ -63,7 +64,8 @@ class ChartsListTabs extends React.Component {
     this.setState({
       isLoaded: true,
       queryResult: null,
-      visualization: null
+      visualization: null,
+      visType: null
     });
     ChartsPreviewDOM = angular2react(
       'chartsPreview',
@@ -112,7 +114,8 @@ class ChartsListTabs extends React.Component {
     this.setState({
       isLoaded: false,
       queryResult: null,
-      visualization: null
+      visualization: null,
+      visType: null
     });
 
     Query.query({ id: queryId })
@@ -123,16 +126,33 @@ class ChartsListTabs extends React.Component {
             this.setState({
               isLoaded: true,
               visualization: null,
-              queryResult: queryRes
+              queryResult: queryRes,
+              visType: null
             });
-
-            if (visualizationId) {
+            if (!visualizationId) {
+              const visOption = _.cloneDeep(
+                _.first(
+                  _.orderBy(
+                    query.visualizations,
+                    visualization => visualization.id
+                  )
+                )
+              );
+              if (_.has(visOption, 'options')) {
+                visOption.options.itemsPerPage = 20;
+              }
+              this.setState({
+                visualization: visOption,
+                visType: 'Q'
+              });
+            } else {
               this.setState({
                 visualization: _.find(
                   query.visualizations,
                   // eslint-disable-next-line eqeqeq
                   visualization => visualization.id == visualizationId
-                )
+                ),
+                visType: 'V'
               });
             }
           })
@@ -148,7 +168,8 @@ class ChartsListTabs extends React.Component {
         this.setState({
           isLoaded: true,
           visualization: null,
-          queryResult: 'empty'
+          queryResult: 'empty',
+          visType: null
         });
       });
   }
@@ -164,16 +185,43 @@ class ChartsListTabs extends React.Component {
   render() {
     return (
       <>
-        {!this.state.isLoaded && <LoadingState />}
+        {!this.state.isLoaded && (
+          <>
+            <Menu selectedKeys={[]} mode="horizontal">
+              <Menu.Item key="add-vis" disabled>
+                <Icon type="file-add" />
+                新建可视化组件
+              </Menu.Item>
+              <Menu.Item key="edit-query" disabled>
+                <Icon type="edit" />
+                编辑数据集
+              </Menu.Item>
+            </Menu>
+            <div className="align-center-div" style={{ paddingTop: '15%' }}>
+              <LoadingState />
+            </div>
+          </>
+        )}
         {this.state.isLoaded && this.state.queryResult == null && (
-          <Empty
-            description="请从左侧点击选择可视化组件"
-            style={{ paddingTop: '10%' }}
-          />
+          <>
+            <Menu selectedKeys={[]} mode="horizontal">
+              <Menu.Item key="add-vis" disabled>
+                <Icon type="file-add" />
+                新建可视化组件
+              </Menu.Item>
+              <Menu.Item key="edit-query" disabled>
+                <Icon type="edit" />
+                编辑数据集
+              </Menu.Item>
+            </Menu>
+            <div className="align-center-div" style={{ paddingTop: '15%' }}>
+              <img src={emptyChartImg} alt="" style={{ width: 100 }} />
+            </div>
+          </>
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
           <Empty
-            description="该可视化组件暂无数据"
+            description={(<span style={{color:'#fff'}}>该可视化组件暂无数据</span>)}
             style={{ paddingTop: '10%' }}
           >
             <Button
@@ -189,7 +237,8 @@ class ChartsListTabs extends React.Component {
           this.state.queryResult != null &&
           this.state.queryResult !== 'empty' && (
             <>
-              {this.state.visualization === null ? (
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {this.state.visType === 'Q' ? (
                 <>
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="add-vis">
@@ -213,13 +262,12 @@ class ChartsListTabs extends React.Component {
                       </a>
                     </Menu.Item>
                   </Menu>
-                  <Table
-                    columns={this.normalizedTableColumn(this.state.queryResult)}
-                    dataSource={this.state.queryResult.getData()}
-                    pagination={{ pageSize: 100 }}
+                  <ChartsPreviewDOM
+                    visualization={this.state.visualization}
+                    queryResult={this.state.queryResult}
                   />
                 </>
-              ) : (
+              ) : this.state.visType === 'V' ? (
                 <>
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="edit-vis">
@@ -242,7 +290,7 @@ class ChartsListTabs extends React.Component {
                     queryResult={this.state.queryResult}
                   />
                 </>
-              )}
+              ) : null}
             </>
           )}
       </>

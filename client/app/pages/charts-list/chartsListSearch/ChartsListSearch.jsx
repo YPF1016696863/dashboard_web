@@ -193,10 +193,7 @@ class ChartsListSearch extends React.Component {
                     selectable={false}
                   >
                     {_.map(this.state.filtered, item =>
-                      !(
-                        item.visualizations.length === 1 &&
-                        item.visualizations[0].name.includes('Table')
-                      ) || item.visualizations.length < 1 ? (
+                      item.visualizations.length > 0 ? (
                         <TreeNode
                           icon={
                             <Icon

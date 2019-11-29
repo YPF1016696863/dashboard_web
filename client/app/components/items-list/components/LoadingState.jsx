@@ -6,7 +6,7 @@ import { BigMessage } from '@/components/BigMessage';
 export default function LoadingState(props) {
   return (
     <div style={{textAlign:"center",overflow: 'hidden'}}>
-      <img className="loading-img" src="/static/images/loading.gif" alt="Loading..." />
+      <img className="loading-img" src="/static/images/loading.gif" alt="Loading..." style={{width:64,height:64}} />
     </div>
   );
 }

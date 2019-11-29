@@ -44,7 +44,7 @@ class QueriesListPageHeader extends React.Component {
         : null,
       disabled: !policy.isCreateDataSourceEnabled()
     };
-console.log(this.props.queryId);
+
     return (
       <>
         <Breadcrumb className="content-layout-Breadcrumb">
