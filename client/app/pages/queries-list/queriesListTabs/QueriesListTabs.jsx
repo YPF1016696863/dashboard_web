@@ -15,6 +15,7 @@ import {
   Alert,
   Empty,
   BackTop,
+  Input,
   Tabs
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -68,8 +69,8 @@ class QueriesListTabs extends React.Component {
     }
 
     if (
-        !_.isEqual(this.props.queryId, prevProps.queryId) &&
-        this.props.queryId == null
+      !_.isEqual(this.props.queryId, prevProps.queryId) &&
+      this.props.queryId == null
     ) {
       // eslint-disable-next-line
       this.setState({
@@ -150,7 +151,38 @@ class QueriesListTabs extends React.Component {
                 />
               </TabPane>
               <TabPane tab="数据集设置" key="2">
-                正在开发
+                <p style={{fontSize:'16px'}}>设置数据集列名称别名:</p>
+                <Table
+                  bordered
+                  pagination={{ pageSize: 10 }}
+                  columns={[
+                    {
+                      title: '名称',
+                      dataIndex: 'name',
+                      key: 'name',
+                    },
+                    {
+                      title: '别名',
+                      dataIndex: 'friendly_name',
+                      key: 'friendly_name',
+                      render: text => <Input placeholder="别名" value={text} allowClear />
+                    }
+                  ]}
+                  dataSource={[
+                    {
+                      key: '1',
+                      name: 'Column1',
+                      friendly_name: 'Column friendly_name 1'
+                    },
+                    {
+                      key: '2',
+                      name: 'Column1',
+                      friendly_name: 'Column friendly_name 2'
+                    }
+                  ]}
+                />
+                <p style={{fontSize:'16px'}}>其他操作:</p>
+                <Button type="danger"><Icon type="delete" />删除数据集</Button>
               </TabPane>
             </Tabs>
           )}

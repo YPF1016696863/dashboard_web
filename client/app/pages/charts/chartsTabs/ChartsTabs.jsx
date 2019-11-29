@@ -47,6 +47,7 @@ import { policy } from '@/services/policy';
 
 import { ChartsPreview } from '@/components/charts-preview/charts-preview';
 import { EditVisualizationDialog } from '@/components/edit-visualization-dialog/edit-visualization-dialog';
+import { IMG_ROOT } from '@/services/data-source';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
@@ -55,8 +56,10 @@ const { TabPane } = Tabs;
 let ChartsPreviewDOM;
 let EditVisualizationDialogDOM;
 
+const emptyChart = '/static/images/emptyChart.png';
+
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
-class ChartsListTabs extends React.Component {
+class ChartsTabs extends React.Component {
   state = {};
 
   componentDidMount() {
@@ -166,10 +169,7 @@ class ChartsListTabs extends React.Component {
       <>
         {!this.state.isLoaded && <LoadingState />}
         {this.state.isLoaded && this.state.queryResult == null && (
-          <Empty
-            description="请从左侧点击选择可视化组件"
-            style={{ paddingTop: '10%' }}
-          />
+          <img className="p-5" src={emptyChart} alt="empty" width="100" />
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
           <Empty
@@ -194,7 +194,7 @@ class ChartsListTabs extends React.Component {
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="add-vis">
                       <a
-                        href={'/charts/' + this.getChartId()}
+                        href={'/queries/' + this.getQueryId() + '/source'}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -223,14 +223,8 @@ class ChartsListTabs extends React.Component {
                 <>
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="edit-vis">
-                      <a
-                        href={'/charts/' + this.getChartId()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Icon type="edit" />
-                        编辑可视化组件
-                      </a>
+                      <Icon type="edit" />
+                      编辑可视化组件
                     </Menu.Item>
                     <Menu.Item key="delete-vis">
                       <Icon type="delete" />
@@ -250,20 +244,20 @@ class ChartsListTabs extends React.Component {
   }
 }
 
-ChartsListTabs.propTypes = {
+ChartsTabs.propTypes = {
   displayId: PropTypes.string
   // displayType: PropTypes.string
 };
 
-ChartsListTabs.defaultProps = {
+ChartsTabs.defaultProps = {
   displayId: null
   // displayType: null
 };
 
 export default function init(ngModule) {
   ngModule.component(
-    'chartsListTabs',
-    react2angular(ChartsListTabs, Object.keys(ChartsListTabs.propTypes), [
+    'chartsTabs',
+    react2angular(ChartsTabs, Object.keys(ChartsTabs.propTypes), [
       '$scope',
       'appSettings'
     ])

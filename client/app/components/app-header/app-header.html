@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default app-header" role="navigation">
-  <div class="container">
+  <div class="container" style="padding-left: 0px !important;">
     <div class="navbar-header">
       <button
         type="button"
@@ -16,124 +16,28 @@
     </div>
     <div class="collapse navbar-collapse" uib-collapse="!isNavOpen">
       <!-- Main Left Nav-->
+      <span style="position: absolute; width: 70px;height: 49px;top:0 !important;text-align:center">
+        <img ng-src="{{ $ctrl.logoUrl }}" style="width: 40px;height: 40px; margin-top: 5px"/>
+      </span>
 
-      <img ng-src="{{ $ctrl.logoUrl }}" style="width: 40px;height: 40px;"/>
-      <span class="brand-title">DataVis数据可视化与BI工具</span>
-      <ul class="nav navbar-nav nav__main">
-        <li ng-show="false">
-          <a href="data_sources" style="color: #fff">数据源</a>
-        </li>
-        <li
-                class="dropdown btn-group"
-                ng-show="false"
-                uib-dropdown
-        >
-          <a class="btn" href="queries" style="color: #fff">{{ 'HEADER.QUERIES' | translate }}</a>
-          <a type="button" class="btn hidden-xs" uib-dropdown-toggle >
-            <i class="fa fa-caret-down " style="color: #fff; margin-left: 5px"></i>
-          </a>
-          <ul class="dropdown-menu" uib-dropdown-menu>
-            <li ng-if="$ctrl.queries.length == 0">
-              <a>
-                <em>
-                  <span class="btn-favourite">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                  </span>
-                  {{ 'HEADER.FAVORITE_QUERY' | translate }}
-                </em>
-              </a>
-            </li>
-            <li ng-repeat="query in $ctrl.queries">
-              <a href="queries/{{ query.id }}">
-                {{ query.name }}
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li
-          class="dropdown btn-group"
-          ng-show="false"
-          uib-dropdown
-        >
-          <a class="btn" href="dashboards" style="color: #fff">{{
-            'HEADER.DASHBOARDS' | translate
-          }}</a>
-          <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
-            <i class="fa fa-caret-down " style="color: #fff"></i>
-          </a>
-          <ul class="dropdown-menu" uib-dropdown-menu>
-            <li ng-if="$ctrl.dashboards.length == 0">
-              <a>
-                <em>
-                  <span class="btn-favourite">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                  </span>
-                  {{ 'HEADER.FAVORITE_DASHBOARD' | translate }}
-                </em>
-              </a>
-            </li>
-            <li ng-repeat="dashboard in $ctrl.dashboards">
-              <a href="dashboard/{{ dashboard.slug }}">
-                {{ dashboard.name }}
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-      <!-- Add New Button -->
-      <div
-              ng-show="false"
-        class="btn-group navbar-btn navbar-left btn__new hidden-xs"
-        uib-dropdown
-        is-open="status.isopen"
-      >
-        <button
-          id="create-button"
-          data-test="CreateButton"
-          type="button"
-          class="btn btn-primary btn--create"
-          uib-dropdown-toggle
-          ng-disabled="disabled"
-        >
-          {{ 'HEADER.CREATE' | translate }}
-          <span class="caret caret--nav"></span>
-        </button>
-        <ul
-          class="dropdown-menu"
-          uib-dropdown-menu
-          role="menu"
-          aria-labelledby="create-button"
-        >
-          <li role="menuitem" ng-show="$ctrl.showSourcesMenu">
-            <a href="data_sources">数据源</a>
-          </li>
-          <li role="menuitem" ng-show="$ctrl.showNewQueryMenu">
-            <a href="queries/new">{{ 'HEADER.QUERIES' | translate }}</a>
-          </li>
-          <li role="menuitem">
-            <a
-              ng-show="$ctrl.currentUser.hasPermission('create_dashboard')"
-              ng-click="$ctrl.newDashboard()"
-            >
-              {{ 'HEADER.DASHBOARDS' | translate }}
-            </a>
-          </li>
-        </ul>
-      </div>
+      <span class="brand-title" style="padding-left: 75px">DataVis数据可视化与BI工具</span>
 
       <!-- Profile -->
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <help-trigger
-            type="'HOME'"
-            class-name="'navbar-link-ANGULAR_REMOVE_ME'"
-          ></help-trigger>
-        </li>
-        <li ng-show="$ctrl.currentUser.isAdmin">
-          <a href="data_sources" title="{{ 'HEADER.SETTINGS' | translate }}" style="color: #fff"
-            ><i class="fa fa-sliders" aria-hidden="true"></i
-          ></a>
+        <li uib-dropdown>
+          <a
+                  href="#"
+                  class="dropdown-toggle dropdown--profile"
+                  uib-dropdown-toggle
+                  data-test="ProfileDropdown"
+          >
+            <i class="fa fa-bell " style="color: #fff"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu--profile">
+            <li>
+              <a>查看消息</a>
+            </li>
+          </ul>
         </li>
         <!--<li ng-show="$ctrl.showSettingsMenu">-->
         <!--<a href="users" title="Settings"><i class="fa fa-cog"></i></a>-->
@@ -145,10 +49,7 @@
             uib-dropdown-toggle
             data-test="ProfileDropdown"
           >
-            <img
-              ng-src="{{ $ctrl.currentUser.profile_image_url }}"
-              class="profile__image--navbar"
-              width="20"/>
+
             <span
                     style="color: #fff"
               class="dropdown--profile__username"
@@ -165,11 +66,6 @@
               ng-if="$ctrl.currentUser.hasPermission('super_admin')"
             ></li>
 
-            <li ng-show="$ctrl.currentUser.isAdmin">
-              <a href="data_sources" title="数据源">{{
-                'HEADER.DATA_SOURCE' | translate
-              }}</a>
-            </li>
             <li ng-show="$ctrl.showSettingsMenu">
               <a href="groups" title="Settings">{{
                 'HEADER.GROUPS' | translate
@@ -218,28 +114,6 @@
           </ul>
         </li>
       </ul>
-
-      <!-- Search -->
-      <form
-        class="navbar-form navbar-right"
-        role="search"
-        ng-submit="$ctrl.searchQueries()"
-      >
-        <div class="input-group menu-search">
-          <input
-            type="text"
-            ng-model="$ctrl.searchTerm"
-            class="form-control navbar__search__input"
-            placeholder="{{ 'HEADER.SEARCH_PLACEHOLDER' | translate }}"
-            data-test="AppHeaderSearch"
-          />
-          <span class="input-group-btn">
-            <button type="submit" class="btn btn-default" style="color: #fff">
-              <span class="zmdi zmdi-search"></span>
-            </button>
-          </span>
-        </div>
-      </form>
     </div>
   </div>
 </nav>

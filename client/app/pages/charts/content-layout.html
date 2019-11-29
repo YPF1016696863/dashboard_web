@@ -1,5 +1,5 @@
 <div class="layout-content-wrapper">
-  <charts-list-page-header></charts-list-page-header>
+  <charts-page-header></charts-page-header>
   <main class="query-fullscreen">
     <nav
       resizable
@@ -14,13 +14,12 @@
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
           <div class="scrollbox">
-            <charts-list-search query-search-cb="querySearchCb"></charts-list-search>
+            <charts-search query-search-cb="querySearchCb"></charts-search>
           </div>
         </div>
       </div>
     </nav>
-
-    <div class="content">
+    <div class="content" >
       <div class="flex-fill p-relative">
         <div
           class="p-absolute d-flex flex-column p-l-10 p-r-10"
@@ -38,16 +37,16 @@
               <!-- End of Query Execution Status -->
 
               <!-- tabs and data -->
-              <div class="flex-fill p-relative">
+              <div class="flex-fill p-relative" style="background-color: #25374c!important">
                 <div
                   class="d-flex flex-column p-absolute static-position__mobile"
-                  style="left: 0; top: 0; right: 0; bottom: 0;"
+                  style="left: 0; top: 0; right: 0; bottom: 0;display: flex; align-items: center; justify-content: center"
                 >
                   <div class="query__vis p-b-15 scrollbox">
-                    <charts-list-tabs
+                    <charts-tabs
                       display-id="displayId"
                       display-type="displayType"
-                    ></charts-list-tabs>
+                    ></charts-tabs>
                   </div>
                 </div>
               </div>

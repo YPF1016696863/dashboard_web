@@ -40,14 +40,12 @@ import { Query } from '@/services/query';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
-import './charts-search.css';
-
 import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
-class ChartsListSearch extends React.Component {
+class ChartsSearch extends React.Component {
   state = {
     all: null,
     filtered: null,
@@ -126,7 +124,7 @@ class ChartsListSearch extends React.Component {
                 <Row>
                   <Col span={12}>
                     <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
-                      可视化组件列表:
+                      图表类型
                     </div>
                   </Col>
                 </Row>
@@ -177,63 +175,7 @@ class ChartsListSearch extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col style={{ paddingRight: '10px' }}>
-                <DirectoryTree
-                  defaultExpandedKeys={['datavis-group#ungrouped']}
-                  onSelect={(value, node, extra) => {
-                    this.props.querySearchCb(
-                      node.node.isLeaf() ? 'V' : 'Q',
-                      value[0]
-                    );
-                  }}
-                >
-                  <TreeNode
-                    title="可视化组件(无分组)"
-                    key="datavis-group#ungrouped"
-                    selectable={false}
-                  >
-                    {_.map(this.state.filtered, item =>
-                      !(
-                        item.visualizations.length === 1 &&
-                        item.visualizations[0].name.includes('Table')
-                      ) || item.visualizations.length < 1 ? (
-                        <TreeNode
-                          icon={
-                            <Icon
-                              type="file-search"
-                              style={{ color: '#FAAA39' }}
-                            />
-                          }
-                          title={item.name}
-                          key={item.id}
-                          isLeaf={false}
-                        >
-                          {_.map(item.visualizations, visualization =>
-                            visualization.name.includes('Table') ? null : (
-                              <TreeNode
-                                icon={
-                                  <Icon
-                                    type="pie-chart"
-                                    style={{ color: '#428bca' }}
-                                  />
-                                }
-                                title={
-                                  visualization.name +
-                                  ', id: [' +
-                                  visualization.id +
-                                  ']'
-                                }
-                                key={item.id + ':' + visualization.id}
-                                isLeaf
-                              />
-                            )
-                          )}
-                        </TreeNode>
-                      ) : null
-                    )}
-                  </TreeNode>
-                </DirectoryTree>
-              </Col>
+              <Col style={{ paddingRight: '10px' }} />
             </Row>
           </>
         )}
@@ -242,18 +184,18 @@ class ChartsListSearch extends React.Component {
   }
 }
 
-ChartsListSearch.propTypes = {
+ChartsSearch.propTypes = {
   querySearchCb: PropTypes.func
 };
 
-ChartsListSearch.defaultProps = {
+ChartsSearch.defaultProps = {
   querySearchCb: (a, b) => {}
 };
 
 export default function init(ngModule) {
   ngModule.component(
-    'chartsListSearch',
-    react2angular(ChartsListSearch, Object.keys(ChartsListSearch.propTypes), [
+    'chartsSearch',
+    react2angular(ChartsSearch, Object.keys(ChartsSearch.propTypes), [
       'appSettings'
     ])
   );

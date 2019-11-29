@@ -19,7 +19,7 @@ import helper from '@/components/dynamic-form/dynamicFormHelper';
 
 import CreateSourceDialog from '@/components/CreateSourceDialog';
 
-/* eslint class-methods-use-this: ["error", { "exceptMethods": ["createDataSource"] }] */
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["createDataSource","render"] }] */
 class DataSourcePageHeader extends React.Component {
   /*
   constructor(props) {
@@ -90,20 +90,6 @@ class DataSourcePageHeader extends React.Component {
             </>
           }
           extra={[
-            <Button
-              ghost
-              type="primary"
-              size="small"
-              onClick={
-                policy.isCreateDataSourceEnabled()
-                  ? this.showCreateSourceDialog
-                  : null
-              }
-              disabled={!policy.isCreateDataSourceEnabled()}
-            >
-              <i className="fa fa-plus m-r-5" />
-              新建数据源
-            </Button>
           ]}
         >
           <Descriptions size="small" column={3}>

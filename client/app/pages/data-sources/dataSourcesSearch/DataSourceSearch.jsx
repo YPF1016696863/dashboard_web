@@ -30,15 +30,19 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import { policy } from '@/services/policy';
 import { $route } from '@/services/ng';
 import navigateTo from '@/services/navigateTo';
+import CreateSourceDialog from "@/components/CreateSourceDialog";
+import helper from "@/components/dynamic-form/dynamicFormHelper";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["createDataSource"] }] */
 class DataSourceSearch extends React.Component {
   state = {
     all: null,
     filtered: null,
-    loading: true
+    loading: true,
+    dataSourceTypes: null
   };
 
   componentDidMount() {
@@ -49,9 +53,42 @@ class DataSourceSearch extends React.Component {
       this.setState({
         all: values[0],
         filtered: values[0],
-        loading: false
+        loading: false,
+        dataSourceTypes: values[1]
       });
     });
+  }
+
+  showCreateSourceDialog = () => {
+    CreateSourceDialog.showModal({
+      $translate: this.props.$translate.instant,
+      types: this.state.dataSourceTypes,
+      sourceType: 'Data Source',
+      imageFolder: IMG_ROOT,
+      helpTriggerPrefix: 'DS_',
+      onCreate: this.createDataSource
+    }).result.then((result = {}) => {
+      if (result.success) {
+        this.props.$window.location.reload();
+      }
+    });
+  };
+
+
+  createDataSource(selectedType, values) {
+    const target = { options: {}, type: selectedType.type };
+    helper.updateTargetWithValues(target, values);
+
+    return DataSource.save(target)
+        .$promise.then(dataSource => {
+          return dataSource;
+        })
+        .catch(error => {
+          if (!(error instanceof Error)) {
+            error = new Error(_.get(error, 'data.message', '保存失败.'));
+          }
+          return Promise.reject(error);
+        });
   }
 
   reload() {
@@ -101,9 +138,29 @@ class DataSourceSearch extends React.Component {
           <>
             <Row>
               <Col>
-                <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
-                  数据源列表:
-                </div>
+                <Row>
+                  <Col span={12}>
+                    <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
+                      数据源列表:
+                    </div>
+                  </Col>
+                  <Col span={11} align="right">
+                    <Button
+                      ghost
+                      type="primary"
+                      size="small"
+                      onClick={
+                        policy.isCreateDataSourceEnabled()
+                          ? this.showCreateSourceDialog
+                          : null
+                      }
+                      disabled={!policy.isCreateDataSourceEnabled()}
+                    >
+                      <i className="fa fa-plus m-r-5" />
+                      新建数据源
+                    </Button>
+                  </Col>
+                </Row>
                 <Row>
                   <Col span={18}>
                     <Search
@@ -193,7 +250,7 @@ export default function init(ngModule) {
   ngModule.component(
     'sourceListSearch',
     react2angular(DataSourceSearch, Object.keys(DataSourceSearch.propTypes), [
-      'appSettings'
+      'appSettings', '$translate'
     ])
   );
 }
