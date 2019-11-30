@@ -243,7 +243,7 @@ class ChartsListTabs extends React.Component {
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="add-vis">
                       <a
-                        href={'/charts/' + this.getChartId()}
+                        href={'query/' + this.getQueryId() + '/charts/new'}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -272,7 +272,7 @@ class ChartsListTabs extends React.Component {
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="edit-vis">
                       <a
-                        href={'/charts/' + this.getChartId()}
+                        href={'query/' + this.getQueryId() + '/charts/' + this.getChartId()}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -281,8 +281,8 @@ class ChartsListTabs extends React.Component {
                       </a>
                     </Menu.Item>
                     <Menu.Item key="delete-vis">
-                      <Icon type="delete" />
-                      删除
+                      <Icon type="delete" style={{ color: 'red' }} />
+                      <span style={{color:"red"}}>删除</span>
                     </Menu.Item>
                   </Menu>
                   <ChartsPreviewDOM

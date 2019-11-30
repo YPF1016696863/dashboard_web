@@ -60,7 +60,7 @@ export const EditVisualizationDialog = {
       Visualization.save(
         this.visualization,
         (result) => {
-          notification.success('Visualization saved');
+          notification.success('保存成功');
 
           const visIds = map(this.query.visualizations, i => i.id);
           const index = visIds.indexOf(result.id);
@@ -73,23 +73,11 @@ export const EditVisualizationDialog = {
               this.onNewSuccess(result);
             }
           }
-          this.close();
-          document.location.reload(true);
         },
         () => {
-          notification.error('Visualization could not be saved');
+          notification.error('无法保存');
         },
       );
-    };
-
-    this.closeDialog = () => {
-      if (this.visForm.$dirty) {
-        if ($window.confirm('Are you sure you want to close the editor without saving?')) {
-          this.close();
-        }
-      } else {
-        this.close();
-      }
     };
   },
 };

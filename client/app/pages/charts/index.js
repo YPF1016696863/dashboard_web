@@ -40,25 +40,24 @@ function ChartsViewCtrl(
   appSettings
 ) {
   $scope.currentUser = currentUser;
-  $scope.displayType = null;
-  $scope.displayId = null;
+  $scope.chartId = $route.current.params.chartId;
+  $scope.queryId = $route.current.params.queryId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
-  $scope.querySearchCb = (type, id) => {
-    $scope.displayType = type;
-    $scope.displayId = id;
+  /*
+  $scope.chartSearchCb = (id) => {
     $scope.$apply();
   };
+  */
 
   // currentUser.hasPermission('admin');
-
 }
 
 export default function init(ngModule) {
   ngModule.controller('ChartsViewCtrl', ChartsViewCtrl);
 
   return {
-    '/charts/:chartId': {
+    '/query/:queryId/charts/:chartId': {
       template,
       layout: 'fixed',
       controller: 'ChartsViewCtrl',

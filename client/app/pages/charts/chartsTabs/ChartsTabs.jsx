@@ -66,46 +66,17 @@ class ChartsTabs extends React.Component {
     this.setState({
       isLoaded: true,
       queryResult: null,
-      visualization: null
+      visualization: null,
+      query: null
     });
-    ChartsPreviewDOM = angular2react(
-      'chartsPreview',
-      ChartsPreview,
-      window.$injector
-    );
 
     EditVisualizationDialogDOM = angular2react(
       'editVisualizationDialog',
       EditVisualizationDialog,
       window.$injector
     );
-  }
 
-  componentDidUpdate(prevProps) {
-    if (
-      !_.isEqual(this.props.displayId, prevProps.displayId) &&
-      this.props.displayId
-    ) {
-      this.getQuery(this.props.displayId);
-    }
-
-    if (
-      !_.isEqual(this.props.displayId, prevProps.displayId) &&
-      this.props.displayId == null
-    ) {
-      // eslint-disable-next-line
-      this.setState({
-        queryResult: null
-      });
-    }
-  }
-
-  getQueryId() {
-    return _.split(this.props.displayId, ':')[0];
-  }
-
-  getChartId() {
-    return _.split(this.props.displayId, ':')[1];
+    this.getQuery(this.props.queryId + ':' + this.props.chartId);
   }
 
   getQuery(id) {
@@ -115,27 +86,37 @@ class ChartsTabs extends React.Component {
     this.setState({
       isLoaded: false,
       queryResult: null,
-      visualization: null
+      visualization: null,
+      query: null
     });
 
     Query.query({ id: queryId })
       .$promise.then(query => {
+        this.setState({
+          query
+        });
         query
           .getQueryResultPromise()
           .then(queryRes => {
             this.setState({
-              isLoaded: true,
               visualization: null,
               queryResult: queryRes
             });
 
             if (visualizationId) {
               this.setState({
+                isLoaded: true,
                 visualization: _.find(
                   query.visualizations,
                   // eslint-disable-next-line eqeqeq
                   visualization => visualization.id == visualizationId
                 )
+              });
+            }else{
+              this.setState({
+                isLoaded: true,
+                visualization: null,
+                queryResult: 'empty'
               });
             }
           })
@@ -167,20 +148,17 @@ class ChartsTabs extends React.Component {
   render() {
     return (
       <>
-        {!this.state.isLoaded && <LoadingState />}
+        {!this.state.isLoaded && (<div style={{paddingTop:'20vh'}}><LoadingState /></div>)}
         {this.state.isLoaded && this.state.queryResult == null && (
           <img className="p-5" src={emptyChart} alt="empty" width="100" />
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
           <Empty
-            description="该可视化组件暂无数据"
-            style={{ paddingTop: '10%' }}
+            description={
+              <span style={{ color: '#fff' }}>该可视化组件暂无数据</span>
+            }
           >
-            <Button
-              type="primary"
-              href={'/queries/' + this.getQueryId() + '/source'}
-              target="_blank"
-            >
+            <Button type="primary" href="" target="_blank">
               设置数据
             </Button>
           </Empty>
@@ -188,56 +166,13 @@ class ChartsTabs extends React.Component {
         {this.state.isLoaded &&
           this.state.queryResult != null &&
           this.state.queryResult !== 'empty' && (
-            <>
-              {this.state.visualization === null ? (
-                <>
-                  <Menu selectedKeys={[]} mode="horizontal">
-                    <Menu.Item key="add-vis">
-                      <a
-                        href={'/queries/' + this.getQueryId() + '/source'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Icon type="file-add" />
-                        新建可视化组件
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="edit-query">
-                      <a
-                        href={'/queries/' + this.getQueryId() + '/source'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Icon type="edit" />
-                        编辑数据集
-                      </a>
-                    </Menu.Item>
-                  </Menu>
-                  <Table
-                    columns={this.normalizedTableColumn(this.state.queryResult)}
-                    dataSource={this.state.queryResult.getData()}
-                    pagination={{ pageSize: 100 }}
-                  />
-                </>
-              ) : (
-                <>
-                  <Menu selectedKeys={[]} mode="horizontal">
-                    <Menu.Item key="edit-vis">
-                      <Icon type="edit" />
-                      编辑可视化组件
-                    </Menu.Item>
-                    <Menu.Item key="delete-vis">
-                      <Icon type="delete" />
-                      删除
-                    </Menu.Item>
-                  </Menu>
-                  <ChartsPreviewDOM
-                    visualization={this.state.visualization}
-                    queryResult={this.state.queryResult}
-                  />
-                </>
-              )}
-            </>
+            <EditVisualizationDialogDOM
+              resolve={{
+                query: this.state.query,
+                queryResult: this.state.queryResult,
+                visualization: this.state.visualization
+              }}
+            />
           )}
       </>
     );
@@ -245,13 +180,13 @@ class ChartsTabs extends React.Component {
 }
 
 ChartsTabs.propTypes = {
-  displayId: PropTypes.string
-  // displayType: PropTypes.string
+  queryId: PropTypes.string,
+  chartId: PropTypes.string
 };
 
 ChartsTabs.defaultProps = {
-  displayId: null
-  // displayType: null
+  queryId: null,
+  chartId: null
 };
 
 export default function init(ngModule) {

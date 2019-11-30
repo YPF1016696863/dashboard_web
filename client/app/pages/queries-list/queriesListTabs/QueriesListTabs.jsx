@@ -151,7 +151,7 @@ class QueriesListTabs extends React.Component {
                 />
               </TabPane>
               <TabPane tab="数据集设置" key="2">
-                <p style={{fontSize:'16px'}}>设置数据集列名称别名:</p>
+                <p style={{fontSize:'14px'}}>设置数据集列名称别名:</p>
                 <Table
                   bordered
                   pagination={{ pageSize: 10 }}
@@ -181,7 +181,7 @@ class QueriesListTabs extends React.Component {
                     }
                   ]}
                 />
-                <p style={{fontSize:'16px'}}>其他操作:</p>
+                <p style={{fontSize:'14px'}}>其他操作:</p>
                 <Button type="danger"><Icon type="delete" />删除数据集</Button>
               </TabPane>
             </Tabs>

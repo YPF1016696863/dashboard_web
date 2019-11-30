@@ -58,7 +58,6 @@ import DynamicForm from '@/components/dynamic-form/DynamicForm';
 import notification from '@/services/notification';
 import navigateTo from '@/services/navigateTo';
 
-
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -203,18 +202,10 @@ class DataSourceTabs extends React.Component {
               />
             </Row>
             <Row>
-              <Col span={12}>
-                <Button type="danger" onClick={this.deleteDataSource} block>
-                  <Icon type="delete" />
-                  删除
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button type="primary" onClick={this.testConnection} block>
-                  <Icon type="link" />
-                  连接测试
-                </Button>
-              </Col>
+              <Button type="primary" onClick={this.testConnection}>
+                <Icon type="link" />
+                连接测试
+              </Button>
             </Row>
           </Col>
         </Row>
@@ -240,8 +231,17 @@ class DataSourceTabs extends React.Component {
         )}
         {this.state.isLoaded &&
           this.state.dataSource != null &&
-          this.state.dataSource !== 'empty' &&
-          this.renderForm()}
+          this.state.dataSource !== 'empty' && (
+            <>
+              {this.renderForm()}
+              <div className="col-md-8 col-md-offset-2 m-t-10 m-b-10">
+                <Button type="danger" onClick={this.deleteDataSource} block>
+                  <Icon type="delete" />
+                  删除
+                </Button>
+              </div>
+            </>
+          )}
       </>
     );
   }
