@@ -75,7 +75,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
           // 遍历x轴选中列 对应的所有值
           const selectFan = _.get($scope.options, "useFan", []);
           // 保存选中的扇瓣
-          console.log(selectFan);
           _.forEach(pieData, function (value, key) {
             // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
             const onesValue = value;

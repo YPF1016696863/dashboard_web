@@ -6,7 +6,8 @@ import {
   map,
   intersection,
   isArray,
-  isObject
+  isObject,
+  debounce
 } from 'lodash';
 import {
   SCHEMA_NOT_SUPPORTED,
@@ -43,12 +44,11 @@ function ChartsViewCtrl(
   $scope.chartId = $route.current.params.chartId;
   $scope.queryId = $route.current.params.queryId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
-
-  /*
-  $scope.chartSearchCb = (id) => {
-    $scope.$apply();
+  $scope.chartType = null;
+  $scope.chartSearchCb = (type,shouldUpdate) => {
+    $scope.chartType = type;
+    if(shouldUpdate)$scope.$apply();
   };
-  */
 
   // currentUser.hasPermission('admin');
 }

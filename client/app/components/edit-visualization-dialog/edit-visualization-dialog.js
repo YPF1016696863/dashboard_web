@@ -1,4 +1,4 @@
-import { map } from 'lodash';
+import { map, find } from 'lodash';
 import { copy } from 'angular';
 import notification from '@/services/notification';
 import template from './edit-visualization-dialog.html';
@@ -8,10 +8,11 @@ export const EditVisualizationDialog = {
   template,
   bindings: {
     resolve: '<',
+    chartType:'<',
     close: '&',
     dismiss: '&',
   },
-  controller($window, currentUser, Events, Visualization) {
+  controller($scope, $window, currentUser, Events, Visualization) {
     'ngInject';
 
     this.query = this.resolve.query;
@@ -20,6 +21,17 @@ export const EditVisualizationDialog = {
     this.onNewSuccess = this.resolve.onNewSuccess;
     this.visualization = copy(this.originalVisualization);
     this.visTypes = Visualization.visualizationTypes;
+
+    const vm = this;
+    $scope.$watch(()=>{
+      return this.chartType;
+    },()=>{
+      const isExist = find(this.visTypes,(visType)=>visType.type === this.chartType);
+      if(isExist) {
+        vm.visualization.type = this.chartType;
+        this.typeChanged(this.chartType);
+      }
+    });
 
     // Don't allow to change type after creating visualization
     this.canChangeType = !(this.visualization && this.visualization.id);

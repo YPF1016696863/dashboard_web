@@ -65,6 +65,7 @@ class ChartsTabs extends React.Component {
   componentDidMount() {
     this.setState({
       isLoaded: true,
+      chartType: 'new',
       queryResult: null,
       visualization: null,
       query: null
@@ -79,12 +80,21 @@ class ChartsTabs extends React.Component {
     this.getQuery(this.props.queryId + ':' + this.props.chartId);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.chartType !== this.props.chartType) {
+      this.setState({
+        chartType: nextProps.chartType
+      });
+    }
+  }
+
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
 
     this.setState({
       isLoaded: false,
+      chartType: 'new',
       queryResult: null,
       visualization: null,
       query: null
@@ -103,7 +113,7 @@ class ChartsTabs extends React.Component {
               queryResult: queryRes
             });
 
-            if (visualizationId) {
+            if (visualizationId !== 'new') {
               this.setState({
                 isLoaded: true,
                 visualization: _.find(
@@ -112,61 +122,55 @@ class ChartsTabs extends React.Component {
                   visualization => visualization.id == visualizationId
                 )
               });
-            }else{
+              this.setState({
+                chartType: this.state.visualization.type
+              });
+            } else {
               this.setState({
                 isLoaded: true,
-                visualization: null,
-                queryResult: 'empty'
+                chartType: 'new',
+                visualization: null
               });
             }
           })
           .catch(err => {
             this.setState({
               isLoaded: true,
+              chartType: 'new',
               visualization: null,
-              queryResult: 'empty'
+              queryResult: null
             });
           });
       })
       .catch(err => {
         this.setState({
           isLoaded: true,
+          chartType: 'new',
           visualization: null,
-          queryResult: 'empty'
+          queryResult: null
         });
       });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  normalizedTableColumn(queryRes) {
-    return _.map(queryRes.getColumns(), column => ({
-      title: column.friendly_name,
-      dataIndex: column.name
-    }));
   }
 
   render() {
     return (
       <>
-        {!this.state.isLoaded && (<div style={{paddingTop:'20vh'}}><LoadingState /></div>)}
-        {this.state.isLoaded && this.state.queryResult == null && (
-          <img className="p-5" src={emptyChart} alt="empty" width="100" />
+        {!this.state.isLoaded && (
+          <div style={{ paddingTop: '20vh' }}>
+            <LoadingState />
+          </div>
         )}
-        {this.state.isLoaded && this.state.queryResult === 'empty' && (
-          <Empty
-            description={
-              <span style={{ color: '#fff' }}>该可视化组件暂无数据</span>
-            }
-          >
-            <Button type="primary" href="" target="_blank">
-              设置数据
-            </Button>
-          </Empty>
+        {this.state.isLoaded && this.state.chartType === 'new' && (
+          <div style={{ textAlign: 'center', paddingTop: '20vh' }}>
+            <img className="p-5" src={emptyChart} alt="empty" width="100" />
+            <p style={{ color: '#fff' }}>新建可视化组件,请在左侧选择图表类型</p>
+          </div>
         )}
         {this.state.isLoaded &&
           this.state.queryResult != null &&
-          this.state.queryResult !== 'empty' && (
+          this.state.chartType !== 'new' && (
             <EditVisualizationDialogDOM
+              chartType={this.state.chartType}
               resolve={{
                 query: this.state.query,
                 queryResult: this.state.queryResult,
@@ -181,12 +185,14 @@ class ChartsTabs extends React.Component {
 
 ChartsTabs.propTypes = {
   queryId: PropTypes.string,
-  chartId: PropTypes.string
+  chartId: PropTypes.string,
+  chartType: PropTypes.string
 };
 
 ChartsTabs.defaultProps = {
   queryId: null,
-  chartId: null
+  chartId: null,
+  chartType: null
 };
 
 export default function init(ngModule) {

@@ -106,11 +106,11 @@ function ChartEditor(ColorPalette, clientConfig) {
       }
 
       scope.xAxisScales = [
-        { label: 'Auto Detect', value: '-' },
-        { label: 'Datetime', value: 'datetime' },
-        { label: 'Linear', value: 'linear' },
-        { label: 'Logarithmic', value: 'logarithmic' },
-        { label: 'Category', value: 'category' },
+        { label: '自动监测', value: '-' },
+        { label: '时间', value: 'datetime' },
+        { label: '线性', value: 'linear' },
+        { label: '对数', value: 'logarithmic' },
+        { label: '类别', value: 'category' },
       ];
       scope.yAxisScales = ['linear', 'logarithmic', 'datetime', 'category'];
 
@@ -364,7 +364,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'CHART',
-      name: 'Plotly图表',
+      name: 'DataVis图表',
       renderTemplate,
       editorTemplate: editTemplate,
       defaultOptions: DEFAULT_OPTIONS,

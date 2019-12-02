@@ -11,6 +11,7 @@ import ngSanitize from 'angular-sanitize';
 import ngRoute from 'angular-route';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
+import ngMaterial from 'angular-material';
 // import mocke2e from 'angular-mocks/ngMockE2E';
 import 'angular-translate';
 import 'angular-translate-loader-static-files';
@@ -26,7 +27,6 @@ import 'brace';
 import 'angular-ui-ace';
 import 'angular-resizable';
 import { each, isFunction, extend } from 'lodash';
-import 'angular-echarts/dist/angular-echarts';
 
 import '@/lib/sortable';
 
@@ -41,7 +41,7 @@ import dashboardGridOptions from './dashboard-grid-options';
 import appSettings from './app-settings';
 import './antd-spinner';
 
-const logger = debug('redash:config');
+const logger = debug('datavis:config');
 
 Pace.options.shouldHandlePushState = (prevUrl, newUrl) => {
   // Show pace progress bar only if URL path changed; when query params
@@ -67,7 +67,7 @@ const requirements = [
   'angularResizable',
   vsRepeat,
   'ui.sortable',
-  'angular-echarts'
+  'ngMaterial'
 ];
 
 const ngModule = angular

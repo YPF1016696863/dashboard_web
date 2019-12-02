@@ -1,4 +1,6 @@
 import React from 'react';
+import './ChartsPageHeader.less';
+
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import {
@@ -7,12 +9,13 @@ import {
   Descriptions,
   Icon,
   Divider,
-  Breadcrumb
+  Breadcrumb,
+  Steps
 } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
-import './ChartsPageHeader.less';
+const { Step } = Steps;
 
 class ChartsPageHeader extends React.Component {
   /*
@@ -53,23 +56,26 @@ class ChartsPageHeader extends React.Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item href="/charts">
             <Icon type="file-search" />
-            <span>可视化组件</span>
+            <span>可视化组件列表</span>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
             <Icon type="pie-chart" />
-            <span>{"{图表名称}"}</span>
+            <span>编辑可视化组件</span>
           </Breadcrumb.Item>
         </Breadcrumb>
         <PageHeader
           className="content-layout-header"
-          title={<span style={{ fontSize: '18px' }}>{"{图表名称}"}</span>}
-          subTitle={
-            <>
-              <span style={{ fontSize: '13px' }}>编辑可视化组件列表</span>
-            </>
+          title={<span style={{ fontSize: '18px' }}>编辑可视化组件</span>}
+          extra={
+            <Steps size="small" current={1}>
+              <Step title="图表类型" description="为可视化组件选择一组图表类型" />
+              <Step
+                title="设置可视化组件"
+                description="设置并预览可视化组件"
+              />
+              <Step title="保存" description="保存可视化组件,该组件随后可用于仪表板的创建中." />
+            </Steps>
           }
-          extra={[
-          ]}
         >
           <Descriptions size="small" column={3}>
             <Descriptions.Item label="备注">
@@ -83,19 +89,16 @@ class ChartsPageHeader extends React.Component {
   }
 }
 
-ChartsPageHeader.propTypes = {
-};
-ChartsPageHeader.defaultProps = {
-};
+ChartsPageHeader.propTypes = {};
+ChartsPageHeader.defaultProps = {};
 
 export default function init(ngModule) {
   ngModule.component(
     'chartsPageHeader',
-    react2angular(
-        ChartsPageHeader,
-      Object.keys(ChartsPageHeader.propTypes),
-      ['$rootScope', '$scope']
-    )
+    react2angular(ChartsPageHeader, Object.keys(ChartsPageHeader.propTypes), [
+      '$rootScope',
+      '$scope'
+    ])
   );
 }
 

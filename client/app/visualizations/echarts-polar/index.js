@@ -27,8 +27,7 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
 
           const polarData = [];
           const xDataValue = [];
-            // const yData = _.get($scope.options, "form.yAxisColumn", ":::");  // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
-            const xData = _.get($scope.options, "form.xAxisColumn", "::");    // name string 这一列  AGENT_NAME    
+            const xData = _.get($scope.options, "form.xAxisColumn", "::");// name string 这一列  AGENT_NAME
               _.forEach(data, function (value, key) {// [{0},{1}...] 筛选出每一个{0} {1} ...
                 const onesValue = value;
                 _.forEach(onesValue, function (oneXvalue, oneXkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
@@ -36,7 +35,8 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                     const xValue = oneXvalue;
                     xDataValue.push(xValue);
                     _.forEach(onesValue, function (oneYvalue, oneYkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                      if (oneYkey === _.get($scope.options, "form.yAxisColumn", "")) { // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                      if (oneYkey === _.get($scope.options, "form.yAxisColumn", "")) {
+                        // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
                         polarData.push(
                           [xValue, oneYvalue]                    
                         );
@@ -96,8 +96,7 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
            ${_.get($scope.options, "c_Text", "")}`;
 
            _.set($scope.options, "tooltip.formatter", formatterString);
-      
-           console.log(formatterString);
+
           // 系列名称：极坐标图 1
           // 距离，角度值：180，200 km，°
  
