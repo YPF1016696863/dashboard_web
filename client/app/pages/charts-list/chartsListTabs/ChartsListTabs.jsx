@@ -15,6 +15,7 @@ import {
   Alert,
   Empty,
   BackTop,
+  message,
   Tabs
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -65,7 +66,8 @@ class ChartsListTabs extends React.Component {
       isLoaded: true,
       queryResult: null,
       visualization: null,
-      visType: null
+      visType: null,
+      canEdit: false
     });
     ChartsPreviewDOM = angular2react(
       'chartsPreview',
@@ -115,7 +117,8 @@ class ChartsListTabs extends React.Component {
       isLoaded: false,
       queryResult: null,
       visualization: null,
-      visType: null
+      visType: null,
+      canEdit: false
     });
 
     Query.query({ id: queryId })
@@ -127,7 +130,8 @@ class ChartsListTabs extends React.Component {
               isLoaded: true,
               visualization: null,
               queryResult: queryRes,
-              visType: null
+              visType: null,
+              canEdit: currentUser.canEdit(query) || query.can_edit
             });
             if (!visualizationId) {
               const visOption = _.cloneDeep(
@@ -160,7 +164,9 @@ class ChartsListTabs extends React.Component {
             this.setState({
               isLoaded: true,
               visualization: null,
-              queryResult: 'empty'
+              queryResult: 'empty',
+              visType: null,
+              canEdit: false
             });
           });
       })
@@ -169,7 +175,8 @@ class ChartsListTabs extends React.Component {
           isLoaded: true,
           visualization: null,
           queryResult: 'empty',
-          visType: null
+          visType: null,
+          canEdit: false
         });
       });
   }
@@ -188,13 +195,17 @@ class ChartsListTabs extends React.Component {
         {!this.state.isLoaded && (
           <>
             <Menu selectedKeys={[]} mode="horizontal">
-              <Menu.Item key="add-vis" disabled>
-                <Icon type="file-add" />
-                新建可视化组件
+              <Menu.Item key="add-vis">
+                <Button type="link" disabled>
+                  <Icon type="file-add" />
+                  新建可视化组件
+                </Button>
               </Menu.Item>
-              <Menu.Item key="edit-query" disabled>
-                <Icon type="edit" />
-                编辑数据集
+              <Menu.Item key="edit-query">
+                <Button type="link" disabled>
+                  <Icon type="edit" />
+                  编辑数据集
+                </Button>
               </Menu.Item>
             </Menu>
             <div className="align-center-div" style={{ paddingTop: '15%' }}>
@@ -205,13 +216,17 @@ class ChartsListTabs extends React.Component {
         {this.state.isLoaded && this.state.queryResult == null && (
           <>
             <Menu selectedKeys={[]} mode="horizontal">
-              <Menu.Item key="add-vis" disabled>
-                <Icon type="file-add" />
-                新建可视化组件
+              <Menu.Item key="add-vis">
+                <Button type="link" disabled>
+                  <Icon type="file-add" />
+                  新建可视化组件
+                </Button>
               </Menu.Item>
-              <Menu.Item key="edit-query" disabled>
-                <Icon type="edit" />
-                编辑数据集
+              <Menu.Item key="edit-query">
+                <Button type="link" disabled>
+                  <Icon type="edit" />
+                  编辑数据集
+                </Button>
               </Menu.Item>
             </Menu>
             <div className="align-center-div" style={{ paddingTop: '15%' }}>
@@ -221,7 +236,9 @@ class ChartsListTabs extends React.Component {
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
           <Empty
-            description={(<span style={{color:'#fff'}}>该可视化组件暂无数据</span>)}
+            description={
+              <span style={{ color: '#fff' }}>该可视化组件暂无数据</span>
+            }
             style={{ paddingTop: '10%' }}
           >
             <Button
@@ -242,24 +259,42 @@ class ChartsListTabs extends React.Component {
                 <>
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="add-vis">
-                      <a
-                        href={'query/' + this.getQueryId() + '/charts/new'}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          if (this.state.canEdit) {
+                            this.props.$window.open(
+                              'query/' + this.getQueryId() + '/charts/new',
+                              '新建可视化组件'
+                            );
+                          } else {
+                            message.warning(
+                              '无法新建可视化组件,无有效编辑权限'
+                            );
+                          }
+                        }}
                       >
                         <Icon type="file-add" />
                         新建可视化组件
-                      </a>
+                      </Button>
                     </Menu.Item>
                     <Menu.Item key="edit-query">
-                      <a
-                        href={'/queries/' + this.getQueryId() + '/source'}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          if (this.state.canEdit) {
+                            this.props.$window.open(
+                              '/queries/' + this.getQueryId() + '/source',
+                              '编辑数据集'
+                            );
+                          } else {
+                            message.warning('无法编辑数据集,无有效编辑权限');
+                          }
+                        }}
                       >
                         <Icon type="edit" />
                         编辑数据集
-                      </a>
+                      </Button>
                     </Menu.Item>
                   </Menu>
                   <ChartsPreviewDOM
@@ -272,7 +307,12 @@ class ChartsListTabs extends React.Component {
                   <Menu selectedKeys={[]} mode="horizontal">
                     <Menu.Item key="edit-vis">
                       <a
-                        href={'query/' + this.getQueryId() + '/charts/' + this.getChartId()}
+                        href={
+                          'query/' +
+                          this.getQueryId() +
+                          '/charts/' +
+                          this.getChartId()
+                        }
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -282,7 +322,7 @@ class ChartsListTabs extends React.Component {
                     </Menu.Item>
                     <Menu.Item key="delete-vis">
                       <Icon type="delete" style={{ color: 'red' }} />
-                      <span style={{color:"red"}}>删除</span>
+                      <span style={{ color: 'red' }}>删除</span>
                     </Menu.Item>
                   </Menu>
                   <ChartsPreviewDOM
@@ -313,7 +353,8 @@ export default function init(ngModule) {
     'chartsListTabs',
     react2angular(ChartsListTabs, Object.keys(ChartsListTabs.propTypes), [
       '$scope',
-      'appSettings'
+      'appSettings',
+      '$window'
     ])
   );
 }

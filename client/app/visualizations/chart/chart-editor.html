@@ -290,7 +290,8 @@
             <input placeholder="{{name}}" class="form-control input-sm super-small-input" type="text" ng-model="options.seriesOptions[name].name">
           </td>
           <td ng-if="options.globalSeriesType != 'pie'" style="padding: 3px; width: 105px;">
-            <ui-select ng-model="options.seriesOptions[name].type">
+            <datavis-chart-types serie="name" chart-type="options.seriesOptions[name].type" chart-type-cb="selectChartTypeCb"></datavis-chart-types>
+            <ui-select ng-model="options.seriesOptions[name].type" ng-hide="true">
               <ui-select-match placeholder="图表类型">
                 <div>
                   <i class="fa fa-{{$select.selected.value.icon}}"></i>

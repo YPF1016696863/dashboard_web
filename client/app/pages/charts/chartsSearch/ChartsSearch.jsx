@@ -441,7 +441,7 @@ class ChartsSearch extends React.Component {
                         </Row>
                         <Divider style={{ margin: ' 0' }} />
                       </Radio>
-                      <Radio value="PIVOT" style={{ width: '95%' }}>
+                      <Radio value="TABLE" style={{ width: '95%' }}>
                         <span
                           style={{ fontWeight: 'bold', paddingBottom: '6px' }}
                         >

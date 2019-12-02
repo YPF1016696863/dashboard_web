@@ -90,6 +90,11 @@ function ChartEditor(ColorPalette, clientConfig) {
         scope.currentTab = tab;
       };
 
+      scope.selectChartTypeCb = (serie, type)=>{
+        scope.options.seriesOptions[serie].type = type;
+        scope.$apply();
+      };
+
       scope.chartTypes = {
         line: { name: 'Line', icon: 'line-chart' },
         column: { name: 'Bar', icon: 'bar-chart' },

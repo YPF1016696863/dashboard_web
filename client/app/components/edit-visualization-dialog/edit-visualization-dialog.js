@@ -27,6 +27,7 @@ export const EditVisualizationDialog = {
       return this.chartType;
     },()=>{
       const isExist = find(this.visTypes,(visType)=>visType.type === this.chartType);
+
       if(isExist) {
         vm.visualization.type = this.chartType;
         this.typeChanged(this.chartType);
