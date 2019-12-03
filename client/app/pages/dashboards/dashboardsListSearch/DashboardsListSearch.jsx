@@ -173,12 +173,16 @@ class DashboardsListSearch extends React.Component {
             <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
-                  defaultExpandAll
+                  defaultExpandedKeys={['datavis-group#ungrouped']}
                   onSelect={(value, node, extra) => {
                     this.props.dashboardSearchCb(value);
                   }}
                 >
-                  <TreeNode title="可视化仪表板(无分组)" key="ungrouped">
+                  <TreeNode
+                    title="可视化仪表板(无分组)"
+                    key="datavis-group#ungrouped"
+                    selectable={false}
+                  >
                     {_.map(this.state.filtered, item => (
                       <TreeNode
                         icon={

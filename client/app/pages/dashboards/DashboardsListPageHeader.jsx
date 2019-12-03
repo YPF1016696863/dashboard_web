@@ -44,16 +44,6 @@ class DashboardsListPageHeader extends React.Component {
             </>
           }
           extra={[
-            <Button
-              ghost
-              type="primary"
-              size="small"
-              disabled={this.props.slugId == null}
-              target="_blank"
-            >
-              <i className="fa fa-edit m-r-5" />
-              编辑可视化仪表盘
-            </Button>
           ]}
         >
           <Descriptions size="small" column={3}>
@@ -69,6 +59,7 @@ class DashboardsListPageHeader extends React.Component {
 }
 
 DashboardsListPageHeader.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
   slugId: PropTypes.string
 };
 DashboardsListPageHeader.defaultProps = {

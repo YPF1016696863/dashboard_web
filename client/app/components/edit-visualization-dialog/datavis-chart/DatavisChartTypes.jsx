@@ -1,8 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
-import { Input, Modal, Button, Radio, Row, Col, Avatar, Divider } from 'antd';
-import { appSettingsConfig } from '../../config/app-settings';
+import {
+  Input,
+  Modal,
+  Button,
+  Radio,
+  Row,
+  Col,
+  Avatar,
+  Divider,
+  Alert
+} from 'antd';
+import { appSettingsConfig } from '../../../config/app-settings';
 
 const CHART_IMG_ROOT = '/static/images/';
 
@@ -68,6 +78,13 @@ class DatavisChartTypes extends React.Component {
           cancelText="取消"
         >
           <p style={{ fontSize: '14px' }}>选择图表类型:</p>
+          <Alert
+            showIcon
+            message="信息说明:"
+            description="在全局图表类型选择中,类型分为基础图表(包括折线图,柱状图,散点图等)和饼图,热度图以及箱型图,选择任何一个基础图表之后,数据的每一个系列可再单独进行图表类型选择."
+            type="info"
+          />
+          <Divider>选择图表</Divider>
           <div>
             <Radio.Group
               defaultValue={this.state.preSelected}
@@ -107,7 +124,7 @@ class DatavisChartTypes extends React.Component {
                   size="large"
                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-pie.png`}
                 />
-                <span style={{ fontSize: '12px' }}>计数器</span>
+                <span style={{ fontSize: '12px' }}>饼图</span>
               </Radio>
               <br />
               <br />

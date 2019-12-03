@@ -95,6 +95,11 @@ function ChartEditor(ColorPalette, clientConfig) {
         scope.$apply();
       };
 
+      scope.selectGlobalChartTypeCb = (serie, type)=>{
+        scope.options.globalSeriesType = type;
+        scope.$apply();
+      };
+
       scope.chartTypes = {
         line: { name: 'Line', icon: 'line-chart' },
         column: { name: 'Bar', icon: 'bar-chart' },
