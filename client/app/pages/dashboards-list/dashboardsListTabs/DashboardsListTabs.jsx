@@ -13,6 +13,7 @@ import {
   Tree,
   Input,
   Checkbox,
+  notification,
   Statistic,
   Switch,
   Tabs,
@@ -79,6 +80,8 @@ class DashboardsListTabs extends React.Component {
     if (slugId) {
       this.getDashboard(slugId);
     }
+
+    notification.destroy();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -103,8 +106,6 @@ class DashboardsListTabs extends React.Component {
             currentUser.id === dashboard.user.id ||
             currentUser.hasPermission('admin')
         });
-        console.log(this.state.dashboard);
-        console.log(this.state.isDashboardOwner);
       },
       rejection => {
         this.setState({
@@ -116,8 +117,25 @@ class DashboardsListTabs extends React.Component {
     );
   };
 
+  connectCb = (isLoaded, loadSuccess) => {
+    this.setState({
+      isLoaded
+    });
+  };
+
+  deleteDashboard = ()=>{
+    notification.error({
+      message: `消息`,
+      description:
+          '功能暂未开放.',
+      placement: 'bottomRight'
+    });
+  };
+
   render() {
     const { slugId } = this.props;
+
+    console.log(this.state.isDashboardOwner);
 
     return (
       <>
@@ -146,7 +164,7 @@ class DashboardsListTabs extends React.Component {
         {this.state.isLoaded && this.state.dashboard != null && (
           <Tabs defaultActiveKey="1" type="card" className="queries-tab">
             <TabPane tab="可视化面板预览" key="1">
-              <DashboardsPreviewDOM slugId={slugId} />
+              <DashboardsPreviewDOM slugId={slugId} connectCb={this.connectCb} />
             </TabPane>
             <TabPane tab="可视化面板设置" key="2">
               <Descriptions title={this.state.dashboard.name}>
@@ -161,9 +179,9 @@ class DashboardsListTabs extends React.Component {
                 </Descriptions.Item>
                 <Descriptions.Item label="可编辑">
                   {this.state.dashboard.can_edit ? (
-                    <Switch disabled defaultChecked />
+                    <Switch disabled defaultChecked checkedChildren="是" />
                   ) : (
-                    <Switch disabled />
+                    <Switch disabled unCheckedChildren="否" />
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item label="面板引用ID">
@@ -191,7 +209,7 @@ class DashboardsListTabs extends React.Component {
                 <Row>
                   <Col span={18}>
                     <Input
-                      value="http://datavis.chinambse.com/dashboard/xxxxxx?token=abcd12345"
+                      value="暂时无法获取可视化面板链接地址"
                       readOnly
                     />
                   </Col>
@@ -204,7 +222,7 @@ class DashboardsListTabs extends React.Component {
               </Card>
               <br />
               <p style={{ fontSize: '14px' }}>其他操作:</p>
-              <Button type="danger">
+              <Button type="danger" onClick={this.deleteDashboard}>
                 <Icon type="delete" />
                 删除可视化面板
               </Button>
@@ -213,6 +231,7 @@ class DashboardsListTabs extends React.Component {
                 type="primary"
                 disabled={slugId == null}
                 target="_blank"
+                href={'dashboards/' + slugId}
               >
                 <i className="fa fa-edit m-r-5" />
                 编辑可视化面板

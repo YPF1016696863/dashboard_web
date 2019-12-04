@@ -18,6 +18,11 @@ const layouts = {
     bodyClass: 'fixed-layout',
     bodyClassBackgroundColor: ''
   },
+  dashboard: {
+    showHeader: false,
+    bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
+  },
   defaultSignedOut: {
     showHeader: false,
     bodyClassBackgroundColor:''

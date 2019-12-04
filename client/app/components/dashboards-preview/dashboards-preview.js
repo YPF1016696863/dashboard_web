@@ -235,6 +235,7 @@ function DashboardPreviewCtrl(
       { slug: this.slugId },
       dashboard => {
         this.dashboard = dashboard;
+        console.log(dashboard);
         this.isDashboardOwner =
           currentUser.id === dashboard.user.id ||
           currentUser.hasPermission('admin');
@@ -262,8 +263,11 @@ function DashboardPreviewCtrl(
             );
           }
         }
+
+        this.connectCb(true,true);
       },
       rejection => {
+        this.connectCb(true,false);
         const statusGroup = Math.floor(rejection.status / 100);
         if (statusGroup === 5) {
           // recoverable errors - all 5** (server is temporarily unavailable
@@ -277,7 +281,7 @@ function DashboardPreviewCtrl(
     );
   }, 1000);
 
-  this.loadDashboard();
+  // this.loadDashboard();
 
   this.refreshDashboard = () => {
     renderDashboard(this.dashboard, true);
@@ -531,7 +535,8 @@ function DashboardPreviewCtrl(
 export const DashboardsPreview = {
   template,
   bindings: {
-    slugId: '<'
+    slugId: '<',
+    connectCb:'<'
   },
   controller: DashboardPreviewCtrl
 };

@@ -1,32 +1,45 @@
-<div class="widget-dark-theme">
+<div
+  class="widget-dark-theme"
+  style="min-height:100vh"
+  ng-if="$ctrl.dashboard.widgets.length > 0"
+>
   <div class="dashboard-dark-theme" ng-if="$ctrl.globalParameters.length > 0">
     <parameters parameters="$ctrl.globalParameters"></parameters>
   </div>
 
-  <div ng-if="$ctrl.dashboard.widgets.length > 0">
+  <div
+    gridstack
+    editing="$ctrl.layoutEditing"
+    on-layout-changed="$ctrl.onLayoutChanged"
+    is-one-column-mode="$ctrl.isGridDisabled"
+    class="dashboard-wrapper"
+    ng-class="{'preview-mode': true, 'editing-mode':false}"
+  >
     <div
-      gridstack
-      editing="$ctrl.layoutEditing"
-      on-layout-changed="$ctrl.onLayoutChanged"
-      is-one-column-mode="$ctrl.isGridDisabled"
-      class="dashboard-wrapper"
-      ng-class="{'preview-mode': true, 'editing-mode':false}"
+      class="dashboard-widget-wrapper"
+      ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
+      gridstack-item="widget.options.position"
+      gridstack-item-id="{{ widget.id }}"
+      data-test="WidgetId{{ widget.id }}"
     >
-      <div
-        class="dashboard-widget-wrapper"
-        ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
-        gridstack-item="widget.options.position"
-        gridstack-item-id="{{ widget.id }}"
-        data-test="WidgetId{{ widget.id }}"
-      >
-        <div class="grid-stack-item-content">
-          <dashboard-widget
-            widget="widget"
-            dashboard="$ctrl.dashboard"
-            on-delete="$ctrl.removeWidget(widget.id)"
-          ></dashboard-widget>
-        </div>
+      <div class="grid-stack-item-content">
+        <dashboard-widget
+          widget="widget"
+          dashboard="$ctrl.dashboard"
+          on-delete="$ctrl.removeWidget(widget.id)"
+        ></dashboard-widget>
       </div>
     </div>
+  </div>
+</div>
+
+<div
+  class="widget-dark-theme"
+  style="height:100vh;display:flex;"
+  ng-if="$ctrl.dashboard.widgets.length == 0"
+>
+  <div style="margin:auto;text-align: center">
+    <img src="/static/images/brandImg.png" width="64" height="64" />
+    <p style="color:#fff">数据可视化面板</p>
   </div>
 </div>

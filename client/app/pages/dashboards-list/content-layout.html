@@ -1,26 +1,26 @@
-<div class="layout-content-wrapper-full-height" style="padding:0 !important;background-color: #25374C">
-  <dashboards-page-header slug-id="slugId" style="border-bottom: 1px solid #363e55 !important;"></dashboards-page-header>
-  <main class="query-fullscreen dashboard-design" style="background-color: #25374C">
+<div class="layout-content-wrapper">
+  <dashboards-list-page-header slug-id="slugId"></dashboards-list-page-header>
+  <main class="query-fullscreen">
     <nav
       resizable
       r-directions="['right']"
       r-flex="true"
       resizable-toggle
-      style="max-width: 300px;"
+      toggle-shortcut="Alt+Shift+D, Alt+D"
     >
       <div class="editor__left__schema">
         <div
           class="d-flex flex-column p-absolute"
-          style="left: 0; top: 0; right: 0; bottom: 0;"
+          style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
-          <div class="scrollbox" style="height: 100% !important;background-color: #20263B">
-            <dashboards-search dashboard-search-cb="dashboardSearchCb"></dashboards-search>
+          <div class="scrollbox" style="height: 100% !important;">
+            <dashboards-list-search dashboard-search-cb="dashboardSearchCb"></dashboards-list-search>
           </div>
         </div>
       </div>
     </nav>
 
-    <div class="content" style="background-color: #25374C">
+    <div class="content">
       <div class="flex-fill p-relative">
         <div
           class="p-absolute d-flex flex-column"
@@ -44,9 +44,9 @@
                   style="left: 0; top: 0; right: 0; bottom: 0;"
                 >
                   <div class="query__vis scrollbox">
-                    <dashboards-tabs
+                    <dashboards-list-tabs
                       slug-id="slugId"
-                    ></dashboards-tabs>
+                    ></dashboards-list-tabs>
                   </div>
                 </div>
               </div>

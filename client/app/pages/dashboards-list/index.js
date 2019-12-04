@@ -20,7 +20,7 @@ import notification from '@/services/notification';
 
 import template from './content-layout.html';
 
-function DashboardsViewCtrl(
+function DashboardsListViewCtrl(
   $scope,
   Events,
   $route,
@@ -39,11 +39,12 @@ function DashboardsViewCtrl(
   appSettings
 ) {
   $scope.currentUser = currentUser;
-  $scope.slugId = $route.current.params.slugId;
+  $scope.slugId = null;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
   $scope.dashboardSearchCb = (slug) => {
-    // $scope.$apply();
+    $scope.slugId = slug&&slug.length?slug[0]:null;
+    $scope.$apply();
   };
 
   // currentUser.hasPermission('admin');
@@ -51,13 +52,13 @@ function DashboardsViewCtrl(
 }
 
 export default function init(ngModule) {
-  ngModule.controller('DashboardsViewCtrl', DashboardsViewCtrl);
+  ngModule.controller('DashboardsListViewCtrl', DashboardsListViewCtrl);
 
   return {
-    '/dashboards/:slugId': {
+    '/dashboards': {
       template,
-      layout: 'dashboard',
-      controller: 'DashboardsViewCtrl',
+      layout: 'fixed',
+      controller: 'DashboardsListViewCtrl',
       reloadOnSearch: false
     }
   };
