@@ -1,9 +1,11 @@
 import * as _ from 'lodash';
 import $ from 'jquery';
+import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
-import { defaultGaugeChartOptions, getChartType, setData } from './echartsGaugeChartOptionUtils';
+
+import { defaultGaugeChartOptions, getChartType, setData, setThemeColor } from './echartsGaugeChartOptionUtils';
 
 function EchartsGaugeRenderer($rootScope) {
   return {
@@ -15,8 +17,8 @@ function EchartsGaugeRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-      $scope.chartSeries = [];
 
+      console.log($scope.options);
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           const data = $scope.queryResult.getData();
@@ -32,6 +34,8 @@ function EchartsGaugeRenderer($rootScope) {
             });
           });
 
+          // 切换主题颜色
+          setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
           _.set($scope.options, "series", []);// 清空设置           
           $scope.options.series.push({
@@ -123,8 +127,8 @@ function EchartsGaugeEditor() {
       $scope.columns = $scope.queryResult.getColumns();
       $scope.columnNames = _.map($scope.columns, i => i.name);
 
-      // Set default options for new vis
-      if (_.isEmpty($scope.options)) {
+      // Set default options for new vis// 20191203 bug fix 
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "GaugeChart") {
         $scope.options = defaultGaugeChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
@@ -256,7 +260,50 @@ export default function init(ngModule) {
       '<echarts-gauge-renderer options="visualization.options" query-result="queryResult"></echarts-gauge-renderer>';
 
     const editorTemplate = '<echarts-gauge-editor options="visualization.options" query-result="queryResult"></echarts-gauge-editor>';
-    const defaultOptions = {};
+    const defaultOptions = {
+      id: UUIDv4(),
+      backgroundColor: 'transparent',
+      series_Name: '',
+      tooltip: {
+        formatter: "{a} <br/>{b} : {c}%",
+        textStyle: {
+          color: '#333',
+        }
+      },
+      toolbox: {
+        feature: {
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      legend: {
+        show: true,
+        // x: 'left'
+        textStyle: {
+          color: '#333',
+        }
+      },
+      title: {
+        text: '',
+        subtext: '',
+        x: 'center',
+        backgroundColor: 'transparent',
+        textStyle: {
+          color: '#333',
+          fontStyle: 'normal',
+          fontFamily: 'serif',
+          fontSize: 25,
+        },
+        subtextStyle: {
+          color: '#333',
+          fontStyle: 'normal',
+          fontFamily: 'serif',
+          fontSize: 18,
+        },
+      },
+      series: []
+
+    };
 
     VisualizationProvider.registerVisualization({
       type: 'ECHARTS-GAUGE',

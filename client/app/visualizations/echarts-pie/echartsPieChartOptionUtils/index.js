@@ -3,25 +3,12 @@ import UUIDv4 from 'uuid/v4';
 
 export function defaultPieChartOptions() {
     return {
-
-        // 多系列时需要转为数组
-        // series_ItemStyle_Color: '',
-        // series_LabelLine_LineStyle_Color: '',
-        // series_Label_Color: '',
-        // series_Label_Position: '',
-        // series_RadiusMax: '',
-        // series_RadiusMin: '',
-        // series_Label_Normal_Show: '',
-        // series_Label_Emphasis_Show: '',
-        // series_Label_Normal_FontSize: '',
-        // series_Label_Normal_FontWeights: '',
-        // series_Label_FontSize: '',
+        id: UUIDv4(),
+        chartType: "PieChart",
         useSerie: '',           // 选中的系列名称
         useSerie_Index: -1,     // 选中的系列下标
 
-
-
-        backgroundColor: '#fff',
+        backgroundColor: 'transparent',
         form: {
             xAxisColumn: "",
             yAxisColumns: []
@@ -31,8 +18,17 @@ export function defaultPieChartOptions() {
             left: 'center',
             top: 20,
             textStyle: {
-                color: '#ccc'
+                color: '#333',
+ 	                fontStyle: 'normal',
+ 	                fontFamily: 'serif',
+ 	                fontSize: 25,
             },
+            subtextStyle: {
+                color: '#333',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 18,
+                 },
             backgroundColor: 'transparent',
             borderWidth: 0,
         },
@@ -40,6 +36,13 @@ export function defaultPieChartOptions() {
             responsive: true,
             width: "600px",
             height: "400px"
+        },
+        legend: {
+            show: true,
+            // x: 'left'
+            textStyle:{
+                color: '#333',
+            }
         },
         tooltip: {
             trigger: 'item',
@@ -149,4 +152,43 @@ export function returnDataVisColors() {
         "橘黄色": '#ffa600',
         "绿色": '#53aa46'
     };
+}
+
+export function setThemeColor(options,theme) {
+    if( theme === "light" ){
+        
+       //  亮色背景下如果是白色文字。则切换成黑色
+        if( _.get(options, "title.textStyle.color", "") === "#ccc" ){
+            _.set(options, "title.textStyle.color","#333");
+        }
+        if( _.get(options, "title.subtextStyle.color", "") === "#ccc" ){
+           _.set(options, "title.subtextStyle.color","#333");
+       }
+       if( _.get(options, "legend.textStyle.color", "") === "#ccc"){
+        _.set(options, "legend.textStyle.color","#333");
+       }
+       if( _.get(options, "series_LabelLine_LineStyle_Color", "") === "#ccc"){
+        _.set(options, "series_LabelLine_LineStyle_Color","#333");
+       }
+        
+       
+   }
+        
+    else if(theme !== "light"){   
+       // 暗色背景下如果是黑色文字。则切换成白色    
+       if( _.get(options, "title.textStyle.color", "") === "#333" ){
+           _.set(options, "title.textStyle.color","#ccc");
+        }
+        if( _.get(options, "title.subtextStyle.color", "") === "#333" ){
+           _.set(options, "title.subtextStyle.color","#ccc");
+       }
+       if( _.get(options, "legend.textStyle.color", "") === "#333" ){
+        _.set(options, "legend.textStyle.color","#ccc");
+      }
+      if( _.get(options, "series_LabelLine_LineStyle_Color", "") === "#333" ){
+        _.set(options, "series_LabelLine_LineStyle_Color","#ccc");
+      }
+
+
+   }      
 }

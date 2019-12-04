@@ -4,7 +4,7 @@ import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
-import { defaultPieChartOptions, parseChartType, getChartType, getRadius } from './echartsPieChartOptionUtils';
+import { defaultPieChartOptions, parseChartType, getChartType, setThemeColor, getRadius } from './echartsPieChartOptionUtils';
 
 function EchartsPieRenderer($timeout, $rootScope, $window) {
   return {
@@ -16,9 +16,15 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
     template: echartsTemplate,
     link($scope, $element) {
       $scope.chartSeries = [];
+      
+      console.log($scope.options);
 
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+
+
+          // 切换主题颜色
+          setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
           // 找到选中serise的下标        
           _.set($scope.options, 'useSerie_Index',
@@ -26,9 +32,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               _.get($scope.options, "form.yAxisColumns", []),
               function (o) { return o === _.get($scope.options, 'useSerie', ''); }
             ));
-
-
-
 
           const data = $scope.queryResult.getData();
           // 输入的数据格式转换 
@@ -125,7 +128,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               labelLine: {
                 normal: {
                   lineStyle: {
-                    color: _.get($scope.options, "series_LabelLine_LineStyle_Color", ''),// 引导线的颜色
+                    color: _.get($scope.options, "series_LabelLine_LineStyle_Color", '#ccc'),// 引导线的颜色
                   },
                   smooth: 0.2,
                   length: 10,
@@ -202,11 +205,21 @@ function EchartsPieEditor() {
     },
     link($scope) {
 
+      // 20191203 feature add 
+      $scope.selectChartTypeCb = (serie, type) => {// 图表类型选择的转换
+        const stringTemp = "form.yAxisColumnTypes[" + serie + "]";// 按照原先的输入格式进行配置 （现在的类型输入转换）
+        _.set($scope.options, stringTemp, type);
+        console.log($scope.options.form.yAxisColumnTypes);
+        // $scope.options.form.yAxisColumnTypes[serie] = type;
+        $scope.$apply();
+      };
+
+
       $scope.columns = $scope.queryResult.getColumns();
       $scope.columnNames = _.map($scope.columns, i => i.name);
 
-      // Set default options for new vis
-      if (_.isEmpty($scope.options)) {
+      // Set default options for new vis// 20191203 bug fix 
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
         $scope.options = defaultPieChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
@@ -255,13 +268,17 @@ function EchartsPieEditor() {
         { label: 'oblique', value: 'oblique' }
       ];
       $scope.Colors = [
-        { label: '默认', value: '' },
-        { label: 'DataVis-白色', value: '#fff' },
-        { label: 'DataVis-红色', value: '#ed4d50' },
-        { label: 'DataVis-绿色', value: '#6eb37a' },
-        { label: 'DataVis-蓝色', value: '#5290e9' },
-        { label: 'DataVis-橘色', value: '#ee941b' },
-        { label: 'DataVis-紫色', value: '#985896' },
+        { label: '默认', value: 'auto' },
+        { label: '透明', value: 'transparent' },
+        { label: '暗绿色', value: '#84AF9B' },
+        { label: '白色', value: '#ffffff' },
+        { label: '黑色', value: '#2C3E50' },
+        { label: '白色', value: '#fff' },
+        { label: '红色', value: '#ed4d50' },
+        { label: '绿色', value: '#6eb37a' },
+        { label: '蓝色', value: '#5290e9' },
+        { label: '橘色', value: '#ee941b' },
+        { label: '紫色', value: '#985896' },
         { label: '瑠璃色', value: '#2a5caa' },
         { label: '青蓝', value: '#102b6a' },
         { label: '铁绀', value: '#181d4b' },
@@ -272,9 +289,16 @@ function EchartsPieEditor() {
       ];
 
       $scope.BackgroundColors = [
-        { label: '暗绿色', value: '#84AF9B' },
-        { label: '白色', value: '#ffffff' },
-        { label: '黑色', value: '#2C3E50' }
+        { label: '黑色', value: '#2C3E50' },
+        { label: '透明', value: 'transparent' },
+        { label: '紫色', value: '#985896' },
+        { label: '瑠璃色', value: '#2a5caa' },
+        { label: '青蓝', value: '#102b6a' },
+        { label: '铁绀', value: '#181d4b' },
+        { label: '蔷薇色', value: '#f05b72' },
+        { label: '黄緑', value: '#b2d235' },
+        { label: '萌黄', value: '#a3cf62' },
+        { label: '赤丹', value: '#d64f44' }
       ];
       $scope.TextAligns = [
         { label: '默认', value: '' },
