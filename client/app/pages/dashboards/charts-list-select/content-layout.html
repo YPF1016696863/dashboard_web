@@ -1,0 +1,59 @@
+<div class="dashboard-content-wrapper">
+  <main class="dashboard-fullscreen">
+    <nav
+      resizable
+      r-directions="['right']"
+      r-flex="true"
+      resizable-toggle
+      style="min-width: 300px;"
+    >
+      <div class="editor__left__schema">
+        <div
+          class="d-flex flex-column p-absolute"
+          style="left: 20px; top: 0; right: 0; bottom: 0;"
+        >
+          <div class="scrollbox" style="height: 100% !important;">
+            <charts-list-search query-search-cb="querySearchCb"></charts-list-search>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="flex-fill p-relative">
+        <div
+          class="p-absolute d-flex flex-column "
+          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto"
+        >
+          <section
+            class="flex-fill p-relative t-body query-visualizations-wrapper"
+          >
+            <div
+              class="d-flex flex-column p-absolute static-position__mobile"
+              style="left: 0; top: 0; right: 0; bottom: 0;"
+            >
+              <!-- Query Execution Status -->
+
+              <!-- End of Query Execution Status -->
+
+              <!-- tabs and data -->
+              <div class="flex-fill p-relative">
+                <div
+                  class="d-flex flex-column p-absolute static-position__mobile"
+                  style="left: 0; top: 0; right: 0; bottom: 0;background-color: #25374C"
+                >
+                  <div class="query__vis scrollbox">
+                    <charts-select-tabs
+                      display-id="displayId"
+                      display-type="displayType"
+                    ></charts-select-tabs>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

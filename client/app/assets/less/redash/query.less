@@ -462,6 +462,204 @@ a.label-tag {
   }
 }
 
+
+.dashboard-fullscreen {
+  background: #fff;
+  padding: 0;
+  flex-grow: 1;
+  display: flex;
+
+  .tile, .tiled {
+    box-shadow: none;
+    padding: 0 !important;
+  }
+
+  nav {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    flex-basis: 18%;
+    flex-shrink: 0;
+    max-width: 600px;
+    min-width: 10px;
+    overflow-x: hidden;
+
+    .schema-container {
+    }
+
+    .editor__left__data-source,
+    .schema-control,
+    .query-metadata--history,
+    .editor {
+      flex-shrink: 0;
+    }
+
+    .query-metadata {
+      border-top: 1px solid #efefef;
+    }
+
+    .query-metadata, .editor__left__schema, .editor__left__data-source {
+      padding: 15px;
+    }
+
+    .editor__left__schema {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 0;
+      padding-top: 0 !important;
+      position: relative;
+
+      schema-browser {
+        position: absolute;
+        left: 15px;
+        top: 0;
+        right: 15px;
+        bottom: 0;
+      }
+    }
+  }
+  main {
+    display: flex;
+    height: 100%;
+  }
+  .content {
+    background: #fff;
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-content: space-around;
+    padding: 0;
+    overflow-x: hidden;
+
+    .editor {
+      border-bottom: 1px solid #efefef;
+    }
+
+    pivot-table-renderer > table, grid-renderer > div, visualization-renderer > div {
+      overflow: visible;
+    }
+
+    .tab-nav {
+      flex-shrink: 0;
+    }
+  }
+  .row {
+    background: #fff;
+    z-index: 9;
+    min-height: 50px;
+
+    &.resizable {
+      flex: 0 0 300px;
+    }
+
+    &.editor {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-around;
+      align-content: space-around;
+      overflow: hidden;
+    }
+
+    .row {
+      display: block;
+      min-height: 0;
+    }
+  }
+
+  section {
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 30px;
+    &.resizable {
+      flex: 0 0 300px;
+    }
+  }
+
+  // **********************************************************************
+  // directive styles
+  // **********************************************************************
+  .resizable {
+    position: relative;
+    &.no-transition {
+      transition: none !important;
+    }
+  }
+  .rg-right, .rg-left, .rg-top, .rg-bottom {
+    display: block;
+    width: 10px;
+    height: 10px;
+    line-height: @spacing;
+    position: absolute;
+    z-index: 99;
+
+    span {
+      position: absolute;
+      box-sizing: border-box;
+      display: block;
+      border: 1px solid #ccc;
+    }
+  }
+  .rg-right, .rg-left {
+    span {
+      border-width: 0 1px;
+      top: 50%;
+      margin: -10px 0 0 @spacing/4;
+      height: 20px;
+      width: 3px;
+    }
+  }
+  .rg-top, .rg-bottom {
+    span {
+      border-width: 1px 0;
+      left: 50%;
+      margin: @spacing/4 0 0 -10px;
+      width: 20px;
+      height: 3px;
+    }
+  }
+  .rg-top     {
+    cursor: row-resize;
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin-top: -@spacing/2;
+  }
+  .rg-right   {
+    cursor: col-resize;
+    border-right: 1px solid #efefef;
+    height: 100%;
+    right: 0;
+    top: 0;
+    margin-right: 0px;
+
+    &:hover {
+      background: fade(@redash-gray, 6%);
+    }
+  }
+  .rg-bottom  {
+    cursor: row-resize;
+    background: #fff;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 0;
+
+    &:hover {
+      background: fade(@redash-gray, 6%);
+    }
+  }
+  .rg-left    {
+    cursor: col-resize;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin-left: -@spacing;
+  }
+}
+
+
 .dashboard-design {
   .rg-right {
     border-right: 1px solid #363e55 !important;

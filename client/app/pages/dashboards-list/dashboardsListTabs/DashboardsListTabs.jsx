@@ -123,11 +123,10 @@ class DashboardsListTabs extends React.Component {
     });
   };
 
-  deleteDashboard = ()=>{
+  deleteDashboard = () => {
     notification.error({
       message: `消息`,
-      description:
-          '功能暂未开放.',
+      description: '功能暂未开放.',
       placement: 'bottomRight'
     });
   };
@@ -164,7 +163,10 @@ class DashboardsListTabs extends React.Component {
         {this.state.isLoaded && this.state.dashboard != null && (
           <Tabs defaultActiveKey="1" type="card" className="queries-tab">
             <TabPane tab="可视化面板预览" key="1">
-              <DashboardsPreviewDOM slugId={slugId} connectCb={this.connectCb} />
+              <DashboardsPreviewDOM
+                slugId={slugId}
+                connectCb={this.connectCb}
+              />
             </TabPane>
             <TabPane tab="可视化面板设置" key="2">
               <Descriptions title={this.state.dashboard.name}>
@@ -208,10 +210,7 @@ class DashboardsListTabs extends React.Component {
                 />
                 <Row>
                   <Col span={18}>
-                    <Input
-                      value="暂时无法获取可视化面板链接地址"
-                      readOnly
-                    />
+                    <Input value="暂时无法获取可视化面板链接地址" readOnly />
                   </Col>
                   <Col span={6}>
                     <Button type="primary" style={{ marginLeft: '15px' }}>
@@ -222,11 +221,6 @@ class DashboardsListTabs extends React.Component {
               </Card>
               <br />
               <p style={{ fontSize: '14px' }}>其他操作:</p>
-              <Button type="danger" onClick={this.deleteDashboard}>
-                <Icon type="delete" />
-                删除可视化面板
-              </Button>
-              <br /><br />
               <Button
                 type="primary"
                 disabled={slugId == null}
@@ -235,6 +229,12 @@ class DashboardsListTabs extends React.Component {
               >
                 <i className="fa fa-edit m-r-5" />
                 编辑可视化面板
+              </Button>
+              <br />
+              <br />
+              <Button type="danger" onClick={this.deleteDashboard}>
+                <Icon type="delete" />
+                删除可视化面板
               </Button>
             </TabPane>
           </Tabs>

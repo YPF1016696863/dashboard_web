@@ -22,18 +22,20 @@ class DashboardsPageHeader extends React.Component {
   render() {
     return (
       <div>
-        <Menu mode="horizontal" className="dashboard-header-menu">
+        <Menu
+          mode="horizontal"
+          className="dashboard-header-menu"
+          selectable={false}
+        >
           <Menu.Item key="mail">
-            <Icon type="mail" />
-            Navigation One
+            <Icon type="save" />
+            保存
           </Menu.Item>
-          <Menu.Item key="app" disabled>
-            <Icon type="appstore" />
-            Navigation Two
-          </Menu.Item>
-          <Menu.Item key="alipay">
-            <Icon type="appstore" />
-            Navigation Two
+          <Divider type="vertical" />
+
+          <Menu.Item key="alipay2" style={{ float: 'right' }}>
+            <Icon type="play-square" />
+            预览模式
           </Menu.Item>
         </Menu>
       </div>

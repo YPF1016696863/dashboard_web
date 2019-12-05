@@ -19,8 +19,9 @@ import ScheduleDialog from '@/components/queries/ScheduleDialog';
 import notification from '@/services/notification';
 
 import template from './content-layout.html';
+import {DashboardsPreview} from "@/components/dashboards-preview/dashboards-preview";
 
-function DashboardsViewCtrl(
+function ChartsListSelectViewCtrl(
   $scope,
   Events,
   $route,
@@ -34,45 +35,36 @@ function DashboardsViewCtrl(
   clientConfig,
   $uibModal,
   currentUser,
-  Dashboard,
+  Query,
+  DataSource,
   Visualization,
   appSettings
 ) {
   $scope.currentUser = currentUser;
-  $scope.slugId = $route.current.params.slugId;
+  $scope.displayType = null;
+  $scope.displayId = null;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
-  $scope.dashboardSearchCb = (slug) => {
-    // $scope.$apply();
+  $scope.querySearchCb = (type, id) => {
+    $scope.displayType = type;
+    $scope.displayId = id;
+    $scope.$apply();
   };
 
   // currentUser.hasPermission('admin');
 
-  this.topDirections = ['left', 'up'];
-  this.bottomDirections = ['down', 'right'];
-
-  this.isOpen = false;
-
-  this.availableModes = ['md-fling', 'md-scale'];
-  this.selectedMode = 'md-fling';
-
-  this.availableDirections = ['up', 'down', 'left', 'right'];
-  this.selectedDirection = 'up';
-
-
 }
 
-export default function init(ngModule) {
-  ngModule.controller('DashboardsViewCtrl', DashboardsViewCtrl);
+// eslint-disable-next-line import/prefer-default-export
+export const ChartsListSelectView = {
+  template,
+  bindings: {
+  },
+  controller: ChartsListSelectViewCtrl
+};
 
-  return {
-    '/dashboards/:slugId': {
-      template,
-      layout: 'dashboard',
-      controller: 'DashboardsViewCtrl',
-      reloadOnSearch: false
-    }
-  };
+export default function init(ngModule) {
+  ngModule.component('chartsListSelectView', ChartsListSelectView);
 }
 
 init.init = true;

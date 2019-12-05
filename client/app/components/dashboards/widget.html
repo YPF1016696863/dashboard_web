@@ -2,39 +2,11 @@
   <div class="tile body-container widget-visualization" ng-if="$ctrl.type=='visualization'" ng-class="[$ctrl.type,$root.theme.widgetBackgroundColor]"
     ng-switch="$ctrl.widget.getQueryResult().getStatus()">
     <div class="body-row">
-      <div class="t-header widget clearfix" style="padding: 5px">
+      <div class="t-header widget clearfix" style="padding: 0px !important;">
         <div class="dropdown pull-right widget-menu-remove"  ng-if="!$ctrl.public && $ctrl.dashboard.canEdit()">
           <div class="actions">
             <a ng-click="$ctrl.deleteWidget()" title="从可视化面板中移除"><i class="zmdi zmdi-close" style="font-size: 18px !important;"></i></a>
           </div>
-        </div>
-        <div class="dropdown pull-right widget-menu-regular" ng-if="!$ctrl.public"
-          uib-dropdown dropdown-append-to-body="true"
-        >
-          <div class="actions">
-            <a data-toggle="dropdown" uib-dropdown-toggle><i class="zmdi zmdi-more-vert" style="font-size: 18px !important;"></i></a>
-          </div>
-
-          <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
-            <li ng-class="{'disabled': $ctrl.widget.getQueryResult().isEmpty()}"><a ng-href="{{$ctrl.widget.getQueryResult().getLink($ctrl.widget.getQuery().id, 'csv')}}" download="{{$ctrl.widget.getQueryResult().getName($ctrl.widget.getQuery().name, 'csv')}}" target="_self">保存为CSV文件</a></li>
-            <li ng-class="{'disabled': $ctrl.widget.getQueryResult().isEmpty()}"><a ng-href="{{$ctrl.widget.getQueryResult().getLink($ctrl.widget.getQuery().id, 'xlsx')}}" download="{{$ctrl.widget.getQueryResult().getName($ctrl.widget.getQuery().name, 'xlsx')}}" target="_self">保存为Excel文件</a></li>
-
-            <li ng-if="$ctrl.canViewQuery || ($ctrl.dashboard.canEdit() && $ctrl.hasParameters())" class="divider"></li>
-            <li ng-if="$ctrl.canViewQuery"><a ng-href="{{$ctrl.widget.getQuery().getUrl(true, $ctrl.widget.visualization.id)}}">查看查询</a></li>
-            <li ng-if="$ctrl.dashboard.canEdit() && $ctrl.hasParameters()">
-              <li ng-if="$ctrl.dashboard.canEdit() && $ctrl.hasParameters()"><a ng-click="$ctrl.editParameterMappings()">编辑参数</a></li>
-            </li>
-
-            <li ng-if="$ctrl.dashboard.canEdit()" class="divider"></li>
-            <li ng-if="$ctrl.dashboard.canEdit()"><a ng-click="$ctrl.deleteWidget()">从可视化面板中移除</a></li>
-          </ul>
-        </div>
-        <div class="th-title">
-          <p style="margin: 0 0 5px !important;">
-            <query-link query="$ctrl.widget.getQuery()" visualization="$ctrl.widget.visualization"
-              readonly="!$ctrl.canViewQuery"></query-link>
-          </p>
-          <div class="text-muted query--description" ng-bind-html="$ctrl.widget.getQuery().description | markdown"></div>
         </div>
       </div>
       <div class="m-b-10" ng-if="$ctrl.localParametersDefs().length > 0">

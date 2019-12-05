@@ -1,6 +1,15 @@
-<div class="layout-content-wrapper-full-height" style="padding:0 !important;background-color: #25374C">
-  <dashboards-page-header slug-id="slugId" style="border-bottom: 1px solid #363e55 !important;"></dashboards-page-header>
-  <main class="query-fullscreen dashboard-design" style="background-color: #25374C">
+<div
+  class="layout-content-wrapper-full-height"
+  style="padding:0 !important;background-color: #25374C"
+>
+  <dashboards-page-header
+    slug-id="slugId"
+    style="border-bottom: 1px solid #363e55 !important;"
+  ></dashboards-page-header>
+  <main
+    class="query-fullscreen dashboard-design"
+    style="background-color: #25374C"
+  >
     <nav
       resizable
       r-directions="['right']"
@@ -13,13 +22,17 @@
           class="d-flex flex-column p-absolute"
           style="left: 0; top: 0; right: 0; bottom: 0;"
         >
-          <div class="scrollbox" style="height: 100% !important;background-color: #20263B">
-            <dashboards-search dashboard-search-cb="dashboardSearchCb"></dashboards-search>
+          <div
+            class="scrollbox"
+            style="height: 100% !important;background-color: #20263B"
+          >
+            <dashboards-search
+              dashboard-search-cb="dashboardSearchCb"
+            ></dashboards-search>
           </div>
         </div>
       </div>
     </nav>
-
     <div class="content" style="background-color: #25374C">
       <div class="flex-fill p-relative">
         <div
@@ -44,9 +57,35 @@
                   style="left: 0; top: 0; right: 0; bottom: 0;"
                 >
                   <div class="query__vis scrollbox">
-                    <dashboards-tabs
-                      slug-id="slugId"
-                    ></dashboards-tabs>
+                    <dashboards-tabs slug-id="slugId"></dashboards-tabs>
+                  </div>
+                  <div class="FAB">
+                    <md-fab-toolbar md-open="false" md-direction="left">
+                      <md-fab-trigger class="align-with-text">
+                        <md-button aria-label="menu" class="md-fab md-warn">
+                          <md-icon
+                            md-svg-src="static/images/plus-solid.svg"
+                          ></md-icon>
+                        </md-button>
+                      </md-fab-trigger>
+
+                      <md-toolbar>
+                        <md-fab-actions class="md-toolbar-tools">
+                          <md-button
+                            aria-label="添加可视化组件"
+                          >
+                            <md-icon
+                              md-svg-src="static/images/chart-pie-solid.svg"
+                            ></md-icon>&nbsp;&nbsp;添加可视化组件
+                          </md-button>
+                          <md-button
+                                  aria-label="添加其他可视化仪表盘"
+                          >
+                            <dashboard-add-widgets></dashboard-add-widgets>
+                          </md-button>
+                        </md-fab-actions>
+                      </md-toolbar>
+                    </md-fab-toolbar>
                   </div>
                 </div>
               </div>
