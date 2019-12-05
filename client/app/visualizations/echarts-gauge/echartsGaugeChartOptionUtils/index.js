@@ -3,9 +3,15 @@ import UUIDv4 from 'uuid/v4';
 
 export function defaultGaugeChartOptions() {
     return {
+        id: UUIDv4(),
+        chartType: "GaugeChart",
+        backgroundColor: 'transparent',
         series_Name: '',
         tooltip: {
-            formatter: "{a} <br/>{b} : {c}%"
+            formatter: "{a} <br/>{b} : {c}%",
+            textStyle: {
+                color: '#333',
+            }
         },
         toolbox: {
             feature: {
@@ -13,14 +19,32 @@ export function defaultGaugeChartOptions() {
                 saveAsImage: {}
             }
         },
-        series: [
-            // {
-            //     name: '业务指标',
-            //     type: 'gauge',
-            //     detail: { formatter: '{value}%' },
-            //     data: [{ value: 50, name: '完成率' }]
-            // }
-        ]
+        legend: {
+            show: true,
+            // x: 'left'
+            textStyle: {
+                color: '#333',
+            }
+        },
+        title: {
+            text: '',
+            subtext: '',
+            x: 'center',
+            backgroundColor: 'transparent',
+            textStyle: {
+                color: '#333',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 25,
+            },
+            subtextStyle: {
+                color: '#333',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 18,
+            },
+        },
+        series: []
     };
 
 
@@ -93,4 +117,35 @@ export function returnDataVisColors() {
         "橘黄色": '#ffa600',
         "绿色": '#53aa46'
     };
+}
+
+export function setThemeColor(options, theme) {
+    if (theme === "light") {
+
+        //  亮色背景下如果是白色文字。则切换成黑色
+        if (_.get(options, "title.textStyle.color", "") === "#ccc") {
+            _.set(options, "title.textStyle.color", "#333");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#ccc") {
+            _.set(options, "title.subtextStyle.color", "#333");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#ccc") {
+            _.set(options, "legend.textStyle.color", "#333");
+        }
+
+
+    }
+
+    else if (theme !== "light") {
+        // 暗色背景下如果是黑色文字。则切换成白色    
+        if (_.get(options, "title.textStyle.color", "") === "#333") {
+            _.set(options, "title.textStyle.color", "#ccc");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#333") {
+            _.set(options, "title.subtextStyle.color", "#ccc");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#333") {
+            _.set(options, "legend.textStyle.color", "#ccc");
+        }
+    }
 }

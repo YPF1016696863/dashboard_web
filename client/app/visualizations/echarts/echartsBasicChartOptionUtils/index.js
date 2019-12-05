@@ -4,11 +4,10 @@ import UUIDv4 from 'uuid/v4';
 export function defaultBasicChartOptions() {
     return {
         id: UUIDv4(),
+        chartType: "BasicChart",
+
         yAxisOptionsShow: false,
-
-
-
-
+        backgroundColor: 'transparent',
         useSerie: '',           // 选中的系列名称
         useSerie_Index: -1,     // 选中的系列下标
         bar2Flag: false,
@@ -57,6 +56,9 @@ export function defaultBasicChartOptions() {
         legend: {
             show: true,
             // x: 'left'
+            textStyle: {
+                color: '#333',
+            }
         },
         toolbox: {
             show: true,
@@ -75,7 +77,10 @@ export function defaultBasicChartOptions() {
             data: ["-"],
             nameLocation: "end",
             axisLine: {
-                show: true
+                show: true,
+                lineStyle: {
+                    color: '#333',
+                }
             },
             axisTick: {
                 show: true
@@ -84,6 +89,7 @@ export function defaultBasicChartOptions() {
                 show: true
             }
         },
+
         yAxis: {
             name: '',
             type: 'value',
@@ -93,7 +99,10 @@ export function defaultBasicChartOptions() {
                 show: true
             },
             axisLine: {
-                show: true
+                show: true,
+                lineStyle: {
+                    color: '#333',
+                }
             },
             axisTick: {
                 show: true
@@ -207,4 +216,47 @@ export function returnDataVisColors() {
         "橘黄色": '#ffa600',
         "绿色": '#53aa46'
     };
+}
+export function setThemeColor(options, theme) {
+    if (theme === "light") {
+
+        //  亮色背景下如果是白色文字。则切换成黑色
+        if (_.get(options, "title.textStyle.color", "") === "#ccc") {
+            _.set(options, "title.textStyle.color", "#333");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#ccc") {
+            _.set(options, "title.subtextStyle.color", "#333");
+        }
+        if (_.get(options, "xAxis.axisLine.lineStyle.color", "") === "#ccc") {
+            _.set(options, "xAxis.axisLine.lineStyle.color", "#333");
+        }
+        if (_.get(options, "yAxis.axisLine.lineStyle.color", "") === "#ccc") {
+            _.set(options, "yAxis.axisLine.lineStyle.color", "#333");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#ccc") {
+            _.set(options, "legend.textStyle.color", "#333");
+        }
+
+
+    }
+
+    else if (theme !== "light") {
+        // 暗色背景下如果是黑色文字。则切换成白色    
+        if (_.get(options, "title.textStyle.color", "") === "#333") {
+            _.set(options, "title.textStyle.color", "#ccc");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#333") {
+            _.set(options, "title.subtextStyle.color", "#ccc");
+        }
+        if (_.get(options, "xAxis.axisLine.lineStyle.color", "") === "#333") {
+            _.set(options, "xAxis.axisLine.lineStyle.color", "#ccc");
+        }
+        if (_.get(options, "yAxis.axisLine.lineStyle.color", "") === "#333") {
+            _.set(options, "yAxis.axisLine.lineStyle.color", "#ccc");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#333") {
+            _.set(options, "legend.textStyle.color", "#ccc");
+        }
+
+    }
 }

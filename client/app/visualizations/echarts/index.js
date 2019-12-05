@@ -4,7 +4,10 @@ import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
-import { defaultBasicChartOptions, parseChartType, getChartType, setxAxis, setyAxis, setScatter } from './echartsBasicChartOptionUtils';
+import {
+  defaultBasicChartOptions, parseChartType, getChartType, setxAxis, setyAxis,
+  setScatter, setThemeColor
+} from './echartsBasicChartOptionUtils';
 
 function EchartsRenderer($timeout, $rootScope, $window) {
   return {
@@ -16,6 +19,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
     template: echartsTemplate,
     link($scope, $element) {
       $scope.chartSeries = [];
+
+
+      console.log($scope.options);
 
       const refreshData = () => {
 
@@ -30,17 +36,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           const data = $scope.queryResult.getData();
-          //  主题整体修改 样式全变 如何在切换主题时更换颜色 但在默认主题或人为修改颜色时修改颜色？
-          // _.set($scope.options, "title.textStyle.color",
-          // _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
 
-          // _.set($scope.options, "title.subtextStyle.color", 
-          // _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
-
-          // _.set($scope.options, "textStyle.color", 
-          // _.get($rootScope, "theme.theme", "light") === "light" ? "#333" : "#fff");
-
-
+          // 切换主题颜色
+          setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
 
           //  提示框文字格式
@@ -87,7 +85,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
           let seriesNameIndex = 0;
           // setChartType($scope.options, selected);
           _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-
 
 
             $scope.options.series.push({
@@ -248,6 +245,20 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         }
       };
 
+      const refreshType = () => {// 单独对xy类型做刷新
+        // 一旦选中了横向柱状图 x 为value y 为字符类型
+        _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+          // 有一个系列选了横向柱状图
+          if (_.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === 'bar2') {
+            return false;
+          }
+          // 没有系列选了横向柱状图
+          _.set($scope.options, "xAxis.type", 'category');
+          _.set($scope.options, "yAxis.type", 'value');
+        });
+      };
+      $scope.$watch('options.form', refreshType, true);
+
       $scope.$watch('options', refreshData, true);
       $scope.$watch('queryResult && queryResult.getData()', refreshData);
       $rootScope.$watch('theme.theme', refreshData);
@@ -265,11 +276,21 @@ function EchartsEditor() {
     },
     link($scope) {
 
+      // 20191203 feature add 
+      $scope.selectChartTypeCb = (serie, type) => {// 图表类型选择的转换
+        const stringTemp = "form.yAxisColumnTypes[" + serie + "]";// 按照原先的输入格式进行配置 （现在的类型输入转换）
+        _.set($scope.options, stringTemp, type);
+        console.log($scope.options.form.yAxisColumnTypes);
+        // $scope.options.form.yAxisColumnTypes[serie] = type;
+        $scope.$apply();
+      };
+
       $scope.columns = $scope.queryResult.getColumns();
       $scope.columnNames = _.map($scope.columns, i => i.name);
 
-      // Set default options for new vis
-      if (_.isEmpty($scope.options)) {
+      // Set default options for new vis // 20191203 bug fix 
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "BasicChart") {
+        console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
@@ -427,14 +448,16 @@ export default function init(ngModule) {
       '<echarts-renderer options="visualization.options" query-result="queryResult"></echarts-renderer>';
 
     const editorTemplate = '<echarts-editor options="visualization.options" query-result="queryResult"></echarts-editor>';
-    const defaultOptions = {};
+    const defaultOptions = {
+
+    };// 此处的默认值先不配（在refashdata前加上判空似乎完成了默认配置的输入）
 
     VisualizationProvider.registerVisualization({
       type: 'ECHARTS',
       name: 'Echarts基础图表',
       renderTemplate,
       editorTemplate,
-      defaultOptions,
+      defaultOptions,// 
     });
   });
 }

@@ -35,7 +35,11 @@
                             ng-model="yAxisColumn">
                     </td>
                     <td style="padding: 3px; width: 105px;">
-                        <ui-select ng-model="options.form.yAxisColumnTypes[yAxisColumn]">
+
+                        <e-chart-pie-types serie="yAxisColumn" chart-type="options.form.yAxisColumnTypes[yAxisColumn]"
+                            chart-type-cb="selectChartTypeCb"></e-chart-pie-types>
+
+                        <ui-select ng-model="options.form.yAxisColumnTypes[yAxisColumn]" ng-hide="true">
                             <ui-select-match placeholder="图表种类">
                                 <div>
                                     <i class="fa fa-{{$select.selected.value.icon}}"></i>
@@ -92,6 +96,15 @@
             <ui-select ng-model="options.backgroundColor">
                 <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
                 <ui-select-choices repeat="Color.value as Color in BackgroundColors">
+                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">图例文字颜色</label>
+            <ui-select ng-model="options.legend.textStyle.color">
+                <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
+                <ui-select-choices repeat="Color.value as Color in Colors">
                     <div ng-bind-html="Color.label | highlight: $select.search"></div>
                 </ui-select-choices>
             </ui-select>

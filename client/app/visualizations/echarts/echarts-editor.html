@@ -45,7 +45,11 @@
                             ng-model="yAxisColumn">
                     </td>
                     <td style="padding: 3px; width: 105px;">
-                        <ui-select ng-model="options.form.yAxisColumnTypes[yAxisColumn]">
+
+                        <e-chart-types serie="yAxisColumn" chart-type="options.form.yAxisColumnTypes[yAxisColumn]"
+                            chart-type-cb="selectChartTypeCb"></e-chart-types>
+
+                        <ui-select ng-model="options.form.yAxisColumnTypes[yAxisColumn]" ng-hide="true">
                             <ui-select-match placeholder="图表种类">
                                 <div>
                                     <i class="fa fa-{{$select.selected.value.icon}}"></i>

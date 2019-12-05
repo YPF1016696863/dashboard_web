@@ -40,6 +40,8 @@ function ChartRenderer() {
     replace: false,
     controller($scope, clientConfig) {
       $scope.chartSeries = [];
+      
+      $scope.options=DEFAULT_OPTIONS;
 
       function zIndexCompare(series) {
         if ($scope.options.seriesOptions[series.name]) {
