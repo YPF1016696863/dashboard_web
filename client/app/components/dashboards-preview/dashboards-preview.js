@@ -54,12 +54,79 @@ function DashboardPreviewCtrl(
   this.saveInProgress = false;
   this.saveDelay = false;
   const vm = this;
+  const updateDashboard = data => {
+    _.extend(this.dashboard, data);
+    data = _.extend({}, data, {
+      slug: this.dashboard.id,
+      version: this.dashboard.version
+    });
+    Dashboard.save(
+        data,
+        dashboard => {
+          _.extend(this.dashboard, _.pick(dashboard, _.keys(data)));
+        },
+        error => {
+          if (error.status === 403) {
+            notification.error('可视化面板更新失败', '许可拒绝。');
+          } else if (error.status === 409) {
+            notification.error(
+                '此可视化面板似乎已经被另一个用户修改了。',
+                '请复制/备份您的更改并重新加载此页。 ',
+                { duration: null }
+            );
+          }
+        }
+    );
+  };
 
-  $scope.$watch(function(){
-    return vm.slugId;
-  }, function(data){
-    vm.loadDashboard();
-  });
+  $scope.$watch(
+    function() {
+      return vm.slugId;
+    },
+    function(data) {
+      vm.loadDashboard();
+    }
+  );
+
+  $scope.$watch(
+    function() {
+      return vm.widgetData;
+    },
+    function(data) {
+      if (vm.widgetData && vm.widgetData.widget) {
+        vm.addWidget(
+          vm.widgetData.widget,
+          vm.widgetData.paramMapping ? vm.widgetData.paramMapping : {}
+        );
+      }
+    }
+  );
+
+  $scope.$watch(
+      function() {
+        return vm.dashboardBgImg;
+      },
+      function(data) {
+        if(_.isEmpty(vm.dashboardBgImg)) {
+          vm.dashboardStyle = {
+          };
+          return;
+        }
+        vm.dashboardStyle = {
+          'background-image': 'url("'+vm.dashboardBgImg+'")',
+          'background-position': 'center',
+          'background-repeat': 'no-repeat',
+          'background-size': 'cover'
+        };
+
+        updateDashboard({ background_image:vm.dashboardBgImg });
+
+      }
+  );
+
+
+
+
 
   this.saveDashboardLayout = () => {
     if (!this.dashboard.canEdit()) {
@@ -152,6 +219,7 @@ function DashboardPreviewCtrl(
   }));
 
   const allowedIntervals = policy.getDashboardRefreshIntervals();
+
   if (_.isArray(allowedIntervals)) {
     _.each(this.refreshRates, rate => {
       rate.enabled = allowedIntervals.indexOf(rate.rate) >= 0;
@@ -235,7 +303,15 @@ function DashboardPreviewCtrl(
       { slug: this.slugId },
       dashboard => {
         this.dashboard = dashboard;
-        console.log(dashboard);
+
+        // Get dashboard style
+        this.dashboardStyle = {
+          'background-image': 'url("'+dashboard.background_image+'")',
+          'background-position': 'center',
+          'background-repeat': 'no-repeat',
+          'background-size': 'cover'
+        };
+
         this.isDashboardOwner =
           currentUser.id === dashboard.user.id ||
           currentUser.hasPermission('admin');
@@ -246,7 +322,7 @@ function DashboardPreviewCtrl(
           $location.search('edit', null);
           this.editLayout(true);
         }
-
+        this.editLayout(true);
         if ($location.search().refresh !== undefined) {
           if (this.refreshRate === null) {
             const refreshRate = Math.max(
@@ -263,11 +339,8 @@ function DashboardPreviewCtrl(
             );
           }
         }
-
-        this.connectCb(true,true);
       },
       rejection => {
-        this.connectCb(true,false);
         const statusGroup = Math.floor(rejection.status / 100);
         if (statusGroup === 5) {
           // recoverable errors - all 5** (server is temporarily unavailable
@@ -337,31 +410,6 @@ function DashboardPreviewCtrl(
     getTags(appSettings.server.backendUrl + '/api/dashboards/tags').then(tags =>
       _.map(tags, t => t.name)
     );
-
-  const updateDashboard = data => {
-    _.extend(this.dashboard, data);
-    data = _.extend({}, data, {
-      slug: this.dashboard.id,
-      version: this.dashboard.version
-    });
-    Dashboard.save(
-      data,
-      dashboard => {
-        _.extend(this.dashboard, _.pick(dashboard, _.keys(data)));
-      },
-      error => {
-        if (error.status === 403) {
-          notification.error('可视化面板更新失败', '许可拒绝。');
-        } else if (error.status === 409) {
-          notification.error(
-            '此可视化面板似乎已经被另一个用户修改了。',
-            '请复制/备份您的更改并重新加载此页。 ',
-            { duration: null }
-          );
-        }
-      }
-    );
-  };
 
   this.saveName = name => {
     updateDashboard({ name });
@@ -536,7 +584,9 @@ export const DashboardsPreview = {
   template,
   bindings: {
     slugId: '<',
-    connectCb:'<'
+    widgetData: '<',
+    dashboardBgImg: '<',
+    editing:'<'
   },
   controller: DashboardPreviewCtrl
 };

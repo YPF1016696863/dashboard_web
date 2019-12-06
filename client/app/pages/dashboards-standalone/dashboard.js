@@ -14,7 +14,7 @@ import AddWidgetDialog from '@/components/dashboards/AddWidgetDialog';
 import TextboxDialog from '@/components/dashboards/TextboxDialog';
 import notification from '@/services/notification';
 
-import './dashboard.less';
+
 
 function isWidgetPositionChanged(oldPosition, newPosition) {
   const fields = ['col', 'row', 'sizeX', 'sizeY', 'autoHeight'];

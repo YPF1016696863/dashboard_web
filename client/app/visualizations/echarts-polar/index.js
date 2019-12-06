@@ -17,7 +17,6 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
     link($scope, $element) {
 
       $scope.chartSeries = [];
-      console.log($scope.options);
 
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {

@@ -51,6 +51,10 @@ function ChartsListSelectViewCtrl(
     $scope.$apply();
   };
 
+  $scope.getVisCb = (vis) => {
+    this.selectWidgetCb(vis);
+  };
+
   // currentUser.hasPermission('admin');
 
 }
@@ -59,6 +63,7 @@ function ChartsListSelectViewCtrl(
 export const ChartsListSelectView = {
   template,
   bindings: {
+    selectWidgetCb:'<'
   },
   controller: ChartsListSelectViewCtrl
 };

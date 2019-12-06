@@ -1,6 +1,5 @@
 import logoUrl from '@/assets/images/redash_icon_small.png';
 import template from './public-dashboard-page.html';
-import './dashboard.less';
 
 function loadDashboard($http, $route, appSettings) {
   const token = $route.current.params.token;

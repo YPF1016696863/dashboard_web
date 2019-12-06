@@ -12,7 +12,7 @@ class DashboardThemeSwitch extends React.Component {
     super(props);
     const {$rootScope} = props;
     // Get theme flag from rootScope first, if not exist, set to false, which means use light theme.
-    console.log($rootScope);
+
     this.state = { visible: false, isDarkTheme:_.get($rootScope,"theme.theme","dark") === "dark" };// false: light theme, true: dark theme.
   }
 

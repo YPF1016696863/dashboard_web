@@ -23,9 +23,15 @@ const layouts = {
     bodyClass: 'fixed-layout',
     bodyClassBackgroundColor: ''
   },
+  dashboardPreview: {
+    showHeader: false,
+    hideLeftPanel: true,
+    bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
+  },
   defaultSignedOut: {
     showHeader: false,
-    bodyClassBackgroundColor:''
+    bodyClassBackgroundColor: ''
   }
 };
 
@@ -71,11 +77,14 @@ class AppViewComponent {
       this.applyLayout($$route);
     });
 
-    $rootScope.$on('$routeChangeError', (event, current, previous, rejection) => {
-      const $$route = current.$$route || { authenticated: true };
-      this.applyLayout($$route);
-      throw new PromiseRejectionError(rejection);
-    });
+    $rootScope.$on(
+      '$routeChangeError',
+      (event, current, previous, rejection) => {
+        const $$route = current.$$route || { authenticated: true };
+        this.applyLayout($$route);
+        throw new PromiseRejectionError(rejection);
+      }
+    );
   }
 
   applyLayout(route) {
@@ -84,17 +93,18 @@ class AppViewComponent {
     this.$rootScope.theme = {
       theme: 'dark',
       bodyBackgroundColor: 'dashboard-dark-theme',
-      bodyBackgroundImage: "",
-      dashboardHeaderBackgroundColor: "widget-dark-theme",
-      dashboardHeaderTitleColor: "header-title-dark-theme",
-      widgetBackgroundColor: "widget-dark-theme",
-      queryLinkTextColor:"query-link-dark-theme",
-      widgetHeaderTextColor: "widget-header-text-dark-theme",
-      widgetFooterTextColor: "widget-footer-text-dark-theme",
-      widgetActionPanelBackgroundColor:"widget-action-panel-dark-theme",
-      dashboardFooterFontColor:"dashboard-footer-font-color-dark-theme",
-      dashboardTableTextColor:'dashboard-widget-table-text-dark-theme',
-      dashboardTableHeaderTextColor:'dashboard-widget-table-header-text-dark-theme',
+      bodyBackgroundImage: '',
+      dashboardHeaderBackgroundColor: 'widget-dark-theme',
+      dashboardHeaderTitleColor: 'header-title-dark-theme',
+      widgetBackgroundColor: 'widget-dark-theme',
+      queryLinkTextColor: 'query-link-dark-theme',
+      widgetHeaderTextColor: 'widget-header-text-dark-theme',
+      widgetFooterTextColor: 'widget-footer-text-dark-theme',
+      widgetActionPanelBackgroundColor: 'widget-action-panel-dark-theme',
+      dashboardFooterFontColor: 'dashboard-footer-font-color-dark-theme',
+      dashboardTableTextColor: 'dashboard-widget-table-text-dark-theme',
+      dashboardTableHeaderTextColor:
+        'dashboard-widget-table-header-text-dark-theme',
       dashboardWidgetScrollBar: 'dashboard-widget-scrollbox-dark',
       dashboardHeaderButtonColor: true
     };
@@ -104,14 +114,15 @@ class AppViewComponent {
 export default function init(ngModule) {
   ngModule.factory(
     '$exceptionHandler',
-    () => function exceptionHandler(exception) {
-      handler.process(exception);
-    },
+    () =>
+      function exceptionHandler(exception) {
+        handler.process(exception);
+      }
   );
 
   ngModule.component('appView', {
     template,
-    controller: AppViewComponent,
+    controller: AppViewComponent
   });
 }
 

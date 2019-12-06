@@ -147,6 +147,7 @@ class ChartsSelectTabs extends React.Component {
                 ),
                 visType: 'V'
               });
+              this.props.getVisCb(this.state.visualization);
             }
           })
           .catch(err => {
@@ -240,13 +241,14 @@ class ChartsSelectTabs extends React.Component {
 }
 
 ChartsSelectTabs.propTypes = {
-  displayId: PropTypes.string
+  displayId: PropTypes.string,
+  getVisCb: PropTypes.func
   // displayType: PropTypes.string
 };
 
 ChartsSelectTabs.defaultProps = {
-  displayId: null
-  // displayType: null
+  displayId: null,
+  getVisCb: a=>{}
 };
 
 export default function init(ngModule) {

@@ -4,6 +4,7 @@
 ></app-header>
 <div style="display: flex; flex-direction: row;">
   <div
+    ng-hide="$ctrl.layout.hideLeftPanel"
     ng-class="{'main-section-left': $ctrl.layout.showHeader,'main-section-left-dashboard': !$ctrl.layout.showHeader}"
   >
     <nav-sidebar></nav-sidebar>

@@ -16,8 +16,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
     template: echartsTemplate,
     link($scope, $element) {
       $scope.chartSeries = [];
-      
-      console.log($scope.options);
 
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {

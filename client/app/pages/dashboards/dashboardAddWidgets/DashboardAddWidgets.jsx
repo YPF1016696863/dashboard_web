@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
-import { angular2react } from "angular2react";
+import { angular2react } from 'angular2react';
 import { Modal, Button } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
 import './DashboardAddWidgets.less';
-import {ChartsListSelectView} from "../charts-list-select";
+import { ChartsListSelectView } from '../charts-list-select';
 
 let ChartsListSelectViewDOM;
 
@@ -17,13 +17,13 @@ class DashboardAddWidgets extends React.Component {
       super(props);
     }
     */
-  state = { visible: false };
+  state = { visible: false, selectedWidget: null };
 
   componentDidMount() {
     ChartsListSelectViewDOM = angular2react(
-        'chartsListSelectView',
-        ChartsListSelectView,
-        window.$injector
+      'chartsListSelectView',
+      ChartsListSelectView,
+      window.$injector
     );
   }
 
@@ -35,17 +35,24 @@ class DashboardAddWidgets extends React.Component {
   };
 
   handleOk = e => {
-    console.log(e);
+    this.setState({
+      visible: false
+    });
+    this.props.addWidgetCb({widget:this.state.selectedWidget,paramMapping:{}});
+  };
+
+  handleCancel = e => {
     this.setState({
       visible: false
     });
   };
 
-  handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false
-    });
+  selectWidgetCb = selectedWidget => {
+    if(selectedWidget) {
+      this.setState({
+        selectedWidget
+      });
+    }
   };
 
   render() {
@@ -59,8 +66,10 @@ class DashboardAddWidgets extends React.Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           width="60vw"
+          cancelText="取消"
+          okText="添加"
         >
-          <ChartsListSelectViewDOM />
+          <ChartsListSelectViewDOM selectWidgetCb={this.selectWidgetCb} />
         </Modal>
       </div>
     );
@@ -68,11 +77,10 @@ class DashboardAddWidgets extends React.Component {
 }
 
 DashboardAddWidgets.propTypes = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  slugId: PropTypes.string
+  addWidgetCb: PropTypes.func
 };
 DashboardAddWidgets.defaultProps = {
-  slugId: null
+  addWidgetCb: data => {}
 };
 
 export default function init(ngModule) {

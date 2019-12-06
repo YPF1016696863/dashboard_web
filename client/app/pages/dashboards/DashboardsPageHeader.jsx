@@ -25,17 +25,19 @@ class DashboardsPageHeader extends React.Component {
         <Menu
           mode="horizontal"
           className="dashboard-header-menu"
-          selectable={false}
+
         >
-          <Menu.Item key="mail">
+          <Menu.Item key="save" selectable={false}>
             <Icon type="save" />
-            保存
+            保存/自动保存
           </Menu.Item>
           <Divider type="vertical" />
 
-          <Menu.Item key="alipay2" style={{ float: 'right' }}>
-            <Icon type="play-square" />
-            预览模式
+          <Menu.Item key="preview" style={{ float: 'right' }}>
+            <a href={"/preview/"+this.props.slugId} target="_blank" rel="noopener noreferrer">
+              <Icon type="play-square" />
+              预览模式
+            </a>
           </Menu.Item>
         </Menu>
       </div>

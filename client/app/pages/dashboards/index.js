@@ -38,6 +38,8 @@ function DashboardsViewCtrl(
   Visualization,
   appSettings
 ) {
+  $scope.widgetData = null;
+  $scope.dashboardBgImg="";
   $scope.currentUser = currentUser;
   $scope.slugId = $route.current.params.slugId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
@@ -46,19 +48,18 @@ function DashboardsViewCtrl(
     // $scope.$apply();
   };
 
+  $scope.updateDashboardBgImgCb = (dashboardBgImg) => {
+    $scope.dashboardBgImg= dashboardBgImg;
+    $scope.$apply();
+  };
+
+
+  $scope.addWidgetCb = (widgetData) => {
+    $scope.widgetData = widgetData;
+    $scope.$apply();
+  };
+
   // currentUser.hasPermission('admin');
-
-  this.topDirections = ['left', 'up'];
-  this.bottomDirections = ['down', 'right'];
-
-  this.isOpen = false;
-
-  this.availableModes = ['md-fling', 'md-scale'];
-  this.selectedMode = 'md-fling';
-
-  this.availableDirections = ['up', 'down', 'left', 'right'];
-  this.selectedDirection = 'up';
-
 
 }
 

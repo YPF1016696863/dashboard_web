@@ -27,7 +27,9 @@
             style="height: 100% !important;background-color: #20263B"
           >
             <dashboards-search
+              slug-id="slugId"
               dashboard-search-cb="dashboardSearchCb"
+              update-dashboard-bg-img-cb="updateDashboardBgImgCb"
             ></dashboards-search>
           </div>
         </div>
@@ -57,7 +59,7 @@
                   style="left: 0; top: 0; right: 0; bottom: 0;"
                 >
                   <div class="query__vis scrollbox">
-                    <dashboards-tabs slug-id="slugId"></dashboards-tabs>
+                    <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg"></dashboards-tabs>
                   </div>
                   <div class="FAB">
                     <md-fab-toolbar md-open="false" md-direction="left">
@@ -81,7 +83,7 @@
                           <md-button
                                   aria-label="添加其他可视化仪表盘"
                           >
-                            <dashboard-add-widgets></dashboard-add-widgets>
+                            <dashboard-add-widgets add-widget-cb="addWidgetCb"></dashboard-add-widgets>
                           </md-button>
                         </md-fab-actions>
                       </md-toolbar>

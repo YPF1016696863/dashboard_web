@@ -117,12 +117,6 @@ class DashboardsTabs extends React.Component {
     );
   };
 
-  connectCb = (isLoaded, loadSuccess) => {
-    this.setState({
-      isLoaded
-    });
-  };
-
   deleteDashboard = () => {
     notification.error({
       message: `消息`,
@@ -132,9 +126,9 @@ class DashboardsTabs extends React.Component {
   };
 
   render() {
-    const { slugId } = this.props;
-
-    console.log(this.state.isDashboardOwner);
+    const { slugId,widgetData,dashboardBgImg } = this.props;
+    // eslint-disable-next-line no-unused-vars
+    const {isDashboardOwner} = this.state;
 
     return (
       <>
@@ -151,7 +145,7 @@ class DashboardsTabs extends React.Component {
           </div>
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
-          <DashboardsPreviewDOM slugId={slugId} connectCb={this.connectCb} />
+          <DashboardsPreviewDOM slugId={slugId} widgetData={widgetData} dashboardBgImg={dashboardBgImg} editing />
         )}
       </>
     );
@@ -159,11 +153,15 @@ class DashboardsTabs extends React.Component {
 }
 
 DashboardsTabs.propTypes = {
-  slugId: PropTypes.string
+  slugId: PropTypes.string,
+  widgetData: PropTypes.object,
+  dashboardBgImg: PropTypes.string,
 };
 
 DashboardsTabs.defaultProps = {
-  slugId: null
+  slugId: null,
+  widgetData: null,
+  dashboardBgImg:null
 };
 
 export default function init(ngModule) {
