@@ -338,12 +338,11 @@ class ChartsListTabs extends React.Component {
                         href={
                           'query/' +
                           this.getQueryId() +
-                          '/charts/' +
-                          this.getChartId()
+                          '/charts/new'
                         }
                       >
                         <i className="fa fa-edit m-r-5" />
-                        编辑可视化组件
+                        新建可视化组件
                       </Button>
                       <br />
                       <br />
