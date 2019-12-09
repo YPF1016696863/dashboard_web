@@ -15,6 +15,7 @@ import {
   Alert,
   Empty,
   BackTop,
+  message,
   Tabs
 } from 'antd';
 import PropTypes from 'prop-types';

@@ -14,7 +14,7 @@ import {
   Table,
   Alert,
   Empty,
-  BackTop,
+  message,
   Input,
   Tabs
 } from 'antd';
@@ -56,6 +56,7 @@ class QueriesListTabs extends React.Component {
   componentDidMount() {
     this.setState({
       isLoaded: true,
+      queryResultRaw: null,
       queryResult: null
     });
   }
@@ -74,6 +75,7 @@ class QueriesListTabs extends React.Component {
     ) {
       // eslint-disable-next-line
       this.setState({
+        queryResultRaw: null,
         queryResult: null
       });
     }
@@ -82,18 +84,21 @@ class QueriesListTabs extends React.Component {
   getQuery(id) {
     this.setState({
       isLoaded: false,
+      queryResultRaw: null,
       queryResult: null
     });
     Query.resultById({ id })
       .$promise.then(res => {
         this.setState({
           isLoaded: true,
+          queryResultRaw: res,
           queryResult: this.normalizedTableData(res.query_result)
         });
       })
       .catch(err => {
         this.setState({
           isLoaded: true,
+          queryResultRaw: null,
           queryResult: 'empty'
         });
       });
@@ -110,6 +115,27 @@ class QueriesListTabs extends React.Component {
       })),
       rows: data.data.rows
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  updateFriendlyName() {
+    // TODO: 触发这个函数的时候，数据已经保存到this.state.queryResultRaw中，需要使用api将数据保存到服务端，具体用法需要研究api使用，
+    message.error("暂时无法将数据集别名保存至服务器，该功能正在开发当中...");
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  friendlyNameOnChange(id, record, event) {
+    _.find(
+      _.get(this.state.queryResultRaw, 'query_result.data.columns', []),
+      record
+    ).friendly_name = event.target.value;
+    this.setState({
+      isLoaded: true,
+      queryResultRaw: this.state.queryResultRaw,
+      queryResult: this.normalizedTableData(
+        this.state.queryResultRaw.query_result
+      )
+    });
   }
 
   render() {
@@ -151,7 +177,7 @@ class QueriesListTabs extends React.Component {
                 />
               </TabPane>
               <TabPane tab="数据集设置" key="2">
-                <p style={{fontSize:'14px'}}>设置数据集列名称别名:</p>
+                <p style={{ fontSize: '14px' }}>设置数据集列名称别名:</p>
                 <Table
                   bordered
                   pagination={{ pageSize: 10 }}
@@ -159,30 +185,56 @@ class QueriesListTabs extends React.Component {
                     {
                       title: '名称',
                       dataIndex: 'name',
-                      key: 'name',
+                      key: 'name'
                     },
                     {
                       title: '别名',
                       dataIndex: 'friendly_name',
                       key: 'friendly_name',
-                      render: text => <Input placeholder="别名" value={text} allowClear />
+                      render: (text, record, index) => {
+                        return (
+                          <Input
+                            placeholder="别名"
+                            value={text}
+                            allowClear
+                            onChange={e =>
+                              this.friendlyNameOnChange(index, record, e)
+                            }
+                          />
+                        );
+                      }
                     }
                   ]}
-                  dataSource={[
-                    {
-                      key: '1',
-                      name: 'Column1',
-                      friendly_name: 'Column friendly_name 1'
-                    },
-                    {
-                      key: '2',
-                      name: 'Column1',
-                      friendly_name: 'Column friendly_name 2'
-                    }
-                  ]}
+                  dataSource={_.get(
+                    this.state.queryResultRaw,
+                    'query_result.data.columns',
+                    []
+                  )}
                 />
-                <p style={{fontSize:'14px'}}>其他操作:</p>
-                <Button type="danger"><Icon type="delete" />删除数据集</Button>
+                <div align="right">
+                  <Button type="primary" onClick={this.updateFriendlyName}>
+                    <Icon type="upload" />
+                    更新数据集别名
+                  </Button>
+                </div>
+
+                <br />
+                <br />
+                <p style={{ fontSize: '14px' }}>其他设置:</p>
+                <Button
+                  type="primary"
+                  target="_blank"
+                  href={'/queries/' + this.props.queryId + '/source'}
+                >
+                  <i className="fa fa-edit m-r-5" />
+                  编辑数据集
+                </Button>
+                <br />
+                <br />
+                <Button type="danger">
+                  <Icon type="delete" />
+                  删除数据集
+                </Button>
               </TabPane>
             </Tabs>
           )}

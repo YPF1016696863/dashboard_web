@@ -16,7 +16,11 @@ import {
   Empty,
   BackTop,
   message,
-  Tabs
+  Tabs,
+  Switch,
+  Statistic,
+  Card,
+  Input
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -64,6 +68,7 @@ class ChartsListTabs extends React.Component {
   componentDidMount() {
     this.setState({
       isLoaded: true,
+      query: null,
       queryResult: null,
       visualization: null,
       visType: null,
@@ -115,6 +120,7 @@ class ChartsListTabs extends React.Component {
 
     this.setState({
       isLoaded: false,
+      query: null,
       queryResult: null,
       visualization: null,
       visType: null,
@@ -123,6 +129,7 @@ class ChartsListTabs extends React.Component {
 
     Query.query({ id: queryId })
       .$promise.then(query => {
+        this.setState({ query });
         query
           .getQueryResultPromise()
           .then(queryRes => {
@@ -163,6 +170,7 @@ class ChartsListTabs extends React.Component {
           .catch(err => {
             this.setState({
               isLoaded: true,
+              query: null,
               visualization: null,
               queryResult: 'empty',
               visType: null,
@@ -173,6 +181,7 @@ class ChartsListTabs extends React.Component {
       .catch(err => {
         this.setState({
           isLoaded: true,
+          query: null,
           visualization: null,
           queryResult: 'empty',
           visType: null,
@@ -194,61 +203,48 @@ class ChartsListTabs extends React.Component {
       <>
         {!this.state.isLoaded && (
           <>
-            <Menu selectedKeys={[]} mode="horizontal">
-              <Menu.Item key="add-vis">
-                <Button type="link" disabled>
-                  <Icon type="file-add" />
-                  新建可视化组件
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="edit-query">
-                <Button type="link" disabled>
-                  <Icon type="edit" />
-                  编辑数据集
-                </Button>
-              </Menu.Item>
-            </Menu>
-            <div className="align-center-div" style={{ paddingTop: '15%' }}>
-              <LoadingState />
-            </div>
+            <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+              <TabPane tab="可视化组件预览" key="1" disabled>
+                <div className="align-center-div" style={{ paddingTop: '15%' }}>
+                  <LoadingState />
+                </div>
+              </TabPane>
+              <TabPane tab="编辑可视化组件" key="2" disabled />
+            </Tabs>
           </>
         )}
         {this.state.isLoaded && this.state.queryResult == null && (
           <>
-            <Menu selectedKeys={[]} mode="horizontal">
-              <Menu.Item key="add-vis">
-                <Button type="link" disabled>
-                  <Icon type="file-add" />
-                  新建可视化组件
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="edit-query">
-                <Button type="link" disabled>
-                  <Icon type="edit" />
-                  编辑数据集
-                </Button>
-              </Menu.Item>
-            </Menu>
-            <div className="align-center-div" style={{ paddingTop: '15%' }}>
-              <img src={emptyChartImg} alt="" style={{ width: 100 }} />
-            </div>
+            <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+              <TabPane tab="可视化组件预览" key="1" disabled>
+                <div className="align-center-div" style={{ paddingTop: '15%' }}>
+                  <img src={emptyChartImg} alt="" style={{ width: 100 }} />
+                </div>
+              </TabPane>
+              <TabPane tab="编辑可视化组件" key="2" disabled />
+            </Tabs>
           </>
         )}
         {this.state.isLoaded && this.state.queryResult === 'empty' && (
-          <Empty
-            description={
-              <span style={{ color: '#fff' }}>该可视化组件暂无数据</span>
-            }
-            style={{ paddingTop: '10%' }}
-          >
-            <Button
-              type="primary"
-              href={'/queries/' + this.getQueryId() + '/source'}
-              target="_blank"
-            >
-              设置数据
-            </Button>
-          </Empty>
+          <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+            <TabPane tab="可视化组件预览" key="1" disabled>
+              <Empty
+                description={
+                  <span style={{ color: '#fff' }}>该可视化组件暂无数据</span>
+                }
+                style={{ paddingTop: '10%' }}
+              >
+                <Button
+                  type="primary"
+                  href={'/queries/' + this.getQueryId() + '/source'}
+                  target="_blank"
+                >
+                  设置数据
+                </Button>
+              </Empty>
+            </TabPane>
+            <TabPane tab="编辑可视化组件" key="2" disabled />
+          </Tabs>
         )}
         {this.state.isLoaded &&
           this.state.queryResult != null &&
@@ -257,78 +253,173 @@ class ChartsListTabs extends React.Component {
               {/* eslint-disable-next-line no-nested-ternary */}
               {this.state.visType === 'Q' ? (
                 <>
-                  <Menu selectedKeys={[]} mode="horizontal">
-                    <Menu.Item key="add-vis">
-                      <Button
-                        type="link"
-                        onClick={() => {
-                          if (this.state.canEdit) {
-                            this.props.$window.open(
-                              'query/' + this.getQueryId() + '/charts/new',
-                              '新建可视化组件'
-                            );
-                          } else {
-                            message.warning(
-                              '无法新建可视化组件,无有效编辑权限'
-                            );
-                          }
+                  <Tabs
+                    defaultActiveKey="1"
+                    type="card"
+                    className="queries-tab"
+                  >
+                    <TabPane tab="可视化组件数据预览" key="1">
+                      <ChartsPreviewDOM
+                        visualization={this.state.visualization}
+                        queryResult={this.state.queryResult}
+                      />
+                    </TabPane>
+                    <TabPane tab="新建设置" key="2">
+                      <Descriptions title={this.state.query.name}>
+                        <Descriptions.Item label="数据集创建时间">
+                          {this.state.query.created_at}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="ID">
+                          {this.state.visualization.id}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="创建者">
+                          {this.state.query.user.name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="可编辑">
+                          {this.state.canEdit ? (
+                            <Switch
+                              disabled
+                              defaultChecked
+                              checkedChildren="是"
+                            />
+                          ) : (
+                            <Switch disabled unCheckedChildren="否" />
+                          )}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="最近更新自">
+                          {this.state.query.last_modified_by.name}
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Statistic
+                        title="数据集:"
+                        value={this.state.query.query}
+                      />
+                      <br />
+                      <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
+                      <Card
+                        bodyStyle={{
+                          paddingTop: '10px',
+                          paddingBottom: '10px'
                         }}
                       >
-                        <Icon type="file-add" />
-                        新建可视化组件
-                      </Button>
-                    </Menu.Item>
-                    <Menu.Item key="edit-query">
-                      <Button
-                        type="link"
-                        onClick={() => {
-                          if (this.state.canEdit) {
-                            this.props.$window.open(
-                              '/queries/' + this.getQueryId() + '/source',
-                              '编辑数据集'
-                            );
-                          } else {
-                            message.warning('无法编辑数据集,无有效编辑权限');
+                        <Statistic
+                          title="可视化组件共享"
+                          value=" "
+                          prefix={
+                            <Switch
+                              checkedChildren="开"
+                              unCheckedChildren="关"
+                              defaultChecked={false}
+                            />
                           }
-                        }}
-                      >
-                        <Icon type="edit" />
-                        编辑数据集
-                      </Button>
-                    </Menu.Item>
-                  </Menu>
-                  <ChartsPreviewDOM
-                    visualization={this.state.visualization}
-                    queryResult={this.state.queryResult}
-                  />
-                </>
-              ) : this.state.visType === 'V' ? (
-                <>
-                  <Menu selectedKeys={[]} mode="horizontal">
-                    <Menu.Item key="edit-vis">
-                      <a
+                        />
+                        <Row>
+                          <Col span={18}>
+                            <Input
+                              value={this.state.query.api_key}
+                              readOnly
+                            />
+                          </Col>
+                          <Col span={6}>
+                            <Button
+                              disabled
+                              type="primary"
+                              style={{ marginLeft: '15px' }}
+                            >
+                              <Icon type="copy" /> 拷贝API Key
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Card>
+                      <p style={{ fontSize: '14px' }}>其他设置:</p>
+                      <Button
+                        type="primary"
+                        target="_blank"
                         href={
                           'query/' +
                           this.getQueryId() +
                           '/charts/' +
                           this.getChartId()
                         }
-                        target="_blank"
-                        rel="noopener noreferrer"
                       >
-                        <Icon type="edit" />
+                        <i className="fa fa-edit m-r-5" />
                         编辑可视化组件
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="delete-vis">
-                      <Icon type="delete" style={{ color: 'red' }} />
-                      <span style={{ color: 'red' }}>删除</span>
-                    </Menu.Item>
-                  </Menu>
-                  <ChartsPreviewDOM
-                    visualization={this.state.visualization}
-                    queryResult={this.state.queryResult}
-                  />
+                      </Button>
+                      <br />
+                      <br />
+                      <Button disabled>
+                        <Icon type="delete" />
+                        删除可视化组件
+                      </Button>
+                    </TabPane>
+                  </Tabs>
+                </>
+              ) : this.state.visType === 'V' ? (
+                <>
+                  <Tabs
+                    defaultActiveKey="1"
+                    type="card"
+                    className="queries-tab"
+                  >
+                    <TabPane tab="可视化组件数据预览" key="1">
+                      <ChartsPreviewDOM
+                        visualization={this.state.visualization}
+                        queryResult={this.state.queryResult}
+                      />
+                    </TabPane>
+                    <TabPane tab="设置可视化组件" key="2">
+                      <Descriptions title={this.state.visualization.name}>
+                        <Descriptions.Item label="更新时间">
+                          {this.state.visualization.updated_at}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="ID">
+                          {this.state.visualization.id}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="创建者">
+                          {this.state.query.user.name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="可编辑">
+                          {this.state.canEdit ? (
+                            <Switch
+                              disabled
+                              defaultChecked
+                              checkedChildren="是"
+                            />
+                          ) : (
+                            <Switch disabled unCheckedChildren="否" />
+                          )}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="可视化组件类型">
+                          {this.state.visualization.type}
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Statistic
+                        title="该可视化组建由以下数据集创建:"
+                        value={this.state.query.name}
+                      />
+                      <br />
+                      <p style={{ fontSize: '14px' }}>其他设置:</p>
+                      <Button
+                        type="primary"
+                        target="_blank"
+                        href={
+                          'query/' +
+                          this.getQueryId() +
+                          '/charts/' +
+                          this.getChartId()
+                        }
+                      >
+                        <i className="fa fa-edit m-r-5" />
+                        编辑可视化组件
+                      </Button>
+                      <br />
+                      <br />
+                      <Button disabled>
+                        <Icon type="delete" />
+                        删除可视化组件
+                      </Button>
+                    </TabPane>
+                  </Tabs>
                 </>
               ) : null}
             </>

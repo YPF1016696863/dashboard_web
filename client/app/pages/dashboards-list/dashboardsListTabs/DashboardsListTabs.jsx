@@ -17,7 +17,8 @@ import {
   Statistic,
   Switch,
   Tabs,
-  Card
+  Card,
+  message
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -67,8 +68,7 @@ class DashboardsListTabs extends React.Component {
 
     this.setState({
       isLoaded: true,
-      dashboard: null,
-      isDashboardOwner: false
+      dashboard: null
     });
 
     DashboardsPreviewDOM = angular2react(
@@ -93,25 +93,24 @@ class DashboardsListTabs extends React.Component {
   getDashboard = slugId => {
     this.setState({
       isLoaded: false,
-      dashboard: null,
-      isDashboardOwner: false
+      dashboard: null
     });
     Dashboard.get(
       { slug: slugId },
       dashboard => {
         this.setState({
           isLoaded: true,
-          dashboard,
-          isDashboardOwner:
-            currentUser.id === dashboard.user.id ||
-            currentUser.hasPermission('admin')
+          dashboard
         });
+        if(!(currentUser.id === dashboard.user.id ||
+            currentUser.hasPermission('admin'))) {
+          message.warning('该可视化仪表盘由其他用户创建.');
+        }
       },
       rejection => {
         this.setState({
           isLoaded: true,
-          dashboard: null,
-          isDashboardOwner: false
+          dashboard: null
         });
       }
     );
@@ -133,8 +132,6 @@ class DashboardsListTabs extends React.Component {
 
   render() {
     const { slugId } = this.props;
-
-    console.log(this.state.isDashboardOwner);
 
     return (
       <>
@@ -220,7 +217,7 @@ class DashboardsListTabs extends React.Component {
                 </Row>
               </Card>
               <br />
-              <p style={{ fontSize: '14px' }}>其他操作:</p>
+              <p style={{ fontSize: '14px' }}>其他设置:</p>
               <Button
                 type="primary"
                 disabled={slugId == null}

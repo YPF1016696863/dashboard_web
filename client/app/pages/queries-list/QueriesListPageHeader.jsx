@@ -24,7 +24,6 @@ class QueriesListPageHeader extends React.Component {
   componentDidMount() {}
 
   render() {
-    const { query } = this.props;
     const newDataSourceProps = {
       type: 'primary',
       ghost: true,
@@ -64,19 +63,7 @@ class QueriesListPageHeader extends React.Component {
               <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
             </>
           }
-          extra={[
-            <Button
-              ghost
-              type="primary"
-              size="small"
-              disabled={this.props.queryId == null || this.props.queryId.includes('datavis-group#')}
-              href={'/queries/' + this.props.queryId + '/source'}
-              target="_blank"
-            >
-              <i className="fa fa-edit m-r-5" />
-              编辑数据集
-            </Button>
-          ]}
+          extra={[]}
         >
           <Descriptions size="small" column={3}>
             <Descriptions.Item label="备注">
@@ -91,7 +78,6 @@ class QueriesListPageHeader extends React.Component {
 }
 
 QueriesListPageHeader.propTypes = {
-  queryId: PropTypes.string.isRequired
 };
 QueriesListPageHeader.defaultProps = {};
 
