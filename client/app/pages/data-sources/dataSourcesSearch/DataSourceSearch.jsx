@@ -68,8 +68,9 @@ class DataSourceSearch extends React.Component {
       helpTriggerPrefix: 'DS_',
       onCreate: this.createDataSource
     }).result.then((result = {}) => {
+      console.log(result);
       if (result.success) {
-        this.props.$window.location.reload();
+        this.reload();
       }
     });
   };
@@ -205,6 +206,7 @@ class DataSourceSearch extends React.Component {
                 <DirectoryTree
                   defaultExpandAll
                   onSelect={(value, node, extra) => {
+                    localStorage.setItem('lastSelectedDataSourceId', value&&value.length?value[0]:null);
                     this.props.sourceSearchCb(value);
                   }}
                 >

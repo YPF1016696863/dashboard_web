@@ -264,7 +264,7 @@ class ChartsListTabs extends React.Component {
                         queryResult={this.state.queryResult}
                       />
                     </TabPane>
-                    <TabPane tab="新建设置" key="2">
+                    <TabPane tab="新建设置" key="2" style={{paddingRight:'10px'}}>
                       <Descriptions title={this.state.query.name}>
                         <Descriptions.Item label="数据集创建时间">
                           {this.state.query.created_at}
@@ -366,7 +366,7 @@ class ChartsListTabs extends React.Component {
                         queryResult={this.state.queryResult}
                       />
                     </TabPane>
-                    <TabPane tab="设置可视化组件" key="2">
+                    <TabPane tab="设置可视化组件" key="2" style={{paddingRight:'10px'}}>
                       <Descriptions title={this.state.visualization.name}>
                         <Descriptions.Item label="更新时间">
                           {this.state.visualization.updated_at}

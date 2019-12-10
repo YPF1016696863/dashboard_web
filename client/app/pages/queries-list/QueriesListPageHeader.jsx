@@ -63,7 +63,22 @@ class QueriesListPageHeader extends React.Component {
               <span style={{ fontSize: '13px' }}>新建并管理数据查询</span>
             </>
           }
-          extra={[]}
+          extra={[
+            <Button
+              ghost
+              type="primary"
+              size="small"
+              disabled={
+                this.props.queryId == null ||
+                this.props.queryId.includes('datavis-group#')
+              }
+              href={'/query/' + this.props.queryId + '/charts/new'}
+              target="_blank"
+            >
+              <Icon type="pie-chart" />
+              新建可视化组件
+            </Button>
+          ]}
         >
           <Descriptions size="small" column={3}>
             <Descriptions.Item label="备注">
@@ -78,6 +93,7 @@ class QueriesListPageHeader extends React.Component {
 }
 
 QueriesListPageHeader.propTypes = {
+  queryId: PropTypes.string.isRequired
 };
 QueriesListPageHeader.defaultProps = {};
 

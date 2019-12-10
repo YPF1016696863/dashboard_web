@@ -49,12 +49,14 @@ const { Search } = Input;
 
 class QueriesListSearch extends React.Component {
   state = {
+    selected:null,
     all: null,
     filtered: null,
     loading: true
   };
 
   componentDidMount() {
+    localStorage.setItem('lastSelectedDataSourceId', null);
     Query.allQueries().$promise.then(res => {
       this.setState({
         all: res,
@@ -64,9 +66,23 @@ class QueriesListSearch extends React.Component {
     });
   }
 
-  reload() {
-    this.props.querySearchCb(null);
+  componentDidUpdate(prevProps) {
+    if (
+        !_.isEqual(this.props.reload, prevProps.reload)
+    ) {
+      this.reload(true)
+    }
+  }
+
+  reload(holdTab) {
+    let queryid = null;
+    if(holdTab) {
+      queryid = this.state.selected;
+    }
+    localStorage.setItem('lastSelectedDataSourceId', queryid);
+    this.props.querySearchCb([queryid]);
     this.setState({
+      selected:queryid,
       all: null,
       filtered: null,
       loading: true
@@ -181,8 +197,10 @@ class QueriesListSearch extends React.Component {
                 <DirectoryTree
                   defaultExpandAll
                   onSelect={(value, node, extra) => {
+                    this.setState({selected:value[0]});
                     this.props.querySearchCb(value);
                   }}
+                  selectedKeys={[this.state.selected]}
                 >
                   <TreeNode title="数据查询(无分组)" key="datavis-group#ungrouped">
                     {_.map(this.state.filtered, item => (
@@ -210,7 +228,8 @@ class QueriesListSearch extends React.Component {
 }
 
 QueriesListSearch.propTypes = {
-  querySearchCb: PropTypes.func.isRequired
+  querySearchCb: PropTypes.func.isRequired,
+  reload: PropTypes.number.isRequired
 };
 
 QueriesListSearch.defaultProps = {};

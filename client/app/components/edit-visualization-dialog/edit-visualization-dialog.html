@@ -2,6 +2,15 @@
   <div class="row m-0">
     <div class="col-md-3">
       <div>
+        <div style="text-align:center;overflow:hidden;padding-top:15vh" ng-if="false">
+          <img
+            className="loading-img"
+            src="/static/images/loading.gif"
+            alt="Loading..."
+            style="width:64px;height:64px"
+          />
+        </div>
+
         <form name="$ctrl.visForm">
           <div class="form-group" ng-if="false">
             <label class="control-label"
@@ -30,8 +39,12 @@
               placeholder="{{ $ctrl.visualization.type | capitalize }}"
             />
           </div>
-
+          <div class="form-group" ng-if="$ctrl.query.id==='unset'">
+            <label class="control-label">数据集</label>
+            <queries-list query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType"></queries-list>
+          </div>
           <button
+            ng-if="$ctrl.query.id!=='unset'"
             type="submit"
             class="btn btn-primary"
             ng-click="$ctrl.submit()"
@@ -40,6 +53,7 @@
           </button>
         </form>
         <visualization-options-editor
+          ng-if="$ctrl.query.id!=='unset'"
           visualization="$ctrl.visualization"
           query-result="$ctrl.queryResult"
           query="$ctrl.query"

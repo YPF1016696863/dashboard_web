@@ -41,13 +41,19 @@ function QueriesListViewCtrl(
 ) {
   $scope.currentUser = currentUser;
   $scope.queryId = null;
+  $scope.reload = 1;
   $scope.queries = $route.current.locals.queries;
   $scope.query = $route.current.locals.query;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
   $scope.querySearchCb = (id) => {
     $scope.queryId = id&&id.length?id[0]:null;
-    $scope.$apply();
+    $scope.$applyAsync();
+  };
+
+  $scope.cbAfterUpdate = (id) => {
+    $scope.reload += $scope.reload;
+    $scope.$applyAsync();
   };
 
   // currentUser.hasPermission('admin');

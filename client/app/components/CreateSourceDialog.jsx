@@ -151,7 +151,7 @@ class CreateSourceDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={$translate("CREATESOURCEDIALOG.CREATE_A_NEW",{sourceType})}
+        title="创建一个新的数据源"
         footer={(currentStep === StepEnum.SELECT_TYPE) ? [
           (<Button key="cancel" onClick={() => dialog.dismiss()}>取消</Button>),
           (<Button key="submit" type="primary" disabled>创建</Button>),

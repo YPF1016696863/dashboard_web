@@ -55,6 +55,8 @@ import PromiseRejectionError from '@/lib/promise-rejection-error';
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
+const { TextArea } = Input;
+
 const emptyChartImg = '/static/images/emptyChart.png';
 
 let DashboardsPreviewDOM;
@@ -68,7 +70,10 @@ class DashboardsListTabs extends React.Component {
 
     this.setState({
       isLoaded: true,
-      dashboard: null
+      dashboard: null,
+      runtime: {
+        name: null
+      }
     });
 
     DashboardsPreviewDOM = angular2react(
@@ -93,17 +98,27 @@ class DashboardsListTabs extends React.Component {
   getDashboard = slugId => {
     this.setState({
       isLoaded: false,
-      dashboard: null
+      dashboard: null,
+      runtime: {
+        name: null
+      }
     });
     Dashboard.get(
       { slug: slugId },
       dashboard => {
         this.setState({
           isLoaded: true,
-          dashboard
+          dashboard,
+          runtime: {
+            name: dashboard.name
+          }
         });
-        if(!(currentUser.id === dashboard.user.id ||
-            currentUser.hasPermission('admin'))) {
+        if (
+          !(
+            currentUser.id === dashboard.user.id ||
+            currentUser.hasPermission('admin')
+          )
+        ) {
           message.warning('该可视化仪表盘由其他用户创建.');
         }
       },
@@ -130,6 +145,24 @@ class DashboardsListTabs extends React.Component {
     });
   };
 
+  updateDashboard = data => {
+    _.extend(this.state.dashboard, data);
+    data = _.extend({}, data, {
+      slug: this.state.dashboard.id,
+      version: this.state.dashboard.version
+    });
+    Dashboard.save(
+      data,
+      dashboard => {
+        _.extend(this.state.dashboard, _.pick(dashboard, _.keys(data)));
+        message.success('可视化面板更新成功');
+      },
+      error => {
+        message.error('可视化面板更新失败', '出现错误');
+      }
+    );
+  };
+
   render() {
     const { slugId } = this.props;
 
@@ -137,16 +170,19 @@ class DashboardsListTabs extends React.Component {
       <>
         {!this.state.isLoaded && (
           <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+            {/*
             <TabPane tab="可视化面板预览" key="1" disabled>
               <div className="align-center-div" style={{ paddingTop: '15%' }}>
                 <LoadingState />
               </div>
             </TabPane>
+            */}
             <TabPane tab="可视化面板设置" key="2" disabled />
           </Tabs>
         )}
         {this.state.isLoaded && this.state.dashboard == null && (
           <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+            {/*
             <TabPane tab="可视化面板预览" key="1" disabled>
               <div className="align-center-div" style={{ paddingTop: '15%' }}>
                 <img src={emptyChartImg} alt="" style={{ width: 100 }} />
@@ -154,19 +190,44 @@ class DashboardsListTabs extends React.Component {
                 <p>选择可视化面板</p>
               </div>
             </TabPane>
+            */}
             <TabPane tab="可视化面板设置" key="2" disabled />
           </Tabs>
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
           <Tabs defaultActiveKey="1" type="card" className="queries-tab">
+            {/*
             <TabPane tab="可视化面板预览" key="1">
               <DashboardsPreviewDOM
                 slugId={slugId}
                 connectCb={this.connectCb}
               />
             </TabPane>
-            <TabPane tab="可视化面板设置" key="2">
-              <Descriptions title={this.state.dashboard.name}>
+            */}
+            <TabPane
+              tab="可视化面板设置"
+              key="2"
+              style={{ paddingRight: '10px' }}
+            >
+              <Descriptions
+                title={
+                  <Input
+                    addonBefore="数据集名称"
+                    value={this.state.runtime.name}
+                    onChange={e => {
+                      this.setState(
+                        {
+                          runtime: {
+                            name: e.target.value
+                          }
+                        },
+                        () => {}
+                      );
+                    }}
+                    allowClear
+                  />
+                }
+              >
                 <Descriptions.Item label="更新时间">
                   {this.state.dashboard.updated_at}
                 </Descriptions.Item>
@@ -187,6 +248,7 @@ class DashboardsListTabs extends React.Component {
                   {this.state.dashboard.slug}
                 </Descriptions.Item>
               </Descriptions>
+
               <Statistic
                 title="该面板中可视化组件数量"
                 value={this.state.dashboard.widgets.length}
@@ -216,6 +278,25 @@ class DashboardsListTabs extends React.Component {
                   </Col>
                 </Row>
               </Card>
+              <br />
+              <p style={{ fontSize: '14px' }}>可视化仪表板描述:</p>
+              <TextArea placeholder="可视化仪表板描述" rows={7} />
+              <br />
+              <br />
+              <div align="right">
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.updateDashboard({
+                      name: this.state.runtime.name
+                    });
+                  }}
+                >
+                  <Icon type="dashboard" />
+                  更新可视化仪表盘
+                </Button>
+              </div>
+              <br />
               <br />
               <p style={{ fontSize: '14px' }}>其他设置:</p>
               <Button

@@ -44,7 +44,8 @@ function ChartsViewCtrl(
   $scope.chartId = $route.current.params.chartId;
   $scope.queryId = $route.current.params.queryId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
-  $scope.chartType = null;
+  $scope.chartType = $route.current.params.type?$route.current.params.type:null;
+
   $scope.chartSearchCb = (type,shouldUpdate) => {
     $scope.chartType = type;
     if(shouldUpdate)$scope.$apply();

@@ -65,6 +65,16 @@ class ChartsListPageHeader extends React.Component {
             </>
           }
           extra={[
+            <Button
+              ghost
+              type="primary"
+              size="small"
+              href='/query/unset/charts/new'
+              target="_blank"
+            >
+              <Icon type="pie-chart" />
+              新建可视化组件
+            </Button>
           ]}
         >
           <Descriptions size="small" column={3}>
@@ -79,16 +89,14 @@ class ChartsListPageHeader extends React.Component {
   }
 }
 
-ChartsListPageHeader.propTypes = {
-};
-ChartsListPageHeader.defaultProps = {
-};
+ChartsListPageHeader.propTypes = {};
+ChartsListPageHeader.defaultProps = {};
 
 export default function init(ngModule) {
   ngModule.component(
     'chartsListPageHeader',
     react2angular(
-        ChartsListPageHeader,
+      ChartsListPageHeader,
       Object.keys(ChartsListPageHeader.propTypes),
       ['$rootScope', '$scope']
     )

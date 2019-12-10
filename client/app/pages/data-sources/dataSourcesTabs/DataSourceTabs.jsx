@@ -202,10 +202,20 @@ class DataSourceTabs extends React.Component {
               />
             </Row>
             <Row>
-              <Button type="primary" onClick={this.testConnection}>
-                <Icon type="link" />
-                连接测试
-              </Button>
+              <Col span={12}>
+                {' '}
+                <Button type="primary" onClick={this.testConnection}>
+                  <Icon type="link" />
+                  连接测试
+                </Button>
+              </Col>
+              <Col span={12}>
+                {' '}
+                <Button type="primary" href="/queries/new" target="_blank">
+                  <Icon type="filter" />
+                  新建数据集
+                </Button>
+              </Col>
             </Row>
           </Col>
         </Row>

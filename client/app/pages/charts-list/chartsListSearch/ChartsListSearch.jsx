@@ -194,7 +194,7 @@ class ChartsListSearch extends React.Component {
                     selectable={false}
                   >
                     {_.map(this.state.filtered, item =>
-                      item.visualizations.length > 0 ? (
+                      item.visualizations.length > 1 ? (
                         <TreeNode
                           icon={
                             <Icon
@@ -218,7 +218,7 @@ class ChartsListSearch extends React.Component {
                                 title={
                                   visualization.name +
                                   ', id: [' +
-                                  visualization.id +
+                                  visualization.type +
                                   ']'
                                 }
                                 key={item.id + ':' + visualization.id}

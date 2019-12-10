@@ -14,7 +14,7 @@
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
           <div class="scrollbox" style="height: 100% !important;">
-            <queries-list-search query-search-cb="querySearchCb"></queries-list-search>
+            <queries-list-search query-search-cb="querySearchCb" reload="reload"></queries-list-search>
           </div>
         </div>
       </div>
@@ -46,6 +46,7 @@
                   <div class="query__vis p-b-15 scrollbox">
                     <queries-list-tabs
                       query-id="queryId"
+                      cb-after-update="cbAfterUpdate"
                     ></queries-list-tabs>
                   </div>
                 </div>

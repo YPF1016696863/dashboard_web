@@ -65,7 +65,7 @@ class ChartsTabs extends React.Component {
   componentDidMount() {
     this.setState({
       isLoaded: true,
-      chartType: 'new',
+      chartType: this.props.chartType?this.props.chartType:'new',
       queryResult: null,
       visualization: null,
       query: null
@@ -94,11 +94,24 @@ class ChartsTabs extends React.Component {
 
     this.setState({
       isLoaded: false,
-      chartType: 'new',
+      chartType: this.props.chartType?this.props.chartType:'new',
       queryResult: null,
       visualization: null,
       query: null
     });
+
+    if(queryId === "unset") {
+      const query = Query.newQuery();
+      query.id = "unset";
+      this.setState({
+        isLoaded: true,
+        chartType: this.props.chartType?this.props.chartType:'new',
+        query,
+        queryResult: {},
+        visualization: null
+      });
+      return;
+    }
 
     Query.query({ id: queryId })
       .$promise.then(query => {
@@ -128,7 +141,7 @@ class ChartsTabs extends React.Component {
             } else {
               this.setState({
                 isLoaded: true,
-                chartType: 'new',
+                chartType: this.props.chartType?this.props.chartType:'new',
                 visualization: null
               });
             }

@@ -76,7 +76,7 @@ class ChartsSearch extends React.Component {
     if (visualizationId === 'new') {
       this.setState({
         isLoaded: true,
-        visualization: { type: 'new' }
+        visualization: { type: this.props.chartType?this.props.chartType:'new' }
       });
     } else {
       Query.query({ id: queryId })
@@ -96,7 +96,7 @@ class ChartsSearch extends React.Component {
               } else {
                 this.setState({
                   isLoaded: true,
-                  visualization: { type: 'new' }
+                  visualization: { type: this.props.chartType?this.props.chartType:'new' }
                 });
               }
               this.props.chartSearchCb(this.state.visualization.type);
@@ -546,13 +546,15 @@ class ChartsSearch extends React.Component {
 ChartsSearch.propTypes = {
   chartSearchCb: PropTypes.func,
   queryId: PropTypes.string,
-  chartId: PropTypes.string
+  chartId: PropTypes.string,
+  chartType: PropTypes.string
 };
 
 ChartsSearch.defaultProps = {
   chartSearchCb: (a,b) => {},
   queryId: null,
-  chartId: null
+  chartId: null,
+  chartType: null
 };
 
 export default function init(ngModule) {
