@@ -23,6 +23,7 @@ import template from './content-layout.html';
 
 function ChartsViewCtrl(
   $scope,
+  $rootScope,
   Events,
   $route,
   $routeParams,
@@ -46,11 +47,16 @@ function ChartsViewCtrl(
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
   $scope.chartType = $route.current.params.type?$route.current.params.type:null;
 
-  $scope.chartSearchCb = (type,shouldUpdate) => {
-    $scope.chartType = type;
-    if(shouldUpdate)$scope.$apply();
-  };
-
+  $rootScope.selectChartType = null;
+  $scope.chartSearchCb = (type,shouldUpdate,select) => {
+    $scope.chartType = type;// type
+    $rootScope.selectChartType =select;      // 默认值没有（上一次的值没有） 导致undefined-》line
+    // console.log("select::::"+select+"     tpye:::"+type);   
+    if(shouldUpdate){
+      $scope.$apply();
+      $rootScope.$apply();
+    }
+  };  
   // currentUser.hasPermission('admin');
 }
 

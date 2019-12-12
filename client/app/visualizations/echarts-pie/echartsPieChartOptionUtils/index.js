@@ -19,16 +19,16 @@ export function defaultPieChartOptions() {
             top: 20,
             textStyle: {
                 color: '#333',
- 	                fontStyle: 'normal',
- 	                fontFamily: 'serif',
- 	                fontSize: 25,
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 25,
             },
             subtextStyle: {
                 color: '#333',
                 fontStyle: 'normal',
                 fontFamily: 'serif',
                 fontSize: 18,
-                 },
+            },
             backgroundColor: 'transparent',
             borderWidth: 0,
         },
@@ -40,7 +40,7 @@ export function defaultPieChartOptions() {
         legend: {
             show: true,
             // x: 'left'
-            textStyle:{
+            textStyle: {
                 color: '#333',
             }
         },
@@ -95,41 +95,43 @@ export function getChartType(options) {
 
 // Radius默认值及对应修改
 export function getRadius(options, type, index) {
+    console.log(type);
+
     switch (type) {
         case undefined: {
 
             return [_.get(options, "series_RadiusMin", [])[index] === undefined ?
                 0 : _.get(options, "series_RadiusMin", [])[index],
             _.get(options, "series_RadiusMax", [])[index] === undefined ?
-                200 : _.get(options, "series_RadiusMax", [])[index]
+                '70%' : _.get(options, "series_RadiusMax", [])[index]
             ];
         }
         case "rose": {
             return [_.get(options, "series_RadiusMin", [])[index] === undefined ?
                 0 : _.get(options, "series_RadiusMin", [])[index],
             _.get(options, "series_RadiusMax", [])[index] === undefined ?
-                200 : _.get(options, "series_RadiusMax", [])[index]
+                '70%' : _.get(options, "series_RadiusMax", [])[index]
             ];
         }
         case "pie": {
             return [_.get(options, "series_RadiusMin", [])[index] === undefined ?
                 0 : _.get(options, "series_RadiusMin", [])[index],
             _.get(options, "series_RadiusMax", [])[index] === undefined ?
-                200 : _.get(options, "series_RadiusMax", [])[index]
+                '70%' : _.get(options, "series_RadiusMax", [])[index]
             ];
         }
         case "doughnut": {
             return [_.get(options, "series_RadiusMin", [])[index] === undefined ?
-                100 : _.get(options, "series_RadiusMin", [])[index],
+                '40%' : _.get(options, "series_RadiusMin", [])[index],
             _.get(options, "series_RadiusMax", [])[index] === undefined ?
-                200 : _.get(options, "series_RadiusMax", [])[index]
+                '70%' : _.get(options, "series_RadiusMax", [])[index]
             ];
         }
         default: {
             return [_.get(options, "series_RadiusMin", [])[index] === undefined ?
                 0 : _.get(options, "series_RadiusMin", [])[index],
             _.get(options, "series_RadiusMax", [])[index] === undefined ?
-                200 : _.get(options, "series_RadiusMax", [])[index]
+                '70%' : _.get(options, "series_RadiusMax", [])[index]
             ];
         }
     }
@@ -154,41 +156,41 @@ export function returnDataVisColors() {
     };
 }
 
-export function setThemeColor(options,theme) {
-    if( theme === "light" ){
-        
-       //  亮色背景下如果是白色文字。则切换成黑色
-        if( _.get(options, "title.textStyle.color", "") === "#ccc" ){
-            _.set(options, "title.textStyle.color","#333");
+export function setThemeColor(options, theme) {
+    if (theme === "light") {
+
+        //  亮色背景下如果是白色文字。则切换成黑色
+        if (_.get(options, "title.textStyle.color", "") === "#ccc") {
+            _.set(options, "title.textStyle.color", "#333");
         }
-        if( _.get(options, "title.subtextStyle.color", "") === "#ccc" ){
-           _.set(options, "title.subtextStyle.color","#333");
-       }
-       if( _.get(options, "legend.textStyle.color", "") === "#ccc"){
-        _.set(options, "legend.textStyle.color","#333");
-       }
-       if( _.get(options, "series_LabelLine_LineStyle_Color", "") === "#ccc"){
-        _.set(options, "series_LabelLine_LineStyle_Color","#333");
-       }
-        
-       
-   }
-        
-    else if(theme !== "light"){   
-       // 暗色背景下如果是黑色文字。则切换成白色    
-       if( _.get(options, "title.textStyle.color", "") === "#333" ){
-           _.set(options, "title.textStyle.color","#ccc");
+        if (_.get(options, "title.subtextStyle.color", "") === "#ccc") {
+            _.set(options, "title.subtextStyle.color", "#333");
         }
-        if( _.get(options, "title.subtextStyle.color", "") === "#333" ){
-           _.set(options, "title.subtextStyle.color","#ccc");
-       }
-       if( _.get(options, "legend.textStyle.color", "") === "#333" ){
-        _.set(options, "legend.textStyle.color","#ccc");
-      }
-      if( _.get(options, "series_LabelLine_LineStyle_Color", "") === "#333" ){
-        _.set(options, "series_LabelLine_LineStyle_Color","#ccc");
-      }
+        if (_.get(options, "legend.textStyle.color", "") === "#ccc") {
+            _.set(options, "legend.textStyle.color", "#333");
+        }
+        if (_.get(options, "series_LabelLine_LineStyle_Color", "") === "#ccc") {
+            _.set(options, "series_LabelLine_LineStyle_Color", "#333");
+        }
 
 
-   }      
+    }
+
+    else if (theme !== "light") {
+        // 暗色背景下如果是黑色文字。则切换成白色    
+        if (_.get(options, "title.textStyle.color", "") === "#333") {
+            _.set(options, "title.textStyle.color", "#ccc");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#333") {
+            _.set(options, "title.subtextStyle.color", "#ccc");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#333") {
+            _.set(options, "legend.textStyle.color", "#ccc");
+        }
+        if (_.get(options, "series_LabelLine_LineStyle_Color", "") === "#333") {
+            _.set(options, "series_LabelLine_LineStyle_Color", "#ccc");
+        }
+
+
+    }
 }

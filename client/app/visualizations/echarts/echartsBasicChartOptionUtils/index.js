@@ -137,6 +137,7 @@ export function setChartType(options, type) {
 };
 
 export function parseChartType(type) {
+    console.log(type);
     switch (type) {
         case undefined: {
             return "line";
@@ -181,7 +182,7 @@ export function setyAxis(options, flag, seriesNameIndex) {
 
 export function setScatter(symbolSize) {
     if (symbolSize === undefined)
-        return 25;
+        return 9;
     return symbolSize;
 }
 

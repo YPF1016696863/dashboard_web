@@ -81,7 +81,7 @@ class QueriesList extends React.Component {
       message.warning("请选择一个数据集.");
       return;
     }
-
+    console.log(this.props.chartType);
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
     navigateTo("/query/"+this.state.selected+'/charts/new?type='+this.props.chartType);
@@ -246,7 +246,8 @@ class QueriesList extends React.Component {
                                 style={{ color: '#FAAA39' }}
                               />
                             }
-                            title={item.name + ', id: [' + item.id + ']'}
+                            title={item.name+ ', id: [' + item.id + ']'}
+                            // + ', id: [' + item.id + ']'
                             key={item.id}
                             isLeaf
                           />

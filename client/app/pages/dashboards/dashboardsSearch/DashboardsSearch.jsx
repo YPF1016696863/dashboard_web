@@ -100,6 +100,37 @@ class DashboardsSearch extends React.Component {
         image: '/static/images/themeBackgroundImages/theme6.gif',
         overview: '/static/images/themeBackgroundImages/theme6-overview.png',
         name: 'theme6Bg'
+      },
+      {
+        id: 7,
+        meta: 'DataVis背景7',
+        image: '/static/images/themeBackgroundImages/theme7.png',
+        overview: '/static/images/themeBackgroundImages/theme7-overview.png',
+        name: 'theme7Bg'
+      }
+      ,
+      {
+        id: 8,
+        meta: 'DataVis背景8',
+        image: '/static/images/themeBackgroundImages/theme8.jpg',
+        overview: '/static/images/themeBackgroundImages/theme8-overview.jpg',
+        name: 'theme8Bg'
+      }
+      ,
+      {
+        id: 9,
+        meta: 'DataVis背景9',
+        image: '/static/images/themeBackgroundImages/theme9.jpg',
+        overview: '/static/images/themeBackgroundImages/theme9-overview.jpg',
+        name: 'theme9Bg'
+      }
+      ,
+      {
+        id: 10,
+        meta: 'DataVis背景10',
+        image: '/static/images/themeBackgroundImages/theme10.jpg',
+        overview: '/static/images/themeBackgroundImages/theme10-overview.jpg',
+        name: 'theme10Bg'
       }
     ]
   };
@@ -247,6 +278,34 @@ class DashboardsSearch extends React.Component {
                         <img
                           src={this.state.backgroundImages[6].overview}
                           alt={this.state.backgroundImages[6].meta}
+                          width="100%"
+                        />
+                      </div>
+                      <div>
+                        <img
+                          src={this.state.backgroundImages[7].overview}
+                          alt={this.state.backgroundImages[7].meta}
+                          width="100%"
+                        />
+                      </div>
+                      <div>
+                        <img
+                          src={this.state.backgroundImages[8].overview}
+                          alt={this.state.backgroundImages[8].meta}
+                          width="100%"
+                        />
+                      </div>
+                      <div>
+                        <img
+                          src={this.state.backgroundImages[9].overview}
+                          alt={this.state.backgroundImages[9].meta}
+                          width="100%"
+                        />
+                      </div>
+                      <div>
+                        <img
+                          src={this.state.backgroundImages[10].overview}
+                          alt={this.state.backgroundImages[10].meta}
                           width="100%"
                         />
                       </div>

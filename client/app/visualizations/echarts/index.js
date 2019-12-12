@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
+
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
@@ -19,12 +20,14 @@ function EchartsRenderer($timeout, $rootScope, $window) {
     template: echartsTemplate,
     link($scope, $element) {
       $scope.chartSeries = [];
-
-
+      // 20191211 linaer bug fix ?
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "BasicChart") {
+        console.log("defaultSet");
+        $scope.options = defaultBasicChartOptions();
+      }
       console.log($scope.options);
 
       const refreshData = () => {
-
         // 找到选中serise的下标        
         _.set($scope.options, 'useSerie_Index',
           _.findIndex(
@@ -90,7 +93,11 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             $scope.options.series.push({
               name: _.get($scope.options, "series_ReName", [])[seriesNameIndex] === undefined ?
                 yAxisColumn : _.get($scope.options, "series_ReName", [])[seriesNameIndex],
-              type: parseChartType(_.get($scope.options.form.yAxisColumnTypes, yAxisColumn)),
+              type: parseChartType(
+                _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                  _.get($scope.options, "defaultType"))
+              ),// 将每个系列的类型传进去判断和转换  _.get($scope.options, "defaultType") 
+              // type这里加了默认值的话容易出现预览界面都为左侧选择的图表类型
               smooth: _.get($scope.options, "series_Smooth", false),//   series_Smooth 折线与曲线切换
               data: _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                 return row[yAxisColumn];
@@ -257,8 +264,42 @@ function EchartsRenderer($timeout, $rootScope, $window) {
           _.set($scope.options, "yAxis.type", 'value');
         });
       };
-      $scope.$watch('options.form', refreshType, true);
 
+
+
+      // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
+      const selectChartType = () => {
+        console.log("selectChartType刷新");
+        if (_.get($rootScope, 'selectChartType', undefined) !== undefined) {// 当在组件预览界面时 该值为undefine 因此 这里做一个判断 
+          let selectType;
+          switch (_.get($rootScope, 'selectChartType', 'new')) {// 为了处理第一次点击的问题 这里再做判断
+            case 'line': selectType = 'line'; break;
+            case 'bar': selectType = 'bar'; break;
+            case 'area': selectType = 'area'; break;
+            case 'scatter': selectType = 'scatter'; break;
+            default: ;// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
+          };
+          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {  // 第一次点击（没有xy数据的时候，这一步跳过）          
+            const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
+            switch (_.get($rootScope, 'selectChartType', 'new')) {
+              case 'line': selectType = 'line'; break;
+              case 'bar': selectType = 'bar'; break;
+              case 'area': selectType = 'area'; break;
+              case 'scatter': selectType = 'scatter'; break;
+              default: ;// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
+            };
+            _.set($scope.options, stringTemp, selectType);// 对多系列的类型重置为选择的类型      
+          });
+          _.set($scope.options, "defaultType",selectType);
+          console.log("defaultType:"+_.get($scope.options, "defaultType","nnnn"));// 第一次点击为undefined 
+          console.log("selectChartType处理");
+        }
+      };
+
+      $rootScope.$watch('selectChartType', selectChartType);  // 当图表类型选择时（chart search），覆盖原先的每个系列的type值 
+      // 改变了刷新 没有将上一次值设为默认 导致每次进入都刷新 导致传入的值为undefined 导致type设置为line
+
+      $scope.$watch('options.form', refreshType, true);
       $scope.$watch('options', refreshData, true);
       $scope.$watch('queryResult && queryResult.getData()', refreshData);
       $rootScope.$watch('theme.theme', refreshData);
@@ -280,8 +321,7 @@ function EchartsEditor() {
       $scope.selectChartTypeCb = (serie, type) => {// 图表类型选择的转换
         const stringTemp = "form.yAxisColumnTypes[" + serie + "]";// 按照原先的输入格式进行配置 （现在的类型输入转换）
         _.set($scope.options, stringTemp, type);
-        console.log($scope.options.form.yAxisColumnTypes);
-        // $scope.options.form.yAxisColumnTypes[serie] = type;
+        // console.log($scope.options.form.yAxisColumnTypes);
         $scope.$apply();
       };
 
@@ -391,10 +431,8 @@ function EchartsEditor() {
         { label: '赤丹', value: '#d64f44' }
       ];
       $scope.BackgroundColors = [
+        { label: '默认', value: '' },
         { label: '透明', value: 'transparent' },
-        { label: '暗绿色', value: '#84AF9B' },
-        { label: '白色', value: '#ffffff' },
-        { label: '黑色', value: '#2C3E50' },
         { label: '白色', value: '#fff' },
         { label: '红色', value: '#ed4d50' },
         { label: '绿色', value: '#6eb37a' },
@@ -445,9 +483,9 @@ export default function init(ngModule) {
 
   ngModule.config((VisualizationProvider) => {
     const renderTemplate =
-      '<echarts-renderer options="visualization.options" query-result="queryResult"></echarts-renderer>';
+      '<echarts-renderer options="visualization.options" query-result="queryResult"  ></echarts-renderer>';
 
-    const editorTemplate = '<echarts-editor options="visualization.options" query-result="queryResult"></echarts-editor>';
+    const editorTemplate = '<echarts-editor options="visualization.options" query-result="queryResult"  ></echarts-editor>';
     const defaultOptions = {
 
     };// 此处的默认值先不配（在refashdata前加上判空似乎完成了默认配置的输入）

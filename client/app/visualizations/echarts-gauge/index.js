@@ -17,7 +17,11 @@ function EchartsGaugeRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-
+      
+      
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "GaugeChart") {
+        $scope.options = defaultGaugeChartOptions();
+      }
       console.log($scope.options);
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
@@ -203,9 +207,6 @@ function EchartsGaugeEditor() {
       $scope.BackgroundColors = [
         { label: '默认', value: 'auto' },
         { label: '透明', value: 'transparent' },
-        { label: '暗绿色', value: '#84AF9B' },
-        { label: '白色', value: '#ffffff' },
-        { label: '黑色', value: '#2C3E50' },
         { label: '白色', value: '#fff' },
         { label: '红色', value: '#ed4d50' },
         { label: '绿色', value: '#6eb37a' },

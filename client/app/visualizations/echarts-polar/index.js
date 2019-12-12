@@ -17,7 +17,9 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
     link($scope, $element) {
 
       $scope.chartSeries = [];
-
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "PolarChart") {
+        $scope.options = defaultPolarChartOptions();
+      }
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           // 切换主题颜色
@@ -194,19 +196,38 @@ function EchartsPolarEditor() {
         { label: '居中', value: 'center' }
       ];
       $scope.Colors = [
-        { label: '默认', value: '' },
-        { label: 'DataVis-红色', value: '#ed4d50' },
-        { label: 'DataVis-绿色', value: '#6eb37a' },
-        { label: 'DataVis-蓝色', value: '#5290e9' },
-        { label: 'DataVis-橘色', value: '#ee941b' },
-        { label: 'DataVis-紫色', value: '#985896' },
-        { label: 'DataVis-无色', value: 'transparent' },
+        { label: '默认', value: 'auto' },
+        { label: '透明', value: 'transparent' },
+        { label: '白色', value: '#fff' },
+        { label: '红色', value: '#ed4d50' },
+        { label: '绿色', value: '#6eb37a' },
+        { label: '蓝色', value: '#5290e9' },
+        { label: '橘色', value: '#ee941b' },
+        { label: '紫色', value: '#985896' },
+        { label: '瑠璃色', value: '#2a5caa' },
+        { label: '青蓝', value: '#102b6a' },
+        { label: '铁绀', value: '#181d4b' },
+        { label: '蔷薇色', value: '#f05b72' },
+        { label: '黄緑', value: '#b2d235' },
+        { label: '萌黄', value: '#a3cf62' },
+        { label: '赤丹', value: '#d64f44' }
       ];
       $scope.BackgroundColors = [
-        { label: '暗绿色', value: '#84AF9B' },
-        { label: '白色', value: '#ffffff' },
-        { label: '黑色', value: '#2C3E50' },
-        { label: '蓝色', value: '#5290e9' }
+        { label: '默认', value: 'auto' },
+        { label: '透明', value: 'transparent' },
+        { label: '白色', value: '#fff' },
+        { label: '红色', value: '#ed4d50' },
+        { label: '绿色', value: '#6eb37a' },
+        { label: '蓝色', value: '#5290e9' },
+        { label: '橘色', value: '#ee941b' },
+        { label: '紫色', value: '#985896' },
+        { label: '瑠璃色', value: '#2a5caa' },
+        { label: '青蓝', value: '#102b6a' },
+        { label: '铁绀', value: '#181d4b' },
+        { label: '蔷薇色', value: '#f05b72' },
+        { label: '黄緑', value: '#b2d235' },
+        { label: '萌黄', value: '#a3cf62' },
+        { label: '赤丹', value: '#d64f44' }
       ];
       $scope.LabelFontWeights = [
         { label: 'normal', value: 'normal' },
