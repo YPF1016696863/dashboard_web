@@ -33,6 +33,10 @@
         </li>
     </ul>
     <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
+        <!-- <div class="form-group">
+            <label class="control-label">数据集</label>
+            <queries-list query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType"></queries-list>
+        </div> -->
         <table class="table table-condensed col-table">
             <thead>
                 <th>{{'CHART_EDITOR.LABEL' | translate}}</th>
@@ -290,14 +294,14 @@
         </div>
 
         <!-- <div class="form-group">
-            <label class="control-label">图表标题背景颜色</label>
-            <ui-select ng-model="options.title.backgroundColor">
-                <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
-                <ui-select-choices repeat="Color.value as Color in Colors">
-                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                </ui-select-choices>
-            </ui-select>
-        </div> -->
+                <label class="control-label">图表标题背景颜色</label>
+                <ui-select ng-model="options.title.backgroundColor">
+                    <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in Colors">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div> -->
 
     </div>
     <div ng-if="currentTab == 'tooltip'" class="m-t-10 m-b-10">
@@ -417,11 +421,11 @@
             </ui-select>
         </div>
         <!-- <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.series_MarkLine_Data_Mark[options.useSerie_Index]">
-                标记最大值
-            </label>
-        </div> -->
+                <label>
+                    <input type="checkbox" ng-model="options.series_MarkLine_Data_Mark[options.useSerie_Index]">
+                    标记最大值
+                </label>
+            </div> -->
 
         <div class="form-group">
             <label class="control-label">标注线提示名称</label>
@@ -459,11 +463,11 @@
             </ui-select>
         </div>
         <!-- <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.series_MarkLine_Label_Show[options.useSerie_Index]">
-                显示标签
-            </label>
-        </div> -->
+                <label>
+                    <input type="checkbox" ng-model="options.series_MarkLine_Label_Show[options.useSerie_Index]">
+                    显示标签
+                </label>
+            </div> -->
     </div>
 
     <div ng-if="currentTab == 'markpoint'" class="m-t-10 m-b-10">
@@ -886,37 +890,37 @@
 
     <div ng-if="currentTab == 'dataseries'" class="m-t-10 m-b-10">
         <!-- <table class="table table-condensed col-table">
-            <thead>
-                <th>{{'CHART_EDITOR.LABEL' | translate}}</th>
-                <th>{{'CHART_EDITOR.TYPE' | translate}}</th>
-            </thead>
-            <tbody>
-                <tr ng-repeat="yAxisColumn in options.form.yAxisColumns">
-                    <td style="padding: 3px; width: 140px;">
-                        <input class="form-control input-sm super-small-input" type="text" readonly="true"
-                            ng-model="yAxisColumn">
-                    </td>
-                    <td style="padding: 3px; width: 105px;">
-                        <ui-select ng-model="options.form.yAxisColumnTypes[yAxisColumn]">
-                            <ui-select-match placeholder="图表种类">
-                                <div>
-                                    <i class="fa fa-{{$select.selected.value.icon}}"></i>
-                                    {{$select.selected.value.name}}
-                                </div>
-                            </ui-select-match>
-                            <ui-select-choices repeat="info.chartType as (chartType, info) in chartTypes">
-                                <div>
-                                    <i class="fa fa-{{info.value.icon}}"></i>
-                                    <span> </span>
-                                    <span ng-bind-html="info.value.name | highlight: $select.search"></span>
-                                </div>
-                            </ui-select-choices>
-                        </ui-select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <hr> -->
+                <thead>
+                    <th>{{'CHART_EDITOR.LABEL' | translate}}</th>
+                    <th>{{'CHART_EDITOR.TYPE' | translate}}</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="yAxisColumn in options.form.yAxisColumns">
+                        <td style="padding: 3px; width: 140px;">
+                            <input class="form-control input-sm super-small-input" type="text" readonly="true"
+                                ng-model="yAxisColumn">
+                        </td>
+                        <td style="padding: 3px; width: 105px;">
+                            <ui-select ng-model="options.form.yAxisColumnTypes[yAxisColumn]">
+                                <ui-select-match placeholder="图表种类">
+                                    <div>
+                                        <i class="fa fa-{{$select.selected.value.icon}}"></i>
+                                        {{$select.selected.value.name}}
+                                    </div>
+                                </ui-select-match>
+                                <ui-select-choices repeat="info.chartType as (chartType, info) in chartTypes">
+                                    <div>
+                                        <i class="fa fa-{{info.value.icon}}"></i>
+                                        <span> </span>
+                                        <span ng-bind-html="info.value.name | highlight: $select.search"></span>
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr> -->
         <div class="form-group">
             <label class="control-label">选择设置系列</label>
             <ui-select name="name" required ng-model="options.useSerie">

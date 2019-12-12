@@ -20,10 +20,10 @@
     </li>
   </ul>
   <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label class="control-label">可视化组件全局图表类型</label>
       <datavis-chart-types serie="" chart-type="options.globalSeriesType" chart-type-cb="selectGlobalChartTypeCb"></datavis-chart-types>
-    </div>
+    </div> -->
 
     <div class="form-group" ng-class="{'has-error': chartEditor.xAxisColumn.$invalid}">
       <label class="control-label">{{'CHART_EDITOR.X_COLUMN' | translate}}</label>
@@ -140,7 +140,7 @@
     </div>
 
     <div class="form-group" ng-if="options.globalSeriesType == 'pie'">
-      <label class="control-label">Pie Chart Hole Size</label>
+      <label class="control-label">饼图中空半径大小(0-1)</label>
       <input ng-model="options.pieChartHoleSize" type="text" class="form-control" placeholder="0.4">
     </div>
   </div>

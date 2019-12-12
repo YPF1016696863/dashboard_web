@@ -17,6 +17,9 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
     link($scope, $element) {
       $scope.chartSeries = [];
 
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
+        $scope.options = defaultPieChartOptions();
+      }
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
 
@@ -99,14 +102,16 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               name: _.get($scope.options, "series_Name", ''),
               type: 'pie',
               radius: getRadius($scope.options,
-                _.get($scope.options.form.yAxisColumnTypes, yAxisColumn),
+                _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                  _.get($rootScope, 'selectChartType', 'pie')),
                 seriesIndex),// 内外半径修改 多系列需动态
               center: [_.get($scope.options, "series_CenterX", "50%"),
               _.get($scope.options, "series_CenterY", "50%")],
 
               data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }),// 多系列需动态
               // 判断是玫瑰图
-              roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "rose" ? 'radius' : undefined,
+              roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                _.get($rootScope, 'selectChartType', 'radius')) === "rose" ? 'radius' : undefined,
               label: {
                 normal: {
                   show: _.get($scope.options, "series_Label_Position", '')[seriesIndex] !== 'center',
@@ -185,6 +190,27 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
         }
       };
+
+
+      // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
+      const selectChartType = () => {
+        console.log(_.get($rootScope, 'selectChartType', 'pie'));
+        let selectType;
+        switch (_.get($rootScope, 'selectChartType', 'pie')) {// 因为可能会有选到line的情况 所以这里用了case 做一个其他类型的判断
+          case 'pie': selectType = 'pie'; break;
+          case 'doughnut': selectType = 'doughnut'; break;
+          case 'rose': selectType = 'rose'; break;
+          default: selectType = 'pie';
+        };
+        _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+          const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
+          console.log(_.get($scope.options, stringTemp));
+          _.set($scope.options, stringTemp, selectType);
+        });
+        console.log($scope.options.form.yAxisColumnTypes);
+      };
+
+      $rootScope.$watch('selectChartType', selectChartType);  // 当图表类型选择时（chart search），覆盖原先的每个系列的type值   
 
       $scope.$watch('options', refreshData, true);
       $scope.$watch('queryResult && queryResult.getData()', refreshData);
@@ -268,9 +294,6 @@ function EchartsPieEditor() {
       $scope.Colors = [
         { label: '默认', value: 'auto' },
         { label: '透明', value: 'transparent' },
-        { label: '暗绿色', value: '#84AF9B' },
-        { label: '白色', value: '#ffffff' },
-        { label: '黑色', value: '#2C3E50' },
         { label: '白色', value: '#fff' },
         { label: '红色', value: '#ed4d50' },
         { label: '绿色', value: '#6eb37a' },
@@ -287,8 +310,13 @@ function EchartsPieEditor() {
       ];
 
       $scope.BackgroundColors = [
-        { label: '黑色', value: '#2C3E50' },
+        { label: '默认', value: 'auto' },
         { label: '透明', value: 'transparent' },
+        { label: '白色', value: '#fff' },
+        { label: '红色', value: '#ed4d50' },
+        { label: '绿色', value: '#6eb37a' },
+        { label: '蓝色', value: '#5290e9' },
+        { label: '橘色', value: '#ee941b' },
         { label: '紫色', value: '#985896' },
         { label: '瑠璃色', value: '#2a5caa' },
         { label: '青蓝', value: '#102b6a' },
