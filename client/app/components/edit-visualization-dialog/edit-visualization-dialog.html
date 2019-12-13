@@ -39,12 +39,13 @@
               placeholder="{{ $ctrl.visualization.type | capitalize }}"
             />
           </div>
-          <div class="form-group" ng-if="$ctrl.query.id==='unset'">
+          <!-- <div class="form-group"  >
             <label class="control-label">数据集</label>
             <queries-list query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType"></queries-list>
-          </div>
+          </div> -->
+          <!-- ng-if="$ctrl.query.id!=='unset'" -->
           <button
-            ng-if="$ctrl.query.id!=='unset'"
+            
             type="submit"
             class="btn btn-primary"
             ng-click="$ctrl.submit()"
@@ -52,8 +53,9 @@
             保存
           </button>
         </form>
+        <!-- ng-if="$ctrl.query.id!=='unset'" -->
         <visualization-options-editor
-          ng-if="$ctrl.query.id!=='unset'"
+          
           visualization="$ctrl.visualization"
           query-result="$ctrl.queryResult"
           query="$ctrl.query"
