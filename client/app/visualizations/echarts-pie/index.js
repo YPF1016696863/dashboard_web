@@ -21,173 +21,177 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
         $scope.options = defaultPieChartOptions();
       }
       const refreshData = () => {
-        if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+        try {
+          if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
 
 
-          // 切换主题颜色
-          setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
+            // 切换主题颜色
+            setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-          // 找到选中serise的下标        
-          _.set($scope.options, 'useSerie_Index',
-            _.findIndex(
-              _.get($scope.options, "form.yAxisColumns", []),
-              function (o) { return o === _.get($scope.options, 'useSerie', ''); }
-            ));
+            // 找到选中serise的下标        
+            _.set($scope.options, 'useSerie_Index',
+              _.findIndex(
+                _.get($scope.options, "form.yAxisColumns", []),
+                function (o) { return o === _.get($scope.options, 'useSerie', ''); }
+              ));
 
-          const data = $scope.queryResult.getData();
-          // 输入的数据格式转换 
-          const seriesData = [];
-          let pieData = [];
-          let xDataValue = [];
-          const yData = _.get($scope.options, "form.yAxisColumns", ":::");
-          // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
-          const xData = _.get($scope.options, "form.xAxisColumn", "::");
-          // name string 这一列  AGENT_NAME
-          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-            pieData = [];
-            xDataValue = [];
-            _.forEach(data, function (value, key) {
-              // [{0},{1}...] 筛选出每一个{0} {1} ...
+            const data = $scope.queryResult.getData();
+            // 输入的数据格式转换 
+            const seriesData = [];
+            let pieData = [];
+            let xDataValue = [];
+            const yData = _.get($scope.options, "form.yAxisColumns", ":::");
+            // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
+            const xData = _.get($scope.options, "form.xAxisColumn", "::");
+            // name string 这一列  AGENT_NAME
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+              pieData = [];
+              xDataValue = [];
+              _.forEach(data, function (value, key) {
+                // [{0},{1}...] 筛选出每一个{0} {1} ...
+                const onesValue = value;
+                _.forEach(onesValue, function (oneXvalue, oneXkey) {
+                  // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                  if (oneXkey === xData) { // x
+                    const xValue = oneXvalue;
+                    xDataValue.push(xValue);
+                    _.forEach(onesValue, function (oneYvalue, oneYkey) {
+                      // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                      if (oneYkey === yAxisColumn) {
+                        // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                        pieData.push({
+                          name: xValue,
+                          value: oneYvalue,
+                          itemStyle: { color: '' }
+                        });
+                      }
+                    });
+                  }
+                });
+              });
+              seriesData.push(pieData);
+
+            });
+            // console.log(seriesData);
+
+
+            // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
+            _.set($scope.options, "Fans", xDataValue);
+            // 遍历x轴选中列 对应的所有值
+            const selectFan = _.get($scope.options, "useFan", []);
+            // 保存选中的扇瓣
+            _.forEach(pieData, function (value, key) {
+              // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
               const onesValue = value;
+              // name: "王小斌", value: 50}
               _.forEach(onesValue, function (oneXvalue, oneXkey) {
                 // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                if (oneXkey === xData) { // x
-                  const xValue = oneXvalue;
-                  xDataValue.push(xValue);
-                  _.forEach(onesValue, function (oneYvalue, oneYkey) {
-                    // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                    if (oneYkey === yAxisColumn) {
-                      // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
-                      pieData.push({
-                        name: xValue,
-                        value: oneYvalue,
-                        itemStyle: { color: '' }
-                      });
-                    }
-                  });
+                if (oneXvalue === selectFan) {
+                  // 找到选中的x的数据 王小斌===选择的王小斌
+                  onesValue.itemStyle.color =
+                    _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
                 }
               });
             });
-            seriesData.push(pieData);
-
-          });
-          // console.log(seriesData);
 
 
-          // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
-          _.set($scope.options, "Fans", xDataValue);
-          // 遍历x轴选中列 对应的所有值
-          const selectFan = _.get($scope.options, "useFan", []);
-          // 保存选中的扇瓣
-          _.forEach(pieData, function (value, key) {
-            // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
-            const onesValue = value;
-            // name: "王小斌", value: 50}
-            _.forEach(onesValue, function (oneXvalue, oneXkey) {
-              // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-              if (oneXvalue === selectFan) {
-                // 找到选中的x的数据 王小斌===选择的王小斌
-                onesValue.itemStyle.color =
-                  _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
-              }
-            });
-          });
+            let seriesIndex = 0;
+            _.set($scope.options, "series", []);// 清空设置
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
 
+              $scope.options.series.push({
+                name: _.get($scope.options, "series_Name", ''),
+                type: 'pie',
+                radius: getRadius($scope.options,
+                  _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                    _.get($rootScope, 'selectChartType', 'pie')),
+                  seriesIndex),// 内外半径修改 多系列需动态
+                center: [_.get($scope.options, "series_CenterX", "50%"),
+                _.get($scope.options, "series_CenterY", "50%")],
 
-          let seriesIndex = 0;
-          _.set($scope.options, "series", []);// 清空设置
-          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-
-            $scope.options.series.push({
-              name: _.get($scope.options, "series_Name", ''),
-              type: 'pie',
-              radius: getRadius($scope.options,
-                _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
-                  _.get($rootScope, 'selectChartType', 'pie')),
-                seriesIndex),// 内外半径修改 多系列需动态
-              center: [_.get($scope.options, "series_CenterX", "50%"),
-              _.get($scope.options, "series_CenterY", "50%")],
-
-              data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }),// 多系列需动态
-              // 判断是玫瑰图
-              roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
-                _.get($rootScope, 'selectChartType', 'radius')) === "rose" ? 'radius' : undefined,
-              label: {
-                normal: {
-                  show: _.get($scope.options, "series_Label_Position", '')[seriesIndex] !== 'center',
-                  position: _.get($scope.options, "series_Label_Position", '')[seriesIndex],
-                  fontSize: _.get($scope.options, "series_Label_FontSize", 25)[seriesIndex],
-                  formatter: `{b}${_.get($scope.options, "show_Persant", false) ? `{d}%` : ``} `,
+                data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }),// 多系列需动态
+                // 判断是玫瑰图
+                roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                  _.get($rootScope, 'selectChartType', 'radius')) === "rose" ? 'radius' : undefined,
+                label: {
+                  normal: {
+                    show: _.get($scope.options, "series_Label_Position", '')[seriesIndex] !== 'center',
+                    position: _.get($scope.options, "series_Label_Position", '')[seriesIndex],
+                    fontSize: _.get($scope.options, "series_Label_FontSize", 25)[seriesIndex],
+                    formatter: `{b}${_.get($scope.options, "show_Persant", false) ? `{d}%` : ``} `,
+                  },
+                  emphasis: {
+                    show: true,
+                    textStyle: {
+                      fontSize: _.get($scope.options, "series_Label_Normal_FontSize", 25)[seriesIndex],
+                      fontWeight: _.get($scope.options, "series_Label_Normal_FontWeights", '')[seriesIndex],
+                    }
+                  },
+                  color: _.get($scope.options, "series_Label_Color", ''),// 引导线名称颜色
                 },
-                emphasis: {
-                  show: true,
-                  textStyle: {
-                    fontSize: _.get($scope.options, "series_Label_Normal_FontSize", 25)[seriesIndex],
-                    fontWeight: _.get($scope.options, "series_Label_Normal_FontWeights", '')[seriesIndex],
+                labelLine: {
+                  normal: {
+                    lineStyle: {
+                      color: _.get($scope.options, "series_LabelLine_LineStyle_Color", '#ccc'),// 引导线的颜色
+                    },
+                    smooth: 0.2,
+                    length: 10,
+                    length2: 20
                   }
                 },
-                color: _.get($scope.options, "series_Label_Color", ''),// 引导线名称颜色
-              },
-              labelLine: {
-                normal: {
-                  lineStyle: {
-                    color: _.get($scope.options, "series_LabelLine_LineStyle_Color", '#ccc'),// 引导线的颜色
-                  },
-                  smooth: 0.2,
-                  length: 10,
-                  length2: 20
-                }
-              },
-              // itemStyle: {
-              //   // normal: {
-              //   color: _.get($scope.options, "series_ItemStyle_Color", ''),
-              //   // }
-              // },
-              animationType: 'scale',
-              animationEasing: 'elasticOut'
+                // itemStyle: {
+                //   // normal: {
+                //   color: _.get($scope.options, "series_ItemStyle_Color", ''),
+                //   // }
+                // },
+                animationType: 'scale',
+                animationEasing: 'elasticOut'
 
 
 
+              });
+              seriesIndex += 1;
             });
-            seriesIndex += 1;
-          });
 
 
-          let myChart = null;
+            let myChart = null;
 
-          if (document.getElementById("pie-main")) {
-            document.getElementById("pie-main").id = $scope.options.id;
-            // eslint-disable-next-line
-            myChart = echarts.init(document.getElementById($scope.options.id));
-          } else {
-            // eslint-disable-next-line
-            myChart = echarts.init(document.getElementById($scope.options.id));
-          }
-
-          if (_.get($scope.options, "form.isCodeEnabled", false)) {
-            myChart.setOption(JSON.parse(_.replace($scope.options.form.code, "'", '"')), true);
-          } else {
-            myChart.setOption($scope.options, true);
-          }
-          // Resize - Responsive
-          if (_.get($scope.options, "size.responsive", false)) {
-
-            // Find widget and resize
-            let height = "100%";
-            if ($($element[0]).closest('.widget-container').length === 0) {
-              // Set a default height for widget.
-              height = "400px";
+            if (document.getElementById("pie-main")) {
+              document.getElementById("pie-main").id = $scope.options.id;
+              // eslint-disable-next-line
+              myChart = echarts.init(document.getElementById($scope.options.id));
+            } else {
+              // eslint-disable-next-line
+              myChart = echarts.init(document.getElementById($scope.options.id));
             }
 
-            _.set($scope.options, "size", {
-              responsive: true,
-              width: Math.floor($element.parent().width()) + "px",
-              height
-            });
-          }
-          //  myChart.setOption(defaultPieChartOptions(), true);
-          myChart.resize($scope.options.size.width, $scope.options.size.height);
+            if (_.get($scope.options, "form.isCodeEnabled", false)) {
+              myChart.setOption(JSON.parse(_.replace($scope.options.form.code, "'", '"')), true);
+            } else {
+              myChart.setOption($scope.options, true);
+            }
+            // Resize - Responsive
+            if (_.get($scope.options, "size.responsive", false)) {
 
+              // Find widget and resize
+              let height = "100%";
+              if ($($element[0]).closest('.widget-container').length === 0) {
+                // Set a default height for widget.
+                height = "400px";
+              }
+
+              _.set($scope.options, "size", {
+                responsive: true,
+                width: Math.floor($element.parent().width()) + "px",
+                height
+              });
+            }
+            //  myChart.setOption(defaultPieChartOptions(), true);
+            myChart.resize($scope.options.size.width, $scope.options.size.height);
+
+          }
+        } catch (e) {
+          console.log("先选组件类型 则该方法不存在因此用trycatch来解决:$scope.queryResult.getData is not a function");
         }
       };
 
@@ -238,10 +242,12 @@ function EchartsPieEditor() {
         $scope.$apply();
       };
 
-
-      $scope.columns = $scope.queryResult.getColumns();
-      $scope.columnNames = _.map($scope.columns, i => i.name);
-
+      try {
+        $scope.columns = $scope.queryResult.getColumns();
+        $scope.columnNames = _.map($scope.columns, i => i.name);
+      } catch (e) {
+        console.log("先选组件类型 则该方法不存在因此用trycatch来解决:$scope.queryResult.getData is not a function");
+      }
       // Set default options for new vis// 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
         $scope.options = defaultPieChartOptions();

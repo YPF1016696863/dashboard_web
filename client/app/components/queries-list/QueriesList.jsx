@@ -51,7 +51,8 @@ class QueriesList extends React.Component {
     selected: null,
     all: null,
     filtered: null,
-    loading: true
+    loading: true,
+    selectedName: "选择数据集",
   };
 
   componentDidUpdate(prevProps) {
@@ -77,20 +78,35 @@ class QueriesList extends React.Component {
   };
 
   handleOk = e => {
-    if(this.state.selected === null) {
+    if (this.state.selected === null) {
       message.warning("请选择一个数据集.");
       return;
     }
-    console.log(this.props.chartType);
+    const allItems = _.cloneDeep(this.state.all);
+
+    _.filter(allItems, item => {
+      if (item.id + '' === this.state.selected) {
+        this.setState({
+          selectedName: item.name
+        });
+      }
+    }
+    );
+
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
-    navigateTo("/query/"+this.state.selected+'/charts/new?type='+this.props.chartType);
+    navigateTo("/query/"+this.state.selected+"/charts/new?type="+ this.props.chartType);
+    // 找到当前页面的id 
+    // query/unset this.state.selected /charts/new this.props.chartType直接新建组件的页面链接
+    // navigateTo("/query/unset/charts/new?type=null");原地xy数据没有要单独传某些数据？
+    // this.state.selected要内部传递？
 
     this.setState({
       visible: false,
       selected: null
     });
   };
+
 
   handleCancel = e => {
     this.setState({
@@ -139,10 +155,11 @@ class QueriesList extends React.Component {
 
   render() {
     const { appSettings } = this.props;
-
+    const { selectedName } =this.state;
+    console.log(selectedName);
     return (
       <>
-        <Input placeholder="选择数据集" onClick={this.showModal} />
+        <Input placeholder={selectedName} onClick={this.showModal} />
         <Modal
           destroyOnClose
           title="选择数据集"
@@ -246,7 +263,7 @@ class QueriesList extends React.Component {
                                 style={{ color: '#FAAA39' }}
                               />
                             }
-                            title={item.name+ ', id: [' + item.id + ']'}
+                            title={item.name + ', id: [' + item.id + ']'}
                             // + ', id: [' + item.id + ']'
                             key={item.id}
                             isLeaf
@@ -266,20 +283,21 @@ class QueriesList extends React.Component {
 }
 
 QueriesList.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
   chartType: PropTypes.string,
   querySearchCb: PropTypes.func
 };
 
 QueriesList.defaultProps = {
-  chartType:null,
-  querySearchCb: a => {}
+  chartType: null,
+  querySearchCb: a => { }
 };
 
 export default function init(ngModule) {
   ngModule.component(
     'queriesList',
     react2angular(QueriesList, Object.keys(QueriesList.propTypes), [
-      'appSettings','$location'
+      'appSettings', '$location'
     ])
   );
 }

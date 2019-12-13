@@ -21,77 +21,78 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
         $scope.options = defaultPolarChartOptions();
       }
       const refreshData = () => {
-        if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
-          // 切换主题颜色
-          setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
+        try {
+          if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+            // 切换主题颜色
+            setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-          const data = $scope.queryResult.getData();
-          // 输入的数据格式转换  系列1
-          const seriesData = [];
-          _.set($scope.options, "series", []);// 清空设置
+            const data = $scope.queryResult.getData();
+            // 输入的数据格式转换  系列1
+            const seriesData = [];
+            _.set($scope.options, "series", []);// 清空设置
 
-          const polarData = [];
-          const xDataValue = [];
-          const xData = _.get($scope.options, "form.xAxisColumn", "::");// name string 这一列  AGENT_NAME
-          _.forEach(data, function (value, key) {// [{0},{1}...] 筛选出每一个{0} {1} ...
-            const onesValue = value;
-            _.forEach(onesValue, function (oneXvalue, oneXkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-              if (oneXkey === xData) { // x
-                const xValue = oneXvalue;
-                xDataValue.push(xValue);
-                _.forEach(onesValue, function (oneYvalue, oneYkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                  if (oneYkey === _.get($scope.options, "form.yAxisColumn", "")) {
-                    // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
-                    polarData.push(
-                      [xValue, oneYvalue]
-                    );
-                  }
-                });
-              }
+            const polarData = [];
+            const xDataValue = [];
+            const xData = _.get($scope.options, "form.xAxisColumn", "::");// name string 这一列  AGENT_NAME
+            _.forEach(data, function (value, key) {// [{0},{1}...] 筛选出每一个{0} {1} ...
+              const onesValue = value;
+              _.forEach(onesValue, function (oneXvalue, oneXkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                if (oneXkey === xData) { // x
+                  const xValue = oneXvalue;
+                  xDataValue.push(xValue);
+                  _.forEach(onesValue, function (oneYvalue, oneYkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                    if (oneYkey === _.get($scope.options, "form.yAxisColumn", "")) {
+                      // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                      polarData.push(
+                        [xValue, oneYvalue]
+                      );
+                    }
+                  });
+                }
+              });
             });
-          });
 
 
-          // 自定义输入系列名称、样式等
-          $scope.options.series.push({
+            // 自定义输入系列名称、样式等
+            $scope.options.series.push({
 
-            coordinateSystem: 'polar',
-            name: _.get($scope.options, "series_Name", ''),  // 设置系列/图例的名称
-            type: 'scatter',
-            data: polarData,
+              coordinateSystem: 'polar',
+              name: _.get($scope.options, "series_Name", ''),  // 设置系列/图例的名称
+              type: 'scatter',
+              data: polarData,
 
-            // 设置标记点大小--默认设置为何现实很小
-            symbolSize: _.get($scope.options, "series_SymbolSize", 16),
+              // 设置标记点大小--默认设置为何现实很小
+              symbolSize: _.get($scope.options, "series_SymbolSize", 16),
 
-            // 设置标记点形状
-            symbol: _.get($scope.options, "series_Symbol", 'circle'),
+              // 设置标记点形状
+              symbol: _.get($scope.options, "series_Symbol", 'circle'),
 
-            // // 设置标记点旋转角度
-            symbolRotate: _.get($scope.options, "series_SymbolRotate", ''),
+              // // 设置标记点旋转角度
+              symbolRotate: _.get($scope.options, "series_SymbolRotate", ''),
 
-            markPoint: {
+              markPoint: {
 
-            },
-            // 设置系列颜色
-            itemStyle: {
-              color: _.get($scope.options, "series_ItemStyle_Color", '') === undefined ?
-                '' : _.get($scope.options, "series_ItemStyle_Color", ''),
-            }
+              },
+              // 设置系列颜色
+              itemStyle: {
+                color: _.get($scope.options, "series_ItemStyle_Color", '') === undefined ?
+                  '' : _.get($scope.options, "series_ItemStyle_Color", ''),
+              }
 
-          });
+            });
 
-          // 设置环形分割区域的间隔颜色
-          _.set($scope.options, "radiusAxis.splitArea.areaStyle.color",
-            [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),
-            _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')]);
+            // 设置环形分割区域的间隔颜色
+            _.set($scope.options, "radiusAxis.splitArea.areaStyle.color",
+              [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),
+              _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')]);
 
-          // 设置扇形分割区域的间隔颜色
-          _.set($scope.options, "angleAxis.splitArea.areaStyle.color",
-            [_.get($scope.options, "angleAxis.splitArea.areaStyle.color1", 'transparent'),
-            _.get($scope.options, "angleAxis.splitArea.areaStyle.color2", 'transparent')]);
+            // 设置扇形分割区域的间隔颜色
+            _.set($scope.options, "angleAxis.splitArea.areaStyle.color",
+              [_.get($scope.options, "angleAxis.splitArea.areaStyle.color1", 'transparent'),
+              _.get($scope.options, "angleAxis.splitArea.areaStyle.color2", 'transparent')]);
 
-          //  提示框文字格式
-          const formatterString = `${_.get($scope.options, "Text_a", "")}
+            //  提示框文字格式
+            const formatterString = `${_.get($scope.options, "Text_a", "")}
            {a}&nbsp${_.get($scope.options, "a_Text", "")}
 
            <br/>${_.get($scope.options, "Text_b", "")},
@@ -100,45 +101,48 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
            {b}{c}&nbsp${_.get($scope.options, "b_Text", "")} 
            ${_.get($scope.options, "c_Text", "")}`;
 
-          _.set($scope.options, "tooltip.formatter", formatterString);
+            _.set($scope.options, "tooltip.formatter", formatterString);
 
-          // 系列名称：极坐标图 1
-          // 距离，角度值：180，200 km，°
+            // 系列名称：极坐标图 1
+            // 距离，角度值：180，200 km，°
 
 
 
-          let myChart = null;
+            let myChart = null;
 
-          if (document.getElementById("polar-main")) {
-            document.getElementById("polar-main").id = $scope.options.id;
-            // eslint-disable-next-line
-            myChart = echarts.init(document.getElementById($scope.options.id));
-          } else {
-            // eslint-disable-next-line
-            myChart = echarts.init(document.getElementById($scope.options.id));
-          }
-
-          if (_.get($scope.options, "form.isCodeEnabled", false)) {
-            myChart.setOption(JSON.parse(_.replace($scope.options.form.code, "'", '"')), true);
-          } else {
-            myChart.setOption($scope.options, true);
-          }
-          // Resize - Responsive
-          if (_.get($scope.options, "size.responsive", true)) {
-
-            // Find widget and resize
-            let height = "100%";
-            if ($($element[0]).closest('.widget-container').length === 0) {
-              // Set a default height for widget.
-              height = "400px";
+            if (document.getElementById("polar-main")) {
+              document.getElementById("polar-main").id = $scope.options.id;
+              // eslint-disable-next-line
+              myChart = echarts.init(document.getElementById($scope.options.id));
+            } else {
+              // eslint-disable-next-line
+              myChart = echarts.init(document.getElementById($scope.options.id));
             }
-            _.set($scope.options, "size", {
-              responsive: true,
-              width: Math.floor($element.parent().width()) + "px",
-              height
-            });
+
+            if (_.get($scope.options, "form.isCodeEnabled", false)) {
+              myChart.setOption(JSON.parse(_.replace($scope.options.form.code, "'", '"')), true);
+            } else {
+              myChart.setOption($scope.options, true);
+            }
+            // Resize - Responsive
+            if (_.get($scope.options, "size.responsive", true)) {
+
+              // Find widget and resize
+              let height = "100%";
+              if ($($element[0]).closest('.widget-container').length === 0) {
+                // Set a default height for widget.
+                height = "400px";
+              }
+              _.set($scope.options, "size", {
+                responsive: true,
+                width: Math.floor($element.parent().width()) + "px",
+                height
+              });
+            }
+            myChart.resize($scope.options.size.width, $scope.options.size.height);
           }
-          myChart.resize($scope.options.size.width, $scope.options.size.height);
+        } catch (e) {
+          console.log("先选组件类型 则该方法不存在因此用trycatch来解决:$scope.queryResult.getData is not a function");
         }
       };
 
@@ -158,10 +162,12 @@ function EchartsPolarEditor() {
       options: '=?',
     },
     link($scope) {
-
-      $scope.columns = $scope.queryResult.getColumns();
-      $scope.columnNames = _.map($scope.columns, i => i.name);
-
+      try {
+        $scope.columns = $scope.queryResult.getColumns();
+        $scope.columnNames = _.map($scope.columns, i => i.name);
+      } catch (e) {
+        console.log("先选组件类型 则该方法不存在因此用trycatch来解决:$scope.queryResult.getData is not a function");
+      }
       // Set default options for new vis // 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "PolarChart") {
         $scope.options = defaultPolarChartOptions();

@@ -168,6 +168,7 @@ class ChartsSearch extends React.Component {
                           value: e.target.value,
                           visualization:{type:e.target.value}// 
                         });
+                        // debugger
                         let type;
                         let chart;
                         switch (e.target.value) {
