@@ -12,7 +12,7 @@ import {
   Col,
   Tree,
   Input,
-  Alert,
+  Popover,
   Empty,
   BackTop,
   Tabs
@@ -43,13 +43,16 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import './queries-search.css';
 
 import { policy } from '@/services/policy';
+import notification from "@/services/notification";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
 class QueriesListSearch extends React.Component {
   state = {
-    selected:null,
+    editMode: false,
+    rename: null,
+    selected: null,
     all: null,
     filtered: null,
     loading: true
@@ -67,22 +70,20 @@ class QueriesListSearch extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-        !_.isEqual(this.props.reload, prevProps.reload)
-    ) {
-      this.reload(true)
+    if (!_.isEqual(this.props.reload, prevProps.reload)) {
+      this.reload(true);
     }
   }
 
   reload(holdTab) {
     let queryid = null;
-    if(holdTab) {
+    if (holdTab) {
       queryid = this.state.selected;
     }
     localStorage.setItem('lastSelectedDataSourceId', queryid);
     this.props.querySearchCb([queryid]);
     this.setState({
-      selected:queryid,
+      selected: queryid,
       all: null,
       filtered: null,
       loading: true
@@ -114,6 +115,60 @@ class QueriesListSearch extends React.Component {
     this.props.querySearchCb(null);
     this.setState({
       filtered: _.reverse(_.orderBy(this.state.filtered, item => item[value]))
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  saveQuery(query, customOptions, data) {
+    return new Promise((resolve, reject) => {
+      let request = data;
+
+      if (request) {
+        // Don't save new query with partial data
+        if (query.isNew()) {
+          return reject();
+        }
+        request.id = query.id;
+        request.version = query.version;
+      } else {
+        request = _.pick(query, [
+          'schedule',
+          'query',
+          'id',
+          'description',
+          'name',
+          'data_source_id',
+          'options',
+          'latest_query_data_id',
+          'version',
+          'is_draft'
+        ]);
+      }
+
+      const options = Object.assign(
+          {},
+          {
+            successMessage: '保存成功',
+            errorMessage: '无法保存'
+          },
+          customOptions
+      );
+
+      if (options.force) {
+        delete request.version;
+      }
+
+      Query.save(
+          request,
+          updatedQuery => {
+            notification.success(options.successMessage);
+            query.version = updatedQuery.version;
+            resolve();
+          },
+          error => {
+            reject(error);
+          }
+      );
     });
   }
 
@@ -197,25 +252,88 @@ class QueriesListSearch extends React.Component {
                 <DirectoryTree
                   defaultExpandAll
                   onSelect={(value, node, extra) => {
-                    this.setState({selected:value[0]});
+                    const stillEdit = value[0] === this.state.selected;
+                    this.setState({ selected: value[0], editMode: stillEdit });
                     this.props.querySearchCb(value);
                   }}
                   selectedKeys={[this.state.selected]}
                 >
-                  <TreeNode title="数据查询(无分组)" key="datavis-group#ungrouped">
-                    {_.map(this.state.filtered, item => (
-                      <TreeNode
-                        icon={
-                          <Icon
-                            type="file-search"
-                            style={{ color: '#FAAA39' }}
-                          />
-                        }
-                        title={item.name + ', id: [' + item.id + ']'}
-                        key={item.id}
-                        isLeaf
-                      />
-                    ))}
+                  <TreeNode
+                    title="数据查询(无分组)"
+                    key="datavis-group#ungrouped"
+                  >
+                    {_.map(this.state.filtered, item => {
+                      return (
+                        <TreeNode
+                          icon={
+                            <Icon
+                              type="file-search"
+                              style={{ color: '#FAAA39' }}
+                            />
+                          }
+                          title={
+                            <span
+                              onDoubleClick={event => {
+                                this.setState({ editMode: true });
+                              }}
+                            >
+                              {this.state.editMode &&
+                              this.state.selected &&
+                              _.parseInt(this.state.selected) === item.id ? (
+                                <Input
+                                  autoFocus
+                                  size="small"
+                                  value={this.state.rename}
+                                  onFocus={event => {
+                                    this.setState({ rename: item.name });
+                                  }}
+                                  onChange={event => {
+                                    this.setState(
+                                      {
+                                        rename: event.target.value
+                                      },
+                                      () => {}
+                                    );
+                                  }}
+                                  onBlur={() => {
+                                    this.setState({ editMode: false });
+                                    if (this.state.rename === item.name) {
+                                      console.log('NO CHANGE');
+                                    } else {
+                                      this.setState({loading:true});
+                                      this.saveQuery(item,undefined, {
+                                        name: this.state.rename
+                                      }).then(()=>{
+                                        this.reload(true);
+                                        this.props.querySearchCb(item.id);
+                                      });
+                                    }
+                                  }}
+                                  onPressEnter={()=>{
+                                    this.setState({ editMode: false });
+                                    if (this.state.rename === item.name) {
+                                      console.log('NO CHANGE');
+                                    } else {
+                                      this.setState({loading:true});
+                                      this.saveQuery(item,undefined, {
+                                        name: this.state.rename
+                                      }).then(()=>{
+                                        this.reload(true);
+                                        this.props.querySearchCb(item.id);
+                                      });
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                item.name
+                              )}
+                            </span>
+                          }
+                          key={item.id}
+                          isLeaf
+                        />
+                      );
+                    })}
                   </TreeNode>
                 </DirectoryTree>
               </Col>

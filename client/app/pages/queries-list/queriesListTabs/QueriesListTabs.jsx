@@ -63,10 +63,7 @@ class QueriesListTabs extends React.Component {
       canEdit: false,
       query: null,
       queryResultRaw: null,
-      queryResult: null,
-      runtime: {
-        name: null
-      }
+      queryResult: null
     });
   }
 
@@ -87,10 +84,7 @@ class QueriesListTabs extends React.Component {
         canEdit: false,
         query: null,
         queryResultRaw: null,
-        queryResult: null,
-        runtime: {
-          name: null
-        }
+        queryResult: null
       });
     }
   }
@@ -102,19 +96,13 @@ class QueriesListTabs extends React.Component {
       query: null,
       queryResultRaw: null,
       queryResult: null,
-      runtime: {
-        name: null
-      }
     });
 
     Query.query({ id })
       .$promise.then(query => {
         this.setState({
           query,
-          canEdit: currentUser.canEdit(query) || query.can_edit,
-          runtime: {
-            name: query.name
-          }
+          canEdit: currentUser.canEdit(query) || query.can_edit
         });
         query
           .getQueryResultPromise()
@@ -131,10 +119,7 @@ class QueriesListTabs extends React.Component {
               canEdit: false,
               query: null,
               queryResultRaw: null,
-              queryResult: 'empty',
-              runtime: {
-                name: null
-              }
+              queryResult: 'empty'
             });
           });
       })
@@ -144,10 +129,7 @@ class QueriesListTabs extends React.Component {
           canEdit: false,
           query: null,
           queryResultRaw: null,
-          queryResult: 'empty',
-          runtime: {
-            name: null
-          }
+          queryResult: 'empty'
         });
       });
   }
@@ -241,6 +223,7 @@ class QueriesListTabs extends React.Component {
   }
 
   render() {
+    console.log(this.props.cbAfterUpdate);
     return (
       <>
         {!this.state.isLoaded && <LoadingState />}
@@ -264,157 +247,74 @@ class QueriesListTabs extends React.Component {
         {this.state.isLoaded &&
           this.state.queryResult != null &&
           this.state.queryResult !== 'empty' && (
-            <Tabs defaultActiveKey="1" type="card" className="queries-tab">
-              <TabPane tab="数据预览" key="1">
-                <Alert
-                  message="预览数据为该数据集的部分数据."
-                  type="warning"
-                  closable
-                />
-                <br />
-                <Table
-                  columns={this.state.queryResult.columns}
-                  dataSource={this.state.queryResult.rows}
-                  pagination={{ pageSize: 100 }}
-                />
-              </TabPane>
-              <TabPane
-                tab="数据集设置"
-                key="2"
-                style={{ paddingRight: '10px' }}
+            <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
+              <Descriptions
+                title={
+                  <Alert
+                    message="预览数据为该数据集的部分数据."
+                    type="warning"
+                    closable
+                  />
+                }
               >
-                <Descriptions
-                  title={
-                    <Input
-                      placeholder={this.state.query.name}
-                      addonBefore="数据集名称"
-                      value={this.state.runtime.name}
-                      onChange={e => {
-                        this.setState(
-                          {
-                            runtime: {
-                              name: e.target.value
-                            }
-                          },
-                          () => {}
-                        );
-                      }}
-                      allowClear
-                    />
-                  }
-                >
-                  <Descriptions.Item label="数据集创建时间">
-                    {this.state.query.created_at}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="ID">
-                    {this.state.query.id}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="创建者">
-                    {this.state.query.user.name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="可编辑">
-                    {this.state.canEdit ? (
-                      <Switch disabled defaultChecked checkedChildren="是" />
-                    ) : (
-                      <Switch disabled unCheckedChildren="否" />
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="最近更新自">
-                    {this.state.query.last_modified_by.name}
-                  </Descriptions.Item>
-                </Descriptions>
-                <Statistic title="数据集:" value={this.state.query.query} />
-                <br />
-                <Statistic
-                  title="该数据集已应用于组件数量:"
-                  value={
-                    _.isArray(this.state.query.visualizations)
-                      ? this.state.query.visualizations.length
-                      : '无法显示'
-                  }
-                />
-                <br />
-                <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
-                <Button
-                  type="primary"
-                  href={'/query/' + this.state.query.id + '/charts/new'}
-                  target="_blank"
-                >
-                  <Icon type="pie-chart" />
-                  新建可视化组件
-                </Button>
-                <br />
-                <br />
-                <p style={{ fontSize: '14px' }}>设置数据集列名称别名:</p>
-                <Table
-                  bordered
-                  pagination={{ pageSize: 10 }}
-                  columns={[
-                    {
-                      title: '名称',
-                      dataIndex: 'name',
-                      key: 'name'
-                    },
-                    {
-                      title: '别名',
-                      dataIndex: 'friendly_name',
-                      key: 'friendly_name',
-                      render: (text, record, index) => {
-                        return (
-                          <Input
-                            placeholder="别名"
-                            value={text}
-                            allowClear
-                            onChange={e =>
-                              this.friendlyNameOnChange(index, record, e)
-                            }
-                          />
-                        );
-                      }
-                    }
-                  ]}
-                  dataSource={_.get(
-                    this.state.queryResultRaw,
-                    'query_result.data.columns',
-                    []
-                  )}
-                />
-                <div align="right">
-                  <Button
-                    disabled={!this.state.runtime.name}
-                    type="primary"
-                    onClick={() => {
-                      this.saveQuery(undefined, {
-                        name: this.state.runtime.name
-                      }).then(()=>{
-                        this.props.cbAfterUpdate(this.state.query.id);
-                      });
-                    }}
-                  >
-                    <Icon type="upload" />
-                    更新数据集设置
-                  </Button>
-                </div>
-
-                <br />
-                <br />
-                <p style={{ fontSize: '14px' }}>其他设置:</p>
-                <Button
-                  type="primary"
-                  target="_blank"
-                  href={'/queries/' + this.props.queryId + '/source'}
-                >
-                  <i className="fa fa-edit m-r-5" />
-                  编辑数据集
-                </Button>
-                <br />
-                <br />
-                <Button type="danger">
-                  <Icon type="delete" />
-                  删除数据集
-                </Button>
-              </TabPane>
-            </Tabs>
+                <Descriptions.Item label="数据集创建时间">
+                  {this.state.query.created_at}
+                </Descriptions.Item>
+                <Descriptions.Item label="ID">
+                  {this.state.query.id}
+                </Descriptions.Item>
+                <Descriptions.Item label="创建者">
+                  {this.state.query.user.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="可编辑">
+                  {this.state.canEdit ? '是' : '否'}
+                </Descriptions.Item>
+                <Descriptions.Item label="最近更新自">
+                  {this.state.query.last_modified_by.name}
+                </Descriptions.Item>
+              </Descriptions>
+              <Statistic title="数据集:" value={this.state.query.query} />
+              <br />
+              <Statistic
+                title="该数据集已应用于组件数量:"
+                value={
+                  _.isArray(this.state.query.visualizations)
+                    ? this.state.query.visualizations.length
+                    : '无法显示'
+                }
+              />
+              <br />
+              <Table
+                columns={this.state.queryResult.columns}
+                dataSource={this.state.queryResult.rows}
+                pagination={{ pageSize: 100 }}
+              />
+              <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
+              <Button
+                type="primary"
+                href={'/query/' + this.state.query.id + '/charts/new'}
+                target="_blank"
+              >
+                <Icon type="pie-chart" />
+                新建可视化组件
+              </Button>
+              <br />
+              <br />
+              <p style={{ fontSize: '14px' }}>其他设置:</p>
+              <Button
+                type="primary"
+                target="_blank"
+                href={'/queries/' + this.props.queryId + '/source'}
+              >
+                <i className="fa fa-edit m-r-5" />
+                编辑数据集
+              </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type="danger">
+                <Icon type="delete" />
+                删除数据集
+              </Button>
+            </div>
           )}
       </>
     );
@@ -428,7 +328,7 @@ QueriesListTabs.propTypes = {
 
 QueriesListTabs.defaultProps = {
   queryId: null,
-  cbAfterUpdate: a=>{}
+  cbAfterUpdate: a => {}
 };
 
 export default function init(ngModule) {
