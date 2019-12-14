@@ -382,7 +382,7 @@ class QueriesListTabs extends React.Component {
                   编辑数据集
                 </Button>
                 <br />
-                <br />
+                <br />             
                 <Button type="danger">
                   <Icon type="delete" />
                   删除数据集
