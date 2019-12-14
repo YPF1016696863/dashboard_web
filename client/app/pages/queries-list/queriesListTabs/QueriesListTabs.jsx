@@ -265,7 +265,7 @@ class QueriesListTabs extends React.Component {
           this.state.queryResult != null &&
           this.state.queryResult !== 'empty' && (
             <Tabs defaultActiveKey="1" type="card" className="queries-tab">
-              <TabPane tab="数据预览" key="1">
+              {/* <TabPane tab="数据预览" key="1">
                 <Alert
                   message="预览数据为该数据集的部分数据."
                   type="warning"
@@ -275,12 +275,12 @@ class QueriesListTabs extends React.Component {
                 <Table
                   columns={this.state.queryResult.columns}
                   dataSource={this.state.queryResult.rows}
-                  pagination={{ pageSize: 100 }}
+                  pagination={{ pageSize: 20 }}
                 />
-              </TabPane>
+              </TabPane> */}
               <TabPane
                 tab="数据集设置"
-                key="2"
+                key="1"
                 style={{ paddingRight: '10px' }}
               >
                 <Descriptions
@@ -334,51 +334,17 @@ class QueriesListTabs extends React.Component {
                   }
                 />
                 <br />
-                <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
-                <Button
-                  type="primary"
-                  href={'/query/' + this.state.query.id + '/charts/new'}
-                  target="_blank"
-                >
-                  <Icon type="pie-chart" />
-                  新建可视化组件
-                </Button>
-                <br />
-                <br />
-                <p style={{ fontSize: '14px' }}>设置数据集列名称别名:</p>
+                <Alert
+                  message="预览数据为该数据集的部分数据."
+                  type="warning"
+                  closable
+                />  
                 <Table
-                  bordered
-                  pagination={{ pageSize: 10 }}
-                  columns={[
-                    {
-                      title: '名称',
-                      dataIndex: 'name',
-                      key: 'name'
-                    },
-                    {
-                      title: '别名',
-                      dataIndex: 'friendly_name',
-                      key: 'friendly_name',
-                      render: (text, record, index) => {
-                        return (
-                          <Input
-                            placeholder="别名"
-                            value={text}
-                            allowClear
-                            onChange={e =>
-                              this.friendlyNameOnChange(index, record, e)
-                            }
-                          />
-                        );
-                      }
-                    }
-                  ]}
-                  dataSource={_.get(
-                    this.state.queryResultRaw,
-                    'query_result.data.columns',
-                    []
-                  )}
+                  columns={this.state.queryResult.columns}
+                  dataSource={this.state.queryResult.rows}
+                  pagination={{ pageSize: 20 }}
                 />
+                <br />
                 <div align="right">
                   <Button
                     disabled={!this.state.runtime.name}
@@ -394,8 +360,16 @@ class QueriesListTabs extends React.Component {
                     <Icon type="upload" />
                     更新数据集设置
                   </Button>
-                </div>
-
+                </div>             
+                <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
+                <Button
+                  type="primary"
+                  href={'/query/' + this.state.query.id + '/charts/new'}
+                  target="_blank"
+                >
+                  <Icon type="pie-chart" />
+                  新建可视化组件
+                </Button>
                 <br />
                 <br />
                 <p style={{ fontSize: '14px' }}>其他设置:</p>
