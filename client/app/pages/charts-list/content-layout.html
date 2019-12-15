@@ -14,7 +14,11 @@
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
           <div class="scrollbox" style="height: 100% !important;">
-            <charts-list-search query-search-cb="querySearchCb"></charts-list-search>
+            <charts-list-search
+              display-id="displayId"
+              display-type="displayType"
+              query-search-cb="querySearchCb"
+            ></charts-list-search>
           </div>
         </div>
       </div>
@@ -45,6 +49,7 @@
                 >
                   <div class="query__vis p-b-15 scrollbox">
                     <charts-list-tabs
+                      charts-tab-cb="chartsTabCb"
                       display-id="displayId"
                       display-type="displayType"
                     ></charts-list-tabs>

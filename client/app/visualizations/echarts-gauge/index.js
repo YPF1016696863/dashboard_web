@@ -17,8 +17,6 @@ function EchartsGaugeRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-
-      console.log($scope.options);
       const refreshData = () => {
         if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
           const data = $scope.queryResult.getData();

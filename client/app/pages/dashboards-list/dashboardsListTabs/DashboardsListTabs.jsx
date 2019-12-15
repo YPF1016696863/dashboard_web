@@ -14,10 +14,10 @@ import {
   Input,
   Checkbox,
   notification,
-  Statistic,
+  Popconfirm,
   Switch,
   Tabs,
-  Card,
+  Form,
   message
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -70,10 +70,7 @@ class DashboardsListTabs extends React.Component {
 
     this.setState({
       isLoaded: true,
-      dashboard: null,
-      runtime: {
-        name: null
-      }
+      dashboard: null
     });
 
     DashboardsPreviewDOM = angular2react(
@@ -91,27 +88,28 @@ class DashboardsListTabs extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.slugId !== this.props.slugId) {
-      this.getDashboard(nextProps.slugId);
+      if(!nextProps.slugId) {
+        this.setState({
+          isLoaded: true,
+          dashboard: null
+        });
+      }else{
+        this.getDashboard(nextProps.slugId);
+      }
     }
   }
 
   getDashboard = slugId => {
     this.setState({
       isLoaded: false,
-      dashboard: null,
-      runtime: {
-        name: null
-      }
+      dashboard: null
     });
     Dashboard.get(
       { slug: slugId },
       dashboard => {
         this.setState({
           isLoaded: true,
-          dashboard,
-          runtime: {
-            name: dashboard.name
-          }
+          dashboard
         });
         if (
           !(
@@ -131,18 +129,23 @@ class DashboardsListTabs extends React.Component {
     );
   };
 
-  connectCb = (isLoaded, loadSuccess) => {
-    this.setState({
-      isLoaded
-    });
-  };
-
   deleteDashboard = () => {
-    notification.error({
-      message: `消息`,
-      description: '功能暂未开放.',
-      placement: 'bottomRight'
-    });
+    if (this.state.dashboard && this.state.dashboard.id) {
+      this.setState({isLoaded:false});
+      this.state.dashboard.$delete().then(
+        res => {
+          message.success('可视化仪表板'+this.state.dashboard.name+'已删除.');
+          this.props.dashboardTabCb(null);
+          this.setState({isLoaded:true,dashboard:null});
+        },
+        err => {
+          message.error('无法删除,请刷新页面后重试.');
+          this.setState({isLoaded:true});
+        }
+      );
+    } else {
+      message.error('无法删除,请刷新页面后重试.');
+    }
   };
 
   updateDashboard = data => {
@@ -169,153 +172,124 @@ class DashboardsListTabs extends React.Component {
     return (
       <>
         {!this.state.isLoaded && (
-          <Tabs defaultActiveKey="1" type="card" className="queries-tab">
-            {/*
-            <TabPane tab="可视化面板预览" key="1" disabled>
-              <div className="align-center-div" style={{ paddingTop: '15%' }}>
-                <LoadingState />
-              </div>
-            </TabPane>
-            */}
-            <TabPane tab="可视化面板设置" key="2" disabled />
-          </Tabs>
+          <div className="align-center-div" style={{ paddingTop: '15%' }}>
+            <LoadingState />
+          </div>
         )}
         {this.state.isLoaded && this.state.dashboard == null && (
-          <Tabs defaultActiveKey="1" type="card" className="queries-tab">
-            {/*
-            <TabPane tab="可视化面板预览" key="1" disabled>
-              <div className="align-center-div" style={{ paddingTop: '15%' }}>
-                <img src={emptyChartImg} alt="" style={{ width: 100 }} />
-                <br />
-                <p>选择可视化面板</p>
-              </div>
-            </TabPane>
-            */}
-            <TabPane tab="可视化面板设置" key="2" disabled />
-          </Tabs>
+          <div className="align-center-div" style={{ paddingTop: '15%' }}>
+            <img src={emptyChartImg} alt="" style={{ width: 100 }} />
+            <br />
+            <p>选择可视化面板</p>
+          </div>
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
-          <Tabs defaultActiveKey="1" type="card" className="queries-tab">
-            {/*
-            <TabPane tab="可视化面板预览" key="1">
-              <DashboardsPreviewDOM
-                slugId={slugId}
-                connectCb={this.connectCb}
-              />
-            </TabPane>
-            */}
-            <TabPane
-              tab="可视化面板设置"
-              key="2"
-              style={{ paddingRight: '10px' }}
-            >
-              <Descriptions
-                title={
-                  <Input
-                    addonBefore="数据集名称"
-                    value={this.state.runtime.name}
-                    onChange={e => {
-                      this.setState(
-                        {
-                          runtime: {
-                            name: e.target.value
-                          }
-                        },
-                        () => {}
-                      );
-                    }}
-                    allowClear
-                  />
-                }
-              >
-                <Descriptions.Item label="更新时间">
-                  {this.state.dashboard.updated_at}
-                </Descriptions.Item>
-                <Descriptions.Item label="版本">
-                  {this.state.dashboard.version}
-                </Descriptions.Item>
-                <Descriptions.Item label="创建者">
-                  {this.state.dashboard.user.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="可编辑">
-                  {this.state.dashboard.can_edit ? (
-                    <Switch disabled defaultChecked checkedChildren="是" />
-                  ) : (
-                    <Switch disabled unCheckedChildren="否" />
-                  )}
-                </Descriptions.Item>
-                <Descriptions.Item label="面板引用ID">
-                  {this.state.dashboard.slug}
-                </Descriptions.Item>
-              </Descriptions>
+          <div style={{ padding: '10px' }}>
+            <Descriptions title="可视化仪表盘配置">
+              <Descriptions.Item label="更新时间">
+                {this.state.dashboard.updated_at}
+              </Descriptions.Item>
+              <Descriptions.Item label="版本">
+                {this.state.dashboard.version}
+              </Descriptions.Item>
+              <Descriptions.Item label="创建者">
+                {this.state.dashboard.user.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="可编辑">
+                {this.state.dashboard.can_edit ? '是' : '否'}
+              </Descriptions.Item>
+              <Descriptions.Item label="面板引用ID">
+                {this.state.dashboard.slug}
+              </Descriptions.Item>
+              <Descriptions.Item label="该面板中可视化组件数量">
+                {this.state.dashboard.widgets.length}
+              </Descriptions.Item>
+            </Descriptions>
+            <br />
+            <p style={{ fontSize: '14px' }}>可视化仪表板描述:</p>
+            <TextArea placeholder="可视化仪表板描述" rows={4} />
+            <br />
+            <br />
+            <div align="right">
+              <Button type="primary" onClick={() => {}}>
+                <Icon type="save" />
+                保存
+              </Button>
+            </div>
+            <Divider />
+            <p style={{ fontSize: '14px' }}>可视化面板共享设置:</p>
 
-              <Statistic
-                title="该面板中可视化组件数量"
-                value={this.state.dashboard.widgets.length}
-              />
-              <br />
-              <p style={{ fontSize: '14px' }}>可视化面板共享设置:</p>
-              <Card bodyStyle={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                <Statistic
-                  title="可视化面板共享"
-                  value=" "
-                  prefix={
-                    <Switch
-                      checkedChildren="开"
-                      unCheckedChildren="关"
-                      defaultChecked={false}
-                    />
-                  }
+            <Form>
+              <Form.Item
+                label="共享可视化面板"
+                labelAlign="left"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 1, offset: 17 }}
+              >
+                <Switch
+                  checkedChildren="开"
+                  unCheckedChildren="关"
+                  defaultChecked={false}
                 />
-                <Row>
-                  <Col span={18}>
-                    <Input value="暂时无法获取可视化面板链接地址" readOnly />
-                  </Col>
-                  <Col span={6}>
-                    <Button type="primary" style={{ marginLeft: '15px' }}>
+              </Form.Item>
+              <Form.Item
+                label="共享可视化面板URL"
+                labelAlign="left"
+                labelCol={{ span: 2 }}
+                wrapperCol={{ span: 22 }}
+              >
+                <Input
+                  value="暂时无法获取可视化面板链接地址"
+                  readOnly
+                  addonAfter={
+                    <Button type="link">
                       <Icon type="copy" /> 拷贝连接
                     </Button>
-                  </Col>
-                </Row>
-              </Card>
-              <br />
-              <p style={{ fontSize: '14px' }}>可视化仪表板描述:</p>
-              <TextArea placeholder="可视化仪表板描述" rows={7} />
-              <br />
-              <br />
-              <div align="right">
+                  }
+                />
+              </Form.Item>
+            </Form>
+            <br />
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <p style={{ fontSize: '14px' }}>预览:</p>
+                <Button type="primary">
+                  <Icon type="dashboard" />
+                  预览可视化面板
+                </Button>
+              </Col>
+
+              <Col span={24}>
+                <br />
+              </Col>
+
+              <Col span={24}>
+                <p style={{ fontSize: '14px' }}>其他设置:</p>
                 <Button
                   type="primary"
-                  onClick={() => {
-                    this.updateDashboard({
-                      name: this.state.runtime.name
-                    });
-                  }}
+                  disabled={slugId == null}
+                  target="_blank"
+                  href={'dashboards/' + slugId}
                 >
-                  <Icon type="dashboard" />
-                  更新可视化仪表盘
+                  <i className="fa fa-edit m-r-5" />
+                  编辑可视化面板
                 </Button>
-              </div>
-              <br />
-              <br />
-              <p style={{ fontSize: '14px' }}>其他设置:</p>
-              <Button
-                type="primary"
-                disabled={slugId == null}
-                target="_blank"
-                href={'dashboards/' + slugId}
-              >
-                <i className="fa fa-edit m-r-5" />
-                编辑可视化面板
-              </Button>
-              <br />
-              <br />
-              <Button type="danger" onClick={this.deleteDashboard}>
-                <Icon type="delete" />
-                删除可视化面板
-              </Button>
-            </TabPane>
-          </Tabs>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <Popconfirm
+                  placement="topLeft"
+                  title="确认删除可视化仪表盘?"
+                  onConfirm={this.deleteDashboard}
+                  okText="确认"
+                  cancelText="取消"
+                >
+                  <Button type="danger">
+                    <Icon type="delete" />
+                    删除可视化面板
+                  </Button>
+                </Popconfirm>
+              </Col>
+            </Row>
+          </div>
         )}
       </>
     );
@@ -323,7 +297,8 @@ class DashboardsListTabs extends React.Component {
 }
 
 DashboardsListTabs.propTypes = {
-  slugId: PropTypes.string
+  slugId: PropTypes.string,
+  dashboardTabCb: PropTypes.func.isRequired
 };
 
 DashboardsListTabs.defaultProps = {

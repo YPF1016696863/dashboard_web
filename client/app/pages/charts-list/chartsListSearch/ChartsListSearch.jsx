@@ -44,12 +44,17 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import './charts-search.css';
 
 import { policy } from '@/services/policy';
+import notification from '@/services/notification';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
 class ChartsListSearch extends React.Component {
   state = {
+    visualization: null,
+    editMode: false,
+    rename: null,
+    selected: null,
     all: null,
     filtered: null,
     loading: true
@@ -65,9 +70,28 @@ class ChartsListSearch extends React.Component {
     });
   }
 
-  reload() {
-    this.props.querySearchCb(null, null);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.displayId === null) {
+      this.reload();
+    }
+  }
+
+  reload(holdTab) {
+
+    let type = null;
+    let selected = null;
+    let visualization = null;
+    if (holdTab) {
+      type = 'V';
+      selected = this.state.selected;
+      visualization = this.state.visualization;
+    }
+
+    this.props.querySearchCb(type,selected);
+
     this.setState({
+      selected,
+      visualization,
       all: null,
       filtered: null,
       loading: true
@@ -112,6 +136,108 @@ class ChartsListSearch extends React.Component {
     this.setState({
       filtered: _.reverse(_.orderBy(this.state.filtered, item => item[value]))
     });
+  }
+
+  findVisualization(id) {
+    const queryId = _.split(id, ':')[0];
+    const visualizationId = _.split(id, ':')[1];
+    const { all } = this.state;
+
+    return _.find(
+      _.get(_.find(all, query => query.id === _.parseInt(queryId)), 'visualizations', []),
+      visualization => visualization.id === _.parseInt(visualizationId)
+    );
+  }
+
+  visualizationRender() {
+    const { filtered } = this.state;
+    const tempNodes = [];
+    _.map(filtered, query =>
+      _.map(query.visualizations, visualization => {
+        if (!visualization.name.includes('Table')) {
+          tempNodes.push(
+            <TreeNode
+              icon={<Icon type="pie-chart" style={{ color: '#428bca' }} />}
+              title={
+                <span
+                  onDoubleClick={event => {
+                    this.setState({ editMode: true });
+                  }}
+                >
+                  {this.state.editMode &&
+                  this.state.selected &&
+                  _.isEqual(
+                    this.state.selected,
+                    query.id + ':' + visualization.id
+                  ) ? (
+                    <Input
+                      autoFocus
+                      size="small"
+                      value={this.state.rename}
+                      onFocus={event => {
+                        this.setState({
+                          rename: visualization.name
+                        });
+                      }}
+                      onChange={event => {
+                        this.setState(
+                          {
+                            rename: event.target.value
+                          },
+                          () => {}
+                        );
+                      }}
+                      onBlur={() => {
+                        this.setState({ editMode: false });
+                        if (this.state.rename === visualization.name) {
+                          console.log('NO CHANGE');
+                        } else {
+                          this.setState({ loading: true });
+                          this.updateVisualization({name:this.state.rename});
+                        }
+                      }}
+                      onPressEnter={() => {
+                        this.setState({ editMode: false });
+                        if (this.state.rename === visualization.name) {
+                          console.log('NO CHANGE');
+                        } else {
+                          this.setState({ loading: true });
+                          this.updateVisualization({name:this.state.rename});
+                        }
+                      }}
+                    />
+                  ) : (
+                    visualization.name
+                  )}
+                </span>
+              }
+              key={query.id + ':' + visualization.id}
+              isLeaf
+            />
+          );
+        }
+      })
+    );
+
+    return tempNodes;
+  }
+
+  updateVisualization(data) {
+    this.props.Visualization.save(
+      _.extend(this.state.visualization, data),
+      result => {
+        notification.success('保存成功');
+        this.setState({
+          loading: false
+        });
+      },
+      () => {
+        notification.error('无法保存');
+        this.setState({
+          loading: false
+        });
+      }
+    );
   }
 
   render() {
@@ -182,53 +308,25 @@ class ChartsListSearch extends React.Component {
                 <DirectoryTree
                   defaultExpandedKeys={['datavis-group#ungrouped']}
                   onSelect={(value, node, extra) => {
+                    const stillEdit = value[0] === this.state.selected;
+                    this.setState({
+                      selected: value[0],
+                      editMode: stillEdit,
+                      visualization: this.findVisualization(value[0])
+                    });
                     this.props.querySearchCb(
                       node.node.isLeaf() ? 'V' : 'Q',
                       value[0]
                     );
                   }}
+                  selectedKeys={[this.state.selected]}
                 >
                   <TreeNode
                     title="可视化组件(无分组)"
                     key="datavis-group#ungrouped"
                     selectable={false}
                   >
-                    {_.map(this.state.filtered, item =>
-                      item.visualizations.length > 1 ? (
-                        <TreeNode
-                          icon={
-                            <Icon
-                              type="file-search"
-                              style={{ color: '#FAAA39' }}
-                            />
-                          }
-                          title={item.name}
-                          key={item.id}
-                          isLeaf={false}
-                        >
-                          {_.map(item.visualizations, visualization =>
-                            visualization.name.includes('Table') ? null : (
-                              <TreeNode
-                                icon={
-                                  <Icon
-                                    type="pie-chart"
-                                    style={{ color: '#428bca' }}
-                                  />
-                                }
-                                title={
-                                  visualization.name +
-                                  ', id: [' +
-                                  visualization.type +
-                                  ']'
-                                }
-                                key={item.id + ':' + visualization.id}
-                                isLeaf
-                              />
-                            )
-                          )}
-                        </TreeNode>
-                      ) : null
-                    )}
+                    {this.visualizationRender()}
                   </TreeNode>
                 </DirectoryTree>
               </Col>
@@ -241,10 +339,12 @@ class ChartsListSearch extends React.Component {
 }
 
 ChartsListSearch.propTypes = {
+  displayId: PropTypes.string,
   querySearchCb: PropTypes.func
 };
 
 ChartsListSearch.defaultProps = {
+  displayId:null,
   querySearchCb: (a, b) => {}
 };
 
@@ -252,7 +352,8 @@ export default function init(ngModule) {
   ngModule.component(
     'chartsListSearch',
     react2angular(ChartsListSearch, Object.keys(ChartsListSearch.propTypes), [
-      'appSettings'
+      'appSettings',
+      'Visualization'
     ])
   );
 }

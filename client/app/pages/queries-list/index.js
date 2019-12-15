@@ -51,8 +51,8 @@ function QueriesListViewCtrl(
     $scope.$applyAsync();
   };
 
-  $scope.cbAfterUpdate = (id) => {
-    $scope.reload += $scope.reload;
+  $scope.queriesTabCb = (id) => {
+    $scope.queryId = id&&id.length?id[0]:null;
     $scope.$applyAsync();
   };
 

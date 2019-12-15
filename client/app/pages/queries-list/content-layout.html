@@ -7,6 +7,7 @@
       r-flex="true"
       resizable-toggle
       toggle-shortcut="Alt+Shift+D, Alt+D"
+      style="max-width: 30vw;"
     >
       <div class="editor__left__schema">
         <div
@@ -14,7 +15,7 @@
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
           <div class="scrollbox" style="height: 100% !important;">
-            <queries-list-search query-search-cb="querySearchCb" reload="reload"></queries-list-search>
+            <queries-list-search query-search-cb="querySearchCb" query-id="queryId"></queries-list-search>
           </div>
         </div>
       </div>
@@ -46,7 +47,7 @@
                   <div class="query__vis p-b-15 scrollbox">
                     <queries-list-tabs
                       query-id="queryId"
-                      cb-after-update="cbAfterUpdate"
+                      queries-tab-cb="queriesTabCb"
                     ></queries-list-tabs>
                   </div>
                 </div>

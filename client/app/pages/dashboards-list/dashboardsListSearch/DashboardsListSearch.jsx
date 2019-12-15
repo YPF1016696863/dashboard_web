@@ -49,7 +49,11 @@ const { Search } = Input;
 
 class DashboardsListSearch extends React.Component {
   state = {
-    dashboardName:"",
+    dashboard: null,
+    editMode: false,
+    rename: null,
+    selected: null,
+    dashboardName: '',
     all: null,
     filtered: null,
     loading: true,
@@ -66,10 +70,24 @@ class DashboardsListSearch extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.slugId === null) {
+      this.reload();
+    }
+  }
+
   // eslint-disable-next-line react/sort-comp
-  reload() {
-    this.props.dashboardSearchCb(null);
+  reload(holdTab) {
+    let dashboardid = null;
+    let dashboard = null;
+    if (holdTab) {
+      dashboardid = this.state.selected;
+      dashboard = this.state.dashboard;
+    }
+    this.props.dashboardSearchCb([dashboardid]);
     this.setState({
+      dashboard,
+      selected: dashboardid,
       all: null,
       filtered: null,
       loading: true
@@ -104,6 +122,24 @@ class DashboardsListSearch extends React.Component {
     });
   }
 
+  updateDashboard = data => {
+    _.extend(this.state.dashboard, data);
+    data = _.extend({}, data, {
+      slug: this.state.dashboard.id,
+      version: this.state.dashboard.version
+    });
+    Dashboard.save(
+      data,
+      dashboard => {
+        message.success('可视化面板信息更新成功');
+        this.reload(true);
+      },
+      error => {
+        message.error('可视化面板更新失败', '出现错误');
+      }
+    );
+  };
+
   showModal = () => {
     this.setState({
       visible: true
@@ -114,30 +150,29 @@ class DashboardsListSearch extends React.Component {
     this.setState({
       visible: false
     });
-    if(policy.isCreateDashboardEnabled()) {
-
-      if(_.isEmpty(this.state.dashboardName)) {
+    if (policy.isCreateDashboardEnabled()) {
+      if (_.isEmpty(this.state.dashboardName)) {
         message.error('仪表板名称不能为空');
         return;
       }
 
       this.props.$http
-          .post(this.props.appSettings.server.backendUrl + '/api/dashboards', {
-            name: this.state.dashboardName,
-          })
-          .success((response) => {
-            this.props.$location
-                .path(`/dashboards/${response.slug}`)
-                .search('edit')
-                .replace();
-          });
+        .post(this.props.appSettings.server.backendUrl + '/api/dashboards', {
+          name: this.state.dashboardName
+        })
+        .success(response => {
+          this.props.$location
+            .path(`/dashboards/${response.slug}`)
+            .search('edit')
+            .replace();
+        });
     }
   };
 
-  newName = (e)=>{
+  newName = e => {
     const { value } = e.target;
-    this.setState({dashboardName:value});
-  }
+    this.setState({ dashboardName: value });
+  };
 
   render() {
     const { appSettings } = this.props;
@@ -264,24 +299,90 @@ class DashboardsListSearch extends React.Component {
                 <DirectoryTree
                   defaultExpandedKeys={['datavis-group#ungrouped']}
                   onSelect={(value, node, extra) => {
+                    const stillEdit = value[0] === this.state.selected;
+                    this.setState({
+                      selected: value[0],
+                      editMode: stillEdit,
+                      dashboard: _.find(
+                        this.state.all,
+                        dashboard => dashboard.slug === value[0]
+                      )
+                    });
                     this.props.dashboardSearchCb(value);
                   }}
+                  selectedKeys={[this.state.selected]}
                 >
                   <TreeNode
                     title="可视化仪表板(无分组)"
                     key="datavis-group#ungrouped"
                     selectable={false}
                   >
-                    {_.map(this.state.filtered, item => (
-                      <TreeNode
-                        icon={
-                          <Icon type="dashboard" style={{ color: '#801336' }} />
-                        }
-                        title={item.name + ', id: [' + item.id + ']'}
-                        key={item.slug}
-                        isLeaf
-                      />
-                    ))}
+                    {_.map(this.state.filtered, item => {
+                      return (
+                        <TreeNode
+                          icon={
+                            <Icon
+                              type="dashboard"
+                              style={{ color: '#801336' }}
+                            />
+                          }
+                          title={
+                            <span
+                              onDoubleClick={event => {
+                                this.setState({ editMode: true });
+                              }}
+                            >
+                              {this.state.editMode &&
+                              this.state.selected &&
+                              this.state.selected === item.slug ? (
+                                <Input
+                                  autoFocus
+                                  size="small"
+                                  value={this.state.rename}
+                                  onFocus={event => {
+                                    this.setState({ rename: item.name });
+                                  }}
+                                  onChange={event => {
+                                    this.setState(
+                                      {
+                                        rename: event.target.value
+                                      },
+                                      () => {}
+                                    );
+                                  }}
+                                  onBlur={() => {
+                                    this.setState({ editMode: false });
+                                    if (this.state.rename === item.name) {
+                                      console.log('NO CHANGE');
+                                    } else {
+                                      this.setState({ loading: true });
+                                      this.updateDashboard({
+                                        name: this.state.rename
+                                      });
+                                    }
+                                  }}
+                                  onPressEnter={() => {
+                                    this.setState({ editMode: false });
+                                    if (this.state.rename === item.name) {
+                                      console.log('NO CHANGE');
+                                    } else {
+                                      this.setState({ loading: true });
+                                      this.updateDashboard({
+                                        name: this.state.rename
+                                      });
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                item.name
+                              )}
+                            </span>
+                          }
+                          key={item.slug}
+                          isLeaf
+                        />
+                      );
+                    })}
                   </TreeNode>
                 </DirectoryTree>
               </Col>
@@ -294,10 +395,13 @@ class DashboardsListSearch extends React.Component {
 }
 
 DashboardsListSearch.propTypes = {
+  slugId: PropTypes.string,
   dashboardSearchCb: PropTypes.func.isRequired
 };
 
-DashboardsListSearch.defaultProps = {};
+DashboardsListSearch.defaultProps = {
+  slugId:null
+};
 
 export default function init(ngModule) {
   ngModule.component(
@@ -305,7 +409,7 @@ export default function init(ngModule) {
     react2angular(
       DashboardsListSearch,
       Object.keys(DashboardsListSearch.propTypes),
-      ['appSettings','$http','$location']
+      ['appSettings', '$http', '$location']
     )
   );
 }

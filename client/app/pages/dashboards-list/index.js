@@ -44,7 +44,12 @@ function DashboardsListViewCtrl(
 
   $scope.dashboardSearchCb = (slug) => {
     $scope.slugId = slug&&slug.length?slug[0]:null;
-    $scope.$apply();
+    $scope.$applyAsync();
+  };
+
+  $scope.dashboardTabCb = (slug) => {
+    $scope.slugId = slug&&slug.length?slug[0]:null;
+    $scope.$applyAsync();
   };
 
   // currentUser.hasPermission('admin');
