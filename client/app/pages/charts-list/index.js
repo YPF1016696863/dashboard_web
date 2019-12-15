@@ -47,7 +47,12 @@ function ChartsListViewCtrl(
   $scope.querySearchCb = (type, id) => {
     $scope.displayType = type;
     $scope.displayId = id;
-    $scope.$apply();
+    $scope.$applyAsync();
+  };
+  $scope.chartsTabCb = (type, id) => {
+    $scope.displayType = type;
+    $scope.displayId = id;
+    $scope.$applyAsync();
   };
 
   // currentUser.hasPermission('admin');

@@ -70,6 +70,12 @@ class ChartsListSearch extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.displayId === null) {
+      this.reload();
+    }
+  }
+
   reload(holdTab) {
 
     let type = null;
@@ -333,10 +339,12 @@ class ChartsListSearch extends React.Component {
 }
 
 ChartsListSearch.propTypes = {
+  displayId: PropTypes.string,
   querySearchCb: PropTypes.func
 };
 
 ChartsListSearch.defaultProps = {
+  displayId:null,
   querySearchCb: (a, b) => {}
 };
 

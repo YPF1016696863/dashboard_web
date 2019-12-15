@@ -14,7 +14,7 @@
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
           <div class="scrollbox" style="height: 100% !important;">
-            <dashboards-list-search dashboard-search-cb="dashboardSearchCb"></dashboards-list-search>
+            <dashboards-list-search slug-id="slugId" dashboard-search-cb="dashboardSearchCb"></dashboards-list-search>
           </div>
         </div>
       </div>
@@ -46,6 +46,7 @@
                   <div class="query__vis scrollbox">
                     <dashboards-list-tabs
                       slug-id="slugId"
+                      dashboard-tab-cb="dashboardTabCb"
                     ></dashboards-list-tabs>
                   </div>
                 </div>

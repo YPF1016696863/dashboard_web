@@ -47,6 +47,11 @@ function DashboardsListViewCtrl(
     $scope.$applyAsync();
   };
 
+  $scope.dashboardTabCb = (slug) => {
+    $scope.slugId = slug&&slug.length?slug[0]:null;
+    $scope.$applyAsync();
+  };
+
   // currentUser.hasPermission('admin');
 
 }

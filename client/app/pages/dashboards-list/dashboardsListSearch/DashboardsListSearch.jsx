@@ -70,6 +70,12 @@ class DashboardsListSearch extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.slugId === null) {
+      this.reload();
+    }
+  }
+
   // eslint-disable-next-line react/sort-comp
   reload(holdTab) {
     let dashboardid = null;
@@ -389,10 +395,13 @@ class DashboardsListSearch extends React.Component {
 }
 
 DashboardsListSearch.propTypes = {
+  slugId: PropTypes.string,
   dashboardSearchCb: PropTypes.func.isRequired
 };
 
-DashboardsListSearch.defaultProps = {};
+DashboardsListSearch.defaultProps = {
+  slugId:null
+};
 
 export default function init(ngModule) {
   ngModule.component(

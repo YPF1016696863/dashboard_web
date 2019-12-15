@@ -69,9 +69,9 @@ class QueriesListSearch extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(this.props.reload, prevProps.reload)) {
-      this.reload(true);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.queryId === null) {
+      this.reload();
     }
   }
 
@@ -347,10 +347,12 @@ class QueriesListSearch extends React.Component {
 
 QueriesListSearch.propTypes = {
   querySearchCb: PropTypes.func.isRequired,
-  reload: PropTypes.number.isRequired
+  queryId: PropTypes.string
 };
 
-QueriesListSearch.defaultProps = {};
+QueriesListSearch.defaultProps = {
+  queryId:null
+};
 
 export default function init(ngModule) {
   ngModule.component(

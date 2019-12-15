@@ -3,7 +3,7 @@ import {
   PageHeader,
   Button,
   Descriptions,
-  Breadcrumb,
+  Form,
   Dropdown,
   Menu,
   Icon,
@@ -16,9 +16,10 @@ import {
   Empty,
   message,
   Input,
-  Tabs,
+  Popconfirm,
   Switch,
-  Statistic
+  Statistic,
+  Modal
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -50,8 +51,7 @@ import { policy } from '@/services/policy';
 import notification from '@/services/notification';
 
 const { TreeNode, DirectoryTree } = Tree;
-const { SubMenu } = Menu;
-const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
 class QueriesListTabs extends React.Component {
@@ -63,7 +63,8 @@ class QueriesListTabs extends React.Component {
       canEdit: false,
       query: null,
       queryResultRaw: null,
-      queryResult: null
+      queryResult: null,
+      showDeleteModal: false
     });
   }
 
@@ -95,8 +96,19 @@ class QueriesListTabs extends React.Component {
       canEdit: false,
       query: null,
       queryResultRaw: null,
-      queryResult: null,
+      queryResult: null
     });
+
+    if (!id) {
+      this.setState({
+        isLoaded: true,
+        canEdit: false,
+        query: null,
+        queryResultRaw: null,
+        queryResult: 'empty'
+      });
+      return;
+    }
 
     Query.query({ id })
       .$promise.then(query => {
@@ -117,9 +129,8 @@ class QueriesListTabs extends React.Component {
             this.setState({
               isLoaded: true,
               canEdit: false,
-              query: null,
               queryResultRaw: null,
-              queryResult: 'empty'
+              queryResult: null
             });
           });
       })
@@ -129,10 +140,68 @@ class QueriesListTabs extends React.Component {
           canEdit: false,
           query: null,
           queryResultRaw: null,
-          queryResult: 'empty'
+          queryResult: null
         });
       });
   }
+
+  deleteQuery = () => {
+    if (this.state.query && this.state.query.id) {
+      if (
+        this.state.query.visualizations &&
+        this.state.query.visualizations.length > 1
+      ) {
+        this.setState({ showDeleteModal: true });
+      } else {
+        this.setState({ isLoaded: false });
+        Query.delete(
+          { id: this.state.query.id },
+          () => {
+            message.success('数据集' + this.state.query.name + '已删除.');
+            this.props.queriesTabCb(null);
+            this.setState({
+              isLoaded: true,
+              query: null,
+              queryResultRaw: null,
+              queryResult: null
+            });
+          },
+          () => {
+            message.error('无法删除,请刷新页面后重试.');
+            this.setState({ isLoaded: true });
+          }
+        );
+      }
+    } else {
+      message.error('无法删除,请刷新页面后重试.');
+    }
+  };
+
+  handleDeleteOk = () => {
+    this.setState({ isLoaded: false });
+    Query.delete(
+      { id: this.state.query.id },
+      () => {
+        message.success('数据集' + this.state.query.name + '已删除.');
+        this.props.queriesTabCb(null);
+        this.setState({
+          isLoaded: true,
+          query: null,
+          queryResultRaw: null,
+          queryResult: null,
+          showDeleteModal: false
+        });
+      },
+      () => {
+        message.error('无法删除,请刷新页面后重试.');
+        this.setState({ isLoaded: true, showDeleteModal: false });
+      }
+    );
+  };
+
+  handleDeleteCancel = () => {
+    this.setState({ showDeleteModal: false });
+  };
 
   normalizedTableData(data) {
     if (data === 'empty') {
@@ -223,40 +292,40 @@ class QueriesListTabs extends React.Component {
   }
 
   render() {
-    console.log(this.props.cbAfterUpdate);
     return (
       <>
         {!this.state.isLoaded && <LoadingState />}
-        {this.state.isLoaded && this.state.queryResult == null && (
+        {this.state.isLoaded && this.state.query == null && (
           <Empty
             description="请从左侧点击选择数据集"
             style={{ paddingTop: '10%' }}
           />
         )}
-        {this.state.isLoaded && this.state.queryResult === 'empty' && (
-          <Empty description="该数据集暂无数据" style={{ paddingTop: '10%' }}>
-            <Button
-              type="primary"
-              href={'/queries/' + this.props.queryId + '/source'}
-              target="_blank"
+        {this.state.isLoaded && this.state.query != null && (
+          <>
+            <Modal
+              title="以下可视化组件正在使用该数据集显示数据"
+              visible={this.state.showDeleteModal}
+              onOk={this.handleDeleteOk}
+              onCancel={this.handleDeleteCancel}
+              okButtonProps={{ type: 'danger' }}
+              okText="确认删除"
+              cancelText="取消"
             >
-              设置数据
-            </Button>
-          </Empty>
-        )}
-        {this.state.isLoaded &&
-          this.state.queryResult != null &&
-          this.state.queryResult !== 'empty' && (
+              {_.map(this.state.query.visualizations, visualization =>
+                visualization.type === 'TABLE' ? null : (
+                  <p>{visualization.name}</p>
+                )
+              )}
+              <Alert
+                message="确认"
+                description="删除该数据集会同时删除基于该数据集建立的所有可视化组件."
+                type="warning"
+                showIcon
+              />
+            </Modal>
             <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
-              <Descriptions
-                title={
-                  <Alert
-                    message="预览数据为该数据集的部分数据."
-                    type="warning"
-                    closable
-                  />
-                }
-              >
+              <Descriptions title="数据集设置">
                 <Descriptions.Item label="数据集创建时间">
                   {this.state.query.created_at}
                 </Descriptions.Item>
@@ -272,24 +341,87 @@ class QueriesListTabs extends React.Component {
                 <Descriptions.Item label="最近更新自">
                   {this.state.query.last_modified_by.name}
                 </Descriptions.Item>
+                <Descriptions.Item label="数据集">
+                  {this.state.query.query}
+                </Descriptions.Item>
+                <Descriptions.Item label="该数据集已应用于组件数量">
+                  {/* eslint-disable-next-line no-nested-ternary */}
+                  {_.isArray(this.state.query.visualizations)
+                    ? this.state.query.visualizations.length >= 1
+                      ? this.state.query.visualizations.length - 1
+                      : '无法显示'
+                    : '无法显示'}
+                </Descriptions.Item>
               </Descriptions>
-              <Statistic title="数据集:" value={this.state.query.query} />
               <br />
-              <Statistic
-                title="该数据集已应用于组件数量:"
-                value={
-                  _.isArray(this.state.query.visualizations)
-                    ? this.state.query.visualizations.length
-                    : '无法显示'
-                }
+              <p style={{ fontSize: '14px' }}>数据集描述:</p>
+              <TextArea
+                placeholder="数据集描述"
+                rows={4}
+                value={this.state.query.description}
+                onChange={e => {
+                  this.setState({
+                    query: _.extend(this.state.query, {
+                      description: e.target.value
+                    })
+                  });
+                }}
               />
+              <br />
+              <br />
+              <div align="right">
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.saveQuery(null, {
+                      description: this.state.query.description
+                    });
+                  }}
+                >
+                  <Icon type="save" />
+                  保存
+                </Button>
+              </div>
+              <Divider />
+              <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
+              <Form>
+                <Form.Item
+                  label="发布数据集"
+                  labelAlign="left"
+                  labelCol={{ span: 6 }}
+                  wrapperCol={{ span: 1, offset: 17 }}
+                >
+                  <Switch
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    defaultChecked={!this.state.query.is_draft}
+                    onChange={checked=>{
+                      this.saveQuery(null, {
+                        is_draft: !checked
+                      });
+                    }}
+                  />
+                </Form.Item>
+              </Form>
+              <br />
               <br />
               <p style={{ fontSize: '14px' }}>数据集数据预览:</p>
-              <Table
-                columns={this.state.queryResult.columns}
-                dataSource={this.state.queryResult.rows}
-                pagination={{ pageSize: 100 }}
-              />
+              {this.state.queryResult == null ? (
+                <Empty description="该数据集暂无数据" />
+              ) : (
+                <>
+                  <Alert
+                    message="预览数据为该数据集的部分数据."
+                    type="warning"
+                    closable
+                  />
+                  <Table
+                    columns={this.state.queryResult.columns}
+                    dataSource={this.state.queryResult.rows}
+                    pagination={{ pageSize: 100 }}
+                  />
+                </>
+              )}
               <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
               <Button
                 type="primary"
@@ -311,12 +443,21 @@ class QueriesListTabs extends React.Component {
                 编辑数据集
               </Button>
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type="danger">
-                <Icon type="delete" />
-                删除数据集
-              </Button>
+              <Popconfirm
+                placement="topLeft"
+                title="确认删除数据集?"
+                onConfirm={this.deleteQuery}
+                okText="确认"
+                cancelText="取消"
+              >
+                <Button type="danger">
+                  <Icon type="delete" />
+                  删除数据集
+                </Button>
+              </Popconfirm>
             </div>
-          )}
+          </>
+        )}
       </>
     );
   }
@@ -324,12 +465,12 @@ class QueriesListTabs extends React.Component {
 
 QueriesListTabs.propTypes = {
   queryId: PropTypes.string,
-  cbAfterUpdate: PropTypes.func
+  queriesTabCb: PropTypes.func
 };
 
 QueriesListTabs.defaultProps = {
   queryId: null,
-  cbAfterUpdate: a => {}
+  queriesTabCb: a => {}
 };
 
 export default function init(ngModule) {

@@ -14,7 +14,7 @@ import {
   Input,
   Checkbox,
   notification,
-  Statistic,
+  Popconfirm,
   Switch,
   Tabs,
   Form,
@@ -88,7 +88,14 @@ class DashboardsListTabs extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.slugId !== this.props.slugId) {
-      this.getDashboard(nextProps.slugId);
+      if(!nextProps.slugId) {
+        this.setState({
+          isLoaded: true,
+          dashboard: null
+        });
+      }else{
+        this.getDashboard(nextProps.slugId);
+      }
     }
   }
 
@@ -122,18 +129,23 @@ class DashboardsListTabs extends React.Component {
     );
   };
 
-  connectCb = (isLoaded, loadSuccess) => {
-    this.setState({
-      isLoaded
-    });
-  };
-
   deleteDashboard = () => {
-    notification.error({
-      message: `消息`,
-      description: '功能暂未开放.',
-      placement: 'bottomRight'
-    });
+    if (this.state.dashboard && this.state.dashboard.id) {
+      this.setState({isLoaded:false});
+      this.state.dashboard.$delete().then(
+        res => {
+          message.success('可视化仪表板'+this.state.dashboard.name+'已删除.');
+          this.props.dashboardTabCb(null);
+          this.setState({isLoaded:true,dashboard:null});
+        },
+        err => {
+          message.error('无法删除,请刷新页面后重试.');
+          this.setState({isLoaded:true});
+        }
+      );
+    } else {
+      message.error('无法删除,请刷新页面后重试.');
+    }
   };
 
   updateDashboard = data => {
@@ -173,7 +185,7 @@ class DashboardsListTabs extends React.Component {
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
           <div style={{ padding: '10px' }}>
-            <Descriptions>
+            <Descriptions title="可视化仪表盘配置">
               <Descriptions.Item label="更新时间">
                 {this.state.dashboard.updated_at}
               </Descriptions.Item>
@@ -263,10 +275,18 @@ class DashboardsListTabs extends React.Component {
                   编辑可视化面板
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button type="danger" onClick={this.deleteDashboard}>
-                  <Icon type="delete" />
-                  删除可视化面板
-                </Button>
+                <Popconfirm
+                  placement="topLeft"
+                  title="确认删除可视化仪表盘?"
+                  onConfirm={this.deleteDashboard}
+                  okText="确认"
+                  cancelText="取消"
+                >
+                  <Button type="danger">
+                    <Icon type="delete" />
+                    删除可视化面板
+                  </Button>
+                </Popconfirm>
               </Col>
             </Row>
           </div>
@@ -277,7 +297,8 @@ class DashboardsListTabs extends React.Component {
 }
 
 DashboardsListTabs.propTypes = {
-  slugId: PropTypes.string
+  slugId: PropTypes.string,
+  dashboardTabCb: PropTypes.func.isRequired
 };
 
 DashboardsListTabs.defaultProps = {
