@@ -284,6 +284,7 @@ class QueriesListTabs extends React.Component {
                 }
               />
               <br />
+              <p style={{ fontSize: '14px' }}>数据集数据预览:</p>
               <Table
                 columns={this.state.queryResult.columns}
                 dataSource={this.state.queryResult.rows}

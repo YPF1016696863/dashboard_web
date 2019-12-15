@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  PageHeader,
+  message,
   Button,
   Descriptions,
   Breadcrumb,
@@ -79,9 +79,11 @@ class QueriesListSearch extends React.Component {
     let queryid = null;
     if (holdTab) {
       queryid = this.state.selected;
+    }else{
+      this.props.querySearchCb(null);
     }
     localStorage.setItem('lastSelectedDataSourceId', queryid);
-    this.props.querySearchCb([queryid]);
+
     this.setState({
       selected: queryid,
       all: null,
@@ -148,7 +150,7 @@ class QueriesListSearch extends React.Component {
       const options = Object.assign(
           {},
           {
-            successMessage: '保存成功',
+            successMessage: '数据集信息更新成功',
             errorMessage: '无法保存'
           },
           customOptions
@@ -161,7 +163,7 @@ class QueriesListSearch extends React.Component {
       Query.save(
           request,
           updatedQuery => {
-            notification.success(options.successMessage);
+            message.success(options.successMessage);
             query.version = updatedQuery.version;
             resolve();
           },
@@ -305,7 +307,6 @@ class QueriesListSearch extends React.Component {
                                         name: this.state.rename
                                       }).then(()=>{
                                         this.reload(true);
-                                        this.props.querySearchCb(item.id);
                                       });
                                     }
                                   }}
@@ -319,7 +320,6 @@ class QueriesListSearch extends React.Component {
                                         name: this.state.rename
                                       }).then(()=>{
                                         this.reload(true);
-                                        this.props.querySearchCb(item.id);
                                       });
                                     }
                                   }}

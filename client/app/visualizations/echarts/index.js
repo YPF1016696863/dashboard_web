@@ -20,9 +20,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
     link($scope, $element) {
       $scope.chartSeries = [];
 
-
-      console.log($scope.options);
-
       const refreshData = () => {
 
         // 找到选中serise的下标        
