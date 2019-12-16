@@ -258,13 +258,7 @@ class ChartsListTabs extends React.Component {
                     type="card"
                     className="queries-tab"
                   >
-                    <TabPane tab="可视化组件数据预览" key="1">
-                      <ChartsPreviewDOM
-                        visualization={this.state.visualization}
-                        queryResult={this.state.queryResult}
-                      />
-                    </TabPane>
-                    <TabPane tab="新建设置" key="2" style={{paddingRight:'10px'}}>
+                    <TabPane tab="新建设置" key="1" style={{paddingRight:'10px'}}>
                       <Descriptions title={this.state.query.name}>
                         <Descriptions.Item label="数据集创建时间">
                           {this.state.query.created_at}
@@ -360,13 +354,13 @@ class ChartsListTabs extends React.Component {
                     type="card"
                     className="queries-tab"
                   >
-                    <TabPane tab="可视化组件数据预览" key="1">
+                    {/* <TabPane tab="可视化组件数据预览" key="1">
                       <ChartsPreviewDOM
                         visualization={this.state.visualization}
                         queryResult={this.state.queryResult}
                       />
-                    </TabPane>
-                    <TabPane tab="设置可视化组件" key="2" style={{paddingRight:'10px'}}>
+                    </TabPane> */}
+                    <TabPane tab="设置可视化组件" key="1" style={{paddingRight:'10px'}}>
                       <Descriptions title={this.state.visualization.name}>
                         <Descriptions.Item label="更新时间">
                           {this.state.visualization.updated_at}
@@ -396,7 +390,7 @@ class ChartsListTabs extends React.Component {
                         title="该可视化组建由以下数据集创建:"
                         value={this.state.query.name}
                       />
-                      <br />
+                      <br /> 
                       <p style={{ fontSize: '14px' }}>其他设置:</p>
                       <Button
                         type="primary"
@@ -416,7 +410,13 @@ class ChartsListTabs extends React.Component {
                       <Button disabled>
                         <Icon type="delete" />
                         删除可视化组件
-                      </Button>
+                      </Button>                   
+                      <div style={{ width: 500,height:500,marginLeft:'70vh'}}>
+                        <ChartsPreviewDOM 
+                          visualization={this.state.visualization}
+                          queryResult={this.state.queryResult}
+                        />
+                      </div> 
                     </TabPane>
                   </Tabs>
                 </>
