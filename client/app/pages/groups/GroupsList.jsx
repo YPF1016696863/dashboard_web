@@ -18,7 +18,7 @@ import DeleteGroupButton from '@/components/groups/DeleteGroupButton';
 import { Group } from '@/services/group';
 import settingsMenu from '@/services/settingsMenu';
 import { currentUser } from '@/services/auth';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 class GroupsList extends React.Component {

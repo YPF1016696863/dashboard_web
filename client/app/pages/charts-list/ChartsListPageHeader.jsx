@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import {
   PageHeader,
-  Button,
+  Steps,
   Descriptions,
   Icon,
   Divider,
@@ -13,6 +13,8 @@ import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
 import './ChartsListPageHeader.less';
+
+const { Step } = Steps;
 
 class ChartsListPageHeader extends React.Component {
   /*
@@ -65,16 +67,18 @@ class ChartsListPageHeader extends React.Component {
             </>
           }
           extra={[
-            <Button
-              ghost
-              type="primary"
-              size="small"
-              href='/query/unset/charts/new'
-              target="_blank"
-            >
-              <Icon type="pie-chart" />
-              新建可视化组件
-            </Button>
+            <Steps size="small" current={2}>
+              <Step title="数据源" description="连接一个数据源" />
+              <Step title="建立数据集" description="基于建立数据源建立数据集" />
+              <Step
+                title="创建可视化组件"
+                description="使用数据集为可视化组件提供数据."
+              />
+              <Step
+                title="创建可视化仪表板"
+                description="建立和编辑可视化仪表板."
+              />
+            </Steps>
           ]}
         >
           <Descriptions size="small" column={3}>

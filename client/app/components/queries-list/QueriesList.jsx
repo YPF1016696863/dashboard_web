@@ -29,7 +29,7 @@ import {
 } from '@/components/items-list/ItemsList';
 import { ResourceItemsSource } from '@/components/items-list/classes/ItemsSource';
 import { UrlStateStorage } from '@/components/items-list/classes/StateStorage';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import LoadingState from '@/components/items-list/components/LoadingState';
 import * as Sidebar from '@/components/items-list/components/Sidebar';
 import ItemsTable, {

@@ -107,9 +107,10 @@ function DashboardPreviewCtrl(
         return vm.dashboardBgImg;
       },
       function(data) {
-        if(_.isEmpty(vm.dashboardBgImg)) {
+        if(_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
           vm.dashboardStyle = {
           };
+          updateDashboard({ background_image:"" });
           return;
         }
         vm.dashboardStyle = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import {
   PageHeader,
-  Button,
+  Steps,
   Descriptions,
   Icon,
   Divider,
@@ -14,10 +14,12 @@ import './DataSourcesPageHeader.less';
 import { DataSource, IMG_ROOT } from '@/services/data-source';
 import { $route } from '@/services/ng';
 import { policy } from '@/services/policy';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import helper from '@/components/dynamic-form/dynamicFormHelper';
 
 import CreateSourceDialog from '@/components/CreateSourceDialog';
+
+const { Step } = Steps;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["createDataSource","render"] }] */
 class DataSourcePageHeader extends React.Component {
@@ -90,6 +92,18 @@ class DataSourcePageHeader extends React.Component {
             </>
           }
           extra={[
+            <Steps size="small" current={0}>
+              <Step title="数据源" description="连接一个数据源" />
+              <Step title="建立数据集" description="基于建立数据源建立数据集" />
+              <Step
+                title="创建可视化组件"
+                description="使用数据集为可视化组件提供数据."
+              />
+              <Step
+                title="创建可视化仪表板"
+                description="建立和编辑可视化仪表板."
+              />
+            </Steps>
           ]}
         >
           <Descriptions size="small" column={3}>
@@ -113,7 +127,7 @@ export default function init(ngModule) {
     react2angular(
       DataSourcePageHeader,
       Object.keys(DataSourcePageHeader.propTypes),
-      ['$rootScope', '$scope','$translate', '$window']
+      ['$rootScope', '$scope', '$translate', '$window']
     )
   );
 }

@@ -29,6 +29,12 @@ const layouts = {
     bodyClass: 'fixed-layout',
     bodyClassBackgroundColor: ''
   },
+  dashboardView: {
+    showHeader: false,
+    hideLeftPanel: true,
+    bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
+  },
   defaultSignedOut: {
     showHeader: false,
     bodyClassBackgroundColor: ''

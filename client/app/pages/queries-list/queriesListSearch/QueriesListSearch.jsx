@@ -44,6 +44,7 @@ import './queries-search.css';
 
 import { policy } from '@/services/policy';
 import notification from "@/services/notification";
+import {navigateToWithSearch} from '@/services/navigateTo';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -59,6 +60,12 @@ class QueriesListSearch extends React.Component {
   };
 
   componentDidMount() {
+    if(this.props.queryId !== null) {
+      this.setState({
+        selected:this.props.queryId
+      });
+      this.props.querySearchCb([this.props.queryId]);
+    }
     localStorage.setItem('lastSelectedDataSourceId', null);
     Query.allQueries().$promise.then(res => {
       this.setState({
@@ -195,11 +202,12 @@ class QueriesListSearch extends React.Component {
                       ghost
                       type="primary"
                       size="small"
-                      target="_blank"
-                      href="/queries/new"
+                      onClick={e=>{
+                        navigateToWithSearch('/queries/new');
+                      }}
                     >
                       <i className="fa fa-plus m-r-5" />
-                      新建数据查询
+                      新建数据集
                     </Button>
                   </Col>
                 </Row>
@@ -358,7 +366,7 @@ export default function init(ngModule) {
   ngModule.component(
     'queriesListSearch',
     react2angular(QueriesListSearch, Object.keys(QueriesListSearch.propTypes), [
-      'appSettings'
+      'appSettings','$location'
     ])
   );
 }

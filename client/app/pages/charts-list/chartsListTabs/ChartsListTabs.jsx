@@ -54,6 +54,7 @@ import { ChartsPreview } from '@/components/charts-preview/charts-preview';
 import { EditVisualizationDialog } from '@/components/edit-visualization-dialog/edit-visualization-dialog';
 import { Dashboard } from '@/services/dashboard';
 import notification from '@/services/notification';
+import { navigateToWithSearch } from '@/services/navigateTo';
 
 const { TextArea } = Input;
 
@@ -179,7 +180,6 @@ class ChartsListTabs extends React.Component {
                 ),
                 visType: 'V'
               });
-              console.log(this.state);
             }
           })
           .catch(err => {
@@ -293,8 +293,11 @@ class ChartsListTabs extends React.Component {
           >
             <Button
               type="primary"
-              href={'/queries/' + this.getQueryId() + '/source'}
-              target="_blank"
+              onClick={e => {
+                navigateToWithSearch(
+                  '/queries/' + this.getQueryId() + '/source'
+                );
+              }}
             >
               设置数据
             </Button>
@@ -401,6 +404,7 @@ class ChartsListTabs extends React.Component {
                       wrapperCol={{ span: 1, offset: 17 }}
                     >
                       <Switch
+                        disabled
                         checkedChildren="开"
                         unCheckedChildren="关"
                         defaultChecked={false}
@@ -437,13 +441,14 @@ class ChartsListTabs extends React.Component {
                   <p style={{ fontSize: '14px' }}>其他设置:</p>
                   <Button
                     type="primary"
-                    target="_blank"
-                    href={
-                      'query/' +
-                      this.getQueryId() +
-                      '/charts/' +
-                      this.getChartId()
-                    }
+                    onClick={e => {
+                      navigateToWithSearch(
+                        'query/' +
+                          this.getQueryId() +
+                          '/charts/' +
+                          this.getChartId()
+                      );
+                    }}
                   >
                     <i className="fa fa-edit m-r-5" />
                     编辑可视化组件

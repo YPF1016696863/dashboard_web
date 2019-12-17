@@ -5,7 +5,7 @@ import { isEmpty, get } from 'lodash';
 import settingsMenu from '@/services/settingsMenu';
 import { Destination, IMG_ROOT } from '@/services/destination';
 import { policy } from '@/services/policy';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import { $route } from '@/services/ng';
 import { routesToAngularRoutes } from '@/lib/utils';
 import CardsList from '@/components/cards-list/CardsList';
