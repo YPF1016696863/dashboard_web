@@ -67,6 +67,13 @@ class DashboardsListSearch extends React.Component {
         filtered: res,
         loading: false
       });
+
+      if(this.props.slugId) {
+        this.setState({
+          selected: this.props.slugId
+        });
+        this.props.dashboardSearchCb([this.props.slugId]);
+      }
     });
   }
 

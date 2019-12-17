@@ -51,6 +51,7 @@ import { policy } from '@/services/policy';
 import { DashboardsPreview } from '@/components/dashboards-preview/dashboards-preview';
 import { durationHumanize } from '@/filters';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
+import {navigateToWithSearch} from "@/services/navigateTo";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
@@ -88,12 +89,12 @@ class DashboardsListTabs extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.slugId !== this.props.slugId) {
-      if(!nextProps.slugId) {
+      if (!nextProps.slugId) {
         this.setState({
           isLoaded: true,
           dashboard: null
         });
-      }else{
+      } else {
         this.getDashboard(nextProps.slugId);
       }
     }
@@ -131,16 +132,18 @@ class DashboardsListTabs extends React.Component {
 
   deleteDashboard = () => {
     if (this.state.dashboard && this.state.dashboard.id) {
-      this.setState({isLoaded:false});
+      this.setState({ isLoaded: false });
       this.state.dashboard.$delete().then(
         res => {
-          message.success('可视化仪表板'+this.state.dashboard.name+'已删除.');
+          message.success(
+            '可视化仪表板' + this.state.dashboard.name + '已删除.'
+          );
           this.props.dashboardTabCb(null);
-          this.setState({isLoaded:true,dashboard:null});
+          this.setState({ isLoaded: true, dashboard: null });
         },
         err => {
           message.error('无法删除,请刷新页面后重试.');
-          this.setState({isLoaded:true});
+          this.setState({ isLoaded: true });
         }
       );
     } else {
@@ -207,11 +210,29 @@ class DashboardsListTabs extends React.Component {
             </Descriptions>
             <br />
             <p style={{ fontSize: '14px' }}>可视化仪表板描述:</p>
-            <TextArea placeholder="可视化仪表板描述" rows={4} />
+            <TextArea
+              placeholder="可视化仪表板描述"
+              rows={4}
+              value={this.state.dashboard.description}
+              onChange={e => {
+                this.setState({
+                  dashboard: _.extend(this.state.dashboard, {
+                    description: e.target.value
+                  })
+                });
+              }}
+            />
             <br />
             <br />
             <div align="right">
-              <Button type="primary" onClick={() => {}}>
+              <Button
+                type="primary"
+                onClick={e => {
+                  this.updateDashboard({
+                    description: this.state.dashboard.description
+                  });
+                }}
+              >
                 <Icon type="save" />
                 保存
               </Button>
@@ -253,7 +274,12 @@ class DashboardsListTabs extends React.Component {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <p style={{ fontSize: '14px' }}>预览:</p>
-                <Button type="primary">
+                <Button
+                  type="primary"
+                  target="_blank"
+                  href={'/view/' +
+                  this.state.dashboard.slug}
+                >
                   <Icon type="dashboard" />
                   预览可视化面板
                 </Button>
@@ -268,8 +294,9 @@ class DashboardsListTabs extends React.Component {
                 <Button
                   type="primary"
                   disabled={slugId == null}
-                  target="_blank"
-                  href={'dashboards/' + slugId}
+                  onClick={e=>{
+                    navigateToWithSearch( 'dashboards/' + slugId);
+                  }}
                 >
                   <i className="fa fa-edit m-r-5" />
                   编辑可视化面板

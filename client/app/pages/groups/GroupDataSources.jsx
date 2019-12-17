@@ -28,7 +28,7 @@ import notification from '@/services/notification';
 import { currentUser } from '@/services/auth';
 import { Group } from '@/services/group';
 import { DataSource } from '@/services/data-source';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 class GroupDataSources extends React.Component {

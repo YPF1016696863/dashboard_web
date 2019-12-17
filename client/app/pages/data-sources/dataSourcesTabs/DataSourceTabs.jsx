@@ -56,7 +56,7 @@ import {
 import DynamicForm from '@/components/dynamic-form/DynamicForm';
 
 import notification from '@/services/notification';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;

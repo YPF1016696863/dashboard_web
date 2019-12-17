@@ -29,7 +29,7 @@ import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
 import { $route } from '@/services/ng';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import CreateSourceDialog from "@/components/CreateSourceDialog";
 import helper from "@/components/dynamic-form/dynamicFormHelper";
 

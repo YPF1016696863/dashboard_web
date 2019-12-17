@@ -29,12 +29,11 @@ class DashboardsPageHeader extends React.Component {
         >
           <Menu.Item key="save" selectable={false}>
             <Icon type="save" />
-            保存/自动保存
+            自动保存
           </Menu.Item>
-          <Divider type="vertical" />
 
           <Menu.Item key="preview" style={{ float: 'right' }}>
-            <a href={"/preview/"+this.props.slugId} target="_blank" rel="noopener noreferrer">
+            <a href={"/view/"+this.props.slugId} target="_blank" rel="noopener noreferrer">
               <Icon type="play-square" />
               预览模式
             </a>

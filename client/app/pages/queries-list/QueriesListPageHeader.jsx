@@ -7,12 +7,15 @@ import {
   Descriptions,
   Icon,
   Divider,
-  Breadcrumb
+  Breadcrumb,
+  Steps
 } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
 import './QueriesListPageHeader.less';
+
+const { Step } = Steps;
 
 class QueriesListPageHeader extends React.Component {
   /*
@@ -64,20 +67,18 @@ class QueriesListPageHeader extends React.Component {
             </>
           }
           extra={[
-            <Button
-              ghost
-              type="primary"
-              size="small"
-              disabled={
-                this.props.queryId == null ||
-                this.props.queryId.includes('datavis-group#')
-              }
-              href={'/query/' + this.props.queryId + '/charts/new'}
-              target="_blank"
-            >
-              <Icon type="pie-chart" />
-              新建可视化组件
-            </Button>
+            <Steps size="small" current={1}>
+              <Step title="数据源" description="连接一个数据源" />
+              <Step title="建立数据集" description="基于建立数据源建立数据集" />
+              <Step
+                title="创建可视化组件"
+                description="使用数据集为可视化组件提供数据."
+              />
+              <Step
+                title="创建可视化仪表板"
+                description="建立和编辑可视化仪表板."
+              />
+            </Steps>
           ]}
         >
           <Descriptions size="small" column={3}>
@@ -92,9 +93,7 @@ class QueriesListPageHeader extends React.Component {
   }
 }
 
-QueriesListPageHeader.propTypes = {
-  queryId: PropTypes.string.isRequired
-};
+QueriesListPageHeader.propTypes = {};
 QueriesListPageHeader.defaultProps = {};
 
 export default function init(ngModule) {

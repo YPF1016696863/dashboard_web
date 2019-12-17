@@ -50,13 +50,13 @@ function DashboardsViewCtrl(
 
   $scope.updateDashboardBgImgCb = (dashboardBgImg) => {
     $scope.dashboardBgImg= dashboardBgImg;
-    $scope.$apply();
+    $scope.$applyAsync();
   };
 
 
   $scope.addWidgetCb = (widgetData) => {
     $scope.widgetData = widgetData;
-    $scope.$apply();
+    $scope.$applyAsync();
   };
 
   // currentUser.hasPermission('admin');

@@ -59,7 +59,11 @@
                   style="left: 0; top: 0; right: 0; bottom: 0;"
                 >
                   <div class="query__vis scrollbox">
-                    <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg"></dashboards-tabs>
+                    <dashboards-tabs
+                      slug-id="slugId"
+                      widget-data="widgetData"
+                      dashboard-bg-img="dashboardBgImg"
+                    ></dashboards-tabs>
                   </div>
                   <div class="FAB">
                     <md-fab-toolbar md-open="false" md-direction="left">
@@ -73,17 +77,13 @@
 
                       <md-toolbar>
                         <md-fab-actions class="md-toolbar-tools">
-                          <md-button
-                            aria-label="添加可视化组件"
-                          >
-                            <md-icon
-                              md-svg-src="static/images/chart-pie-solid.svg"
-                            ></md-icon>&nbsp;&nbsp;添加可视化组件
+                          <md-button aria-label="添加可视化组件">
+                            <dashboard-add-widgets
+                              add-widget-cb="addWidgetCb"
+                            ></dashboard-add-widgets>
                           </md-button>
-                          <md-button
-                                  aria-label="添加其他可视化仪表盘"
-                          >
-                            <dashboard-add-widgets add-widget-cb="addWidgetCb"></dashboard-add-widgets>
+                          <md-button aria-label="添加其他可视化仪表盘">
+                            添加可视化仪表盘
                           </md-button>
                         </md-fab-actions>
                       </md-toolbar>

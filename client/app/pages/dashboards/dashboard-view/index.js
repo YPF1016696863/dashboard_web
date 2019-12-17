@@ -1,4 +1,13 @@
-import * as _ from "lodash";
+import {
+  pick,
+  some,
+  find,
+  minBy,
+  map,
+  intersection,
+  isArray,
+  isObject
+} from 'lodash';
 import {
   SCHEMA_NOT_SUPPORTED,
   SCHEMA_LOAD_ERROR
@@ -11,7 +20,7 @@ import notification from '@/services/notification';
 
 import template from './content-layout.html';
 
-function ChartsListViewCtrl(
+function DashboardViewCtrl(
   $scope,
   Events,
   $route,
@@ -25,43 +34,28 @@ function ChartsListViewCtrl(
   clientConfig,
   $uibModal,
   currentUser,
-  Query,
-  DataSource,
+  Dashboard,
   Visualization,
   appSettings
 ) {
+  $scope.widgetData = null;
+  $scope.dashboardBgImg="";
   $scope.currentUser = currentUser;
-  $scope.displayType = null;
-  $scope.displayId = $routeParams.visualizationid;
+  $scope.slugId = $route.current.params.slugId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
-
-  $scope.querySearchCb = (type, id) => {
-    $scope.displayType = type;
-    $scope.displayId = id;
-    if(_.split(id, ':')[1]) {
-      $location.search({visualizationid: _.split(id, ':')[1]});
-    }
-
-    $scope.$applyAsync();
-  };
-  $scope.chartsTabCb = (type, id) => {
-    $scope.displayType = type;
-    $scope.displayId = id;
-    $scope.$applyAsync();
-  };
 
   // currentUser.hasPermission('admin');
 
 }
 
 export default function init(ngModule) {
-  ngModule.controller('ChartsListViewCtrl', ChartsListViewCtrl);
+  ngModule.controller('DashboardViewCtrl', DashboardViewCtrl);
 
   return {
-    '/charts': {
+    '/view/:slugId': {
       template,
-      layout: 'fixed',
-      controller: 'ChartsListViewCtrl',
+      layout: 'dashboardView',
+      controller: 'DashboardViewCtrl',
       reloadOnSearch: false
     }
   };

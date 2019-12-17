@@ -39,11 +39,12 @@ function DashboardsListViewCtrl(
   appSettings
 ) {
   $scope.currentUser = currentUser;
-  $scope.slugId = null;
+  $scope.slugId = $routeParams.dashboardslug;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
   $scope.dashboardSearchCb = (slug) => {
     $scope.slugId = slug&&slug.length?slug[0]:null;
+    $location.search({dashboardslug: $scope.slugId});
     $scope.$applyAsync();
   };
 

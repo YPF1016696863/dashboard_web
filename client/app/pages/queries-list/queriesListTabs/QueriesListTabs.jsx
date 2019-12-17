@@ -49,6 +49,7 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import { policy } from '@/services/policy';
 
 import notification from '@/services/notification';
+import {navigateToWithSearch} from "@/services/navigateTo";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { TextArea } = Input;
@@ -66,6 +67,10 @@ class QueriesListTabs extends React.Component {
       queryResult: null,
       showDeleteModal: false
     });
+
+    if(this.queryId !== null) {
+      this.getQuery(this.props.queryId);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -386,7 +391,7 @@ class QueriesListTabs extends React.Component {
               <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
               <Form>
                 <Form.Item
-                  label="发布数据集"
+                  label="数据集对其他人可见"
                   labelAlign="left"
                   labelCol={{ span: 6 }}
                   wrapperCol={{ span: 1, offset: 17 }}
@@ -425,8 +430,9 @@ class QueriesListTabs extends React.Component {
               <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
               <Button
                 type="primary"
-                href={'/query/' + this.state.query.id + '/charts/new'}
-                target="_blank"
+                onClick={e=>{
+                  navigateToWithSearch('/query/' + this.state.query.id + '/charts/new');
+                }}
               >
                 <Icon type="pie-chart" />
                 新建可视化组件
@@ -436,8 +442,9 @@ class QueriesListTabs extends React.Component {
               <p style={{ fontSize: '14px' }}>其他设置:</p>
               <Button
                 type="primary"
-                target="_blank"
-                href={'/queries/' + this.props.queryId + '/source'}
+                onClick={e=>{
+                  navigateToWithSearch('/queries/' + this.props.queryId + '/source');
+                }}
               >
                 <i className="fa fa-edit m-r-5" />
                 编辑数据集

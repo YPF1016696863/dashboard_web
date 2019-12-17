@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import { Icon, Menu } from 'semantic-ui-react';
 import { appSettingsConfig } from '@/config/app-settings';
-import navigateTo from '@/services/navigateTo';
+import {navigateTo} from '@/services/navigateTo';
 import 'semantic-ui-css/semantic.min.css';
 import './nav-sidebar.less';
 

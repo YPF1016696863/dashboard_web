@@ -40,7 +40,7 @@ function QueriesListViewCtrl(
   appSettings
 ) {
   $scope.currentUser = currentUser;
-  $scope.queryId = null;
+  $scope.queryId = $routeParams.queryid;
   $scope.reload = 1;
   $scope.queries = $route.current.locals.queries;
   $scope.query = $route.current.locals.query;
@@ -48,6 +48,7 @@ function QueriesListViewCtrl(
 
   $scope.querySearchCb = (id) => {
     $scope.queryId = id&&id.length?id[0]:null;
+    $location.search({queryid: $scope.queryId});
     $scope.$applyAsync();
   };
 

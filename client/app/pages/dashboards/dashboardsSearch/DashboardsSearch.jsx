@@ -119,9 +119,6 @@ class DashboardsSearch extends React.Component {
   }
 
   onChange = (a, b, c) => {
-    console.log(
-      _.find(this.state.backgroundImages, item => item.id === a).image
-    );
     this.props.updateDashboardBgImgCb(
       _.find(this.state.backgroundImages, item => item.id === a).image
     );
@@ -136,7 +133,6 @@ class DashboardsSearch extends React.Component {
     Dashboard.get(
       { slug: slugId },
       dashboard => {
-        console.log(dashboard);
         this.setState({
           isLoaded: true,
           dashboard,
@@ -191,7 +187,7 @@ class DashboardsSearch extends React.Component {
               <Col>
                 <Collapse
                   bordered={false}
-                  defaultActiveKey={['1']}
+                  defaultActiveKey={['2']}
                   style={{ backgroundColor: '#20263B' }}
                 >
                   <Panel header="仪表盘背景" key="1" className="panel-border">
@@ -251,17 +247,14 @@ class DashboardsSearch extends React.Component {
                         />
                       </div>
                     </Carousel>
-                    <Button type="link" block>
-                      使用背景
-                    </Button>
                   </Panel>
                   <Panel header="基础设置" key="2" className="panel-border">
                     <p style={{ color: '#fff' }}>可视化仪表盘名称:</p>
-                    <Input
-                      value={this.state.dashboard.name}
-                      className="board-name-input"
-                    />
+                    <p className="board-name-input">
+                      {this.state.dashboard.name}
+                    </p>
                   </Panel>
+                  {/*
                   <Panel
                     header="已添加可视化组件列表:"
                     key="3"
@@ -306,6 +299,7 @@ class DashboardsSearch extends React.Component {
                       </TreeNode>
                     </DirectoryTree>
                   </Panel>
+                  */}
                 </Collapse>
               </Col>
             </Row>

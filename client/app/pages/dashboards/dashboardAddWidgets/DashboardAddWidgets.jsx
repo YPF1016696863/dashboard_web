@@ -58,7 +58,7 @@ class DashboardAddWidgets extends React.Component {
   render() {
     return (
       <div>
-        <span onClick={this.showModal}>添加其他可视化仪表盘</span>
+        <span onClick={this.showModal}>添加可视化组件</span>
         <Modal
           destroyOnClose
           title="添加可视化组件"

@@ -45,6 +45,7 @@ import './charts-search.css';
 
 import { policy } from '@/services/policy';
 import notification from '@/services/notification';
+import {navigateToWithSearch} from "@/services/navigateTo";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -62,11 +63,26 @@ class ChartsListSearch extends React.Component {
 
   componentDidMount() {
     Query.allQueries().$promise.then(res => {
+      const selectedVis = _.find(res, query =>
+        _.find(
+          query.visualizations,
+          visualization => visualization.id === _.parseInt(this.props.displayId)
+        )
+      );
+
       this.setState({
+        selected:
+          this.props.displayId && selectedVis
+            ? selectedVis.id + ':' + this.props.displayId
+            : null,
         all: res,
         filtered: res,
         loading: false
       });
+
+      if (this.state.selected) {
+        this.props.querySearchCb('V', this.state.selected);
+      }
     });
   }
 
@@ -77,7 +93,6 @@ class ChartsListSearch extends React.Component {
   }
 
   reload(holdTab) {
-
     let type = null;
     let selected = null;
     let visualization = null;
@@ -87,7 +102,7 @@ class ChartsListSearch extends React.Component {
       visualization = this.state.visualization;
     }
 
-    this.props.querySearchCb(type,selected);
+    this.props.querySearchCb(type, selected);
 
     this.setState({
       selected,
@@ -144,7 +159,11 @@ class ChartsListSearch extends React.Component {
     const { all } = this.state;
 
     return _.find(
-      _.get(_.find(all, query => query.id === _.parseInt(queryId)), 'visualizations', []),
+      _.get(
+        _.find(all, query => query.id === _.parseInt(queryId)),
+        'visualizations',
+        []
+      ),
       visualization => visualization.id === _.parseInt(visualizationId)
     );
   }
@@ -193,7 +212,7 @@ class ChartsListSearch extends React.Component {
                           console.log('NO CHANGE');
                         } else {
                           this.setState({ loading: true });
-                          this.updateVisualization({name:this.state.rename});
+                          this.updateVisualization({ name: this.state.rename });
                         }
                       }}
                       onPressEnter={() => {
@@ -202,7 +221,7 @@ class ChartsListSearch extends React.Component {
                           console.log('NO CHANGE');
                         } else {
                           this.setState({ loading: true });
-                          this.updateVisualization({name:this.state.rename});
+                          this.updateVisualization({ name: this.state.rename });
                         }
                       }}
                     />
@@ -255,6 +274,19 @@ class ChartsListSearch extends React.Component {
                     <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
                       可视化组件列表:
                     </div>
+                  </Col>
+                  <Col span={11} align="right">
+                    <Button
+                      ghost
+                      type="primary"
+                      size="small"
+                      onClick={e=>{
+                        navigateToWithSearch('/query/unset/charts/new');
+                      }}
+                    >
+                      <Icon type="pie-chart" />
+                      新建可视化组件
+                    </Button>
                   </Col>
                 </Row>
                 <Row>
@@ -344,7 +376,7 @@ ChartsListSearch.propTypes = {
 };
 
 ChartsListSearch.defaultProps = {
-  displayId:null,
+  displayId: null,
   querySearchCb: (a, b) => {}
 };
 
