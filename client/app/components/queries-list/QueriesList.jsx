@@ -20,6 +20,7 @@ import {
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import * as _ from 'lodash';
+
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
 import { SchedulePhrase } from '@/components/queries/SchedulePhrase';
 
@@ -77,7 +78,7 @@ class QueriesList extends React.Component {
     });
   };
 
-  handleOk = e => {
+  handleOk = (e, $scope) => {
     if (this.state.selected === null) {
       message.warning("请选择一个数据集.");
       return;
@@ -92,14 +93,29 @@ class QueriesList extends React.Component {
       }
     }
     );
-
+    debugger
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
-    navigateTo("/query/"+this.state.selected+"/charts/new?type="+ this.props.chartType);
-    // 找到当前页面的id 
-    // query/unset this.state.selected /charts/new this.props.chartType直接新建组件的页面链接
-    // navigateTo("/query/unset/charts/new?type=null");原地xy数据没有要单独传某些数据？
-    // this.state.selected要内部传递？
+    // 修改url不跳转页面
+    let start = '';
+    let newURL = '';
+    const url = window.location.href;// http://localhost:8080/query/unset/charts/new   
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < url.length; i++) {
+      if (url.charAt(i) === 'q' && url.charAt(i + 1) === 'u' && url.charAt(i + 2) === 'e'
+        && url.charAt(i + 3) === 'r' && url.charAt(i + 4) === 'y') {
+        start = url.substring(0, i + 6);
+        newURL = start + this.state.selected + "/charts/new?type="+this.props.chartType;// null导致刷新？
+      }
+    }
+
+    window.history.pushState({}, 0, url);
+    window.history.replaceState({}, 0, newURL);
+
+    console.log(this.props.chartType);
+
+    // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
+
 
     this.setState({
       visible: false,
@@ -155,7 +171,7 @@ class QueriesList extends React.Component {
 
   render() {
     const { appSettings } = this.props;
-    const { selectedName } =this.state;
+    const { selectedName } = this.state;
     console.log(selectedName);
     return (
       <>

@@ -2,6 +2,7 @@ import moment from 'moment';
 import { isArray, reduce } from 'lodash';
 
 function VisualizationProvider() {
+  
   this.visualizations = {};
   // this.visualizationTypes = {};
   this.visualizationTypes = [];
