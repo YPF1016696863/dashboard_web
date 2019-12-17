@@ -15,7 +15,7 @@ export function defaultPieChartOptions() {
         },
         title: {
             text: '饼图',
-            left: 'center',
+            left: '50%',
             top: 20,
             textStyle: {
                 color: '#333',

@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
-
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
@@ -15,13 +14,15 @@ function EchartsRenderer($timeout, $rootScope, $window) {
   return {
     restrict: 'E',
     scope: {
-      queryResult: '=',
+      queryResult: '=',// 数据集更改 导致刷新？
       options: '=?',
     },
     template: echartsTemplate,
-    link($scope, $element) {
+    link($scope, $element, $route) {
+      debugger
+      
       $scope.chartSeries = [];
-      // 20191211 linaer bug fix ?
+      // 20191211 linaer bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "BasicChart") {
         console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
@@ -68,10 +69,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 _.set($scope.options, "bar2Flag", true);
                 _.set($scope.options, "xAxis.type", 'value');
                 _.set($scope.options, "yAxis.type", 'category');
-                _.set($scope.options, "yAxis.data", 
-                _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                  return row[_.get($scope.options, "form.xAxisColumn", "-")];
-                }));
+                _.set($scope.options, "yAxis.data",
+                  _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                    return row[_.get($scope.options, "form.xAxisColumn", "-")];
+                  }));
                 _.set($scope.options, "xAxis.data", undefined);
                 return false;
               }
@@ -79,10 +80,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
               // _.set($scope.options, "xAxis.type", 'category');
               // _.set($scope.options, "yAxis.type", 'value');
               _.set($scope.options, "yAxis.data", undefined);
-              _.set($scope.options, "xAxis.data", 
-              _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                return row[_.get($scope.options, "form.xAxisColumn", "-")];
-              }));
+              _.set($scope.options, "xAxis.data",
+                _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                  return row[_.get($scope.options, "form.xAxisColumn", "-")];
+                }));
             });
 
 
@@ -159,11 +160,11 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                   data: [
                     {
                       name: '最大值',
-                      type: _.get($scope.options, "series_MarkPoint_Data_MaxType", [])[seriesNameIndex] === true ? 
-                      'max' : undefined,
+                      type: _.get($scope.options, "series_MarkPoint_Data_MaxType", [])[seriesNameIndex] === true ?
+                        'max' : undefined,
                       symbol: _.get($scope.options, "series_MarkPoint_Data_MaxSymbol", [])[seriesNameIndex],
-                      symbolSize: _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex] 
-                      === undefined ?
+                      symbolSize: _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex]
+                        === undefined ?
                         9 : _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex],
                       label: {
                         show: _.get($scope.options, "series_MarkPoint_Data_Label_MaxShow", [])[seriesNameIndex],
@@ -176,8 +177,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     },
                     {
                       name: '最小值',
-                      type: _.get($scope.options, "series_MarkPoint_Data_MinType", [])[seriesNameIndex] === true ? 
-                      'min' : undefined,
+                      type: _.get($scope.options, "series_MarkPoint_Data_MinType", [])[seriesNameIndex] === true ?
+                        'min' : undefined,
                       symbol: _.get($scope.options, "series_MarkPoint_Data_MinSymbol", [])[seriesNameIndex],
                       symbolSize: _.get($scope.options, "series_MarkPoint_Data_MinSymbolSize", [])[seriesNameIndex],
                       label: {
@@ -191,8 +192,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     },
                     {
                       name: '平均值',
-                      type: _.get($scope.options, "series_MarkPoint_Data_AverageType", [])[seriesNameIndex] === true ? 
-                      'average' : undefined,
+                      type: _.get($scope.options, "series_MarkPoint_Data_AverageType", [])[seriesNameIndex] === true ?
+                        'average' : undefined,
                       symbol: _.get($scope.options, "series_MarkPoint_Data_AverageSymbol", [])[seriesNameIndex],
                       symbolSize: _.get($scope.options, "series_MarkPoint_Data_AverageSymbolSize", [])[seriesNameIndex],
                       label: {
@@ -290,7 +291,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             case 'scatter': selectType = 'scatter'; break;
             default: ;// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
           };
-          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {  
+          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
             // 第一次点击（没有xy数据的时候，这一步跳过）          
             const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
             switch (_.get($rootScope, 'selectChartType', 'new')) {

@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
@@ -20,6 +21,10 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
         $scope.options = defaultPieChartOptions();
       }
+
+
+
+
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
@@ -35,6 +40,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 function (o) { return o === _.get($scope.options, 'useSerie', ''); }
               ));
 
+            // 当xy数据有修改才刷新
             const data = $scope.queryResult.getData();
             // 输入的数据格式转换 
             const seriesData = [];
@@ -57,7 +63,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                     xDataValue.push(xValue);
                     _.forEach(onesValue, function (oneYvalue, oneYkey) {
                       // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                      if (oneYkey === yAxisColumn) {
+                      if (oneYkey === yAxisColumn ) {// 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
                         // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
                         pieData.push({
                           name: xValue,
@@ -66,14 +72,17 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                         });
                       }
                     });
+
                   }
                 });
               });
               seriesData.push(pieData);
-
+              // _.set($scope.options, 'fanFlag', false);
             });
-            // console.log(seriesData);
 
+
+            // console.log(seriesData);
+            // console.log(xDataValue);
 
             // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
             _.set($scope.options, "Fans", xDataValue);
@@ -88,8 +97,9 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                 if (oneXvalue === selectFan) {
                   // 找到选中的x的数据 王小斌===选择的王小斌
-                  onesValue.itemStyle.color =
-                    _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
+                  _.set(onesValue, "itemStyle.color", _.get($scope.options, "series_ItemStyle_Color", ''));
+                  // onesValue.itemStyle.color =
+                  //   _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
                 }
               });
             });
@@ -191,7 +201,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
           }
         } catch (e) {
-          console.log("先选组件类型 则该方法不存在因此用trycatch来解决:$scope.queryResult.getData is not a function");
+          console.log("错误之一解决:$scope.queryResult.getData is not a function");
         }
       };
 
@@ -214,6 +224,21 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
         console.log($scope.options.form.yAxisColumnTypes);
       };
 
+      // 更改扇瓣后，扇瓣相应的设置清空
+      const refreshFanOption = () => {
+        _.set($scope.options, "series_ItemStyle_Color", undefined);
+        // _.set($scope.options,"series_LabelLine_LineStyle_Color",'');
+        // _.set($scope.options,"series_Label_Color",'');
+      };
+
+      const refreshSerise = () => {
+        _.set($scope.options, 'fanFlag', true);
+      };
+
+
+      $scope.$watch('options.form.yAxisColumns || options.form.xAxisColumn', refreshSerise);
+
+      $scope.$watch('options.useFan', refreshFanOption, true);
       $rootScope.$watch('selectChartType', selectChartType);  // 当图表类型选择时（chart search），覆盖原先的每个系列的type值   
 
       $scope.$watch('options', refreshData, true);
