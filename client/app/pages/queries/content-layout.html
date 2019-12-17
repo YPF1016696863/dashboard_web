@@ -128,29 +128,83 @@
             style="min-height: 11px; max-height: 70vh;"
             ng-if="sourceMode"
           >
-            <query-editor
-              style="width: 100%; height: 100%;"
-              file-upload="getQueryType() === 'excelupload'"
-              query-text="query.query"
-              schema="schema"
-              syntax="dataSource.syntax"
-              can-edit="canEdit"
-              is-dirty="isDirty"
-              is-query-owner="isQueryOwner"
-              update-data-source="updateDataSource"
-              execute-query="executeQuery"
-              query-executing="queryExecuting"
-              can-execute-query="canExecuteQuery"
-              listen-for-resize="listenForResize"
-              listen-for-editor-command="listenForEditorCommand"
-              save-query="saveQuery"
-              update-query="updateQuery"
-              update-selected-query="updateSelectedQuery"
-              add-new-parameter="addNewParameter"
-              data-data-source="dataSource"
-              data-data-sources="dataSources"
-            ></query-editor>
+            <div style="width: 100%; height: 100%;">
+              <ul class="nav nav-tabs" ng-init="vm.activeTab=1">
+                <li ng-class="{active: vm.activeTab == 1}"><a href="javascript:;" ng-click="vm.activeTab = 1">标签1</a></li>
+                <li ng-class="{active: vm.activeTab == 2}"><a href="javascript:;" ng-click="vm.activeTab = 2">标签2</a></li>
+              </ul>
+              <div class="tab-content tab-bordered" >
+                <div class="tab-panel" ng-show="vm.activeTab == 1" style="padding-top: 150px;">
+                  <query-editor
+                   style="width: 100%; height: 100%;"
+                   file-upload="getQueryType() === 'excelupload'"
+                   query-text="query.query"
+                   schema="schema"
+                   syntax="dataSource.syntax"
+                   can-edit="canEdit"
+                   is-dirty="isDirty"
+                   is-query-owner="isQueryOwner"
+                   update-data-source="updateDataSource"
+                   execute-query="executeQuery"
+                   query-executing="queryExecuting"
+                   can-execute-query="canExecuteQuery"
+                   listen-for-resize="listenForResize"
+                   listen-for-editor-command="listenForEditorCommand"
+                   save-query="saveQuery"
+                   update-query="updateQuery"
+                   update-selected-query="updateSelectedQuery"
+                   add-new-parameter="addNewParameter"
+                   data-data-source="dataSource"
+                   data-data-sources="dataSources"
+                   data-data-sources="dataSources"
+                 ></query-editor>
+                </div>              
+                <div class="tab-panel" ng-show="vm.activeTab == 2 && queryNname == 'Redis29'" style="padding-left: 50px;">                  
+                  <table>
+                     <thead>
+                        <th>原列名</th>
+                        <th>别名</th>
+                     </thead>
+                     <tbody>
+                      <tr ng-repeat="x in records">
+                        <td class="column-name" style="padding: 3px; width: 140px;">
+                            {{x.columnName}}
+                        </td>
+                        <td class="column-name" style="padding: 3px; width: 140px;">
+                            <input type="text" ng-model="x.friendlyName">
+                        </td>
+                      </tr>  
+                    </tbody>    
+                  </table>
+                </div>
+                
+              
+              </div>
           </div>
+
+          <!-- <query-editor
+          style="width: 100%; height: 100%;"
+          file-upload="getQueryType() === 'excelupload'"
+          query-text="query.query"
+          schema="schema"
+          syntax="dataSource.syntax"
+          can-edit="canEdit"
+          is-dirty="isDirty"
+          is-query-owner="isQueryOwner"
+          update-data-source="updateDataSource"
+          execute-query="executeQuery"
+          query-executing="queryExecuting"
+          can-execute-query="canExecuteQuery"
+          listen-for-resize="listenForResize"
+          listen-for-editor-command="listenForEditorCommand"
+          save-query="saveQuery"
+          update-query="updateQuery"
+          update-selected-query="updateSelectedQuery"
+          add-new-parameter="addNewParameter"
+          data-data-source="dataSource"
+          data-data-sources="dataSources"
+        ></query-editor> -->
+      </div>
 
           <div class="row query-metadata__mobile">
             <img

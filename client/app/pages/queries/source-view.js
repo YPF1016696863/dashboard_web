@@ -1,4 +1,4 @@
-import { map, defer } from 'lodash';
+import { map, defer,forEach,get} from 'lodash';
 import template from './content-layout.html';
 import EditParameterSettingsDialog from '@/components/EditParameterSettingsDialog';
 
@@ -20,11 +20,32 @@ function QuerySourceCtrl(
   const isNewQuery = !$scope.query.id;
   let queryText = $scope.query.query;
   const saveQuery = $scope.saveQuery;
-
+  const Data = [];
+  
   $scope.sourceMode = true;
   $scope.isDirty = false;
   $scope.base_url = `${$location.protocol()}://${$location.host()}:${$location.port()}`;
   $scope.modKey = KeyboardShortcuts.modKey;
+  //  仅当查询为Redis29可修改
+  $scope.queryNname = $scope.query.name;
+  $scope.records = [
+    {
+      "columnName" : "Alfreds Futterkiste",
+      "friendlyName" : "Germany"
+    },
+    {
+      "columnName" : "Berglunds snabbk",
+      "friendlyName" : "Sweden"
+    },
+    {
+      "columnName" : "Centro comercial Moctezuma",
+      "friendlyName" : "Mexico"
+    },
+    {
+      "columnName" : "Ernst Handel",
+      "friendlyName" : "Austria"
+    }
+  ];
 
   // @override
   Object.defineProperty($scope, 'showDataset', {
