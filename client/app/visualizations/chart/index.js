@@ -1,12 +1,13 @@
 import {
   some, extend, defaults, has, partial, intersection, without, includes, isUndefined,
-  sortBy, each, map, keys, difference,
+  sortBy, each, map, keys, difference,set,get,find,forEach
 } from 'lodash';
+
 import template from './chart.html';
 import editorTemplate from './chart-editor.html';
 
 const DEFAULT_OPTIONS = {
-  globalSeriesType: 'column',
+  globalSeriesType: 'column', 
   sortX: true,
   legend: { enabled: true },
   yAxis: [{ type: 'linear' }, { type: 'linear', opposite: true }],
@@ -38,9 +39,11 @@ function ChartRenderer() {
     },
     template,
     replace: false,
-    controller($scope, clientConfig) {
+    controller($scope, clientConfig,$rootScope) {
       $scope.chartSeries = [];
 
+      $scope.options = DEFAULT_OPTIONS;// linear/annot read property 'type' of undefined 的bug修复(options 没有清空导致切换时出错)
+      console.log($scope.options);
       function zIndexCompare(series) {
         if ($scope.options.seriesOptions[series.name]) {
           return $scope.options.seriesOptions[series.name].zIndex;
@@ -62,7 +65,29 @@ function ChartRenderer() {
           dateTimeFormat: clientConfig.dateTimeFormat,
         }, DEFAULT_OPTIONS, $scope.options);
       }
+      // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
+      const selectChartType = () => {
+        
+        let selectType;
+        switch (get($rootScope, 'selectChartType', 'line')) {
+          case 'line': selectType = 'line'; break;
+          case 'bar': selectType = 'column'; break;
+          case 'area': selectType = 'area'; break;
+          case 'pie': selectType = 'pie'; set($scope,"options.globalSeriesType",'pie');break;
+          case 'scatter': selectType = 'scatter'; break;
+          case 'bubble': selectType = 'bubble'; break;
+          case 'heatmap': selectType = 'heatmap'; break;
+          case 'box': selectType = 'box'; break;
+          default: selectType = 'line';
+        };
+        set($scope,"options.tempType",selectType);// 左侧选择到的类型
+        
+        each(get($scope.options, "seriesOptions", {}), (yAxisColumn) => {// 循环写入
+          yAxisColumn.type=get($scope,"options.tempType","selectType");
+        });
+      };
 
+      $rootScope.$watch('selectChartType', selectChartType);  // 当图表类型选择时（chart search），覆盖原先的每个系列的type值
       $scope.$watch('options', reloadChart, true);
       $scope.$watch('queryResult && queryResult.getData()', reloadData);
     },
@@ -90,12 +115,13 @@ function ChartEditor(ColorPalette, clientConfig) {
         scope.currentTab = tab;
       };
 
-      scope.selectChartTypeCb = (serie, type)=>{
+      scope.selectChartTypeCb = (serie, type) => {
         scope.options.seriesOptions[serie].type = type;
+        // console.log(type);
         scope.$apply();
       };
 
-      scope.selectGlobalChartTypeCb = (serie, type)=>{
+      scope.selectGlobalChartTypeCb = (serie, type) => {
         scope.options.globalSeriesType = type;
         scope.$apply();
       };
@@ -163,8 +189,8 @@ function ChartEditor(ColorPalette, clientConfig) {
       function refreshColumnsAndForm() {
         refreshColumns();
         if (!scope.queryResult.getData() ||
-            scope.queryResult.getData().length === 0 ||
-            scope.columns.length === 0) {
+          scope.queryResult.getData().length === 0 ||
+          scope.columns.length === 0) {
           return;
         }
         scope.form.yAxisColumns = intersection(scope.form.yAxisColumns, scope.columnNames);
@@ -176,13 +202,14 @@ function ChartEditor(ColorPalette, clientConfig) {
         }
       }
 
-      function refreshSeries() {
+      function refreshSeries() {        
         const chartData = scope.queryResult.getChartData(scope.options.columnMapping);
         const seriesNames = map(chartData, i => i.name);
         const existing = keys(scope.options.seriesOptions);
         each(difference(seriesNames, existing), (name) => {
           scope.options.seriesOptions[name] = {
-            type: scope.options.globalSeriesType,
+            type: get(scope,"options.tempType","selectType"),// 全局图表设置
+            // scope.options.globalSeriesType
             yAxis: 0,
           };
           scope.form.seriesList.push(name);
@@ -192,7 +219,7 @@ function ChartEditor(ColorPalette, clientConfig) {
           delete scope.options.seriesOptions[name];
         });
 
-        if (scope.options.globalSeriesType === 'pie') {
+        if (scope.options.globalSeriesType === 'pie') {// scope.options.globalSeriesType
           const uniqueValuesNames = new Set();
           each(chartData, (series) => {
             each(series.data, (row) => {

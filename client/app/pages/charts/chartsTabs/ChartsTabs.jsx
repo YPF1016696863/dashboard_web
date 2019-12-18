@@ -101,6 +101,7 @@ class ChartsTabs extends React.Component {
     });
 
     if(queryId === "unset") {
+      // debugger
       const query = Query.newQuery();
       query.id = "unset";
       this.setState({

@@ -81,7 +81,7 @@ class DatavisChartTypes extends React.Component {
           <Alert
             showIcon
             message="信息说明:"
-            description="在全局图表类型选择中,类型分为基础图表(包括折线图,柱状图,散点图等)和饼图,热度图以及箱型图,选择任何一个基础图表之后,数据的每一个系列可再单独进行图表类型选择."
+            description="全局图表类型选择在左侧图表类型列表,选择任何一个基础图表之后,数据的每一个系列可再单独进行图表类型选择."
             type="info"
           />
           <Divider>选择图表</Divider>

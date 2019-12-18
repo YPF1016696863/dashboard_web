@@ -20,6 +20,7 @@ import {
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import * as _ from 'lodash';
+
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
 import { SchedulePhrase } from '@/components/queries/SchedulePhrase';
 
@@ -51,7 +52,8 @@ class QueriesList extends React.Component {
     selected: null,
     all: null,
     filtered: null,
-    loading: true
+    loading: true,
+    selectedName: "选择数据集",
   };
 
   componentDidUpdate(prevProps) {
@@ -76,21 +78,51 @@ class QueriesList extends React.Component {
     });
   };
 
-  handleOk = e => {
-    if(this.state.selected === null) {
+  handleOk = (e, $scope) => {
+    if (this.state.selected === null) {
       message.warning("请选择一个数据集.");
       return;
     }
+    const allItems = _.cloneDeep(this.state.all);
 
+    _.filter(allItems, item => {
+      if (item.id + '' === this.state.selected) {
+        this.setState({
+          selectedName: item.name
+        });
+      }
+    }
+    );
+    debugger
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
-    navigateTo("/query/"+this.state.selected+'/charts/new?type='+this.props.chartType);
+    // 修改url不跳转页面
+    let start = '';
+    let newURL = '';
+    const url = window.location.href;// http://localhost:8080/query/unset/charts/new   
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < url.length; i++) {
+      if (url.charAt(i) === 'q' && url.charAt(i + 1) === 'u' && url.charAt(i + 2) === 'e'
+        && url.charAt(i + 3) === 'r' && url.charAt(i + 4) === 'y') {
+        start = url.substring(0, i + 6);
+        newURL = start + this.state.selected + "/charts/new?type="+this.props.chartType;// null导致刷新？
+      }
+    }
+
+    window.history.pushState({}, 0, url);
+    window.history.replaceState({}, 0, newURL);
+
+    console.log(this.props.chartType);
+
+    // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
+
 
     this.setState({
       visible: false,
       selected: null
     });
   };
+
 
   handleCancel = e => {
     this.setState({
@@ -139,10 +171,11 @@ class QueriesList extends React.Component {
 
   render() {
     const { appSettings } = this.props;
-
+    const { selectedName } = this.state;
+    console.log(selectedName);
     return (
       <>
-        <Input placeholder="选择数据集" onClick={this.showModal} />
+        <Input placeholder={selectedName} onClick={this.showModal} />
         <Modal
           destroyOnClose
           title="选择数据集"
@@ -247,6 +280,7 @@ class QueriesList extends React.Component {
                               />
                             }
                             title={item.name + ', id: [' + item.id + ']'}
+                            // + ', id: [' + item.id + ']'
                             key={item.id}
                             isLeaf
                           />
@@ -265,20 +299,21 @@ class QueriesList extends React.Component {
 }
 
 QueriesList.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
   chartType: PropTypes.string,
   querySearchCb: PropTypes.func
 };
 
 QueriesList.defaultProps = {
-  chartType:null,
-  querySearchCb: a => {}
+  chartType: null,
+  querySearchCb: a => { }
 };
 
 export default function init(ngModule) {
   ngModule.component(
     'queriesList',
     react2angular(QueriesList, Object.keys(QueriesList.propTypes), [
-      'appSettings','$location'
+      'appSettings', '$location'
     ])
   );
 }
