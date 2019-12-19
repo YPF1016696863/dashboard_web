@@ -137,7 +137,7 @@ export function setChartType(options, type) {
 };
 
 export function parseChartType(type) {
-    console.log(type);
+    // console.log(type);
     switch (type) {
         case undefined: {
             return "line";

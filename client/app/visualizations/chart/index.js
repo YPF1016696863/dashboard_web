@@ -1,13 +1,13 @@
 import {
   some, extend, defaults, has, partial, intersection, without, includes, isUndefined,
-  sortBy, each, map, keys, difference,set,get,find,forEach
+  sortBy, each, map, keys, difference, set, get, find, forEach, isEmpty
 } from 'lodash';
 
 import template from './chart.html';
 import editorTemplate from './chart-editor.html';
 
 const DEFAULT_OPTIONS = {
-  globalSeriesType: 'column', 
+  globalSeriesType: 'column',
   sortX: true,
   legend: { enabled: true },
   yAxis: [{ type: 'linear' }, { type: 'linear', opposite: true }],
@@ -29,7 +29,29 @@ const DEFAULT_OPTIONS = {
   minColumns: 1,
   minRows: 5,
 };
+const DEFAULT_OPTIONS2 = {
+  globalSeriesType: 'column',
+  sortX: true,
+  legend: { enabled: true },
+  yAxis: [{ type: 'linear' }, { type: 'linear', opposite: true }],
+  xAxis: { type: '-', labels: { enabled: true } },
+  error_y: { type: 'data', visible: true },
+  series: { stacking: null, error_y: { type: 'data', visible: true } },
+  seriesOptions: {},
+  valuesOptions: {},
+  columnMapping: {},
 
+  // showDataLabels: false, // depends on chart type
+  numberFormat: '0,0[.]00000',
+  percentFormat: '0[.]00%',
+  // dateTimeFormat: 'DD/MM/YYYY HH:mm', // will be set from clientConfig
+  textFormat: '', // default: combination of {{ @@yPercent }} ({{ @@y }} ± {{ @@yError }})
+
+  defaultColumns: 3,
+  defaultRows: 8,
+  minColumns: 1,
+  minRows: 5,
+};
 function ChartRenderer() {
   return {
     restrict: 'E',
@@ -39,10 +61,21 @@ function ChartRenderer() {
     },
     template,
     replace: false,
-    controller($scope, clientConfig,$rootScope) {
+    controller($scope, clientConfig, $rootScope) {
       $scope.chartSeries = [];
-
-      $scope.options = DEFAULT_OPTIONS;// linear/annot read property 'type' of undefined 的bug修复(options 没有清空导致切换时出错)
+      
+      console.log($scope.options);
+      if (isEmpty($scope.options.seriesOptions)||
+      get($scope.options,'chartType','new')==="PieChart"||
+      get($scope.options,'chartType','new')==="BasicChart"||
+      get($scope.options,'chartType','new')==="GaugeChart"||
+      get($scope.options,'chartType','new')==="PolarChart"
+      )
+       {
+        console.log("defaultSet");        
+        $scope.options = DEFAULT_OPTIONS2;// 新建一个不变的默认值
+        // set($scope.options, "seriesOptions", {});
+      }
       console.log($scope.options);
       function zIndexCompare(series) {
         if ($scope.options.seriesOptions[series.name]) {
@@ -65,29 +98,57 @@ function ChartRenderer() {
           dateTimeFormat: clientConfig.dateTimeFormat,
         }, DEFAULT_OPTIONS, $scope.options);
       }
-      // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
+
+
       const selectChartType = () => {
-        
-        let selectType;
-        switch (get($rootScope, 'selectChartType', 'line')) {
-          case 'line': selectType = 'line'; break;
-          case 'bar': selectType = 'column'; break;
-          case 'area': selectType = 'area'; break;
-          case 'pie': selectType = 'pie'; set($scope,"options.globalSeriesType",'pie');break;
-          case 'scatter': selectType = 'scatter'; break;
-          case 'bubble': selectType = 'bubble'; break;
-          case 'heatmap': selectType = 'heatmap'; break;
-          case 'box': selectType = 'box'; break;
-          default: selectType = 'line';
+        if (get($rootScope, 'selectDECharts', 'n') === 'CHART') {
+          // 选到这一组才刷新有效，防止修改其他组图表类型的时候，这里也刷新，导致类型出错
+          // console.log("watch");
+
+          set($scope, 'selectChartTypeCharts', get($rootScope, 'selectChartType', undefined));
+          if (get($scope, 'selectChartTypeCharts', undefined) !== undefined ||
+            get($scope, 'selectChartTypeCharts', null) !== null) {
+            // console.log("selectChartTypeCharts:" + get($scope, 'selectChartTypeCharts', undefined));
+            // 当在组件预览界面时 该值为undefine 因此 这里做一个判断 
+            let selectType;
+            switch (get($scope, 'selectChartTypeCharts', 'new')) {// 为了处理第一次点击的问题 这里再做判断
+              case 'line': selectType = 'line'; set($scope, "options.globalSeriesType", 'line'); break;
+              case 'bar': selectType = 'column'; set($scope, "options.globalSeriesType", 'column'); break;
+              case 'area': selectType = 'area'; set($scope, "options.globalSeriesType", 'area'); break;
+              case 'pie': selectType = 'pie'; set($scope, "options.globalSeriesType", 'pie'); break;
+              case 'scatter': selectType = 'scatter'; set($scope, "options.globalSeriesType", 'scatter'); break;
+              case 'bubble': selectType = 'bubble'; set($scope, "options.globalSeriesType", 'bubble'); break;// options.type === 'bubble'
+              case 'heatmap': selectType = 'heatmap'; set($scope, "options.globalSeriesType", 'heatmap'); break;
+              case 'box': selectType = 'box'; set($scope, "options.globalSeriesType", 'box'); break;
+              default: selectType = undefined; console.log("默认1");// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
+            };
+            // console.log(selectType);
+            set($scope, "options.tempType", selectType);// 左侧选择到的类型
+            if (selectType !== undefined) {
+              each(get($scope.options, "seriesOptions", {}), (yAxisColumn) => {// 把每一个系列图表类型覆盖
+                yAxisColumn.type = selectType;
+                // console.log(yAxisColumn);
+                // console.log($scope.options);
+              });
+            }
+          }
+          set($scope, 'selectChartTypeCharts', undefined);
         };
-        set($scope,"options.tempType",selectType);// 左侧选择到的类型
-        
-        each(get($scope.options, "seriesOptions", {}), (yAxisColumn) => {// 循环写入
-          yAxisColumn.type=get($scope,"options.tempType","selectType");
-        });
+        console.log(get($rootScope, 'selectDECharts', 'n'));
+        if(get($rootScope, 'selectDECharts', 'n') === 'ECHARTS'
+          ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-PIE-AND-RADAR'
+          ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-GAUGE'
+          ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-POLAR'){
+            set($scope.options, "seriesOptions", {});
+            console.log("clear");
+        }
       };
 
+
       $rootScope.$watch('selectChartType', selectChartType);  // 当图表类型选择时（chart search），覆盖原先的每个系列的type值
+
+
+
       $scope.$watch('options', reloadChart, true);
       $scope.$watch('queryResult && queryResult.getData()', reloadData);
     },
@@ -202,13 +263,14 @@ function ChartEditor(ColorPalette, clientConfig) {
         }
       }
 
-      function refreshSeries() {        
+      function refreshSeries() {
         const chartData = scope.queryResult.getChartData(scope.options.columnMapping);
         const seriesNames = map(chartData, i => i.name);
         const existing = keys(scope.options.seriesOptions);
         each(difference(seriesNames, existing), (name) => {
           scope.options.seriesOptions[name] = {
-            type: get(scope,"options.tempType","selectType"),// 全局图表设置
+            type: get(scope, "options.tempType", '全局图表设置默认'),// 全局图表设置
+
             // scope.options.globalSeriesType
             yAxis: 0,
           };

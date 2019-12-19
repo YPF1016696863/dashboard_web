@@ -19,12 +19,12 @@ function EchartsRenderer($timeout, $rootScope, $window) {
     },
     template: echartsTemplate,
     link($scope, $element, $route) {
-      debugger
-      
+
+
       $scope.chartSeries = [];
       // 20191211 linaer bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "BasicChart") {
-        console.log("defaultSet");
+        // console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
       console.log($scope.options);
@@ -259,7 +259,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             myChart.resize($scope.options.size.width, $scope.options.size.height);
           }
         } catch (e) {
-          console.log("先选组件类型 则该方法不存在因此用trycatch来解决 ：$scope.queryResult.getData is not a function");
+          console.log("some error");
         }
       };
 
@@ -280,33 +280,40 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
       // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
       const selectChartType = () => {
-        console.log("selectChartType刷新");
-        if (_.get($rootScope, 'selectChartType', undefined) !== undefined) {
-          // 当在组件预览界面时 该值为undefine 因此 这里做一个判断 
-          let selectType;
-          switch (_.get($rootScope, 'selectChartType', 'new')) {// 为了处理第一次点击的问题 这里再做判断
-            case 'line': selectType = 'line'; break;
-            case 'bar': selectType = 'bar'; break;
-            case 'area': selectType = 'area'; break;
-            case 'scatter': selectType = 'scatter'; break;
-            default: ;// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
-          };
-          _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-            // 第一次点击（没有xy数据的时候，这一步跳过）          
-            const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
-            switch (_.get($rootScope, 'selectChartType', 'new')) {
+        // console.log("selectChartType刷新");
+
+        if (_.get($rootScope, 'selectDECharts', 'n') === 'ECHARTS') {
+          // 选到这一组才刷新有效，防止修改其他组图表类型的时候，这里也刷新，导致类型出错
+          _.set($scope, 'selectChartTypeCharts', _.get($rootScope, 'selectChartType', undefined));
+          // 转为一个本地的变量
+          if (_.get($scope, 'selectChartTypeCharts', undefined) !== undefined
+            || _.get($scope, 'selectChartTypeCharts', null) !== null) {
+            // 当在组件预览界面时 该值为undefine 因此 这里做一个判断 为undefine不做处理
+            let selectType;
+            switch (_.get($scope, 'selectChartTypeCharts', 'new')) {// 为了处理第一次点击的问题 这里再做判断
               case 'line': selectType = 'line'; break;
               case 'bar': selectType = 'bar'; break;
               case 'area': selectType = 'area'; break;
               case 'scatter': selectType = 'scatter'; break;
               default: ;// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
             };
-            _.set($scope.options, stringTemp, selectType);// 对多系列的类型重置为选择的类型      
-          });
-          _.set($scope.options, "defaultType", selectType);
-          console.log("defaultType:" + _.get($scope.options, "defaultType", "nnnn"));// 第一次点击为undefined 
-          console.log("selectChartType处理");
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+              // 第一次点击（没有xy数据的时候，这一步跳过）          
+              const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
+              switch (_.get($scope, 'selectChartTypeCharts', 'new')) {
+                case 'line': selectType = 'line'; break;
+                case 'bar': selectType = 'bar'; break;
+                case 'area': selectType = 'area'; break;
+                case 'scatter': selectType = 'scatter'; break;
+                default: ;// _.set($scope.options, stringTemp, _.get($scope.options, stringTemp))
+              };
+              _.set($scope.options, stringTemp, selectType);// 对多系列的类型重置为选择的类型      
+            });
+            _.set($scope.options, "defaultType", selectType);
+          }
+          _.set($scope, 'selectChartTypeCharts', undefined);
         }
+
       };
 
       $rootScope.$watch('selectChartType', selectChartType);  // 当图表类型选择时（chart search），覆盖原先的每个系列的type值 
@@ -341,7 +348,7 @@ function EchartsEditor() {
         $scope.columns = $scope.queryResult.getColumns();
         $scope.columnNames = _.map($scope.columns, i => i.name);
       } catch (e) {
-        console.log("先选组件类型 则该方法不存在因此用trycatch来解决 ：$scope.queryResult.getData is not a function");
+        console.log("some error");
       }
 
 

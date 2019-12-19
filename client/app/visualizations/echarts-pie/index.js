@@ -63,7 +63,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                     xDataValue.push(xValue);
                     _.forEach(onesValue, function (oneYvalue, oneYkey) {
                       // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                      if (oneYkey === yAxisColumn ) {// 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
+                      if (oneYkey === yAxisColumn) {// 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
                         // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
                         pieData.push({
                           name: xValue,
@@ -201,27 +201,34 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
           }
         } catch (e) {
-          console.log("错误之一解决:$scope.queryResult.getData is not a function");
+          console.log("some error");
         }
       };
 
 
       // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
       const selectChartType = () => {
-        console.log(_.get($rootScope, 'selectChartType', 'pie'));
-        let selectType;
-        switch (_.get($rootScope, 'selectChartType', 'pie')) {// 因为可能会有选到line的情况 所以这里用了case 做一个其他类型的判断
-          case 'pie': selectType = 'pie'; break;
-          case 'doughnut': selectType = 'doughnut'; break;
-          case 'rose': selectType = 'rose'; break;
-          default: selectType = 'pie';
-        };
-        _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-          const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
-          console.log(_.get($scope.options, stringTemp));
-          _.set($scope.options, stringTemp, selectType);
-        });
-        console.log($scope.options.form.yAxisColumnTypes);
+        if (_.get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-PIE-AND-RADAR') {
+          // 选到这一组才刷新有效，防止修改其他组图表类型的时候，这里也刷新，导致类型出错
+          console.log("watch");
+          _.set($scope, 'selectChartTypeCharts', _.get($rootScope, 'selectChartType', undefined));
+          // 转为一个本地的变量
+          if (_.get($scope, 'selectChartTypeCharts', undefined) !== undefined
+            || _.get($scope, 'selectChartTypeCharts', null) !== null) {
+              let selectType;
+              switch (_.get($rootScope, 'selectChartType', 'pie')) {// 因为可能会有选到line的情况 所以这里用了case 做一个其他类型的判断
+                case 'pie': selectType = 'pie'; break;
+                case 'doughnut': selectType = 'doughnut'; break;
+                case 'rose': selectType = 'rose'; break;
+                default: selectType = 'pie';
+              };
+              _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+                const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
+                _.set($scope.options, stringTemp, selectType);
+              });              
+          }
+          _.set($scope, 'selectChartTypeCharts', undefined);
+        }
       };
 
       // 更改扇瓣后，扇瓣相应的设置清空
@@ -262,7 +269,7 @@ function EchartsPieEditor() {
       $scope.selectChartTypeCb = (serie, type) => {// 图表类型选择的转换
         const stringTemp = "form.yAxisColumnTypes[" + serie + "]";// 按照原先的输入格式进行配置 （现在的类型输入转换）
         _.set($scope.options, stringTemp, type);
-        console.log($scope.options.form.yAxisColumnTypes);
+        // console.log($scope.options.form.yAxisColumnTypes);
         // $scope.options.form.yAxisColumnTypes[serie] = type;
         $scope.$apply();
       };
@@ -271,7 +278,7 @@ function EchartsPieEditor() {
         $scope.columns = $scope.queryResult.getColumns();
         $scope.columnNames = _.map($scope.columns, i => i.name);
       } catch (e) {
-        console.log("先选组件类型 则该方法不存在因此用trycatch来解决:$scope.queryResult.getData is not a function");
+        console.log("some error");
       }
       // Set default options for new vis// 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
