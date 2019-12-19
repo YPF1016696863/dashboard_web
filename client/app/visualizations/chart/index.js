@@ -63,7 +63,6 @@ function ChartRenderer() {
     replace: false,
     controller($scope, clientConfig, $rootScope) {
       $scope.chartSeries = [];
-
       if (isEmpty($scope.options.seriesOptions)||
       get($scope.options,'chartType','new')==="PieChart"||
       get($scope.options,'chartType','new')==="BasicChart"||
@@ -132,7 +131,6 @@ function ChartRenderer() {
           }
           set($scope, 'selectChartTypeCharts', undefined);
         };
-
         if(get($rootScope, 'selectDECharts', 'n') === 'ECHARTS'
           ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-PIE-AND-RADAR'
           ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-GAUGE'
