@@ -388,8 +388,8 @@ class QueriesListTabs extends React.Component {
                 </Button>
               </div>
               <Divider />
-              <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
-              <Form>
+              <p style={{ fontSize: '14px' }}>数据集共享设置:</p>
+              <Form style={{paddingLeft:'20px'}}>
                 <Form.Item
                   label="数据集对其他人可见"
                   labelAlign="left"
@@ -437,8 +437,7 @@ class QueriesListTabs extends React.Component {
                 <Icon type="pie-chart" />
                 新建可视化组件
               </Button>
-              <br />
-              <br />
+              <Divider />
               <p style={{ fontSize: '14px' }}>其他设置:</p>
               <Button
                 type="primary"

@@ -1,14 +1,22 @@
-<div class="dashboard-dark-theme" style="min-height:45vh !important;">
-  <div class="body-row-auto scrollbox dashboard-dark-theme">
-    <div class="body-row">
-      <div class="m-b-10" ng-if="$ctrl.localParametersDefs().length > 0">
-        <parameters parameters="$ctrl.localParametersDefs()"></parameters>
-      </div>
-    </div>
-    <visualization-renderer
-      visualization="$ctrl.visualization"
-      query-result="$ctrl.queryResult"
+<main class="dashboard-fullscreen p-10" style="background-color: #25374C">
+  <div class="flex-fill p-relative">
+    <div
+      class="p-absolute d-flex flex-column"
+      style="left: 0; top: 0; right: 0; bottom: 0; overflow: hidden"
     >
-    </visualization-renderer>
+      <section class="flex-fill p-relative query-visualizations-wrapper">
+        <div class="dashboard-dark-theme">
+          <div class="dashboard-wrapper preview-mode">
+            <div class="dashboard-widget-wrapper">
+              <visualization-renderer
+                visualization="$ctrl.visualization"
+                query-result="$ctrl.queryResult"
+              >
+              </visualization-renderer>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
-</div>
+</main>

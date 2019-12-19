@@ -55,13 +55,19 @@ import { EditVisualizationDialog } from '@/components/edit-visualization-dialog/
 import { Dashboard } from '@/services/dashboard';
 import notification from '@/services/notification';
 import { navigateToWithSearch } from '@/services/navigateTo';
+import InputWithCopy from '@/components/InputWithCopy';
+import { appSettingsConfig } from '@/config/app-settings';
+import { $http } from '@/services/ng';
 
 const { TextArea } = Input;
 
 let ChartsPreviewDOM;
 let EditVisualizationDialogDOM;
 const emptyChartImg = '/static/images/emptyChart.png';
-
+const API_SHARE_URL =
+  appSettingsConfig.server.backendUrl + '/api/visualizations/{id}/share';
+const VISUALIZATION_SHARE_URL =
+  window.location.origin + '/public/visualizations/';
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
 class ChartsListTabs extends React.Component {
   state = {};
@@ -75,7 +81,14 @@ class ChartsListTabs extends React.Component {
       visType: null,
       canEdit: false,
       showDeleteModal: false,
-      referencedDashboards: []
+      referencedDashboards: [],
+      runtime: {
+        share: {
+          public: null,
+          apiurl: null,
+          saving: false
+        }
+      }
     });
     ChartsPreviewDOM = angular2react(
       'chartsPreview',
@@ -172,13 +185,29 @@ class ChartsListTabs extends React.Component {
                 visType: 'Q'
               });
             } else {
+              const visualization = _.find(
+                query.visualizations,
+                // eslint-disable-next-line eqeqeq
+                vis => vis.id == visualizationId
+              );
+              visualization.publicAccessEnabled = !!_.get(
+                visualization,
+                'api_key',
+                null
+              );
+
               this.setState({
-                visualization: _.find(
-                  query.visualizations,
-                  // eslint-disable-next-line eqeqeq
-                  visualization => visualization.id == visualizationId
-                ),
-                visType: 'V'
+                visualization,
+                visType: 'V',
+                runtime: {
+                  share: {
+                    public: visualization.publicAccessEnabled
+                      ? VISUALIZATION_SHARE_URL + visualization.api_key
+                      : '打开可视化面板共享按钮以获取url链接',
+                    api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                    saving: false
+                  }
+                }
               });
             }
           })
@@ -269,6 +298,101 @@ class ChartsListTabs extends React.Component {
 
   handleDeleteCancel = () => {
     this.setState({ showDeleteModal: false });
+  };
+
+  onChange = checked => {
+    if (checked) {
+      this.enableAccess();
+    } else {
+      this.disableAccess();
+    }
+  };
+
+  enableAccess = () => {
+    const { visualization } = this.state;
+    this.setState({
+      runtime: {
+        share: {
+          saving: true
+        }
+      }
+    });
+
+    if (this.state.runtime.share.api) {
+      $http
+        .post(this.state.runtime.share.api)
+        .success(data => {
+          visualization.publicAccessEnabled = true;
+          this.setState({
+            runtime: {
+              share: {
+                public: VISUALIZATION_SHARE_URL + data.api_key,
+                api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .error(() => {
+          message.error('未能打开此可视化组件的共享');
+          this.setState({
+            runtime: {
+              share: {
+                public: '打开可视化组件共享按钮以获取url链接',
+                api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .finally(() => {});
+    } else {
+      message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
+    }
+  };
+
+  disableAccess = () => {
+    const { visualization } = this.state;
+    this.setState({
+      runtime: {
+        share: {
+          saving: true
+        }
+      }
+    });
+
+    if (this.state.runtime.share.api) {
+      $http
+        .delete(this.state.runtime.share.api)
+        .success(() => {
+          visualization.publicAccessEnabled = false;
+          delete visualization.api_key;
+          this.setState({
+            runtime: {
+              share: {
+                public: '打开可视化组件共享按钮以获取url链接',
+                api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .error(() => {
+          message.error('未能关闭此可视化组件的共享');
+          this.setState({
+            runtime: {
+              share: {
+                public: VISUALIZATION_SHARE_URL + visualization.api_key,
+                api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .finally(() => {});
+    } else {
+      message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
+    }
   };
 
   render() {
@@ -396,7 +520,7 @@ class ChartsListTabs extends React.Component {
                   </div>
                   <Divider />
                   <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
-                  <Form>
+                  <Form style={{paddingLeft:'20px'}}>
                     <Form.Item
                       label="共享可视化组件"
                       labelAlign="left"
@@ -404,10 +528,11 @@ class ChartsListTabs extends React.Component {
                       wrapperCol={{ span: 1, offset: 17 }}
                     >
                       <Switch
-                        disabled
                         checkedChildren="开"
                         unCheckedChildren="关"
-                        defaultChecked={false}
+                        checked={this.state.visualization.publicAccessEnabled}
+                        onChange={this.onChange}
+                        loading={this.state.runtime.share.saving}
                       />
                     </Form.Item>
                     <Form.Item
@@ -416,28 +541,20 @@ class ChartsListTabs extends React.Component {
                       labelCol={{ span: 2 }}
                       wrapperCol={{ span: 22 }}
                     >
-                      <Input
-                        value="暂时无法获取可视化组件链接地址"
-                        readOnly
-                        addonAfter={
-                          <Button type="link">
-                            <Icon type="copy" /> 拷贝连接
-                          </Button>
-                        }
-                      />
+                      <InputWithCopy value={this.state.runtime.share.public} />
                     </Form.Item>
                   </Form>
                   <br />
                   <p style={{ fontSize: '14px' }}>可视化组件预览:</p>
                   <Row>
-                    <Col span={12}>
+                    <Col span={12} style={{width:"30vw",height:"35vh"}}>
                       <ChartsPreviewDOM
                         visualization={this.state.visualization}
                         queryResult={this.state.queryResult}
                       />
                     </Col>
                   </Row>
-                  <br />
+                  <Divider />
                   <p style={{ fontSize: '14px' }}>其他设置:</p>
                   <Button
                     type="primary"

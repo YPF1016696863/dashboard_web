@@ -25,23 +25,6 @@
         <i class="zmdi zmdi-refresh zmdi-hc-spin zmdi-hc-5x"></i>
       </div>
     </div>
-
-    <div class="body-row clearfix tile__bottom-control">
-      <a class="small hidden-print" ng-click="$ctrl.refresh()" ng-if="!$ctrl.public" data-test="RefreshIndicator" ng-class="$root.theme.widgetFooterTextColor">
-        <i ng-class='{"zmdi-hc-spin": $ctrl.widget.loading}' class="zmdi zmdi-refresh"></i>
-        <span am-time-ago="$ctrl.widget.getQueryResult().getUpdatedAt()" ng-if="!$ctrl.widget.loading"></span>
-        <rd-timer from="$ctrl.widget.refreshStartedAt" ng-if="$ctrl.widget.loading"></rd-timer>
-      </a>
-      <span class="small hidden-print" ng-if="$ctrl.public">
-        <i class="zmdi zmdi-time-restore"></i> <span am-time-ago="$ctrl.widget.getQueryResult().getUpdatedAt()"></span>
-      </span>
-      <span class="visible-print">
-        <i class="zmdi zmdi-time-restore"></i> {{$ctrl.widget.getQueryResult().getUpdatedAt() | dateTime}}
-      </span>
-
-      <button class="btn btn-sm btn-default pull-right hidden-print btn-transparent btn__refresh" ng-click="$ctrl.refresh()" ng-if="!$ctrl.public"><i class="zmdi zmdi-refresh"></i></button>
-      <button class="btn btn-sm btn-default pull-right hidden-print btn-transparent btn__refresh" ng-click="$ctrl.expandVisualization()"><i class="zmdi zmdi-fullscreen"></i></button>
-    </div>
   </div>
 
   <div class="tile body-container widget-restricted" ng-if="$ctrl.type=='restricted'" ng-class="$ctrl.type">

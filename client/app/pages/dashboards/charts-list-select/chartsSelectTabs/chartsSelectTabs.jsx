@@ -67,9 +67,9 @@ class ChartsSelectTabs extends React.Component {
     });
 
     ChartsPreviewDOM = angular2react(
-        'chartsPreview',
-        ChartsPreview,
-        window.$injector
+      'chartsPreview',
+      ChartsPreview,
+      window.$injector
     );
   }
 
@@ -185,7 +185,6 @@ class ChartsSelectTabs extends React.Component {
             <div className="align-center-div" style={{ paddingTop: '15%' }}>
               <LoadingState />
             </div>
-
           </>
         )}
         {this.state.isLoaded && this.state.queryResult == null && (
@@ -225,13 +224,17 @@ class ChartsSelectTabs extends React.Component {
                   />
                 </>
               ) : this.state.visType === 'V' ? (
-                <>
+                <div
+                  style={{
+                    height:'400px'
+                  }}
+                >
                   {/* eslint-disable-next-line react/jsx-no-undef */}
                   <ChartsPreviewDOM
                     visualization={this.state.visualization}
                     queryResult={this.state.queryResult}
                   />
-                </>
+                </div>
               ) : null}
             </>
           )}
@@ -248,7 +251,7 @@ ChartsSelectTabs.propTypes = {
 
 ChartsSelectTabs.defaultProps = {
   displayId: null,
-  getVisCb: a=>{}
+  getVisCb: a => {}
 };
 
 export default function init(ngModule) {

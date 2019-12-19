@@ -37,7 +37,7 @@ import { ResourceItemsSource } from '@/components/items-list/classes/ItemsSource
 import { UrlStateStorage } from '@/components/items-list/classes/StateStorage';
 
 import LoadingState from '@/components/items-list/components/LoadingState';
-import * as Sidebar from '@/components/items-list/components/Sidebar';
+import InputWithCopy from '@/components/InputWithCopy';
 import ItemsTable, {
   Columns
 } from '@/components/items-list/components/ItemsTable';
@@ -51,7 +51,9 @@ import { policy } from '@/services/policy';
 import { DashboardsPreview } from '@/components/dashboards-preview/dashboards-preview';
 import { durationHumanize } from '@/filters';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
-import {navigateToWithSearch} from "@/services/navigateTo";
+import { navigateToWithSearch } from '@/services/navigateTo';
+import { $http } from '@/services/ng';
+import { appSettingsConfig } from '@/config/app-settings';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { SubMenu } = Menu;
@@ -59,7 +61,9 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 const emptyChartImg = '/static/images/emptyChart.png';
-
+const API_SHARE_URL =
+  appSettingsConfig.server.backendUrl + '/api/dashboards/{id}/share';
+const DASHBOARD_SHARE_URL = window.location.origin + '/public/dashboards/';
 let DashboardsPreviewDOM;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
@@ -71,7 +75,15 @@ class DashboardsListTabs extends React.Component {
 
     this.setState({
       isLoaded: true,
-      dashboard: null
+      dashboard: null,
+      runtime: {
+        share: {
+          public: null,
+          apiurl: null,
+          saving: false,
+          disabled:true
+        }
+      }
     });
 
     DashboardsPreviewDOM = angular2react(
@@ -109,6 +121,16 @@ class DashboardsListTabs extends React.Component {
       { slug: slugId },
       dashboard => {
         this.setState({
+          runtime: {
+            share: {
+              public: dashboard.publicAccessEnabled
+                ? DASHBOARD_SHARE_URL + dashboard.api_key
+                : '打开可视化面板共享按钮以获取url链接',
+              api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+              saving: false,
+              disabled: dashboard.is_draft
+            }
+          },
           isLoaded: true,
           dashboard
         });
@@ -169,9 +191,124 @@ class DashboardsListTabs extends React.Component {
     );
   };
 
+  onChange = checked => {
+    if (checked) {
+      this.enableAccess();
+    } else {
+      this.disableAccess();
+    }
+  };
+
+  enableAccess = () => {
+    const { dashboard } = this.state;
+    this.setState({
+      runtime: {
+        share: {
+          saving: true
+        }
+      }
+    });
+
+    if (this.state.runtime.share.api) {
+      $http
+        .post(this.state.runtime.share.api)
+        .success(data => {
+          dashboard.publicAccessEnabled = true;
+          this.setState({
+            runtime: {
+              share: {
+                public: DASHBOARD_SHARE_URL + data.api_key,
+                api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .error(() => {
+          message.error('未能打开此可视化面板的共享');
+          this.setState({
+            runtime: {
+              share: {
+                public: '打开可视化面板共享按钮以获取url链接',
+                api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .finally(() => {});
+    } else {
+      message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
+      this.setState({
+        runtime: {
+          share: {
+            public: DASHBOARD_SHARE_URL + dashboard.api_key,
+            api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+            saving: false,
+            disabled:false
+          }
+        }
+      });
+    }
+  };
+
+  disableAccess = () => {
+    const { dashboard } = this.state;
+    this.setState({
+      runtime: {
+        share: {
+          saving: true
+        }
+      }
+    });
+
+    if (this.state.runtime.share.api) {
+      $http
+        .delete(this.state.runtime.share.api)
+        .success(() => {
+          dashboard.publicAccessEnabled = false;
+          delete dashboard.api_key;
+          this.setState({
+            runtime: {
+              share: {
+                public: '打开可视化面板共享按钮以获取url链接',
+                api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+                saving: false
+              }
+            }
+          });
+        })
+        .error(() => {
+          message.error('未能关闭此可视化面板的共享');
+          this.setState({
+            runtime: {
+              share: {
+                public: DASHBOARD_SHARE_URL + dashboard.api_key,
+                api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+                saving: false,
+                disabled:false
+              }
+            }
+          });
+        })
+        .finally(() => {});
+    } else {
+      message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
+      this.setState({
+        runtime: {
+          share: {
+            public: DASHBOARD_SHARE_URL + dashboard.api_key,
+            api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
+            saving: false,
+            disabled:false
+          }
+        }
+      });
+    }
+  };
+
   render() {
     const { slugId } = this.props;
-
     return (
       <>
         {!this.state.isLoaded && (
@@ -239,10 +376,9 @@ class DashboardsListTabs extends React.Component {
             </div>
             <Divider />
             <p style={{ fontSize: '14px' }}>可视化面板共享设置:</p>
-
-            <Form>
+            <Form style={{paddingLeft:'20px'}}>
               <Form.Item
-                label="共享可视化面板"
+                label="可视化面板对其他人可见"
                 labelAlign="left"
                 labelCol={{ span: 6 }}
                 wrapperCol={{ span: 1, offset: 17 }}
@@ -250,7 +386,44 @@ class DashboardsListTabs extends React.Component {
                 <Switch
                   checkedChildren="开"
                   unCheckedChildren="关"
-                  defaultChecked={false}
+                  defaultChecked={!this.state.dashboard.is_draft}
+                  onChange={checked => {
+                    this.updateDashboard({
+                      is_draft: !checked
+                    });
+                    if(!checked) {
+                      // Set public share
+                      this.disableAccess();
+                    }else{
+                      this.setState({
+                        runtime: {
+                          share:{
+                            public: this.state.dashboard.publicAccessEnabled
+                                ? DASHBOARD_SHARE_URL + this.state.dashboard.api_key
+                                : '打开可视化面板共享按钮以获取url链接',
+                            api: _.replace(API_SHARE_URL, '{id}', this.state.dashboard.id),
+                            saving: false,
+                            disabled:false
+                          }
+                        }
+                      });
+                    }
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="共享可视化面板"
+                labelAlign="left"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 1, offset: 17 }}
+              >
+                <Switch
+                  disabled={this.state.runtime.share.disabled}
+                  checkedChildren="开"
+                  unCheckedChildren="关"
+                  checked={this.state.dashboard.publicAccessEnabled}
+                  onChange={this.onChange}
+                  loading={this.state.runtime.share.saving}
                 />
               </Form.Item>
               <Form.Item
@@ -259,15 +432,7 @@ class DashboardsListTabs extends React.Component {
                 labelCol={{ span: 2 }}
                 wrapperCol={{ span: 22 }}
               >
-                <Input
-                  value="暂时无法获取可视化面板链接地址"
-                  readOnly
-                  addonAfter={
-                    <Button type="link">
-                      <Icon type="copy" /> 拷贝连接
-                    </Button>
-                  }
-                />
+                <InputWithCopy value={this.state.runtime.share.public} />
               </Form.Item>
             </Form>
             <br />
@@ -277,8 +442,7 @@ class DashboardsListTabs extends React.Component {
                 <Button
                   type="primary"
                   target="_blank"
-                  href={'/view/' +
-                  this.state.dashboard.slug}
+                  href={'/view/' + this.state.dashboard.slug}
                 >
                   <Icon type="dashboard" />
                   预览可视化面板
@@ -286,16 +450,13 @@ class DashboardsListTabs extends React.Component {
               </Col>
 
               <Col span={24}>
-                <br />
-              </Col>
-
-              <Col span={24}>
+                <Divider />
                 <p style={{ fontSize: '14px' }}>其他设置:</p>
                 <Button
                   type="primary"
                   disabled={slugId == null}
-                  onClick={e=>{
-                    navigateToWithSearch( 'dashboards/' + slugId);
+                  onClick={e => {
+                    navigateToWithSearch('dashboards/' + slugId);
                   }}
                 >
                   <i className="fa fa-edit m-r-5" />

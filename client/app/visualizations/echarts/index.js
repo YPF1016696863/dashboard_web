@@ -27,7 +27,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         // console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
-      console.log($scope.options);
 
       const refreshData = () => {
         // 找到选中serise的下标        
