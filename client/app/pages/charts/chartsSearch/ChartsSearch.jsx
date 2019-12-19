@@ -196,7 +196,7 @@ class ChartsSearch extends React.Component {
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
                           default: type = 'ECHARTS';console.log("default(error)");
                         }
-                        console.log("改变了");
+                        // console.log("改变了");
                         
                         this.props.chartSearchCb(type, true, chart);
                       }}

@@ -1,4 +1,4 @@
-import { map, find } from 'lodash';
+import { map, find,set,get } from 'lodash';
 import { copy } from 'angular';
 import notification from '@/services/notification';
 import template from './edit-visualization-dialog.html';
@@ -13,7 +13,7 @@ export const EditVisualizationDialog = {
     close: '&',
     dismiss: '&'
   },
-  controller($scope, $window, currentUser, Events, Visualization) {
+  controller($scope,$rootScope, $window, currentUser, Events, Visualization) {
     'ngInject';
 
     const vm = this;
@@ -70,12 +70,12 @@ export const EditVisualizationDialog = {
       name: Visualization.defaultVisualization.name,
       description: '',
       options: Visualization.defaultVisualization.defaultOptions
-    });debugger
+    });
     if (!this.visualization) {
       this.visualization = this.newVisualization();
     }
 
-    this.typeChanged = oldType => {debugger
+    this.typeChanged = oldType => {
       const type = this.visualization.type;
       // if not edited by user, set name to match type
       // todo: this is wrong, because he might have edited it before.
@@ -113,7 +113,8 @@ export const EditVisualizationDialog = {
         this.visualization,
         result => {
           notification.success('保存成功');
-
+          set($rootScope, 'selectChartType', undefined);
+          console.log("初始化selectChartType=undefined");
           const visIds = map(this.query.visualizations, i => i.id);
           const index = visIds.indexOf(result.id);
           if (index > -1) {

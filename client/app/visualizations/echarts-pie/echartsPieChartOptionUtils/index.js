@@ -95,7 +95,7 @@ export function getChartType(options) {
 
 // Radius默认值及对应修改
 export function getRadius(options, type, index) {
-    console.log(type);
+    // console.log(type);
 
     switch (type) {
         case undefined: {

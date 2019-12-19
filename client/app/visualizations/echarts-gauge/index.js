@@ -22,7 +22,7 @@ function EchartsGaugeRenderer($rootScope) {
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "GaugeChart") {
         $scope.options = defaultGaugeChartOptions();
       }
-      console.log($scope.options);
+      // console.log($scope.options);
 
       const refreshData = () => {
         try {
@@ -111,7 +111,7 @@ function EchartsGaugeRenderer($rootScope) {
             myChart.resize($scope.options.size.width, $scope.options.size.height);
           }
         } catch (e) {
-          console.log("先选组件类型 则该方法不存在因此用trycatch来解决 ：$scope.queryResult.getData is not a function");
+          console.log("some error");
         }
       };
 
@@ -136,7 +136,7 @@ function EchartsGaugeEditor() {
         $scope.columns = $scope.queryResult.getColumns();
         $scope.columnNames = _.map($scope.columns, i => i.name);
       } catch (e) {
-        console.log("先选组件类型 则该方法不存在因此用trycatch来解决 ：$scope.queryResult.getData is not a function");
+        console.log("some error");
       }
       // Set default options for new vis// 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "GaugeChart") {
