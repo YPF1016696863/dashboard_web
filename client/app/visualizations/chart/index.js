@@ -29,7 +29,29 @@ const DEFAULT_OPTIONS = {
   minColumns: 1,
   minRows: 5,
 };
+const DEFAULT_OPTIONS2 = {
+  globalSeriesType: 'column',
+  sortX: true,
+  legend: { enabled: true },
+  yAxis: [{ type: 'linear' }, { type: 'linear', opposite: true }],
+  xAxis: { type: '-', labels: { enabled: true } },
+  error_y: { type: 'data', visible: true },
+  series: { stacking: null, error_y: { type: 'data', visible: true } },
+  seriesOptions: {},
+  valuesOptions: {},
+  columnMapping: {},
 
+  // showDataLabels: false, // depends on chart type
+  numberFormat: '0,0[.]00000',
+  percentFormat: '0[.]00%',
+  // dateTimeFormat: 'DD/MM/YYYY HH:mm', // will be set from clientConfig
+  textFormat: '', // default: combination of {{ @@yPercent }} ({{ @@y }} ± {{ @@yError }})
+
+  defaultColumns: 3,
+  defaultRows: 8,
+  minColumns: 1,
+  minRows: 5,
+};
 function ChartRenderer() {
   return {
     restrict: 'E',
@@ -41,9 +63,7 @@ function ChartRenderer() {
     replace: false,
     controller($scope, clientConfig, $rootScope) {
       $scope.chartSeries = [];
-// delete $scope.options.Fan;
-// delete $scope.options.backgroundColor;
-// delete $scope.options.chartType;
+      
       console.log($scope.options);
       if (isEmpty($scope.options.seriesOptions)||
       get($scope.options,'chartType','new')==="PieChart"||
@@ -53,7 +73,7 @@ function ChartRenderer() {
       )
        {
         console.log("defaultSet");        
-        $scope.options = DEFAULT_OPTIONS;
+        $scope.options = DEFAULT_OPTIONS2;// 新建一个不变的默认值
         // set($scope.options, "seriesOptions", {});
       }
       console.log($scope.options);
