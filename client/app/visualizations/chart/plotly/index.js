@@ -31,7 +31,7 @@ const PlotlyChart = ($rootScope,$timeout) => ({
   link(scope, element) {
 
     const plotlyElement = element[0].querySelector('.plotly-chart-container');
-    const plotlyOptions = { showLink: false, displaylogo: false };
+    const plotlyOptions = { showLink: false, displaylogo: false, displayModeBar: false };
     let theme = ($rootScope.theme && $rootScope.theme.theme)?$rootScope.theme.theme:"dark";
     let layout = {};
     let data = [];

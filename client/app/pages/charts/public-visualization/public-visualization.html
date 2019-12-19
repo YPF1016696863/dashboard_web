@@ -1,0 +1,48 @@
+<div
+  class="layout-content-wrapper-full-height"
+  style="padding:0 !important;background-color: #25374C"
+>
+  <main class="dashboard-fullscreen" style="background-color: #25374C">
+    <div class="flex-fill p-relative">
+      <div
+        class="p-absolute d-flex flex-column"
+        style="left: 0; top: 0; right: 0; bottom: 0; overflow: hidden"
+      >
+        <section
+          class="flex-fill p-relative t-body query-visualizations-wrapper"
+        >
+          <div
+            class="dashboard-dark-theme"
+            style="min-height:100vh !important;"
+            ng-style="$ctrl.dashboardStyle"
+            ng-if="$ctrl.dashboard.widgets.length > 0"
+          >
+            <div class="dashboard-wrapper preview-mode">
+              <div
+                class="dashboard-widget-wrapper"
+                ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
+              >
+                <dashboard-widget
+                  widget="widget"
+                  dashboard="$ctrl.dashboard"
+                  public="true"
+                ></dashboard-widget>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="dashboard-dark-theme"
+            style="height:100vh;display:flex;"
+            ng-if="$ctrl.dashboard.widgets.length == 0"
+          >
+            <div style="margin:auto;text-align: center">
+              <img src="/static/images/brandImg.png" width="64" height="64" />
+              <p style="color:#fff">数据可视化面板</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

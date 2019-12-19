@@ -4,7 +4,7 @@
 ></app-header>
 <div style="display: flex; flex-direction: row;">
   <div
-    ng-hide="$ctrl.layout.hideLeftPanel"
+    ng-if="!$ctrl.layout.hideLeftPanel"
     ng-class="{'main-section-left': $ctrl.layout.showHeader,'main-section-left-dashboard': !$ctrl.layout.showHeader}"
   >
     <nav-sidebar></nav-sidebar>
@@ -13,5 +13,17 @@
     ng-class="{'main-section-right': $ctrl.layout.showHeader,'main-section-right-dashboard': !$ctrl.layout.showHeader}"
   >
     <div ng-if="!$ctrl.handler.error" ng-view></div>
+    <div ng-if="$ctrl.handler.error">
+      <div
+        class="dashboard-dark-theme"
+        style="height:100vh;display:flex;"
+      >
+        <div style="margin:auto;text-align: center">
+          <img src="/static/images/brandImg.png" width="64" height="64" />
+          <p style="color:#fff">数据可视化工具</p>
+          <p style="color:#fff">{{$ctrl.handler.error.rejection}}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

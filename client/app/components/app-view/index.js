@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 import debug from 'debug';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
 import { ErrorHandler } from './error-handler';
@@ -9,7 +11,8 @@ const handler = new ErrorHandler();
 
 const layouts = {
   default: {
-    showHeader: true,
+    showHeader: false,
+    hideLeftPanel: true,
     bodyClass: false,
     bodyClassBackgroundColor: ''
   },
@@ -37,6 +40,7 @@ const layouts = {
   },
   defaultSignedOut: {
     showHeader: false,
+    hideLeftPanel: true,
     bodyClassBackgroundColor: ''
   }
 };
@@ -88,7 +92,11 @@ class AppViewComponent {
       (event, current, previous, rejection) => {
         const $$route = current.$$route || { authenticated: true };
         this.applyLayout($$route);
-        throw new PromiseRejectionError(rejection);
+        let reason = rejection;
+        if(_.isEqual(_.get(current.$$route,'pageID',''),"publicShare")) {
+          reason = "无法显示，请检查是否打开共享并确认在链接中使用正确的token";
+        }
+        throw new PromiseRejectionError(reason);
       }
     );
   }

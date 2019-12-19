@@ -4,7 +4,7 @@ import { get, find, toUpper } from 'lodash';
 import { react2angular } from 'react2angular';
 import Modal from 'antd/lib/modal';
 import { DataSource, IMG_ROOT } from '../../services/data-source';
-import navigateTo from '../../services/navigateTo';
+import {navigateTo} from '../../services/navigateTo';
 import { $route } from '../../services/ng';
 import notification from '../../services/notification';
 import PromiseRejectionError from '../../lib/promise-rejection-error';

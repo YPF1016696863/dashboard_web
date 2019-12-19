@@ -63,8 +63,7 @@ function ChartRenderer() {
     replace: false,
     controller($scope, clientConfig, $rootScope) {
       $scope.chartSeries = [];
-      
-      console.log($scope.options);
+
       if (isEmpty($scope.options.seriesOptions)||
       get($scope.options,'chartType','new')==="PieChart"||
       get($scope.options,'chartType','new')==="BasicChart"||
@@ -72,11 +71,10 @@ function ChartRenderer() {
       get($scope.options,'chartType','new')==="PolarChart"
       )
        {
-        console.log("defaultSet");        
         $scope.options = DEFAULT_OPTIONS2;// 新建一个不变的默认值
         // set($scope.options, "seriesOptions", {});
       }
-      console.log($scope.options);
+
       function zIndexCompare(series) {
         if ($scope.options.seriesOptions[series.name]) {
           return $scope.options.seriesOptions[series.name].zIndex;
@@ -134,7 +132,7 @@ function ChartRenderer() {
           }
           set($scope, 'selectChartTypeCharts', undefined);
         };
-        console.log(get($rootScope, 'selectDECharts', 'n'));
+
         if(get($rootScope, 'selectDECharts', 'n') === 'ECHARTS'
           ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-PIE-AND-RADAR'
           ||get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-GAUGE'

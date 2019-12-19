@@ -584,7 +584,7 @@ export function prepareLayout(element, seriesList, options, data, theme) {
     plot_bgcolor: "rgba(0,0,0,0)",
     paper_bgcolor: "rgba(0,0,0,0)"
   };
-
+console.log(element);
   if (options.globalSeriesType === 'pie') {
     const hasName = /{{\s*@@name\s*}}/.test(options.textFormat);
 

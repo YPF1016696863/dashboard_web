@@ -57,7 +57,7 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
     if (dashboard.widgets) {
       dashboard.widgets = prepareDashboardWidgets(dashboard.widgets);
     }
-    dashboard.publicAccessEnabled = dashboard.public_url !== undefined;
+    dashboard.publicAccessEnabled = dashboard.api_key !== undefined;
   }
 
   const transform = $http.defaults.transformResponse.concat((data) => {
