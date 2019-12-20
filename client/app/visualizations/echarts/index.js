@@ -27,10 +27,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         // console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
-<<<<<<< HEAD
-=======
-      // console.log($scope.options);
->>>>>>> bugfix（）修复datavis编辑显示问题
 
       const refreshData = () => {
         // 找到选中serise的下标        
