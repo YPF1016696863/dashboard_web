@@ -105,7 +105,7 @@ class QueriesList extends React.Component {
       if (url.charAt(i) === 'q' && url.charAt(i + 1) === 'u' && url.charAt(i + 2) === 'e'
         && url.charAt(i + 3) === 'r' && url.charAt(i + 4) === 'y') {
         start = url.substring(0, i + 6);
-        newURL = start + this.state.selected + "/charts/new?type="+this.props.chartType;// null导致刷新？
+        newURL = start + this.state.selected + "/charts/new?type=ECHARTS";// null导致刷新？
       }
     }
 
