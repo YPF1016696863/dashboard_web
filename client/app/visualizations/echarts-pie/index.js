@@ -210,7 +210,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
       const selectChartType = () => {
         if (_.get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-PIE-AND-RADAR') {
           // 选到这一组才刷新有效，防止修改其他组图表类型的时候，这里也刷新，导致类型出错
-          console.log("watch");
+          // console.log("watch");
           _.set($scope, 'selectChartTypeCharts', _.get($rootScope, 'selectChartType', undefined));
           // 转为一个本地的变量
           if (_.get($scope, 'selectChartTypeCharts', undefined) !== undefined

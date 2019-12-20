@@ -27,7 +27,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         // console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
-      console.log($scope.options);
+      // console.log($scope.options);
 
       const refreshData = () => {
         // 找到选中serise的下标        
@@ -354,7 +354,7 @@ function EchartsEditor() {
 
       // Set default options for new vis // 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "BasicChart") {
-        console.log("defaultSet");
+        // console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);

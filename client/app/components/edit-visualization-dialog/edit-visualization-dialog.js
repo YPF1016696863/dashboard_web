@@ -114,7 +114,7 @@ export const EditVisualizationDialog = {
         result => {
           notification.success('保存成功');
           set($rootScope, 'selectChartType', undefined);
-          console.log("初始化selectChartType=undefined");
+          // console.log("初始化selectChartType=undefined");
           const visIds = map(this.query.visualizations, i => i.id);
           const index = visIds.indexOf(result.id);
           if (index > -1) {
