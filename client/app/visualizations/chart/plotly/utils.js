@@ -584,7 +584,6 @@ export function prepareLayout(element, seriesList, options, data, theme) {
     plot_bgcolor: "rgba(0,0,0,0)",
     paper_bgcolor: "rgba(0,0,0,0)"
   };
-// console.log(element);
   if (options.globalSeriesType === 'pie') {
     const hasName = /{{\s*@@name\s*}}/.test(options.textFormat);
 
@@ -817,7 +816,6 @@ export function updateLayout(plotlyElement, layout, updatePlot) {
   // update layout size to plot container
   layout.width = Math.floor(plotlyElement.offsetWidth);
   layout.height = Math.floor(plotlyElement.offsetHeight);
-
   const transformName = find([
     'transform',
     'webkitTransform',

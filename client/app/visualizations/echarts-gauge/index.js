@@ -96,17 +96,23 @@ function EchartsGaugeRenderer($rootScope) {
             // Resize - Responsive
             if (_.get($scope.options, "size.responsive", true)) {
 
-              // Find widget and resize
-              let height = "100%";
-              if ($($element[0]).closest('.widget-container').length === 0) {
-                // Set a default height for widget.
-                height = "400px";
-              }
-              _.set($scope.options, "size", {
-                responsive: true,
-                width: Math.floor($element.parent().width()) + "px",
-                height
-              });
+             // Find widget and resize
+             let height = $element.parent().parent()["0"].clientHeight+10;// height 大屏
+             let width = $element.parent().parent()["0"].clientWidth;
+             if ($element.parent()["0"].clientWidth === 412) {// 在预览页面时 $element.parent()["0"].clientWidth===820
+               height = "290%";
+               width = Math.floor($element.parent().width()) + "px";
+             }
+             if ($element.parent()["0"].clientWidth === 820) {// 在编辑页面时 $element.parent()["0"].clientWidth===820
+               height = "540px";
+               width = Math.floor($element.parent().width()) + "px";
+             }
+
+             _.set($scope.options, "size", {
+               responsive: true,
+               width,
+               height
+             });
             }
             myChart.resize($scope.options.size.width, $scope.options.size.height);
           }
