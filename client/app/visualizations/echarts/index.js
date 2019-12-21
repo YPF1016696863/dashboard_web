@@ -353,7 +353,7 @@ function EchartsEditor() {
 
       // Set default options for new vis // 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "BasicChart") {
-        console.log("defaultSet");
+        // console.log("defaultSet");
         $scope.options = defaultBasicChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
