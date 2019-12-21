@@ -271,7 +271,15 @@
     </div>
 
     <div ng-if="currentTab == 'dataseries'" class="m-t-10 m-b-10">
-
+        <div class="form-group">
+            <label class="control-label">选择设置系列</label>
+            <ui-select name="serise" required ng-model="options.useSerie">
+                <ui-select-match placeholder="选择系列...">{{$select.selected}}</ui-select-match>
+                <ui-select-choices repeat="column in options.form.yAxisColumns ">
+                    <span ng-bind-html="column | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
         <!-- 系列提示文字设置 -->
         <div class="form-group">
             <label>
@@ -282,15 +290,7 @@
 
         <div class="form-group" ng-if="options.serieShow">
 
-            <div class="form-group">
-                <label class="control-label">选择设置系列</label>
-                <ui-select name="serise" required ng-model="options.useSerie">
-                    <ui-select-match placeholder="选择系列...">{{$select.selected}}</ui-select-match>
-                    <ui-select-choices repeat="column in options.form.yAxisColumns ">
-                        <span ng-bind-html="column | highlight: $select.search"></span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
+            
 
             <div class="form-group">
                 <label>
