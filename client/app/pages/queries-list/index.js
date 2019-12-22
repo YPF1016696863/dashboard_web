@@ -41,9 +41,7 @@ function QueriesListViewCtrl(
 ) {
   $scope.currentUser = currentUser;
   $scope.queryId = $routeParams.queryid;
-  $scope.reload = 1;
-  $scope.queries = $route.current.locals.queries;
-  $scope.query = $route.current.locals.query;
+
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
   $scope.querySearchCb = (id) => {
@@ -71,16 +69,6 @@ export default function init(ngModule) {
       controller: 'QueriesListViewCtrl',
       reloadOnSearch: false,
       resolve: {
-        queries: (Query, $route) => {
-          'ngInject';
-
-          return Query.allQueries().$promise;
-        },
-        query: (Query, $route) => {
-          'ngInject';
-
-          return Query.get().$promise;
-        }
       }
     }
   };

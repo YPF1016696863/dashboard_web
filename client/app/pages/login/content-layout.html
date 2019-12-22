@@ -1,0 +1,92 @@
+<div class="layout-login-wrapper">
+  <div layout layout-align="center center" ng-if="!isLogin">
+    <div ng-if="loading">
+      <img
+        src="/static/images/loading.gif"
+        alt="Loading..."
+        width="56"
+        height="56"
+      />正在登录...
+    </div>
+    <md-whiteframe
+      ng-if="!loading"
+      class="md-whiteframe-4dp"
+      style="width: 33vw;"
+    >
+      <div layout="row">
+        <div flex="40">
+          <img
+            src="/static/images/illustrations/loginside.png"
+            width="100%"
+            height="100%"
+            alt="login"
+          />
+        </div>
+        <div
+          flex="60"
+          style="padding-top: 30px;padding-left: 20px;padding-right: 20px; padding-bottom: 0px"
+        >
+          <div style="font-size: 18px;font-weight: bold;color: #092c4e">
+            登录DataVis数据可视化平台
+          </div>
+          <div style="font-size: 12px;font-weight: lighter;color: #aab0b7">
+            大数据BI工具,DataVis可视化探索分析,面向用户,能够以直观快速的方式,了解自己的数据,发现问题改进业务
+          </div>
+          <br />
+          <form name="datavisLoginForm">
+            <md-input-container class="md-block">
+              <label>用户名:</label>
+              <input
+                ng-disabled="loading"
+                required
+                type="text"
+                name="username"
+                ng-model="username"
+                placeholder="输入用户名"
+              />
+
+              <div ng-messages="datavisLoginForm.username.$error" role="alert">
+                <div ng-message-exp="['required']">
+                  用户名不能为空
+                </div>
+              </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+              <label>密码:</label>
+              <input
+                ng-disabled="loading"
+                required
+                type="password"
+                name="password"
+                ng-model="password"
+                placeholder="输入密码"
+              />
+
+              <div ng-messages="datavisLoginForm.password.$error" role="alert">
+                <div ng-message-exp="['required']">
+                  密码不能为空
+                </div>
+              </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+              <md-button
+                ng-disabled="!password || !username || loading"
+                style="width: 120px"
+                class="md-primary md-raised"
+                ng-click="login(username,password)"
+                ><i class="fa fa-sign-in"></i
+                >&nbsp;&nbsp;&nbsp;&nbsp;登录</md-button
+              >
+            </md-input-container>
+            <p style="color: #DD2C00" ng-if="errorMessage">
+              {{errorMessage}}
+            </p>
+          </form>
+        </div>
+      </div>
+    </md-whiteframe>
+  </div>
+    <div layout layout-align="center center" ng-if="isLogin">
+        <redirect></redirect>
+    </div>
+</div>

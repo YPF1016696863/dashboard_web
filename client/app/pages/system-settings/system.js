@@ -37,6 +37,7 @@ export default function init(ngModule) {
 
   return {
     '/settings/system': {
+      layout: 'settings',
       template: '<system-settings-page></system-settings-page>',
       title: 'System Settings',
     },

@@ -154,6 +154,7 @@ export default function init(ngModule) {
     },
   ], {
     reloadOnSearch: false,
+    layout: 'settings',
     template: '<settings-screen><page-groups-list on-error="handleError"></page-groups-list></settings-screen>',
     controller($scope, $exceptionHandler) {
       'ngInject';

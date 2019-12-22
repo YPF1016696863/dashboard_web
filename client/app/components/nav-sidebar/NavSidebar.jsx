@@ -99,7 +99,8 @@ export default function init(ngModule) {
     react2angular(NavSidebar, Object.keys(NavSidebar.propTypes), [
       '$rootScope',
       '$scope',
-      '$location'
+      '$location',
+      'Auth'
     ])
   );
 }

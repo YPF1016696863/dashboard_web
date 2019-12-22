@@ -27,6 +27,7 @@ export default function init() {
   ], {
     template: '<settings-screen><page-users-list on-error="handleError"></page-users-list></settings-screen>',
     reloadOnSearch: false,
+    layout: 'settings',
     controller($scope, $exceptionHandler) {
       'ngInject';
 
@@ -47,6 +48,7 @@ export default function init() {
     },
   ], {
     reloadOnSearch: false,
+    layout: 'settings',
     template: '<settings-screen><page-user-profile on-error="handleError"></page-user-profile></settings-screen>',
     controller($scope, $exceptionHandler) {
       'ngInject';

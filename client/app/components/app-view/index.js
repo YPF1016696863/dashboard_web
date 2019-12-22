@@ -16,6 +16,18 @@ const layouts = {
     bodyClass: false,
     bodyClassBackgroundColor: ''
   },
+  settings:{
+    showHeader: true,
+    hideLeftPanel: false,
+    bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
+  },
+  login:{
+    showHeader: true,
+    hideLeftPanel: true,
+    bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
+  },
   fixed: {
     showHeader: true,
     bodyClass: 'fixed-layout',
@@ -61,7 +73,10 @@ class AppViewComponent {
     this.layout = layouts.defaultSignedOut;
     this.handler = handler;
 
+    this.isAuthenticated = Auth.isAuthenticated();
+
     $rootScope.$on('$routeChangeStart', (event, route) => {
+      this.isAuthenticated = Auth.isAuthenticated();
       this.handler.reset();
       // In case we're handling $routeProvider.otherwise call, there will be no
       // $$route.

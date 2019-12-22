@@ -24,7 +24,7 @@
 
       <!-- Profile -->
       <ul class="nav navbar-nav navbar-right">
-        <li uib-dropdown>
+        <li uib-dropdown ng-if="$ctrl.isAuthenticated">
           <a
                   href="#"
                   class="dropdown-toggle dropdown--profile"
@@ -42,7 +42,7 @@
         <!--<li ng-show="$ctrl.showSettingsMenu">-->
         <!--<a href="users" title="Settings"><i class="fa fa-cog"></i></a>-->
         <!--</li>-->
-        <li class="dropdown" uib-dropdown>
+        <li class="dropdown" uib-dropdown ng-if="$ctrl.isAuthenticated">
           <a
             href="#"
             class="dropdown-toggle dropdown--profile"

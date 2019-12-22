@@ -22,7 +22,7 @@ export const currentUser = {
 export const clientConfig = {};
 export const messages = [];
 
-const logger = debug('redash:auth');
+const logger = debug('datavis:auth');
 const session = { loaded: false };
 
 function updateSession(sessionData) {
@@ -41,11 +41,13 @@ function AuthService($window, $location, $q, $http, appSettings) {
     login() {
       const next = encodeURI($location.url());
       logger('Calling login with next = %s', next);
-      window.location.href = `${appSettings.app.login}?next=${next}`;
+      window.location.href = `/login`;
     },
     logout() {
       logger('Logout.');
-      $window.location.href = appSettings.app.logout;
+      return $http.post(appSettings.server.backendUrl + '/api/logout').then((response) => {
+        window.location.href = `/login`;
+      });
     },
     loadSession() {
       logger('Loading session');

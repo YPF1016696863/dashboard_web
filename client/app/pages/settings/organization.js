@@ -46,6 +46,7 @@ export default function init(ngModule) {
 
   return {
     '/settings/organization': {
+      layout: 'settings',
       template: '<organization-settings-page></organization-settings-page>',
       title: 'Organization Settings',
     },
