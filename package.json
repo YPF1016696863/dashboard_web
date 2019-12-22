@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --api-server=http://datavis-api.chinambse.com",
     "clean": "rm -rf ./client/dist/",
-    "build": "npm run clean && NODE_ENV=production node --max-old-space-size=4096 node_modules/.bin/webpack",
+    "build": "npm run clean && cross-env NODE_ENV=production API_SERVER=http://datavis-api.chinambse.com node --max-old-space-size=4096 node_modules/.bin/webpack",
     "lint": "npm run lint:base  -- --ext .js --ext .jsx ./client",
     "lint:base": "eslint --config ./client/.eslintrc.js --ignore-path ./client/.eslintignore",
     "lint:ci": "npm run lint -- --format junit --output-file /tmp/test-results/eslint/results.xml"
@@ -97,6 +97,7 @@
     "babel-plugin-angularjs-annotate": "^0.8.2",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
     "copy-webpack-plugin": "^4.6.0",
+    "cross-env": "^6.0.3",
     "css-loader": "^0.28.7",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",

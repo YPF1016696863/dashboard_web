@@ -15,7 +15,6 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 const path = require("path");
 
 const isProduction = process.env.NODE_ENV === "production";
-
 const basePath = path.join(__dirname, "client");
 const appPath = path.join(__dirname, "client", "app");
 
@@ -56,14 +55,14 @@ const config = {
     },
   },
   plugins: [
-    new WebpackBuildNotifierPlugin({ title: "Redash" }),
+    new WebpackBuildNotifierPlugin({ title: "DataVis" }),
     // Enforce angular to use jQuery instead of jqLite
     new webpack.ProvidePlugin({ "window.jQuery": "jquery" }),
     new webpack.ProvidePlugin({ echarts: 'echarts' }),
     // bundle only default `moment` locale (`en`)
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     new webpack.DefinePlugin({
-      'API_SERVER': JSON.stringify(getWebpackDevServerArg('api-server'))
+        'API_SERVER': process.env.API_SERVER?JSON.stringify(process.env.API_SERVER):JSON.stringify(getWebpackDevServerArg('api-server'))
     }),
     new HtmlWebpackPlugin({
       template: "./client/app/index.html",
