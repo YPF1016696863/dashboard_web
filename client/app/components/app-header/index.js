@@ -1,5 +1,7 @@
 import debug from 'debug';
 
+import { policy } from '@/services/policy';
+
 import logoUrl from '@/assets/images/brandImg.png';
 import frontendVersion from '@/version.json';
 import template from './app-header.html';
@@ -12,6 +14,8 @@ function controller($rootScope, $location, $route, $uibModal,
   this.logoUrl = logoUrl;
   this.basePath = clientConfig.basePath;
   this.currentUser = currentUser;
+
+  this.isAuthenticated = Auth.isAuthenticated();
 
   this.showSourcesMenu = currentUser.isAdmin;
   this.showQueriesMenu = currentUser.hasPermission('view_query');
@@ -26,17 +30,9 @@ function controller($rootScope, $location, $route, $uibModal,
 
   this.reload = () => {
     logger('Reloading dashboards and queries.');
-    Dashboard.favorites().$promise.then((data) => {
-      this.dashboards = data.results;
-    });
-    Query.favorites().$promise.then((data) => {
-      this.queries = data.results;
-    });
   };
 
   this.reload();
-
-  $rootScope.$on('reloadFavorites', this.reload);
 
   this.newDashboard = () => {
     $uibModal.open({

@@ -148,13 +148,18 @@ function registerPages() {
     ngModule.config($routeProvider => {
       each(routes, (route, path) => {
         logger('Registering route: %s', path);
-        route.authenticated = true;
-        route.resolve = extend(
-          {
-            __organizationStatus: () => organizationStatus.refresh()
-          },
-          route.resolve
-        );
+
+        if(route.pageID && route.pageID === "login") {
+          route.authenticated = false;
+        }else{
+          route.authenticated = true;
+          route.resolve = extend(
+              {
+                __organizationStatus: () => organizationStatus.refresh()
+              },
+              route.resolve
+          );
+        }
         $routeProvider.when(path, route);
       });
     });
