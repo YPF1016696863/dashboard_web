@@ -1,5 +1,5 @@
 <div class="layout-login-wrapper">
-  <div layout layout-align="center center">
+  <div layout layout-align="center center" ng-if="!isLogin">
     <div ng-if="loading">
       <img
         src="/static/images/loading.gif"
@@ -86,4 +86,7 @@
       </div>
     </md-whiteframe>
   </div>
+    <div layout layout-align="center center" ng-if="isLogin">
+        <redirect></redirect>
+    </div>
 </div>

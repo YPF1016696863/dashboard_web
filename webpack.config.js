@@ -23,6 +23,15 @@ const extensionsRelativePath = process.env.EXTENSIONS_DIRECTORY ||
   path.join("client", "app", "extensions");
 const extensionPath = path.join(__dirname, extensionsRelativePath);
 
+function getWebpackDevServerArg(name){
+  let result = '';
+  process.argv.forEach((argv)=>{
+    if(argv.indexOf('--' + name) === -1) return;
+    result = argv.split('=')[1];
+  });
+  return  result;
+}
+
 const config = {
   mode: isProduction ? "production" : "development",
   entry: {
@@ -53,6 +62,9 @@ const config = {
     new webpack.ProvidePlugin({ echarts: 'echarts' }),
     // bundle only default `moment` locale (`en`)
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+    new webpack.DefinePlugin({
+      'API_SERVER': JSON.stringify(getWebpackDevServerArg('api-server'))
+    }),
     new HtmlWebpackPlugin({
       template: "./client/app/index.html",
       filename: "index.html",

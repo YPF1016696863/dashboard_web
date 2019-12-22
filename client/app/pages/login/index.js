@@ -26,6 +26,7 @@ function LoginViewCtrl(
   $scope.username = '';
   $scope.errorMessage = '';
   $scope.loading = false;
+  $scope.isLogin = false;
   $scope.currentUser = currentUser;
 
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
@@ -46,7 +47,7 @@ function LoginViewCtrl(
       )
       .then(
         response => {
-          window.location.href = window.location.origin;
+          $scope.isLogin = true;
         },
         err => {
           $scope.errorMessage =

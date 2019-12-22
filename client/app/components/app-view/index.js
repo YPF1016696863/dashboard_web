@@ -16,6 +16,12 @@ const layouts = {
     bodyClass: false,
     bodyClassBackgroundColor: ''
   },
+  settings:{
+    showHeader: true,
+    hideLeftPanel: false,
+    bodyClass: 'fixed-layout',
+    bodyClassBackgroundColor: ''
+  },
   login:{
     showHeader: true,
     hideLeftPanel: true,

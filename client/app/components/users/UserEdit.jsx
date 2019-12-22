@@ -128,7 +128,7 @@ export default class UserEdit extends React.Component {
       },
       {
         name: 'email',
-        title: '邮箱',
+        title: '用户名',
         type: 'email',
         initialValue: user.email,
       },
