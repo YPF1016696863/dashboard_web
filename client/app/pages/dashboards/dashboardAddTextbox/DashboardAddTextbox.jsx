@@ -47,8 +47,7 @@ class DashboardAddTextbox extends React.Component {
   // }
 
   state = { 
-    visible: false ,
-  
+    visible: false
   };
 
 
@@ -74,10 +73,6 @@ class DashboardAddTextbox extends React.Component {
       visualization_id: null,
     });
 
-    const position = this.state.dashboard.calculateNewWidgetPosition(widget);
-    widget.options.position.col = position.col;
-    widget.options.position.row = position.row;
-   
     this.props.addWidgetCb({widget});
   };
 
@@ -89,7 +84,6 @@ class DashboardAddTextbox extends React.Component {
  
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
-    this.updatePreview();
   };
 
   render() {
@@ -148,11 +142,9 @@ class DashboardAddTextbox extends React.Component {
 }
 
 DashboardAddTextbox.propTypes = {
-  slugId: PropTypes.string,
   addWidgetCb: PropTypes.func
 };
 DashboardAddTextbox.defaultProps = {
-  slugId: null,
   addWidgetCb: data => {}
 };
 

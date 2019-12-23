@@ -95,7 +95,7 @@ function DashboardPreviewCtrl(
     function(data) {
       if (vm.widgetData && vm.widgetData.widget) {
         if(vm.widgetData.widget.text){
-          this.addTextbox(vm.widgetData.widget.text);
+          vm.addTextbox(vm.widgetData.widget.text);
         }
         else{
           vm.addWidget(
