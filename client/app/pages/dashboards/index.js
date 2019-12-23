@@ -36,7 +36,7 @@ function DashboardsViewCtrl(
   currentUser,
   Dashboard,
   Visualization,
-  appSettings
+  appSettings,
 ) {
   $scope.widgetData = null;
   $scope.dashboardBgImg="";
@@ -58,6 +58,7 @@ function DashboardsViewCtrl(
     $scope.widgetData = widgetData;
     $scope.$applyAsync();
   };
+
 
   // currentUser.hasPermission('admin');
 

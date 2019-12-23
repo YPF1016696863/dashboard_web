@@ -39,6 +39,8 @@ class DashboardAddWidgets extends React.Component {
       visible: false
     });
     this.props.addWidgetCb({widget:this.state.selectedWidget,paramMapping:{}});
+    console.log(123);
+    console.log({widget:this.state.selectedWidget,paramMapping:{}});
   };
 
   handleCancel = e => {

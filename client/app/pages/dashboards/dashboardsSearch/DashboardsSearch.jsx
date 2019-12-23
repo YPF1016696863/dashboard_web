@@ -14,7 +14,8 @@ import {
   Tree,
   message,
   Carousel,
-  Collapse
+  Collapse,
+  Modal
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -40,7 +41,6 @@ import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
-
 import './DashboardSearch.less';
 
 const { Panel } = Collapse;
@@ -49,6 +49,7 @@ const emptyChartImg = '/static/images/emptyChart.png';
 
 class DashboardsSearch extends React.Component {
   state = {
+    visible: false,
     isLoaded: false,
     dashboard: null,
     backgroundImages: [
@@ -107,24 +108,21 @@ class DashboardsSearch extends React.Component {
         image: '/static/images/themeBackgroundImages/theme7.png',
         overview: '/static/images/themeBackgroundImages/theme7-overview.png',
         name: 'theme7Bg'
-      }
-      ,
+      },
       {
         id: 8,
         meta: 'DataVis背景8',
         image: '/static/images/themeBackgroundImages/theme8.jpg',
         overview: '/static/images/themeBackgroundImages/theme8-overview.jpg',
         name: 'theme8Bg'
-      }
-      ,
+      },
       {
         id: 9,
         meta: 'DataVis背景9',
         image: '/static/images/themeBackgroundImages/theme9.jpg',
         overview: '/static/images/themeBackgroundImages/theme9-overview.jpg',
         name: 'theme9Bg'
-      }
-      ,
+      },
       {
         id: 10,
         meta: 'DataVis背景10',
@@ -149,10 +147,32 @@ class DashboardsSearch extends React.Component {
     message.success('点击预览查看完整数据可视化面板演示', 1);
   }
 
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = e => {
+    this.setState({
+      visible: false
+    }); 
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false
+    });
+    this.props.updateDashboardBgImgCb(
+      _.find(this.state.backgroundImages, item => item.id === 0).image
+    );
+  };
+
   onChange = (a, b, c) => {
     this.props.updateDashboardBgImgCb(
       _.find(this.state.backgroundImages, item => item.id === a).image
     );
+    console.log( _.find(this.state.backgroundImages, item => item.id === a).image)
   };
 
   getDashboard = slugId => {
@@ -214,105 +234,104 @@ class DashboardsSearch extends React.Component {
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
           <>
-            <Row>
+            <Row visible={this.state.visible}>
               <Col>
                 <Collapse
                   bordered={false}
-                  defaultActiveKey={['2']}
+                  defaultActiveKey={['1']}
                   style={{ backgroundColor: '#20263B' }}
                 >
-                  <Panel header="仪表盘背景" key="1" className="panel-border">
-                    <Carousel
-                      afterChange={this.onChange}
-                      ref={node => {
-                        this.crousel = node;
-                      }}
-                    >
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[0].overview}
-                          alt={this.state.backgroundImages[0].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[1].overview}
-                          alt={this.state.backgroundImages[1].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[2].overview}
-                          alt={this.state.backgroundImages[2].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[3].overview}
-                          alt={this.state.backgroundImages[3].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[4].overview}
-                          alt={this.state.backgroundImages[4].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[5].overview}
-                          alt={this.state.backgroundImages[5].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[6].overview}
-                          alt={this.state.backgroundImages[6].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[7].overview}
-                          alt={this.state.backgroundImages[7].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[8].overview}
-                          alt={this.state.backgroundImages[8].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[9].overview}
-                          alt={this.state.backgroundImages[9].meta}
-                          width="100%"
-                        />
-                      </div>
-                      <div>
-                        <img
-                          src={this.state.backgroundImages[10].overview}
-                          alt={this.state.backgroundImages[10].meta}
-                          width="100%"
-                        />
-                      </div>
-                    </Carousel>
-                  </Panel>
-                  <Panel header="基础设置" key="2" className="panel-border">
+                  <Panel header="基础设置" key="1" className="panel-border">
                     <p style={{ color: '#fff' }}>可视化仪表盘名称:</p>
                     <p className="board-name-input">
                       {this.state.dashboard.name}
                     </p>
                   </Panel>
+                  <Panel header="主题设置" key="2" className="panel-border">
+                    <Button style={{ color: '#fff' , backgroundColor: '#20263B' }} onClick={this.showModal} block>点击设置背景图片</Button>
+                    <Modal
+                      destroyOnClose
+                      title="添加可视化组件"
+                      visible={this.state.visible}
+                      onOk={this.handleOk}
+                      onCancel={this.handleCancel}
+                      width="60vw"
+                      okText="添加"
+                      cancelText="取消背景"
+                    >  
+                      <Carousel
+                        afterChange={this.onChange}
+                        ref={node => {
+                          this.crousel = node;
+                        }}
+                      >
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[0].overview}
+                            alt={this.state.backgroundImages[0].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[1].overview}
+                            alt={this.state.backgroundImages[1].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[2].overview}
+                            alt={this.state.backgroundImages[2].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[3].overview}
+                            alt={this.state.backgroundImages[3].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[4].overview}
+                            alt={this.state.backgroundImages[4].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[5].overview}
+                            alt={this.state.backgroundImages[5].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[6].overview}
+                            alt={this.state.backgroundImages[6].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[7].overview}
+                            alt={this.state.backgroundImages[7].meta}
+                            width="100%"
+                          />
+                        </div>
+                        <div>
+                          <img
+                            src={this.state.backgroundImages[8].overview}
+                            alt={this.state.backgroundImages[8].meta}
+                            width="100%"
+                          />
+                        </div>
+                      </Carousel> 
+                    </Modal>
+                  </Panel>  
+                  <p style={{ color: '#fff',paddingTop: '10%'}}>选择添加项目:</p>            
                   {/*
                   <Panel
                     header="已添加可视化组件列表:"
