@@ -5,7 +5,7 @@ import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
-import { defaultPieChartOptions, parseChartType, getChartType, setThemeColor, getRadius } from './echartsPieChartOptionUtils';
+import { defaultPieChartOptions, parseChartType, getChartType, setThemeColor, getRadius, } from './echartsPieChartOptionUtils';
 
 function EchartsPieRenderer($timeout, $rootScope, $window) {
   return {
@@ -32,6 +32,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
+
 
             // 找到选中serise的下标        
             _.set($scope.options, 'useSerie_Index',
@@ -104,7 +105,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               });
             });
 
-
             let seriesIndex = 0;
             _.set($scope.options, "series", []);// 清空设置
             _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
@@ -129,7 +129,22 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                     position: _.get($scope.options, "series_Label_Position", '')[seriesIndex],
                     fontSize: _.get($scope.options, "series_Label_FontSize", 25)[seriesIndex],
                     formatter: `{b}${_.get($scope.options, "show_Persant", false) ? `{d}%` : ``} `,
-                  },
+                    // formatter (params){ 
+                    //   console.log(params);
+                    //   let str =  params.name      
+                    //   if(str.length>= 4 && text.length <= 8)
+                    //   {
+                    //     str = `${str.slice(0,4)}\n${str.slice(4)}`
+                    //   } else if(str.length > 8 && str.length <= 16){
+                    //     str = `${str.slice(0,8)}\n${str.slice(16)}\n`
+                    //   }else if(str.length > 16 && str.length <= 24){
+                    //     str = `${str.slice(0,8)}\n${str.slice(8,16)}\n${str.slice(16)}`
+                    //   }
+                    //   return str
+                    // },
+
+
+                    },
                   emphasis: {
                     show: true,
                     textStyle: {
@@ -157,11 +172,12 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 animationType: 'scale',
                 animationEasing: 'elasticOut'
 
-
-
               });
               seriesIndex += 1;
             });
+
+          
+
 
 
             let myChart = null;
@@ -180,19 +196,19 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             } else {
               myChart.setOption($scope.options, true);
             }
-            // Resize - Responsive
             if (_.get($scope.options, "size.responsive", false)) {
-
-              // Find widget and resize
-              let height = $element.parent().parent()["0"].clientHeight+10;// height 大屏
+              let height = $element.parent().parent()["0"].clientHeight + 50;
               let width = $element.parent().parent()["0"].clientWidth;
-              if ($element.parent()["0"].clientWidth === 412) {// 在预览页面时 $element.parent()["0"].clientWidth===820
-                height = "290%";
-                width = Math.floor($element.parent().width()) + "px";
+
+
+              if ($("#Preview").length !== 0) {
+                height = $("#Preview")["0"].clientHeight;
+                width = $("#Preview")["0"].clientWidth;
               }
-              if ($element.parent()["0"].clientWidth === 820) {// 在编辑页面时 $element.parent()["0"].clientWidth===820
-                height = "540px";
-                width = Math.floor($element.parent().width()) + "px";
+
+              if ($("#editor").length !== 0) {
+                height = $("#editor")["0"].clientHeight - 50;
+                width = $("#editor")["0"].clientWidth - 50;
               }
 
               _.set($scope.options, "size", {
@@ -220,17 +236,17 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
           // 转为一个本地的变量
           if (_.get($scope, 'selectChartTypeCharts', undefined) !== undefined
             || _.get($scope, 'selectChartTypeCharts', null) !== null) {
-              let selectType;
-              switch (_.get($rootScope, 'selectChartType', 'pie')) {// 因为可能会有选到line的情况 所以这里用了case 做一个其他类型的判断
-                case 'pie': selectType = 'pie'; break;
-                case 'doughnut': selectType = 'doughnut'; break;
-                case 'rose': selectType = 'rose'; break;
-                default: selectType = 'pie';
-              };
-              _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-                const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
-                _.set($scope.options, stringTemp, selectType);
-              });              
+            let selectType;
+            switch (_.get($rootScope, 'selectChartType', 'pie')) {// 因为可能会有选到line的情况 所以这里用了case 做一个其他类型的判断
+              case 'pie': selectType = 'pie'; break;
+              case 'doughnut': selectType = 'doughnut'; break;
+              case 'rose': selectType = 'rose'; break;
+              default: selectType = 'pie';
+            };
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+              const stringTemp = "form.yAxisColumnTypes[" + yAxisColumn + "]";
+              _.set($scope.options, stringTemp, selectType);
+            });
           }
           _.set($scope, 'selectChartTypeCharts', undefined);
         }

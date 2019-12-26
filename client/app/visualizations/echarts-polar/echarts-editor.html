@@ -182,14 +182,14 @@
                 <input type="checkbox" ng-model="options.titleLocationShow">
                 显示标题位置设置
             </label>
-        </div>
+        </div>      
         <div class="form-group" ng-if="options.titleLocationShow">
             <div class="form-group">
-                <label class="control-label">图表标题水平位置(单位:px或百分比:如50%)</label>
+                <label class="control-label">图表标题水平位置(单位:百分比，如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.title.left" placeholder="" />
             </div>
             <div class="form-group">
-                <label class="control-label">图表标题垂直位置(单位:px或百分比:如50%)</label>
+                <label class="control-label">图表标题垂直位置(单位:百分比，如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.title.top" placeholder="" />
             </div>
             <div class="form-group">
@@ -432,6 +432,19 @@
                 </ui-select-choices>
             </ui-select>
         </div>
+        <div class="form-group">
+            <label class="control-label">图例宽度(单位:px)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.legend.width" placeholder="" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">图例左侧距离(单位:百分比，如50%)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.legend.left" placeholder="" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">图例顶部距离(单位:百分比，如50%)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.legend.top" placeholder="" />
+        </div>
+     
         <div class="form-group">
             <label>
                 <input type="checkbox" ng-model="options.toolbox.show">

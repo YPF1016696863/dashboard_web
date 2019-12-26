@@ -61,7 +61,7 @@ export function defaultBasicChartOptions() {
             }
         },
         toolbox: {
-            show: true,
+            show: false,
             feature: {
                 dataZoom: {
                     yAxisIndex: 'none'

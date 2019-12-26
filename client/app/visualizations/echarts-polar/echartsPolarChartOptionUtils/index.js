@@ -48,13 +48,8 @@ export function defaultPolarChartOptions() {
             }
         },
         toolbox: {
-            show: true,
-            feature: {
-                dataZoom: {
-                    yAxisIndex: 'none'
-                },
-                magicType: { type: ['line', 'bar'] },
-                restore: {},
+            show: false,
+            feature: {               
                 saveAsImage: {}
             }
         },

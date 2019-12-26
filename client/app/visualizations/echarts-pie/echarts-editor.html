@@ -13,9 +13,7 @@
         <li ng-class="{active: currentTab == 'others'}">
             <a ng-click="changeTab('others')">其他设置</a>
         </li>
-        <li ng-class="{active: currentTab == 'tooltip'}">
-            <a ng-click="changeTab('tooltip')"> 设置</a>
-        </li>
+     
         <li ng-class="{active: currentTab == 'code'}">
             <a ng-click="changeTab('code')">用户自定义</a>
         </li>
@@ -231,11 +229,11 @@
         </div>
         <div class="form-group" ng-if="options.titleLocationShow">
             <div class="form-group">
-                <label class="control-label">图表标题水平位置(单位:px或百分比:如50%)</label>
+                <label class="control-label">图表标题水平位置(百分比:如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.title.left" placeholder="" />
             </div>
             <div class="form-group">
-                <label class="control-label">图表标题垂直位置(单位:px或百分比:如50%)</label>
+                <label class="control-label">图表标题垂直位置(百分比:如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.title.top" placeholder="" />
             </div>
             <div class="form-group">
@@ -381,29 +379,27 @@
         </div>
         <div class="form-group" ng-if="options.serieRadShow">
             <div class="form-group">
-                <label class="control-label">系列最大半径(单位:px或百分比:如50%)</label>
+                <label class="control-label">系列最大半径(百分比:如50%)</label>
                 <input name="name" type="text" class="form-control"
                     ng-model="options.series_RadiusMax[options.useSerie_Index]" placeholder="200" />
             </div>
             <div class="form-group">
-                <label class="control-label">系列最小半径(单位:px或百分比:如50%)</label>
+                <label class="control-label">系列最小半径(百分比:如50%)</label>
                 <input name="name" type="text" class="form-control"
                     ng-model="options.series_RadiusMin[options.useSerie_Index]" placeholder="100" />
             </div>
             <hr>
             <div class="form-group">
-                <label class="control-label">饼图的中心（圆心）坐标X(单位：px或百分比%)</label>
+                <label class="control-label">饼图的中心（圆心）坐标X(百分比%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.series_CenterX"
                     placeholder="50%" />
             </div>
             <div class="form-group">
-                <label class="control-label">饼图的中心（圆心）坐标Y(单位：px或百分比%)</label>
+                <label class="control-label">饼图的中心（圆心）坐标Y(百分比%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.series_CenterY"
                     placeholder="50%" />
             </div>
         </div>
-
-
 
     </div>
 
@@ -466,6 +462,19 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
+            <div class="form-group">
+                <label class="control-label">图例宽度(单位:px)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.legend.width" placeholder="" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">图例左侧距离(单位:百分比，如50%)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.legend.left" placeholder="" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">图例顶部距离(单位:百分比，如50%)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.legend.top" placeholder="" />
+            </div>
+           
             <div class="form-group">
                 <label class="control-label">图例文字颜色</label>
                 <ui-select ng-model="options.legend.textStyle.color">

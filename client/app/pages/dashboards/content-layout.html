@@ -31,6 +31,20 @@
               dashboard-search-cb="dashboardSearchCb"
               update-dashboard-bg-img-cb="updateDashboardBgImgCb"
             ></dashboards-search>
+            <md-button aria-label="添加可视化组件" style="color: #fff">
+              <dashboard-add-widgets
+                add-widget-cb="addWidgetCb"
+              ></dashboard-add-widgets>
+            </md-button>
+            <md-button aria-label="添加文本框" style="color: #fff">
+                <dashboard-add-textbox
+                  add-widget-cb="addWidgetCb"  
+                ></dashboard-add-textbox>
+              </md-button>
+
+            <md-button aria-label="添加其他可视化仪表盘">
+              添加可视化仪表盘
+            </md-button>
           </div>
         </div>
       </div>
@@ -65,7 +79,7 @@
                       dashboard-bg-img="dashboardBgImg"
                     ></dashboards-tabs>
                   </div>
-                  <div class="FAB">
+                  <!-- <div class="FAB">
                     <md-fab-toolbar md-open="false" md-direction="left">
                       <md-fab-trigger class="align-with-text">
                         <md-button aria-label="menu" class="md-fab md-warn">
@@ -88,7 +102,7 @@
                         </md-fab-actions>
                       </md-toolbar>
                     </md-fab-toolbar>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

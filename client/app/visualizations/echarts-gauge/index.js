@@ -67,7 +67,7 @@ function EchartsGaugeRenderer($rootScope) {
                   ],
                 }
               },
-
+              
               data: [{
                 value: setData($scope.options, _.get($scope.options, "defValue", true), dataGauge),
                 // dataGauge / (_.get($scope.options, "maxValue", 100) - _.get($scope.options, "minValue", 0))
@@ -93,31 +93,31 @@ function EchartsGaugeRenderer($rootScope) {
             } else {
               myChart.setOption($scope.options, true);
             }
-            // Resize - Responsive
-            if (_.get($scope.options, "size.responsive", true)) {
+            if (_.get($scope.options, "size.responsive", false)) {
+              let height = $element.parent().parent()["0"].clientHeight + 50;  
+              let width = $element.parent().parent()["0"].clientWidth;
 
-             // Find widget and resize
-             let height = $element.parent().parent()["0"].clientHeight+10;// height 大屏
-             let width = $element.parent().parent()["0"].clientWidth;
-             if ($element.parent()["0"].clientWidth === 412) {// 在预览页面时 $element.parent()["0"].clientWidth===820
-               height = "290%";
-               width = Math.floor($element.parent().width()) + "px";
-             }
-             if ($element.parent()["0"].clientWidth === 820) {// 在编辑页面时 $element.parent()["0"].clientWidth===820
-               height = "540px";
-               width = Math.floor($element.parent().width()) + "px";
-             }
 
-             _.set($scope.options, "size", {
-               responsive: true,
-               width,
-               height
-             });
+              if ($("#Preview").length !== 0) {
+                height = $("#Preview")["0"].clientHeight;
+                width = $("#Preview")["0"].clientWidth;
+              }
+
+              if ($("#editor").length !== 0) {
+                height = $("#editor")["0"].clientHeight - 50;
+                width = $("#editor")["0"].clientWidth - 50;
+              }
+
+              _.set($scope.options, "size", {
+                responsive: true,
+                width,
+                height
+              });
             }
             myChart.resize($scope.options.size.width, $scope.options.size.height);
           }
         } catch (e) {
-          console.log("some error");
+          console.log(e);
         }
       };
 

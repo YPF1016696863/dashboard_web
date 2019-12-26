@@ -547,7 +547,7 @@ class ChartsListTabs extends React.Component {
                   <br />
                   <p style={{ fontSize: '14px' }}>可视化组件预览:</p>
                   <Row>
-                    <Col span={12} style={{width:"30vw",height:"35vh"}}>
+                    <Col span={12} style={{width:"30vw",height:"35vh"}} id="Preview">
                       <ChartsPreviewDOM
                         visualization={this.state.visualization}
                         queryResult={this.state.queryResult}

@@ -94,11 +94,16 @@ function DashboardPreviewCtrl(
     },
     function(data) {
       if (vm.widgetData && vm.widgetData.widget) {
-        vm.addWidget(
-          vm.widgetData.widget,
-          vm.widgetData.paramMapping ? vm.widgetData.paramMapping : {}
-        );
-      }
+        if(vm.widgetData.widget.text){
+          vm.addTextbox(vm.widgetData.widget.text);
+        }
+        else{
+          vm.addWidget(
+            vm.widgetData.widget,
+            vm.widgetData.paramMapping ? vm.widgetData.paramMapping : {}
+          );
+        }
+      }      
     }
   );
 

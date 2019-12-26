@@ -12,6 +12,7 @@ module.exports = {
   },
   rules: {
     // allow debugger during development
+    "no-irregular-whitespace": "off",
     "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0,
     "no-param-reassign": 0,
     "no-mixed-operators": 0,
