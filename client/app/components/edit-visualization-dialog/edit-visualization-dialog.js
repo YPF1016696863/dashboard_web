@@ -2,6 +2,7 @@ import { map, find,set,get } from 'lodash';
 import { copy } from 'angular';
 import notification from '@/services/notification';
 import template from './edit-visualization-dialog.html';
+import {navigateTo} from '@/services/navigateTo';
 import { Query } from '@/services/query';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -101,6 +102,7 @@ export const EditVisualizationDialog = {
         Events.record('update', 'visualization', this.visualization.id, {
           type: this.visualization.type          
         });
+        
       } else {
         Events.record('create', 'visualization', null, {
           type: this.visualization.type
@@ -112,7 +114,7 @@ export const EditVisualizationDialog = {
       Visualization.save(
         this.visualization,
         result => {
-          notification.success('保存成功');
+          notification.success('保存成功');          
           set($rootScope, 'selectChartType', undefined);
           // console.log("初始化selectChartType=undefined");
           const visIds = map(this.query.visualizations, i => i.id);
@@ -126,6 +128,7 @@ export const EditVisualizationDialog = {
               this.onNewSuccess(result);
             }
           }
+          navigateTo("/charts");
         },
         () => {
           notification.error('无法保存');

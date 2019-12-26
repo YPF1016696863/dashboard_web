@@ -144,8 +144,9 @@ class DashboardsSearch extends React.Component {
   showModal = () => {
     this.setState({
       visible: true
-      // imagesId：
     });
+
+    
   };
 
   handleOk = e => {
@@ -167,6 +168,7 @@ class DashboardsSearch extends React.Component {
     this.props.updateDashboardBgImgCb(
       _.find(this.state.backgroundImages, item => item.id === a).image
     );
+
   };
 
   getDashboard = slugId => {
@@ -196,7 +198,6 @@ class DashboardsSearch extends React.Component {
             item => item.image === dashboard.background_image
           );
           this.crousel.goTo(selectedBgImg.id, true);
-          imageId = selectedBgImg.id;
         }
       },
       rejection => {
@@ -242,6 +243,8 @@ class DashboardsSearch extends React.Component {
                       {this.state.dashboard.name}
                     </p>
                   </Panel>
+                
+           
                   <Panel header="主题设置" key="2" className="panel-border">
                     <Button style={{ color: '#fff' , backgroundColor: '#20263B' }} onClick={this.showModal} block>点击设置背景图片</Button>
                     <Modal
@@ -316,23 +319,10 @@ class DashboardsSearch extends React.Component {
                             width="100%"
                           />
                         </div>
-                        {/* <div>
-                          <img
-                            src={this.state.backgroundImages[8].overview}
-                            alt={this.state.backgroundImages[8].meta}
-                            width="100%"
-                          />
-                        </div>
-                        <div>
-                          <img
-                            src={this.state.backgroundImages[9].overview}
-                            alt={this.state.backgroundImages[9].meta}
-                            width="100%"
-                          />
-                        </div> */}
                       </Carousel> 
                     </Modal>
-                  </Panel>  
+                  </Panel> 
+                  
                   <p style={{ color: '#fff',paddingTop: '10%'}}>选择添加项目:</p>                                             
                   {/*
                   <Panel
