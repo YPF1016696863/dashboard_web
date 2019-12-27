@@ -46,7 +46,6 @@ import './DashboardSearch.less';
 const { Panel } = Collapse;
 const { TreeNode, DirectoryTree } = Tree;
 const emptyChartImg = '/static/images/emptyChart.png';
-let imageId =0;
 
 class DashboardsSearch extends React.Component {
   state = {
