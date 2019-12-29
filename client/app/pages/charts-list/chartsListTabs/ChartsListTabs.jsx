@@ -513,19 +513,6 @@ class ChartsListTabs extends React.Component {
             >
               设置数据
             </Button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Popconfirm
-              placement="topLeft"
-              title="确认删除可视化组件?"
-              onConfirm={this.deleteVisualization}
-              okText="确认"
-              cancelText="取消"
-            >
-              <Button type="danger">
-                <Icon type="delete" />
-                删除可视化组件
-              </Button>
-            </Popconfirm>
           </Empty>
         )}
         {this.state.isLoaded &&
@@ -635,7 +622,7 @@ class ChartsListTabs extends React.Component {
                   <br />
                   <p style={{ fontSize: '14px' }}>可视化组件预览:</p>
                   <Row>
-                    <Col span={12} style={{ width: '30vw', height: '35vh' }}>
+                    <Col span={12} style={{width:"30vw",height:"35vh"}} id="Preview">
                       <ChartsPreviewDOM
                         visualization={this.state.visualization}
                         queryResult={this.state.queryResult}

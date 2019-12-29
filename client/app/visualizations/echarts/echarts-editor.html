@@ -237,7 +237,7 @@
                             <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
-                </div>                
+                </div>
             </div>
             <hr>
             <hr>
@@ -251,11 +251,11 @@
         </div>
         <div class="form-group" ng-if="options.titleLocationShow">
             <div class="form-group">
-                <label class="control-label">图表标题水平位置(单位:px或百分比:如50%)</label>
+                <label class="control-label">图表标题水平位置(单位:百分比，如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.title.left" placeholder="" />
             </div>
             <div class="form-group">
-                <label class="control-label">图表标题垂直位置(单位:px或百分比:如50%)</label>
+                <label class="control-label">图表标题垂直位置(单位:百分比，如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.title.top" placeholder="" />
             </div>
             <div class="form-group">
@@ -356,13 +356,22 @@
                     <label class="control-label">坐标轴名称与轴线之间的距离</label>
                     <input ng-model="options.xAxis.nameGap" type="text" class="form-control" placeholder="15">
                 </div>
-
-
-
+                <div class="form-group">
+                    <label class="control-label">组件离容器左侧的距离(单位:百分比，如50%)</label>
+                    <input ng-model="options.grid.left" type="text" class="form-control" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">组件离容器下侧的距离(单位:百分比，如50%)</label>
+                    <input ng-model="options.grid.bottom" type="text" class="form-control" placeholder="0">
+                </div>
                 <div class="form-group">
                     <label class="control-label">坐标轴刻度标签旋转角度值</label>
                     <input ng-model="options.xAxis.axisLabel.rotate" type="text" class="form-control" placeholder="0">
                 </div>
+                <!-- <div class="form-group">
+                    <label class="control-label">坐标轴刻度标签间隔值</label>
+                    <input ng-model="options.xAxis.axisLabel.interval" type="text" class="form-control" placeholder="0">
+                </div> -->
                 <hr>
                 <hr>
             </div>
@@ -520,6 +529,16 @@
                 </ui-select-choices>
             </ui-select>
         </div>
+        <div class="form-group">
+            <label class="control-label">柱状图宽度(单位:px或百分比)</label>
+            <input name="name" type="text" class="form-control" 
+            ng-model="options.series_BarWidth" placeholder="25" />               
+        </div>
+        <!-- <div class="form-group">
+            <label class="control-label">柱状图宽度(单位:px或百分比)</label>
+            <input name="name" type="text" class="form-control"
+                ng-model="options.series_BarWidth" placeholder="25" />
+        </div> -->
         <div class="form-group">
             <label class="control-label">系列名称</label>
             <input name="name" type="text" class="form-control" ng-model="options.series_ReName[options.useSerie_Index]"
@@ -984,6 +1003,7 @@
             </div>
         </div>
     </div>
+
     <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
         <div class="form-group">
             <label>
@@ -1034,16 +1054,12 @@
                 </ui-select>
             </div>
         </div>
-
-
-
         <div class="form-group">
             <label>
                 <input type="checkbox" ng-model="options.legend.show">
                 显示图例
             </label>
         </div>
-
         <div class="form-group">
             <label class="control-label">图例对齐方式</label>
             <ui-select ng-model="options.legend.left">
@@ -1053,14 +1069,25 @@
                 </ui-select-choices>
             </ui-select>
         </div>
-
+        <div class="form-group">
+            <label class="control-label">图例宽度(单位:px)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.legend.width" placeholder="" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">图例左侧距离(单位:百分比，如50%)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.legend.left" placeholder="" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">图例顶部距离(单位:百分比，如50%)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.legend.top" placeholder="" />
+        </div>
+  
         <div class="form-group">
             <label>
                 <input type="checkbox" ng-model="options.toolbox.show">
                 显示工具栏
             </label>
         </div>
-
 
         <div class="form-group">
             <label>
@@ -1080,7 +1107,6 @@
                 开启坐标轴两边留白策略
             </label>
         </div>
-
         <div class="form-group">
             <label>
                 <input type="checkbox" ng-model="options.dataZoom_Disabled">
@@ -1106,8 +1132,8 @@
             <input name="name" type="text" style="width: 150px;" placeholder="数值" disabled="true" />
             <input name="name" type="text" style="width: 150px;" ng-model="options.c_Text" placeholder="" />
         </div>
-
     </div>
+
     <div ng-if="currentTab == 'code'" class="m-t-10 m-b-10">
         <div class="form-group">
             <label>

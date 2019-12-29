@@ -202,7 +202,7 @@ class ChartsSearch extends React.Component {
                       }}
                     >
 
-                      <Collapse bordered={false} style={{ width: '100%' }}>
+                      <Collapse bordered={false} style={{position:"absolute",left:'0%', width: '100%' }}>
                         {/* *** *****Radio value="ECHARTS" Echarts基础图  key 1 */}
                         <Panel header="Echarts基础图组" id="p1" key="1">
                           <Row gutter={[8, 8]}>

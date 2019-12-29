@@ -48,7 +48,12 @@ export function defaultPieChartOptions() {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
-
+        toolbox: {
+            show: false,
+            feature: {               
+                saveAsImage: {}
+            }
+        },
         // visualMap: {
         //     show: false,
         //     min: 80,
@@ -190,7 +195,6 @@ export function setThemeColor(options, theme) {
         if (_.get(options, "series_LabelLine_LineStyle_Color", "") === "#333") {
             _.set(options, "series_LabelLine_LineStyle_Color", "#ccc");
         }
-
 
     }
 }

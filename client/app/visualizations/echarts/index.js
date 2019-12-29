@@ -112,9 +112,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                   // eslint-disable-next-line no-shadow
                   function bubble(data) { return data / 2; } :// 气泡图的大小变化
                   setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),// 散点图大小设置
-
-
-
+                barWidth:_.get($scope.options,'series_BarWidth',25),
                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                   'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
                 symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
@@ -126,6 +124,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                   fontSize: _.get($scope.options, "series_Label_FontSize", [])[seriesNameIndex],
                   fontFamily: _.get($scope.options, "series_Label_FontFamily", [])[seriesNameIndex],
                 },
+                
                 // 数据标记线
 
                 markLine: {
@@ -238,19 +237,19 @@ function EchartsRenderer($timeout, $rootScope, $window) {
               myChart.setOption($scope.options, true);
             }
 
-            // Resize - Responsive
             if (_.get($scope.options, "size.responsive", false)) {
-
-              // Find widget and resize
-              let height = $element.parent().parent()["0"].clientHeight+10;// height 大屏
+              let height = $element.parent().parent()["0"].clientHeight + 50; 
               let width = $element.parent().parent()["0"].clientWidth;
-              if ($element.parent()["0"].clientWidth === 412) {// 在预览页面时 $element.parent()["0"].clientWidth===820
-                height = "290%";
-                width = Math.floor($element.parent().width()) + "px";
+
+
+              if ($("#Preview").length !== 0) { 
+                height = $("#Preview")["0"].clientHeight;
+                width = $("#Preview")["0"].clientWidth;
               }
-              if ($element.parent()["0"].clientWidth === 820) {// 在编辑页面时 $element.parent()["0"].clientWidth===820
-                height = "540px";
-                width = Math.floor($element.parent().width()) + "px";
+
+              if ($("#editor").length !== 0) { 
+                height = $("#editor")["0"].clientHeight - 50;
+                width = $("#editor")["0"].clientWidth - 50;
               }
 
               _.set($scope.options, "size", {
@@ -263,7 +262,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             myChart.resize($scope.options.size.width, $scope.options.size.height);
           }
         } catch (e) {
-          console.log("some error");
+          console.log(e);
         }
       };
 

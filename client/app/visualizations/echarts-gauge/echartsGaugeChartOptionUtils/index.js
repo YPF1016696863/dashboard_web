@@ -14,8 +14,8 @@ export function defaultGaugeChartOptions() {
             }
         },
         toolbox: {
-            feature: {
-                restore: {},
+            show: false,
+            feature: {               
                 saveAsImage: {}
             }
         },
