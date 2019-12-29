@@ -39,6 +39,9 @@ function DataSourcesViewCtrl(
   Visualization,
   appSettings
 ) {
+
+  Title.set("DataVis数据可视化-数据源");
+
   $scope.currentUser = currentUser;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 

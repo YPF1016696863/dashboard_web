@@ -38,6 +38,9 @@ function DashboardsListViewCtrl(
   Visualization,
   appSettings
 ) {
+
+  Title.set("DataVis数据可视化-可视化面板");
+
   $scope.currentUser = currentUser;
   $scope.slugId = $routeParams.dashboardslug;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;

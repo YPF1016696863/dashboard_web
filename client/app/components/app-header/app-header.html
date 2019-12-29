@@ -25,19 +25,7 @@
       <!-- Profile -->
       <ul class="nav navbar-nav navbar-right">
         <li uib-dropdown ng-if="$ctrl.isAuthenticated">
-          <a
-                  href="#"
-                  class="dropdown-toggle dropdown--profile"
-                  uib-dropdown-toggle
-                  data-test="ProfileDropdown"
-          >
-            <i class="fa fa-bell " style="color: #fff"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu--profile">
-            <li>
-              <a>查看消息</a>
-            </li>
-          </ul>
+          <release-notes></release-notes>
         </li>
         <!--<li ng-show="$ctrl.showSettingsMenu">-->
         <!--<a href="users" title="Settings"><i class="fa fa-cog"></i></a>-->
