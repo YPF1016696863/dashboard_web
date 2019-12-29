@@ -55,6 +55,11 @@ function DashboardPreviewCtrl(
   this.saveDelay = false;
   const vm = this;
   const updateDashboard = data => {
+
+    if (!this.dashboard) {
+      return;
+    }
+
     _.extend(this.dashboard, data);
     data = _.extend({}, data, {
       slug: this.dashboard.id,

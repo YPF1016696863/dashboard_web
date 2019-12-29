@@ -104,6 +104,11 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
         method: 'get',
         isArray: true,
         url: apiServerUrl + '/api/dashboards?all',
+      },      
+      dashboardsOverview: {
+        method: 'get',
+        isArray: true,
+        url: apiServerUrl + '/api/dashboards?overview',
       }
     },
   );

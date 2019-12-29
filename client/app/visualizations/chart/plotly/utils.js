@@ -543,8 +543,8 @@ export function prepareLayout(element, seriesList, options, data, theme) {
     margin: {
       l: options.globalSeriesType === 'pie'?10:45,
       r: 10,
-      b: 0,
-      t: 0,
+      b: 2,
+      t: 5,
       pad: 0,
     },
     width: Math.floor(element.offsetWidth),

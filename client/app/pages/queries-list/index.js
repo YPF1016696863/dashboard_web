@@ -39,6 +39,9 @@ function QueriesListViewCtrl(
   Visualization,
   appSettings
 ) {
+
+  Title.set("DataVis数据可视化-数据集");
+
   $scope.currentUser = currentUser;
   $scope.queryId = $routeParams.queryid;
 

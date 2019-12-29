@@ -1,6 +1,6 @@
 <div
   class="dashboard-dark-theme"
-  style="min-height:100vh !important;"
+  style="height:100%;width:100%;overflow: hidden;"
   ng-style="$ctrl.dashboardStyle"
   ng-if="$ctrl.dashboard.widgets.length > 0"
 >
@@ -35,8 +35,7 @@
 </div>
 
 <div
-  class="dashboard-dark-theme"
-  style="height:100vh;display:flex;"
+  style="height:100%;width:100%; position: absolute; right: 0; top: 0; display:flex;"
   ng-if="$ctrl.dashboard.widgets.length == 0"
 >
   <div style="margin:auto;text-align: center">

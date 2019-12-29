@@ -429,8 +429,8 @@ class DashboardsListTabs extends React.Component {
               <Form.Item
                 label="共享可视化面板URL"
                 labelAlign="left"
-                labelCol={{ span: 2 }}
-                wrapperCol={{ span: 22 }}
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
               >
                 <InputWithCopy value={this.state.runtime.share.public} />
               </Form.Item>
