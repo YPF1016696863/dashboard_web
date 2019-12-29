@@ -190,13 +190,17 @@ class DashboardsSearch extends React.Component {
         // This is a really bad workaround, need to be changed after the dwmo
         // try to find image url and set ID
         if (_.isEmpty(dashboard.background_image)) {
-          this.crousel.goTo(0, true);
+          if (this.crousel.goTo) {
+            this.crousel.goTo(0, true);
+          }
         } else {
           const selectedBgImg = _.find(
             this.state.backgroundImages,
             item => item.image === dashboard.background_image
           );
-          this.crousel.goTo(selectedBgImg.id, true);
+          if (this.crousel.goTo) {
+            this.crousel.goTo(selectedBgImg.id, true);
+          }
         }
       },
       rejection => {
@@ -211,8 +215,7 @@ class DashboardsSearch extends React.Component {
 
   render() {
     const { appSettings } = this.props;
-    const { dashboard } = this.state;
-    console.log(this.state.isDashboardOwner);
+    const { dashboard, isDashboardOwner } = this.state;
     return (
       <>
         {!this.state.isLoaded && (

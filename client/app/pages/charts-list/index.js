@@ -30,6 +30,9 @@ function ChartsListViewCtrl(
   Visualization,
   appSettings
 ) {
+
+  Title.set("DataVis数据可视化-可视化组件");
+
   $scope.currentUser = currentUser;
   $scope.displayType = null;
   $scope.displayId = $routeParams.visualizationid;
@@ -45,6 +48,7 @@ function ChartsListViewCtrl(
     $scope.$applyAsync();
   };
   $scope.chartsTabCb = (type, id) => {
+    console.log("reload..");
     $scope.displayType = type;
     $scope.displayId = id;
     $scope.$applyAsync();

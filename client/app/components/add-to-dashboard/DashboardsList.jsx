@@ -23,7 +23,10 @@ import * as _ from 'lodash';
 
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
 import { SchedulePhrase } from '@/components/queries/SchedulePhrase';
-
+import {
+  editableMappingsToParameterMappings,
+  synchronizeWidgetTitles
+} from '@/components/ParameterMappingInput';
 import {
   wrap as itemsList,
   ControllerType
@@ -40,21 +43,24 @@ import ItemsTable, {
 import { Query } from '@/services/query';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
-
+import { Dashboard } from '@/services/dashboard';
+import { Widget } from '@/services/widget';
 import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
-class QueriesList extends React.Component {
+export class DashboardsList extends React.Component {
   state = {
     visible: false,
     selected: null,
     all: null,
     filtered: null,
     loading: true,
-    selectedName: '选择数据集'
+    selectedName: '选择仪表板'
   };
+
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     if (!_.isEqual(this.props.reload, prevProps.reload)) {
@@ -62,68 +68,63 @@ class QueriesList extends React.Component {
     }
   }
 
-  showModal = () => {
-    this.setState({
-      loading: true,
-      selected: null,
-      visible: true
-    });
-    localStorage.setItem('lastSelectedDataSourceId', null);
-    Query.allQueries().$promise.then(res => {
+  getDashboardOverview() {
+    const visualizationId = this.props.visualization.id;
+
+    if (!visualizationId) {
       this.setState({
-        all: res,
-        filtered: res,
-        loading: false
+        selected: null,
+        all: null,
+        filtered: null
       });
-    });
+      return Promise.resolve('OK');
+    }
+
+    return Dashboard.dashboardsOverview()
+      .$promise.then(overview => {
+        // split overview response into two parts:
+        // part 1:
+        this.setState(
+          {
+            all: _.filter(
+              overview,
+              dashboard =>
+                !_.find(
+                  dashboard.visualizations,
+                  visualization => visualization === _.parseInt(visualizationId)
+                )
+            ),
+            filtered: _.filter(
+              overview,
+              dashboard =>
+                !_.find(
+                  dashboard.visualizations,
+                  visualization => visualization === _.parseInt(visualizationId)
+                )
+            )
+          },
+          () => {}
+        );
+      })
+      .catch(err => {
+        this.setState({
+          selected: null,
+          all: null,
+          filtered: null
+        });
+      });
+  }
+
+  showModal = () => {
+    this.reload();
   };
 
-  handleOk = (e, $scope) => {
+  handleOk = e => {
     if (this.state.selected === null) {
-      message.warning('请选择一个数据集.');
+      message.warning('请选择一个仪表板.');
       return;
     }
-    const allItems = _.cloneDeep(this.state.all);
-
-    _.filter(allItems, item => {
-      if (item.id + '' === this.state.selected) {
-        this.setState({
-          selectedName: item.name
-        });
-      }
-    });
-
-    localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
-
-    // 修改url不跳转页面
-    let start = '';
-    let newURL = '';
-    const url = window.location.href; // http://localhost:8080/query/unset/charts/new
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < url.length; i++) {
-      if (
-        url.charAt(i) === 'q' &&
-        url.charAt(i + 1) === 'u' &&
-        url.charAt(i + 2) === 'e' &&
-        url.charAt(i + 3) === 'r' &&
-        url.charAt(i + 4) === 'y'
-      ) {
-        start = url.substring(0, i + 6);
-        newURL = start + this.state.selected + '/charts/new?type=ECHARTS'; // null导致刷新？
-      }
-    }
-
-    window.history.pushState({}, 0, url);
-    window.history.replaceState({}, 0, newURL);
-
-    // console.log(this.props.chartType);
-
-    // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
-
-    this.setState({
-      visible: false,
-      selected: null
-    });
+    this.addWidget();
   };
 
   handleCancel = e => {
@@ -133,26 +134,75 @@ class QueriesList extends React.Component {
     });
   };
 
-  reload() {
-    this.props.querySearchCb(null);
+  addWidget = () => {
     this.setState({
-      selected: null,
-      all: null,
-      filtered: null,
       loading: true
     });
-    Query.allQueries().$promise.then(res => {
-      this.setState({
-        all: res,
-        filtered: res,
-        loading: false
-      });
+    Dashboard.get(
+      { slug: this.state.selected },
+      dashboard => {
+        const visualization = this.props.visualization;
+
+        const widget = new Widget({
+          visualization_id: visualization.id,
+          dashboard_id: dashboard.id,
+          options: {
+            isHidden: false,
+            position: {},
+            parameterMappings: editableMappingsToParameterMappings({})
+          },
+          visualization,
+          text: ''
+        });
+
+        const position = dashboard.calculateNewWidgetPosition(widget);
+        widget.options.position.col = position.col;
+        widget.options.position.row = position.row;
+        const widgetsToSave = [
+          widget,
+          ...synchronizeWidgetTitles(
+            widget.options.parameterMappings,
+            dashboard.widgets
+          )
+        ];
+
+        return Promise.all(widgetsToSave.map(w => w.save())).then(() => {
+          message.success(
+            '可视化组件' +
+              visualization.name +
+              '已经添加到仪表板' +
+              dashboard.name
+          );
+          this.setState({
+            loading: false,
+            visible: false
+          });
+          this.props.onSuccess();
+        });
+      },
+      rejection => {
+        message.error('获取可视化面板失败,请刷新后重试.');
+        this.setState({
+          loading: false
+        });
+      }
+    );
+  };
+
+  reload() {
+    this.setState({
+      loading: true,
+      selected: null,
+      visible: true
+    });
+    this.setState({ loading: true });
+    Promise.all([this.getDashboardOverview()]).finally(() => {
+      this.setState({ loading: false });
     });
   }
 
   searchBy(value) {
     const allItems = _.cloneDeep(this.state.all);
-    this.props.querySearchCb(null);
     if (value === '' || value === null) {
       this.setState({
         filtered: allItems
@@ -165,7 +215,6 @@ class QueriesList extends React.Component {
   }
 
   orderBy(value) {
-    this.props.querySearchCb(null);
     this.setState({
       filtered: _.reverse(_.orderBy(this.state.filtered, item => item[value]))
     });
@@ -177,10 +226,13 @@ class QueriesList extends React.Component {
     // console.log(selectedName);
     return (
       <>
-        <Input placeholder={selectedName} onClick={this.showModal} />
+        <Button type="primary" onClick={this.showModal}>
+          <i className="fa fa-plus m-r-5" />
+          添加至仪表板
+        </Button>
         <Modal
           destroyOnClose
-          title="选择数据集"
+          title="选择仪表板"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -205,7 +257,7 @@ class QueriesList extends React.Component {
                       <div
                         style={{ fontWeight: 'bold', paddingBottom: '10px' }}
                       >
-                        数据列表:
+                        仪表板列表:
                       </div>
                     </Col>
                   </Row>
@@ -265,25 +317,23 @@ class QueriesList extends React.Component {
                       defaultExpandAll
                       onSelect={(value, node, extra) => {
                         this.setState({ selected: value[0] });
-                        this.props.querySearchCb(value);
                       }}
                       selectedKeys={[this.state.selected]}
                     >
                       <TreeNode
-                        title="数据查询(无分组)"
+                        title="可视化仪表盘(无分组)"
                         key="datavis-group#ungrouped"
                       >
                         {_.map(this.state.filtered, item => (
                           <TreeNode
                             icon={
                               <Icon
-                                type="file-search"
-                                style={{ color: '#FAAA39' }}
+                                type="dashboard"
+                                style={{ color: '#801336' }}
                               />
                             }
                             title={item.name}
-                            // + ', id: [' + item.id + ']'
-                            key={item.id}
+                            key={item.slug}
                             isLeaf
                           />
                         ))}
@@ -300,21 +350,21 @@ class QueriesList extends React.Component {
   }
 }
 
-QueriesList.propTypes = {
+DashboardsList.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
-  chartType: PropTypes.string,
-  querySearchCb: PropTypes.func
+  visualization: PropTypes.object,
+  onSuccess: PropTypes.func
 };
 
-QueriesList.defaultProps = {
-  chartType: null,
-  querySearchCb: a => {}
+DashboardsList.defaultProps = {
+  visualization: null,
+  onSuccess: ()=>{}
 };
 
 export default function init(ngModule) {
   ngModule.component(
-    'queriesList',
-    react2angular(QueriesList, Object.keys(QueriesList.propTypes), [
+    'dashboardsList',
+    react2angular(DashboardsList, Object.keys(DashboardsList.propTypes), [
       'appSettings',
       '$location'
     ])

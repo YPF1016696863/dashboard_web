@@ -26,11 +26,9 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import { angular2react } from 'angular2react';
 import * as _ from 'lodash';
-import { Paginator } from '@/components/Paginator';
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
 import { SchedulePhrase } from '@/components/queries/SchedulePhrase';
 import Layout from '@/components/layouts/ContentWithSidebar';
-
 import {
   wrap as itemsList,
   ControllerType
@@ -54,10 +52,11 @@ import { ChartsPreview } from '@/components/charts-preview/charts-preview';
 import { EditVisualizationDialog } from '@/components/edit-visualization-dialog/edit-visualization-dialog';
 import { Dashboard } from '@/services/dashboard';
 import notification from '@/services/notification';
-import { navigateToWithSearch } from '@/services/navigateTo';
+import { navigateToWithSearch, navigateTo } from '@/services/navigateTo';
 import InputWithCopy from '@/components/InputWithCopy';
 import { appSettingsConfig } from '@/config/app-settings';
 import { $http } from '@/services/ng';
+import { DashboardsList } from '@/components/add-to-dashboard/DashboardsList';
 
 const { TextArea } = Input;
 
@@ -72,6 +71,26 @@ const VISUALIZATION_SHARE_URL =
 class ChartsListTabs extends React.Component {
   state = {};
 
+  columns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: '30%'
+    },
+    {
+      title: '类型',
+      dataIndex: 'type',
+      key: 'type',
+      width: '20%'
+    },
+    {
+      title: '上次更新时间',
+      dataIndex: 'updated_at',
+      key: 'updated_at'
+    }
+  ];
+
   componentDidMount() {
     this.setState({
       isLoaded: true,
@@ -81,7 +100,10 @@ class ChartsListTabs extends React.Component {
       visType: null,
       canEdit: false,
       showDeleteModal: false,
-      referencedDashboards: [],
+      dashboards: {
+        referenced: [],
+        unreferenced: []
+      },
       runtime: {
         share: {
           public: null,
@@ -108,7 +130,13 @@ class ChartsListTabs extends React.Component {
       !_.isEqual(this.props.displayId, prevProps.displayId) &&
       this.props.displayId
     ) {
-      this.getQuery(this.props.displayId);
+      // eslint-disable-next-line react/no-did-update-set-state
+      
+      Promise.all([
+        this.getQuery(this.props.displayId),
+        this.getDashboardOverview(this.props.displayId)
+      ]).finally(() => {
+      });
     }
 
     if (
@@ -130,6 +158,64 @@ class ChartsListTabs extends React.Component {
     return _.split(this.props.displayId, ':')[1];
   }
 
+  getDashboardOverview(id) {
+    this.setState({ isLoaded: false });
+    const visualizationId = _.split(id, ':')[1];
+
+    if (!id) {
+      this.setState({
+        dashboards: {
+          referenced: [],
+          unreferenced: [],
+          isLoaded: true
+        }
+      });
+      
+      return Promise.resolve('OK');
+    }
+
+    return Dashboard.dashboardsOverview()
+      .$promise.then(overview => {
+        // split overview response into two parts:
+        // part 1:
+        this.setState(
+          {
+            isLoaded: true,
+            dashboards: {
+              referenced: _.filter(
+                overview,
+                dashboard =>
+                  !!_.find(
+                    dashboard.visualizations,
+                    visualization =>
+                      visualization === _.parseInt(visualizationId)
+                  )
+              ),
+              unreferenced: _.filter(
+                overview,
+                dashboard =>
+                  !_.find(
+                    dashboard.visualizations,
+                    visualization =>
+                      visualization === _.parseInt(visualizationId)
+                  )
+              )
+            }
+          },
+          () => {}
+        );
+      })
+      .catch(err => {
+        this.setState({
+          isLoaded: true,
+          dashboards: {
+            referenced: [],
+            unreferenced: []
+          }
+        });
+      });
+  }
+
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
@@ -143,7 +229,7 @@ class ChartsListTabs extends React.Component {
         visType: null,
         canEdit: false
       });
-      return;
+      return Promise.resolve('OK');
     }
 
     this.setState({
@@ -155,7 +241,7 @@ class ChartsListTabs extends React.Component {
       canEdit: false
     });
 
-    Query.query({ id: queryId })
+    return Query.query({ id: queryId })
       .$promise.then(query => {
         this.setState({ query });
         query
@@ -213,8 +299,8 @@ class ChartsListTabs extends React.Component {
           })
           .catch(err => {
             this.setState({
-              isLoaded: true,
               query: null,
+              isLoaded: true,
               visualization: 'empty',
               queryResult: 'empty',
               visType: null,
@@ -236,23 +322,25 @@ class ChartsListTabs extends React.Component {
 
   deleteVisualization = () => {
     if (this.state.visualization && this.state.visualization.id) {
-      // this.setState({ showDeleteModal: true });
-
-      this.setState({ isLoaded: false });
-      this.props.Visualization.delete(
-        { id: this.state.visualization.id },
-        res => {
-          message.success(
-            '可视化仪组件' + this.state.visualization.name + '已删除.'
-          );
-          this.props.chartsTabCb(null);
-          this.setState({ isLoaded: true, visualization: null });
-        },
-        err => {
-          message.error('无法删除,请刷新页面后重试.');
-          this.setState({ isLoaded: true });
-        }
-      );
+      if (this.state.dashboards.referenced.length > 0) {
+        this.setState({ showDeleteModal: true });
+      } else {
+        this.setState({ isLoaded: false });
+        this.props.Visualization.delete(
+          { id: this.state.visualization.id },
+          res => {
+            message.success(
+              '可视化仪组件' + this.state.visualization.name + '已删除.'
+            );
+            this.props.chartsTabCb(null);
+            this.setState({ isLoaded: true, visualization: null });
+          },
+          err => {
+            message.error('无法删除,请刷新页面后重试.');
+            this.setState({ isLoaded: true });
+          }
+        );
+      }
     } else {
       message.error('无法删除,请刷新页面后重试.');
     }
@@ -425,19 +513,6 @@ class ChartsListTabs extends React.Component {
             >
               设置数据
             </Button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Popconfirm
-              placement="topLeft"
-              title="确认删除可视化组件?"
-              onConfirm={this.deleteVisualization}
-              okText="确认"
-              cancelText="取消"
-            >
-              <Button type="danger">
-                <Icon type="delete" />
-                删除可视化组件
-              </Button>
-            </Popconfirm>
           </Empty>
         )}
         {this.state.isLoaded &&
@@ -453,8 +528,8 @@ class ChartsListTabs extends React.Component {
                 okText="确认删除"
                 cancelText="取消"
               >
-                {_.map(this.state.referencedDashboards, dashboard => (
-                  <p>{dashboard}</p>
+                {_.map(this.state.dashboards.referenced, dashboard => (
+                  <p>{dashboard.name}</p>
                 ))}
                 <Alert
                   message="确认"
@@ -520,7 +595,7 @@ class ChartsListTabs extends React.Component {
                   </div>
                   <Divider />
                   <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
-                  <Form style={{paddingLeft:'20px'}}>
+                  <Form style={{ paddingLeft: '20px' }}>
                     <Form.Item
                       label="共享可视化组件"
                       labelAlign="left"
@@ -538,8 +613,8 @@ class ChartsListTabs extends React.Component {
                     <Form.Item
                       label="共享可视化组件URL"
                       labelAlign="left"
-                      labelCol={{ span: 2 }}
-                      wrapperCol={{ span: 22 }}
+                      labelCol={{ span: 6 }}
+                      wrapperCol={{ span: 18 }}
                     >
                       <InputWithCopy value={this.state.runtime.share.public} />
                     </Form.Item>
@@ -554,6 +629,21 @@ class ChartsListTabs extends React.Component {
                       />
                     </Col>
                   </Row>
+                  <br />
+                  <p style={{ fontSize: '14px' }}>可视化组件仪表板设置:</p>
+                  <Table
+                    pagination={{
+                      pageSize: 5
+                    }}
+                    columns={this.columns}
+                    dataSource={this.state.dashboards.referenced}
+                  />
+                  <DashboardsList
+                    visualization={this.state.visualization}
+                    onSuccess={() => {
+                      this.getDashboardOverview(this.props.displayId);
+                    }}
+                  />
                   <Divider />
                   <p style={{ fontSize: '14px' }}>其他设置:</p>
                   <Button
