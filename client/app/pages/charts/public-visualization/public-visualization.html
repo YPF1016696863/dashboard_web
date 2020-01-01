@@ -1,8 +1,8 @@
 <div
   class="layout-content-wrapper-full-height"
-  style="padding:0 !important;background-color: #25374C"
+  style="padding:0 !important;"
 >
-  <main class="dashboard-fullscreen" style="background-color: #25374C">
+  <main class="dashboard-fullscreen" style="background: rgba(37, 55, 76, 0)">
     <div class="flex-fill p-relative">
       <div
         class="p-absolute d-flex flex-column"
@@ -12,8 +12,7 @@
           class="flex-fill p-relative t-body query-visualizations-wrapper"
         >
           <div
-            class="dashboard-dark-theme"
-            style="min-height:100vh !important;"
+            style="height:100vh;width:100vw;overflow: hidden;"
             ng-style="$ctrl.dashboardStyle"
             ng-if="$ctrl.dashboard.widgets.length > 0"
           >

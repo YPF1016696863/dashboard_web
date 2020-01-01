@@ -288,7 +288,7 @@ class ChartsListTabs extends React.Component {
                 runtime: {
                   share: {
                     public: visualization.publicAccessEnabled
-                      ? VISUALIZATION_SHARE_URL + visualization.api_key
+                      ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
                       : '打开可视化面板共享按钮以获取url链接',
                     api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                     saving: false
@@ -414,7 +414,7 @@ class ChartsListTabs extends React.Component {
           this.setState({
             runtime: {
               share: {
-                public: VISUALIZATION_SHARE_URL + data.api_key,
+                public: this.generateIframeCode(VISUALIZATION_SHARE_URL + data.api_key),
                 api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                 saving: false
               }
@@ -470,7 +470,7 @@ class ChartsListTabs extends React.Component {
           this.setState({
             runtime: {
               share: {
-                public: VISUALIZATION_SHARE_URL + visualization.api_key,
+                public: this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key),
                 api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                 saving: false
               }
@@ -481,6 +481,10 @@ class ChartsListTabs extends React.Component {
     } else {
       message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
     }
+  };
+
+  generateIframeCode = (url) => {
+    return '<iframe src="'+url+'" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
   };
 
   render() {
