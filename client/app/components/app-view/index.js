@@ -137,6 +137,11 @@ class AppViewComponent {
       dashboardWidgetScrollBar: 'dashboard-widget-scrollbox-dark',
       dashboardHeaderButtonColor: true
     };
+    if(route.pageID === "publicShare") {
+      this.$rootScope.publicShare = "publicshare";
+      this.$rootScope.theme.bodyBackgroundColor = "";
+      this.$rootScope.theme.bodyBackgroundImage = "";
+    }
   }
 }
 
