@@ -29,9 +29,9 @@ import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
 import { $route } from '@/services/ng';
-import {navigateTo} from '@/services/navigateTo';
-import CreateSourceDialog from "@/components/CreateSourceDialog";
-import helper from "@/components/dynamic-form/dynamicFormHelper";
+import { navigateTo } from '@/services/navigateTo';
+import CreateSourceDialog from '@/components/CreateSourceDialog';
+import helper from '@/components/dynamic-form/dynamicFormHelper';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -75,21 +75,20 @@ class DataSourceSearch extends React.Component {
     });
   };
 
-
   createDataSource(selectedType, values) {
     const target = { options: {}, type: selectedType.type };
     helper.updateTargetWithValues(target, values);
 
     return DataSource.save(target)
-        .$promise.then(dataSource => {
-          return dataSource;
-        })
-        .catch(error => {
-          if (!(error instanceof Error)) {
-            error = new Error(_.get(error, 'data.message', '保存失败.'));
-          }
-          return Promise.reject(error);
-        });
+      .$promise.then(dataSource => {
+        return dataSource;
+      })
+      .catch(error => {
+        if (!(error instanceof Error)) {
+          error = new Error(_.get(error, 'data.message', '保存失败.'));
+        }
+        return Promise.reject(error);
+      });
   }
 
   reload() {
@@ -145,22 +144,6 @@ class DataSourceSearch extends React.Component {
                       数据源列表:
                     </div>
                   </Col>
-                  <Col span={11} align="right">
-                    <Button
-                      ghost
-                      type="primary"
-                      size="small"
-                      onClick={
-                        policy.isCreateDataSourceEnabled()
-                          ? this.showCreateSourceDialog
-                          : null
-                      }
-                      disabled={!policy.isCreateDataSourceEnabled()}
-                    >
-                      <i className="fa fa-plus m-r-5" />
-                      新建数据源
-                    </Button>
-                  </Col>
                 </Row>
                 <Row>
                   <Col span={18}>
@@ -202,11 +185,47 @@ class DataSourceSearch extends React.Component {
               </Col>
             </Row>
             <Row>
+              <Col span={8}>
+                <Button
+                  size="small"
+                  type="link"
+                  style={{ color: '#3d4d66' }}
+                  onClick={
+                    policy.isCreateDataSourceEnabled()
+                      ? this.showCreateSourceDialog
+                      : null
+                  }
+                  disabled={!policy.isCreateDataSourceEnabled()}
+                >
+                  <Icon type="plus-square" style={{ color: '#13cd66' }} />
+                  新建数据源
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                  <Icon type="folder-add" style={{ color: '#faaa39' }} />
+                  新建文件夹
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                  <Icon type="folder-open" style={{ color: '#3685f2' }} />
+                  移动到
+                </Button>
+              </Col>
+              <Col span={24}>
+                <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
+              </Col>
+            </Row>
+            <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
                   defaultExpandAll
                   onSelect={(value, node, extra) => {
-                    localStorage.setItem('lastSelectedDataSourceId', value&&value.length?value[0]:null);
+                    localStorage.setItem(
+                      'lastSelectedDataSourceId',
+                      value && value.length ? value[0] : null
+                    );
                     this.props.sourceSearchCb(value);
                   }}
                 >
@@ -252,7 +271,8 @@ export default function init(ngModule) {
   ngModule.component(
     'sourceListSearch',
     react2angular(DataSourceSearch, Object.keys(DataSourceSearch.propTypes), [
-      'appSettings', '$translate'
+      'appSettings',
+      '$translate'
     ])
   );
 }

@@ -45,7 +45,7 @@ import './charts-search.css';
 
 import { policy } from '@/services/policy';
 import notification from '@/services/notification';
-import {navigateToWithSearch} from "@/services/navigateTo";
+import { navigateToWithSearch } from '@/services/navigateTo';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -275,19 +275,6 @@ class ChartsListSearch extends React.Component {
                       可视化组件列表:
                     </div>
                   </Col>
-                  <Col span={11} align="right">
-                    <Button
-                      ghost
-                      type="primary"
-                      size="small"
-                      onClick={e=>{
-                        navigateToWithSearch('/query/unset/charts/new');
-                      }}
-                    >
-                      <Icon type="pie-chart" />
-                      新建可视化组件
-                    </Button>
-                  </Col>
                 </Row>
                 <Row>
                   <Col span={18}>
@@ -333,6 +320,36 @@ class ChartsListSearch extends React.Component {
                     />
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Button
+                  size="small"
+                  type="link"
+                  style={{ color: '#3d4d66' }}
+                  onClick={e => {
+                    navigateToWithSearch('/query/unset/charts/new');
+                  }}
+                >
+                  <Icon type="plus-square" style={{ color: '#13cd66' }} />
+                  新建组件
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                  <Icon type="folder-add" style={{ color: '#faaa39' }} />
+                  新建文件夹
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                  <Icon type="folder-open" style={{ color: '#3685f2' }} />
+                  移动到
+                </Button>
+              </Col>
+              <Col span={24}>
+                <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
               </Col>
             </Row>
             <Row>

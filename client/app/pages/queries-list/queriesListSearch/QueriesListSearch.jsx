@@ -43,8 +43,8 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import './queries-search.css';
 
 import { policy } from '@/services/policy';
-import notification from "@/services/notification";
-import {navigateToWithSearch} from '@/services/navigateTo';
+import notification from '@/services/notification';
+import { navigateToWithSearch } from '@/services/navigateTo';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -60,9 +60,9 @@ class QueriesListSearch extends React.Component {
   };
 
   componentDidMount() {
-    if(this.props.queryId !== null) {
+    if (this.props.queryId !== null) {
       this.setState({
-        selected:this.props.queryId
+        selected: this.props.queryId
       });
       this.props.querySearchCb([this.props.queryId]);
     }
@@ -86,7 +86,7 @@ class QueriesListSearch extends React.Component {
     let queryid = null;
     if (holdTab) {
       queryid = this.state.selected;
-    }else{
+    } else {
       this.props.querySearchCb(null);
     }
     localStorage.setItem('lastSelectedDataSourceId', queryid);
@@ -155,12 +155,12 @@ class QueriesListSearch extends React.Component {
       }
 
       const options = Object.assign(
-          {},
-          {
-            successMessage: '数据集信息更新成功',
-            errorMessage: '无法保存'
-          },
-          customOptions
+        {},
+        {
+          successMessage: '数据集信息更新成功',
+          errorMessage: '无法保存'
+        },
+        customOptions
       );
 
       if (options.force) {
@@ -168,15 +168,15 @@ class QueriesListSearch extends React.Component {
       }
 
       Query.save(
-          request,
-          updatedQuery => {
-            message.success(options.successMessage);
-            query.version = updatedQuery.version;
-            resolve();
-          },
-          error => {
-            reject(error);
-          }
+        request,
+        updatedQuery => {
+          message.success(options.successMessage);
+          query.version = updatedQuery.version;
+          resolve();
+        },
+        error => {
+          reject(error);
+        }
       );
     });
   }
@@ -196,19 +196,6 @@ class QueriesListSearch extends React.Component {
                     <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
                       数据列表:
                     </div>
-                  </Col>
-                  <Col span={11} align="right">
-                    <Button
-                      ghost
-                      type="primary"
-                      size="small"
-                      onClick={e=>{
-                        navigateToWithSearch('/queries/new');
-                      }}
-                    >
-                      <i className="fa fa-plus m-r-5" />
-                      新建数据集
-                    </Button>
                   </Col>
                 </Row>
                 <Row>
@@ -255,6 +242,36 @@ class QueriesListSearch extends React.Component {
                     />
                   </Col>
                 </Row>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Button
+                  size="small"
+                  type="link"
+                  style={{ color: '#3d4d66' }}
+                  onClick={e => {
+                    navigateToWithSearch('/queries/new');
+                  }}
+                >
+                  <Icon type="plus-square" style={{ color: '#13cd66' }} />
+                  新建数据集
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                  <Icon type="folder-add" style={{ color: '#faaa39' }} />
+                  新建文件夹
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                  <Icon type="folder-open" style={{ color: '#3685f2' }} />
+                  移动到
+                </Button>
+              </Col>
+              <Col span={24}>
+                <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
               </Col>
             </Row>
             <Row>
@@ -310,23 +327,23 @@ class QueriesListSearch extends React.Component {
                                     if (this.state.rename === item.name) {
                                       console.log('NO CHANGE');
                                     } else {
-                                      this.setState({loading:true});
-                                      this.saveQuery(item,undefined, {
+                                      this.setState({ loading: true });
+                                      this.saveQuery(item, undefined, {
                                         name: this.state.rename
-                                      }).then(()=>{
+                                      }).then(() => {
                                         this.reload(true);
                                       });
                                     }
                                   }}
-                                  onPressEnter={()=>{
+                                  onPressEnter={() => {
                                     this.setState({ editMode: false });
                                     if (this.state.rename === item.name) {
                                       console.log('NO CHANGE');
                                     } else {
-                                      this.setState({loading:true});
-                                      this.saveQuery(item,undefined, {
+                                      this.setState({ loading: true });
+                                      this.saveQuery(item, undefined, {
                                         name: this.state.rename
-                                      }).then(()=>{
+                                      }).then(() => {
                                         this.reload(true);
                                       });
                                     }
@@ -359,14 +376,15 @@ QueriesListSearch.propTypes = {
 };
 
 QueriesListSearch.defaultProps = {
-  queryId:null
+  queryId: null
 };
 
 export default function init(ngModule) {
   ngModule.component(
     'queriesListSearch',
     react2angular(QueriesListSearch, Object.keys(QueriesListSearch.propTypes), [
-      'appSettings','$location'
+      'appSettings',
+      '$location'
     ])
   );
 }
