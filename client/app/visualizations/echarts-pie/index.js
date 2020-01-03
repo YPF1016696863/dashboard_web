@@ -368,6 +368,18 @@ function EchartsPieEditor() {
         { label: '赤丹', value: '#d64f44' }
       ];
 
+      $scope.ThemeColor = [
+        { label: '基础色', value: [ '#3b6291', '#943c39','#779043','#624c7c', '#388498','#bf7334','#3f6899', '#9c403d','#7d9847 ','#675083 '] },
+        { label: '小清新', value: [ '#63b2ee', '#76da91','#f8cb7f','#f89588', '#7cd6cf','#9192ab','#7898e1', '#efa666','#eddd86','#9987ce'] },
+        { label: '复古色', value: [ '#71ae46', '#c4cc38','#ebe12a','#eab026', '#e3852b','#d85d2a','#ce2626', '#ac2026','#96b744','#c4cc38'] },
+        { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288' ] },
+        { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00' ] },
+        { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD' ] },
+        { label: '黄色调渐变', value: ['#FFFFDD','#FFFFBB','#FFFF99','#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+        { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792','#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029','#99001F'] },
+  
+      ];
+
       $scope.BackgroundColors = [
         { label: '默认', value: 'auto' },
         { label: '透明', value: 'transparent' },

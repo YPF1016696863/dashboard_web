@@ -92,7 +92,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             // setChartType($scope.options, selected);
             _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
 
-
+              const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                return row[yAxisColumn];
+              }))
               $scope.options.series.push({
                 name: _.get($scope.options, "series_ReName", [])[seriesNameIndex] === undefined ?
                   yAxisColumn : _.get($scope.options, "series_ReName", [])[seriesNameIndex],
@@ -110,9 +112,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                 symbolSize: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "scatter2" ?
                   // eslint-disable-next-line no-shadow
-                  function bubble(data) { return data / 2; } :// 气泡图的大小变化
-                  setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),// 散点图大小设置
-                barWidth:_.get($scope.options,'series_BarWidth',25),
+                  function bubble(data) {
+                    return (data / maxData) * 100;} :
+                  setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
+                barWidth: _.get($scope.options, 'series_BarWidth', 25),
                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                   'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
                 symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
@@ -124,7 +127,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                   fontSize: _.get($scope.options, "series_Label_FontSize", [])[seriesNameIndex],
                   fontFamily: _.get($scope.options, "series_Label_FontFamily", [])[seriesNameIndex],
                 },
-                
+
                 // 数据标记线
 
                 markLine: {
@@ -238,16 +241,16 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             }
 
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight + 50; 
+              let height = $element.parent().parent()["0"].clientHeight + 50;
               let width = $element.parent().parent()["0"].clientWidth;
 
 
-              if ($("#Preview").length !== 0) { 
+              if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
                 width = $("#Preview")["0"].clientWidth;
               }
 
-              if ($("#editor").length !== 0) { 
+              if ($("#editor").length !== 0) {
                 height = $("#editor")["0"].clientHeight - 50;
                 width = $("#editor")["0"].clientWidth - 50;
               }
@@ -456,6 +459,18 @@ function EchartsEditor() {
         { label: '黄緑', value: '#b2d235' },
         { label: '萌黄', value: '#a3cf62' },
         { label: '赤丹', value: '#d64f44' }
+      ];
+
+      $scope.ThemeColor = [
+        { label: '基础色', value: ['#3b6291', '#943c39', '#779043', '#624c7c', '#388498', '#bf7334', '#3f6899', '#9c403d', '#7d9847 ', '#675083 '] },
+        { label: '小清新', value: ['#63b2ee', '#76da91', '#f8cb7f', '#f89588', '#7cd6cf', '#9192ab', '#7898e1', '#efa666', '#eddd86', '#9987ce'] },
+        { label: '复古色', value: ['#71ae46', '#c4cc38', '#ebe12a', '#eab026', '#e3852b', '#d85d2a', '#ce2626', '#ac2026', '#96b744', '#c4cc38'] },
+        { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
+        { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
+        { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
+        { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
+        { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
+
       ];
       $scope.BackgroundColors = [
         { label: '默认', value: '' },

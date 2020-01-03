@@ -62,6 +62,8 @@ export function defaultPieChartOptions() {
         //         colorLightness: [0, 1]
         //     }
         // },
+        // 默认饼图主题颜色配置
+        color : [ '#63b2ee', '#76da91 ','#f8cb7f ','#f89588', '#7cd6cf ','#9192ab ','#7898e1  ', '#efa666','#eddd86 ','#9987ce '],
         series: [
         ]
     };

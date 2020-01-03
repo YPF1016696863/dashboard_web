@@ -113,6 +113,7 @@ export function defaultBasicChartOptions() {
             type: 'inside',
             disabled: true,
         }],
+        color : [ '#63b2ee', '#76da91 ','#f8cb7f ','#f89588', '#7cd6cf ','#9192ab ','#7898e1  ', '#efa666','#eddd86 ','#9987ce '],
         series: [
         ]
     };
