@@ -131,7 +131,7 @@ class ChartsListTabs extends React.Component {
       this.props.displayId
     ) {
       // eslint-disable-next-line react/no-did-update-set-state
-      
+
       Promise.all([
         this.getQuery(this.props.displayId),
         this.getDashboardOverview(this.props.displayId)
@@ -170,7 +170,7 @@ class ChartsListTabs extends React.Component {
           isLoaded: true
         }
       });
-      
+
       return Promise.resolve('OK');
     }
 
@@ -202,7 +202,7 @@ class ChartsListTabs extends React.Component {
               )
             }
           },
-          () => {}
+          () => { }
         );
       })
       .catch(err => {
@@ -433,7 +433,7 @@ class ChartsListTabs extends React.Component {
             }
           });
         })
-        .finally(() => {});
+        .finally(() => { });
     } else {
       message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
     }
@@ -477,7 +477,7 @@ class ChartsListTabs extends React.Component {
             }
           });
         })
-        .finally(() => {});
+        .finally(() => { });
     } else {
       message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
     }
@@ -545,140 +545,147 @@ class ChartsListTabs extends React.Component {
               {/* eslint-disable-next-line no-nested-ternary */}
               {this.state.visType === 'Q' ? null : this.state.visType ===
                 'V' ? (
-                // eslint-disable-next-line react/jsx-indent
-                <div style={{ padding: '15px' }}>
-                  <Descriptions title="可视化组件设置">
-                    <Descriptions.Item label="更新时间">
-                      {this.state.visualization.updated_at}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="ID">
-                      {this.state.visualization.id}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="创建者">
-                      {this.state.query.user.name}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="可编辑">
-                      {this.state.canEdit ? '是' : '否'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="可视化组件类型">
-                      {this.state.visualization.type}
-                    </Descriptions.Item>
-                  </Descriptions>
-                  <Statistic
-                    title="该可视化组件由以下数据集创建:"
-                    value={this.state.query.name}
-                  />
-                  <br />
-                  <p style={{ fontSize: '14px' }}>可视化仪表板描述:</p>
-                  <TextArea
-                    placeholder="可视化仪表板描述"
-                    rows={4}
-                    value={this.state.visualization.description}
-                    onChange={e => {
-                      this.setState({
-                        visualization: _.extend(this.state.visualization, {
-                          description: e.target.value
-                        })
-                      });
-                    }}
-                  />
-                  <br />
-                  <br />
-                  <div align="right">
-                    <Button
-                      type="primary"
-                      onClick={e => {
-                        this.updateVisualization({
-                          description: this.state.visualization.description
-                        });
-                      }}
-                    >
-                      <Icon type="save" />
-                      保存
-                    </Button>
-                  </div>
-                  <Divider />
-                  <p style={{ fontSize: '14px' }}>可视化组件共享设置:</p>
-                  <Form style={{ paddingLeft: '20px' }}>
-                    <Form.Item
-                      label="共享可视化组件"
-                      labelAlign="left"
-                      labelCol={{ span: 6 }}
-                      wrapperCol={{ span: 1, offset: 17 }}
-                    >
-                      <Switch
-                        checkedChildren="开"
-                        unCheckedChildren="关"
-                        checked={this.state.visualization.publicAccessEnabled}
-                        onChange={this.onChange}
-                        loading={this.state.runtime.share.saving}
+                  // eslint-disable-next-line react/jsx-indent
+                  <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
+                    <div style={{ width: '50%', float: 'left'}}>
+                      <Descriptions title="可视化组件信息" style={{ paddingRight: '10px' }}>
+                        <Descriptions.Item label="更新时间">
+                          {this.state.visualization.updated_at}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="ID">
+                          {this.state.visualization.id}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="创建者">
+                          {this.state.query.user.name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="可编辑">
+                          {this.state.canEdit ? '是' : '否'}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="可视化组件类型">
+                          {this.state.visualization.type}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="该可视化组件由以下数据集创建:">
+                          {this.state.query.name}
+                        </Descriptions.Item>
+                      </Descriptions>
+                      {/* <Statistic
+                        title="该可视化组件由以下数据集创建:"
+                        value={this.state.query.name}
+                      /> */}
+                      <b style={{ fontSize: '14px' }}>可视化组件共享设置:</b>
+                      <div style={{ paddingRight: '10px' }}>
+                        <Form>
+                          <Form.Item
+                            label="共享可视化组件"
+                            labelAlign="left"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 1, offset: 15 }}
+                          >
+                            <Switch
+                              checkedChildren="开"
+                              unCheckedChildren="关"
+                              checked={this.state.visualization.publicAccessEnabled}
+                              onChange={this.onChange}
+                              loading={this.state.runtime.share.saving}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="共享可视化组件URL"
+                            labelAlign="left"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 18 }}
+                          >
+                            <InputWithCopy value={this.state.runtime.share.public} />
+                          </Form.Item>
+                        </Form>
+                      </div>
+
+                      <b style={{ fontSize: '14px' }}>可视化组件预览:</b>
+                      <Row>
+                        <Col span={12} style={{ width: "30vw", height: "35vh" }} id="Preview">
+                          <ChartsPreviewDOM
+                            visualization={this.state.visualization}
+                            queryResult={this.state.queryResult}
+                          />
+                        </Col>
+                      </Row>
+                    </div>
+                    <div style={{ width: '50%', float: 'right' }}>
+                      <b style={{ fontSize: '14px' }}>可视化组件描述:</b>
+                      <TextArea
+                        placeholder="可视化组件描述"
+                        rows={6}
+                        value={this.state.visualization.description}
+                        onChange={e => {
+                          this.setState({
+                            visualization: _.extend(this.state.visualization, {
+                              description: e.target.value
+                            })
+                          });
+                        }}
                       />
-                    </Form.Item>
-                    <Form.Item
-                      label="共享可视化组件URL"
-                      labelAlign="left"
-                      labelCol={{ span: 6 }}
-                      wrapperCol={{ span: 18 }}
-                    >
-                      <InputWithCopy value={this.state.runtime.share.public} />
-                    </Form.Item>
-                  </Form>
-                  <br />
-                  <p style={{ fontSize: '14px' }}>可视化组件预览:</p>
-                  <Row>
-                    <Col span={12} style={{width:"30vw",height:"35vh"}} id="Preview">
-                      <ChartsPreviewDOM
+                      <div align="right">
+                        <Button
+                          type="primary"
+                          onClick={e => {
+                            this.updateVisualization({
+                              description: this.state.visualization.description
+                            });
+                          }}
+                        >
+                          <Icon type="save" />
+                          保存
+                        </Button>
+                      </div>
+                      <b style={{ fontSize: '14px' }}>其他设置:</b>
+                      <br />
+                      <Button
+                        type="primary"
+                        onClick={e => {
+                          navigateToWithSearch(
+                            'query/' +
+                            this.getQueryId() +
+                            '/charts/' +
+                            this.getChartId()
+                          );
+                        }}
+                      >
+                        <i className="fa fa-edit m-r-5" />
+                        编辑可视化组件
+                      </Button>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <Popconfirm
+                        placement="topLeft"
+                        title="确认删除可视化组件?"
+                        onConfirm={this.deleteVisualization}
+                        okText="确认"
+                        cancelText="取消"
+                      >
+                        <Button type="danger">
+                          <Icon type="delete" />
+                          删除可视化组件
+                        </Button>
+                      </Popconfirm>
+                      <br />
+                      <br />
+                      <Divider />
+                      <b style={{ fontSize: '14px' }}>可视化组件仪表板设置:</b>
+                      <Table
+                        pagination={{
+                          pageSize: 5
+                        }}
+                        columns={this.columns}
+                        dataSource={this.state.dashboards.referenced}
+                      />
+                      <DashboardsList
                         visualization={this.state.visualization}
-                        queryResult={this.state.queryResult}
+                        onSuccess={() => {
+                          this.getDashboardOverview(this.props.displayId);
+                        }}
                       />
-                    </Col>
-                  </Row>
-                  <br />
-                  <p style={{ fontSize: '14px' }}>可视化组件仪表板设置:</p>
-                  <Table
-                    pagination={{
-                      pageSize: 5
-                    }}
-                    columns={this.columns}
-                    dataSource={this.state.dashboards.referenced}
-                  />
-                  <DashboardsList
-                    visualization={this.state.visualization}
-                    onSuccess={() => {
-                      this.getDashboardOverview(this.props.displayId);
-                    }}
-                  />
-                  <Divider />
-                  <p style={{ fontSize: '14px' }}>其他设置:</p>
-                  <Button
-                    type="primary"
-                    onClick={e => {
-                      navigateToWithSearch(
-                        'query/' +
-                          this.getQueryId() +
-                          '/charts/' +
-                          this.getChartId()
-                      );
-                    }}
-                  >
-                    <i className="fa fa-edit m-r-5" />
-                    编辑可视化组件
-                  </Button>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <Popconfirm
-                    placement="topLeft"
-                    title="确认删除可视化组件?"
-                    onConfirm={this.deleteVisualization}
-                    okText="确认"
-                    cancelText="取消"
-                  >
-                    <Button type="danger">
-                      <Icon type="delete" />
-                      删除可视化组件
-                    </Button>
-                  </Popconfirm>
-                </div>
-              ) : null}
+                    </div> 
+                  </div>
+                ) : null}
             </>
           )}
       </>

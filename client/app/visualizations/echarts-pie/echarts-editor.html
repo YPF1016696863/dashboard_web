@@ -249,6 +249,15 @@
         <hr>
         <hr>
         <div class="form-group">
+            <label class="control-label">设置整体主题颜色</label>
+            <ui-select ng-model="options.color">
+                <ui-select-match placeholder="选择色系颜色...">{{$select.selected.label}}</ui-select-match>
+                <ui-select-choices repeat="Color.value as Color in ThemeColor">
+                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group">
             <label class="control-label">背景颜色</label>
             <ui-select ng-model="options.backgroundColor">
                 <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>

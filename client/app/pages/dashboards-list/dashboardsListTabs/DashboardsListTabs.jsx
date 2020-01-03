@@ -81,7 +81,7 @@ class DashboardsListTabs extends React.Component {
           public: null,
           apiurl: null,
           saving: false,
-          disabled:true
+          disabled: true
         }
       }
     });
@@ -236,7 +236,7 @@ class DashboardsListTabs extends React.Component {
             }
           });
         })
-        .finally(() => {});
+        .finally(() => { });
     } else {
       message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
       this.setState({
@@ -245,7 +245,7 @@ class DashboardsListTabs extends React.Component {
             public: DASHBOARD_SHARE_URL + dashboard.api_key,
             api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
             saving: false,
-            disabled:false
+            disabled: false
           }
         }
       });
@@ -286,12 +286,12 @@ class DashboardsListTabs extends React.Component {
                 public: DASHBOARD_SHARE_URL + dashboard.api_key,
                 api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
                 saving: false,
-                disabled:false
+                disabled: false
               }
             }
           });
         })
-        .finally(() => {});
+        .finally(() => { });
     } else {
       message.error('无法访问服务器,打开/关闭共享失败,请刷新页面后重试');
       this.setState({
@@ -300,7 +300,7 @@ class DashboardsListTabs extends React.Component {
             public: DASHBOARD_SHARE_URL + dashboard.api_key,
             api: _.replace(API_SHARE_URL, '{id}', dashboard.id),
             saving: false,
-            disabled:false
+            disabled: false
           }
         }
       });
@@ -324,159 +324,159 @@ class DashboardsListTabs extends React.Component {
           </div>
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
-          <div style={{ padding: '10px' }}>
-            <Descriptions title="可视化仪表盘配置">
-              <Descriptions.Item label="更新时间">
-                {this.state.dashboard.updated_at}
-              </Descriptions.Item>
-              <Descriptions.Item label="版本">
-                {this.state.dashboard.version}
-              </Descriptions.Item>
-              <Descriptions.Item label="创建者">
-                {this.state.dashboard.user.name}
-              </Descriptions.Item>
-              <Descriptions.Item label="可编辑">
-                {this.state.dashboard.can_edit ? '是' : '否'}
-              </Descriptions.Item>
-              <Descriptions.Item label="面板引用ID">
-                {this.state.dashboard.slug}
-              </Descriptions.Item>
-              <Descriptions.Item label="该面板中可视化组件数量">
-                {this.state.dashboard.widgets.length}
-              </Descriptions.Item>
-            </Descriptions>
-            <br />
-            <p style={{ fontSize: '14px' }}>可视化仪表板描述:</p>
-            <TextArea
-              placeholder="可视化仪表板描述"
-              rows={4}
-              value={this.state.dashboard.description}
-              onChange={e => {
-                this.setState({
-                  dashboard: _.extend(this.state.dashboard, {
-                    description: e.target.value
-                  })
-                });
-              }}
-            />
-            <br />
-            <br />
-            <div align="right">
-              <Button
-                type="primary"
-                onClick={e => {
-                  this.updateDashboard({
-                    description: this.state.dashboard.description
+          <div style={{ paddingTop: '10px' }}>
+            <div style={{ width: '50%', float: 'left',paddingLeft: '10px'}}>
+              <Descriptions title="可视化仪表盘信息">
+                <Descriptions.Item label="更新时间">
+                  {this.state.dashboard.updated_at}
+                </Descriptions.Item>
+                <Descriptions.Item label="版本">
+                  {this.state.dashboard.version}
+                </Descriptions.Item>
+                <Descriptions.Item label="创建者">
+                  {this.state.dashboard.user.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="可编辑">
+                  {this.state.dashboard.can_edit ? '是' : '否'}
+                </Descriptions.Item>
+                <Descriptions.Item label="面板引用ID">
+                  {this.state.dashboard.slug}
+                </Descriptions.Item>
+                <Descriptions.Item label="该面板中可视化组件数量">
+                  {this.state.dashboard.widgets.length}
+                </Descriptions.Item>
+              </Descriptions>
+              <b style={{ fontSize: '14px' }}>可视化面板共享设置:</b>
+              <div style={{ paddingRight: '10px' }}>
+                <Form>
+                  <Form.Item
+                    label="可视化面板对其他人可见"
+                    labelAlign="left"
+                    labelCol={{ span: 7 }}
+                    wrapperCol={{ span: 1, offset: 14 }}
+                  >
+                    <Switch
+                      checkedChildren="开"
+                      unCheckedChildren="关"
+                      defaultChecked={!this.state.dashboard.is_draft}
+                      onChange={checked => {
+                        this.updateDashboard({
+                          is_draft: !checked
+                        });
+                        if (!checked) {
+                          // Set public share
+                          this.disableAccess();
+                        } else {
+                          this.setState({
+                            runtime: {
+                              share: {
+                                public: this.state.dashboard.publicAccessEnabled
+                                  ? DASHBOARD_SHARE_URL + this.state.dashboard.api_key
+                                  : '打开可视化面板共享按钮以获取url链接',
+                                api: _.replace(API_SHARE_URL, '{id}', this.state.dashboard.id),
+                                saving: false,
+                                disabled: false
+                              }
+                            }
+                          });
+                        }
+                      }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="共享可视化面板"
+                    labelAlign="left"
+                    labelCol={{ span: 6 }}
+                    wrapperCol={{ span: 1, offset: 15 }}
+                  >
+                    <Switch
+                      disabled={this.state.runtime.share.disabled}
+                      checkedChildren="开"
+                      unCheckedChildren="关"
+                      checked={this.state.dashboard.publicAccessEnabled}
+                      onChange={this.onChange}
+                      loading={this.state.runtime.share.saving}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="共享可视化面板URL"
+                    labelAlign="left"
+                    labelCol={{ span: 6 }}
+                    wrapperCol={{ span: 18 }}
+                  >
+                    <InputWithCopy value={this.state.runtime.share.public} />
+                  </Form.Item>
+                </Form>
+              </div>
+
+
+            </div>
+
+            <div style={{ width: '50%', float: 'right',paddingRight: '10px',}}>
+              <b style={{ fontSize: '14px' }}>可视化仪表板描述:</b>
+              <TextArea
+                placeholder="可视化仪表板描述"
+                rows={6}
+                value={this.state.dashboard.description}
+                onChange={e => {
+                  this.setState({
+                    dashboard: _.extend(this.state.dashboard, {
+                      description: e.target.value
+                    })
                   });
                 }}
-              >
-                <Icon type="save" />
-                保存
-              </Button>
-            </div>
-            <Divider />
-            <p style={{ fontSize: '14px' }}>可视化面板共享设置:</p>
-            <Form style={{paddingLeft:'20px'}}>
-              <Form.Item
-                label="可视化面板对其他人可见"
-                labelAlign="left"
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 1, offset: 17 }}
-              >
-                <Switch
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  defaultChecked={!this.state.dashboard.is_draft}
-                  onChange={checked => {
-                    this.updateDashboard({
-                      is_draft: !checked
-                    });
-                    if(!checked) {
-                      // Set public share
-                      this.disableAccess();
-                    }else{
-                      this.setState({
-                        runtime: {
-                          share:{
-                            public: this.state.dashboard.publicAccessEnabled
-                                ? DASHBOARD_SHARE_URL + this.state.dashboard.api_key
-                                : '打开可视化面板共享按钮以获取url链接',
-                            api: _.replace(API_SHARE_URL, '{id}', this.state.dashboard.id),
-                            saving: false,
-                            disabled:false
-                          }
-                        }
-                      });
-                    }
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
-                label="共享可视化面板"
-                labelAlign="left"
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 1, offset: 17 }}
-              >
-                <Switch
-                  disabled={this.state.runtime.share.disabled}
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  checked={this.state.dashboard.publicAccessEnabled}
-                  onChange={this.onChange}
-                  loading={this.state.runtime.share.saving}
-                />
-              </Form.Item>
-              <Form.Item
-                label="共享可视化面板URL"
-                labelAlign="left"
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 18 }}
-              >
-                <InputWithCopy value={this.state.runtime.share.public} />
-              </Form.Item>
-            </Form>
-            <br />
-            <Row gutter={[16, 16]}>
-              <Col span={24}>
-                <p style={{ fontSize: '14px' }}>预览:</p>
+              />
+              <div align="right">
                 <Button
                   type="primary"
-                  target="_blank"
-                  href={'/view/' + this.state.dashboard.slug}
-                >
-                  <Icon type="dashboard" />
-                  预览可视化面板
-                </Button>
-              </Col>
-
-              <Col span={24}>
-                <Divider />
-                <p style={{ fontSize: '14px' }}>其他设置:</p>
-                <Button
-                  type="primary"
-                  disabled={slugId == null}
                   onClick={e => {
-                    navigateToWithSearch('dashboards/' + slugId);
+                    this.updateDashboard({
+                      description: this.state.dashboard.description
+                    });
                   }}
                 >
-                  <i className="fa fa-edit m-r-5" />
-                  编辑可视化面板
+                  <Icon type="save" />
+                  保存
                 </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <Popconfirm
-                  placement="topLeft"
-                  title="确认删除可视化仪表盘?"
-                  onConfirm={this.deleteDashboard}
-                  okText="确认"
-                  cancelText="取消"
-                >
-                  <Button type="danger">
-                    <Icon type="delete" />
-                    删除可视化面板
-                  </Button>
-                </Popconfirm>
-              </Col>
-            </Row>
+              </div>
+              <b style={{ fontSize: '14px' }}>预览:</b>
+              <br />
+              <Button
+                type="primary"
+                target="_blank"
+                href={'/view/' + this.state.dashboard.slug}
+              >
+                <Icon type="dashboard" />
+                预览可视化面板
+              </Button>       
+              <br />
+              <br />
+              <b style={{ fontSize: '14px' }}>其他设置:</b>
+              <br />
+              <Button
+                type="primary"
+                disabled={slugId == null}
+                onClick={e => {
+                  navigateToWithSearch('dashboards/' + slugId);
+                }}
+              >
+                <i className="fa fa-edit m-r-5" />
+                编辑可视化面板
+              </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Popconfirm
+                placement="topLeft"
+                title="确认删除可视化仪表盘?"
+                onConfirm={this.deleteDashboard}
+                okText="确认"
+                cancelText="取消"
+              >
+                <Button type="danger">
+                  <Icon type="delete" />
+                  删除可视化面板
+                </Button>
+              </Popconfirm>
+            </div>
           </div>
         )}
       </>

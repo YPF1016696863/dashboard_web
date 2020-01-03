@@ -49,7 +49,7 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import { policy } from '@/services/policy';
 
 import notification from '@/services/notification';
-import {navigateToWithSearch} from "@/services/navigateTo";
+import { navigateToWithSearch } from "@/services/navigateTo";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { TextArea } = Input;
@@ -68,7 +68,7 @@ class QueriesListTabs extends React.Component {
       showDeleteModal: false
     });
 
-    if(this.queryId !== null) {
+    if (this.queryId !== null) {
       this.getQuery(this.props.queryId);
     }
   }
@@ -330,137 +330,144 @@ class QueriesListTabs extends React.Component {
               />
             </Modal>
             <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
-              <Descriptions title="数据集设置">
-                <Descriptions.Item label="数据集创建时间">
-                  {this.state.query.created_at}
-                </Descriptions.Item>
-                <Descriptions.Item label="ID">
-                  {this.state.query.id}
-                </Descriptions.Item>
-                <Descriptions.Item label="创建者">
-                  {this.state.query.user.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="可编辑">
-                  {this.state.canEdit ? '是' : '否'}
-                </Descriptions.Item>
-                <Descriptions.Item label="最近更新自">
-                  {this.state.query.last_modified_by.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="数据集">
-                  {this.state.query.query}
-                </Descriptions.Item>
-                <Descriptions.Item label="该数据集已应用于组件数量">
-                  {/* eslint-disable-next-line no-nested-ternary */}
-                  {_.isArray(this.state.query.visualizations)
-                    ? this.state.query.visualizations.length >= 1
-                      ? this.state.query.visualizations.length - 1
-                      : '无法显示'
-                    : '无法显示'}
-                </Descriptions.Item>
-              </Descriptions>
-              <br />
-              <p style={{ fontSize: '14px' }}>数据集描述:</p>
-              <TextArea
-                placeholder="数据集描述"
-                rows={4}
-                value={this.state.query.description}
-                onChange={e => {
-                  this.setState({
-                    query: _.extend(this.state.query, {
-                      description: e.target.value
-                    })
-                  });
-                }}
-              />
-              <br />
-              <br />
-              <div align="right">
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    this.saveQuery(null, {
-                      description: this.state.query.description
-                    });
-                  }}
-                >
-                  <Icon type="save" />
-                  保存
-                </Button>
-              </div>
-              <Divider />
-              <p style={{ fontSize: '14px' }}>数据集共享设置:</p>
-              <Form style={{paddingLeft:'20px'}}>
-                <Form.Item
-                  label="数据集对其他人可见"
-                  labelAlign="left"
-                  labelCol={{ span: 6 }}
-                  wrapperCol={{ span: 1, offset: 17 }}
-                >
-                  <Switch
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    defaultChecked={!this.state.query.is_draft}
-                    onChange={checked=>{
-                      this.saveQuery(null, {
-                        is_draft: !checked
+              <div style={{ width: '50%', float: 'right' }}>
+                <b style={{ fontSize: '14px' }}>数据集描述:</b>
+                <div align="left">
+                  <TextArea
+                    placeholder="数据集描述"
+                    rows={4}
+                    value={this.state.query.description}
+                    onChange={e => {
+                      this.setState({
+                        query: _.extend(this.state.query, {
+                          description: e.target.value
+                        })
                       });
                     }}
                   />
-                </Form.Item>
-              </Form>
-              <br />
-              <br />
-              <p style={{ fontSize: '14px' }}>数据集数据预览:</p>
-              {this.state.queryResult == null ? (
-                <Empty description="该数据集暂无数据" />
-              ) : (
-                <>
-                  <Alert
-                    message="预览数据为该数据集的部分数据."
-                    type="warning"
-                    closable
-                  />
-                  <Table
-                    columns={this.state.queryResult.columns}
-                    dataSource={this.state.queryResult.rows}
-                    pagination={{ pageSize: 100 }}
-                  />
-                </>
-              )}
-              <p style={{ fontSize: '14px' }}>新建可视化组件:</p>
-              <Button
-                type="primary"
-                onClick={e=>{
-                  navigateToWithSearch('/query/' + this.state.query.id + '/charts/new');
-                }}
-              >
-                <Icon type="pie-chart" />
-                新建可视化组件
-              </Button>
-              <Divider />
-              <p style={{ fontSize: '14px' }}>其他设置:</p>
-              <Button
-                type="primary"
-                onClick={e=>{
-                  navigateToWithSearch('/queries/' + this.props.queryId + '/source');
-                }}
-              >
-                <i className="fa fa-edit m-r-5" />
-                编辑数据集
-              </Button>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <Popconfirm
-                placement="topLeft"
-                title="确认删除数据集?"
-                onConfirm={this.deleteQuery}
-                okText="确认"
-                cancelText="取消"
-              >
-                <Button type="danger">
-                  <Icon type="delete" />
-                  删除数据集
+                </div>
+                <div align="right">
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      this.saveQuery(null, {
+                        description: this.state.query.description
+                      });
+                    }}
+                  >
+                    <Icon type="save" />
+                    保存
+                  </Button>
+                </div>
+                <b style={{ fontSize: '14px' }}>新建可视化组件:</b>
+                <br />
+                <Button
+                  type="primary"
+                  onClick={e => {
+                    navigateToWithSearch('/query/' + this.state.query.id + '/charts/new');
+                  }}
+                >
+                  <Icon type="pie-chart" />
+                  新建可视化组件
                 </Button>
-              </Popconfirm>
+                <br />
+                <br />
+                <b style={{ fontSize: '14px' }}>其他设置:</b>
+                <br />
+                <Button
+                  type="primary"
+                  onClick={e => {
+                    navigateToWithSearch('/queries/' + this.props.queryId + '/source');
+                  }}
+                >
+                  <i className="fa fa-edit m-r-5" />
+                  编辑数据集
+                </Button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <Popconfirm
+                  placement="topLeft"
+                  title="确认删除数据集?"
+                  onConfirm={this.deleteQuery}
+                  okText="确认"
+                  cancelText="取消"
+                >
+                  <Button type="danger">
+                    <Icon type="delete" />
+                    删除数据集
+                  </Button>
+                </Popconfirm>
+              </div>
+              <div style={{ width: '50%', float: 'left' }}>
+                <Descriptions title="数据集信息">
+                  <Descriptions.Item label="数据集创建时间">
+                    {this.state.query.created_at}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="ID">
+                    {this.state.query.id}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="创建者">
+                    {this.state.query.user.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="可编辑">
+                    {this.state.canEdit ? '是' : '否'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="最近更新自">
+                    {this.state.query.last_modified_by.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="数据集">
+                    {this.state.query.query}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="该数据集已应用于组件数量">
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {_.isArray(this.state.query.visualizations)
+                      ? this.state.query.visualizations.length >= 1
+                        ? this.state.query.visualizations.length - 1
+                        : '无法显示'
+                      : '无法显示'}
+                  </Descriptions.Item>
+                </Descriptions>
+                <b style={{ fontSize: '14px' }}>数据集共享设置:</b>
+                <div style={{ paddingRight: '10px'}}>
+                  <Form>
+                    <Form.Item
+                      label="数据集对其他人可见"
+                      labelAlign="left"
+                      labelCol={{ span: 6 }}
+                      wrapperCol={{ span: 1, offset: 15 }}
+                    >
+                      <Switch
+                        checkedChildren="开"
+                        unCheckedChildren="关"
+                        defaultChecked={!this.state.query.is_draft}
+                        onChange={checked => {
+                          this.saveQuery(null, {
+                            is_draft: !checked
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                  </Form> 
+                </div>
+              </div>
+              <div style={{ width: '100%', float: 'left' }}>
+                <b style={{ fontSize: '14px' }}>数据集数据预览:</b>
+                {this.state.queryResult == null ? (
+                  <Empty description="该数据集暂无数据" />
+                ) : (
+                  <>
+                    <Alert
+                      message="预览数据为该数据集的部分数据."
+                      type="warning"
+                      closable
+                    />
+                    <Table
+                      columns={this.state.queryResult.columns}
+                      dataSource={this.state.queryResult.rows}
+                      pagination={{ pageSize: 10 }}
+                    />
+                  </>
+                  )}
+              </div>
             </div>
           </>
         )}
@@ -476,7 +483,7 @@ QueriesListTabs.propTypes = {
 
 QueriesListTabs.defaultProps = {
   queryId: null,
-  queriesTabCb: a => {}
+  queriesTabCb: a => { }
 };
 
 export default function init(ngModule) {
