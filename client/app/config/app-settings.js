@@ -1,14 +1,7 @@
-const DOMAIN_TO_REPLACE = "chinambse.com";
 export const appSettingsConfig = {
     server: {
-        "backendUrl": "http://datavis-api." + DOMAIN_TO_REPLACE
-    },
-    app: {
-        "login": "http://datavis-login." + DOMAIN_TO_REPLACE,
-        "logout": "http://datavis-login." + DOMAIN_TO_REPLACE + "/logout?email=current",
-        "activate": "http://datavis-login." + DOMAIN_TO_REPLACE + "/active",
-        "setup": '',
-        "help": ''
+        // eslint-disable-next-line no-undef
+        "backendUrl": API_SERVER
     },
     "logging": {},
     "env": {}
@@ -24,24 +17,20 @@ function checkIsIPV4(entry) {
     return false;
 }
 
-const hostname = window.location.hostname;
+// eslint-disable-next-line no-undef
+if (!API_SERVER) {
+    const hostname = window.location.hostname;
+    if (hostname.startsWith("localhost") ||
+        hostname.startsWith("docker-internal") ||
+        checkIsIPV4(hostname)) {
+        appSettingsConfig.server.backendUrl = "http://" + hostname + ":30050";
+    } else {
+        const blocks = hostname.split(".");
+        const primaryBlocks = blocks.length >= 3 ? blocks.slice(1) : blocks;
+        const primary = primaryBlocks.join(".");
 
-if (hostname.startsWith("localhost") ||
-    hostname.startsWith("docker-internal") ||
-    checkIsIPV4(hostname)) {
-    appSettingsConfig.server.backendUrl = "http://" + hostname + ":30050";
-    appSettingsConfig.app.login = "http://" + hostname + ":30092";
-    appSettingsConfig.app.logout = "http://" + hostname + ":30092/logout?email=current";
-    appSettingsConfig.app.activate = "http://" + hostname + ":30092/active";
-} else {
-    const blocks = hostname.split(".");
-    const primaryBlocks = blocks.length >= 3 ? blocks.slice(1) : blocks;
-    const primary = primaryBlocks.join(".");
-
-    appSettingsConfig.server.backendUrl = appSettingsConfig.server.backendUrl.replace(DOMAIN_TO_REPLACE, primary);
-    appSettingsConfig.app.login = appSettingsConfig.app.login.replace(DOMAIN_TO_REPLACE, primary);
-    appSettingsConfig.app.logout = appSettingsConfig.app.logout.replace(DOMAIN_TO_REPLACE, primary);
-    appSettingsConfig.app.activate = appSettingsConfig.app.activate.replace(DOMAIN_TO_REPLACE, primary);
+        appSettingsConfig.server.backendUrl = "http://datavis-api."+primary;
+    }
 }
 
 export default function init(ngModule) {

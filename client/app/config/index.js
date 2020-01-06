@@ -26,7 +26,6 @@ import "brace";
 import "angular-ui-ace";
 import "angular-resizable";
 import { each, isFunction, extend } from "lodash";
-import "angular-echarts/dist/angular-echarts";
 
 
 import "@/lib/sortable";
@@ -67,8 +66,7 @@ const requirements = [
   ngUpload,
   "angularResizable",
   vsRepeat,
-  "ui.sortable",
-  "angular-echarts"
+  "ui.sortable"
 ];
 
 const ngModule = angular.module("app", requirements);
