@@ -44,7 +44,7 @@ npm install'''
     stage('Remove Image') {
       agent any
       steps {
-        sh 'docker rmi $registry:latest'
+        sh 'docker rmi -f $registry:latest'
       }
     }
 
