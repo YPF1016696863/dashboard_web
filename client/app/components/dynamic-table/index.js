@@ -104,7 +104,7 @@ class DynamicTablePaginatorAdapter {
   }
 }
 
-function DynamicTable($scope, $compile) {
+function DynamicTableController($scope, $compile) {
   'ngInject';
 
   this.paginatorAdapter = new DynamicTablePaginatorAdapter(this);
@@ -238,16 +238,19 @@ function DynamicTable($scope, $compile) {
   };
 }
 
+// eslint-disable-next-line import/prefer-default-export
+export const DynamicTable = {
+  template,
+  bindings: {
+    rows: '<',
+    columns: '<',
+    itemsPerPage: '<',
+  },
+  controller: DynamicTableController
+};
+
 export default function init(ngModule) {
-  ngModule.component('dynamicTable', {
-    template,
-    controller: DynamicTable,
-    bindings: {
-      rows: '<',
-      columns: '<',
-      itemsPerPage: '<',
-    },
-  });
+  ngModule.component('dynamicTable', DynamicTable);
 }
 
 init.init = true;

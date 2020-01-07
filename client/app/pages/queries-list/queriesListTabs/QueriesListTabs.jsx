@@ -23,6 +23,7 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
+import { angular2react } from 'angular2react';
 import * as _ from 'lodash';
 import { Paginator } from '@/components/Paginator';
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
@@ -49,7 +50,10 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import { policy } from '@/services/policy';
 
 import notification from '@/services/notification';
-import { navigateToWithSearch } from "@/services/navigateTo";
+import { navigateToWithSearch } from '@/services/navigateTo';
+import { TablePreview } from '@/components/table-preview/table-preview';
+
+let TablePreviewDOM;
 
 const { TreeNode, DirectoryTree } = Tree;
 const { TextArea } = Input;
@@ -65,12 +69,19 @@ class QueriesListTabs extends React.Component {
       query: null,
       queryResultRaw: null,
       queryResult: null,
+      tableData: null,
       showDeleteModal: false
     });
 
     if (this.queryId !== null) {
       this.getQuery(this.props.queryId);
     }
+
+    TablePreviewDOM = angular2react(
+      'tablePreview',
+      TablePreview,
+      window.$injector
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -90,6 +101,7 @@ class QueriesListTabs extends React.Component {
         canEdit: false,
         query: null,
         queryResultRaw: null,
+        tableData: null,
         queryResult: null
       });
     }
@@ -101,6 +113,7 @@ class QueriesListTabs extends React.Component {
       canEdit: false,
       query: null,
       queryResultRaw: null,
+      tableData: null,
       queryResult: null
     });
 
@@ -110,6 +123,7 @@ class QueriesListTabs extends React.Component {
         canEdit: false,
         query: null,
         queryResultRaw: null,
+        tableData: null,
         queryResult: 'empty'
       });
       return;
@@ -119,7 +133,11 @@ class QueriesListTabs extends React.Component {
       .$promise.then(query => {
         this.setState({
           query,
-          canEdit: currentUser.canEdit(query) || query.can_edit
+          canEdit: currentUser.canEdit(query) || query.can_edit,
+          tableData: _.find(
+            query.visualizations,
+            visualization => visualization.type === 'TABLE'
+          )
         });
         query
           .getQueryResultPromise()
@@ -135,6 +153,7 @@ class QueriesListTabs extends React.Component {
               isLoaded: true,
               canEdit: false,
               queryResultRaw: null,
+              tableData: null,
               queryResult: null
             });
           });
@@ -145,6 +164,7 @@ class QueriesListTabs extends React.Component {
           canEdit: false,
           query: null,
           queryResultRaw: null,
+          tableData: null,
           queryResult: null
         });
       });
@@ -168,6 +188,7 @@ class QueriesListTabs extends React.Component {
               isLoaded: true,
               query: null,
               queryResultRaw: null,
+              tableData: null,
               queryResult: null
             });
           },
@@ -193,6 +214,7 @@ class QueriesListTabs extends React.Component {
           isLoaded: true,
           query: null,
           queryResultRaw: null,
+          tableData: null,
           queryResult: null,
           showDeleteModal: false
         });
@@ -364,7 +386,9 @@ class QueriesListTabs extends React.Component {
                 <Button
                   type="primary"
                   onClick={e => {
-                    navigateToWithSearch('/query/' + this.state.query.id + '/charts/new');
+                    navigateToWithSearch(
+                      '/query/' + this.state.query.id + '/charts/new'
+                    );
                   }}
                 >
                   <Icon type="pie-chart" />
@@ -377,7 +401,9 @@ class QueriesListTabs extends React.Component {
                 <Button
                   type="primary"
                   onClick={e => {
-                    navigateToWithSearch('/queries/' + this.props.queryId + '/source');
+                    navigateToWithSearch(
+                      '/queries/' + this.props.queryId + '/source'
+                    );
                   }}
                 >
                   <i className="fa fa-edit m-r-5" />
@@ -427,7 +453,7 @@ class QueriesListTabs extends React.Component {
                   </Descriptions.Item>
                 </Descriptions>
                 <b style={{ fontSize: '14px' }}>数据集共享设置:</b>
-                <div style={{ paddingRight: '10px'}}>
+                <div style={{ paddingRight: '10px' }}>
                   <Form>
                     <Form.Item
                       label="数据集对其他人可见"
@@ -446,7 +472,7 @@ class QueriesListTabs extends React.Component {
                         }}
                       />
                     </Form.Item>
-                  </Form> 
+                  </Form>
                 </div>
               </div>
               <div style={{ width: '100%', float: 'left' }}>
@@ -455,18 +481,21 @@ class QueriesListTabs extends React.Component {
                   <Empty description="该数据集暂无数据" />
                 ) : (
                   <>
-                    <Alert
-                      message="预览数据为该数据集的部分数据."
-                      type="warning"
-                      closable
-                    />
-                    <Table
-                      columns={this.state.queryResult.columns}
-                      dataSource={this.state.queryResult.rows}
-                      pagination={{ pageSize: 10 }}
-                    />
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#25374C'
+                      }}
+                      id="Preview"
+                    >
+                      <TablePreviewDOM
+                        visualization={this.state.tableData}
+                        queryResult={this.state.queryResultRaw}
+                      />
+                    </div>
                   </>
-                  )}
+                )}
               </div>
             </div>
           </>
@@ -483,7 +512,7 @@ QueriesListTabs.propTypes = {
 
 QueriesListTabs.defaultProps = {
   queryId: null,
-  queriesTabCb: a => { }
+  queriesTabCb: a => {}
 };
 
 export default function init(ngModule) {
