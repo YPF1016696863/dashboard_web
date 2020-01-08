@@ -17,6 +17,7 @@ import {
   message,
   Input,
   Popconfirm,
+  Skeleton,
   Switch,
   Statistic,
   Modal
@@ -38,6 +39,7 @@ import { ResourceItemsSource } from '@/components/items-list/classes/ItemsSource
 import { UrlStateStorage } from '@/components/items-list/classes/StateStorage';
 
 import LoadingState from '@/components/items-list/components/LoadingState';
+import { ParameterValueInput } from '@/components/ParameterValueInput';
 import * as Sidebar from '@/components/items-list/components/Sidebar';
 import ItemsTable, {
   Columns
@@ -57,6 +59,7 @@ let TablePreviewDOM;
 
 const { TreeNode, DirectoryTree } = Tree;
 const { TextArea } = Input;
+const ButtonGroup = Button.Group;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
 class QueriesListTabs extends React.Component {
@@ -70,7 +73,8 @@ class QueriesListTabs extends React.Component {
       queryResultRaw: null,
       queryResult: null,
       tableData: null,
-      showDeleteModal: false
+      showDeleteModal: false,
+      runTimeLoading: false
     });
 
     if (this.queryId !== null) {
@@ -102,14 +106,43 @@ class QueriesListTabs extends React.Component {
         query: null,
         queryResultRaw: null,
         tableData: null,
-        queryResult: null
+        queryResult: null,
+        runTimeLoading: false
       });
     }
+  }
+
+  getTemporaryQueryResult() {
+    this.setState({
+      queryResultRaw: null,
+      queryResult: null,
+      runTimeLoading: true
+    });
+
+    this.state.query
+      .getQueryResultByText(-1, this.state.query.query)
+      .toPromise()
+      .then(queryRes => {
+        this.setState({
+          runTimeLoading: false,
+          queryResultRaw: queryRes,
+          queryResult: this.normalizedTableData(queryRes.query_result)
+        });
+      })
+      .catch(err => {
+        this.setState({
+          runTimeLoading: false,
+          queryResultRaw: null,
+          tableData: null,
+          queryResult: null
+        });
+      });
   }
 
   getQuery(id) {
     this.setState({
       isLoaded: false,
+      runTimeLoading: true,
       canEdit: false,
       query: null,
       queryResultRaw: null,
@@ -120,6 +153,7 @@ class QueriesListTabs extends React.Component {
     if (!id) {
       this.setState({
         isLoaded: true,
+        runTimeLoading: false,
         canEdit: false,
         query: null,
         queryResultRaw: null,
@@ -133,6 +167,7 @@ class QueriesListTabs extends React.Component {
       .$promise.then(query => {
         this.setState({
           query,
+          isLoaded: true,
           canEdit: currentUser.canEdit(query) || query.can_edit,
           tableData: _.find(
             query.visualizations,
@@ -143,7 +178,7 @@ class QueriesListTabs extends React.Component {
           .getQueryResultPromise()
           .then(queryRes => {
             this.setState({
-              isLoaded: true,
+              runTimeLoading: false,
               queryResultRaw: queryRes,
               queryResult: this.normalizedTableData(queryRes.query_result)
             });
@@ -151,6 +186,7 @@ class QueriesListTabs extends React.Component {
           .catch(err => {
             this.setState({
               isLoaded: true,
+              runTimeLoading: false,
               canEdit: false,
               queryResultRaw: null,
               tableData: null,
@@ -161,6 +197,7 @@ class QueriesListTabs extends React.Component {
       .catch(err => {
         this.setState({
           isLoaded: true,
+          runTimeLoading: false,
           canEdit: false,
           query: null,
           queryResultRaw: null,
@@ -368,7 +405,7 @@ class QueriesListTabs extends React.Component {
                     }}
                   />
                 </div>
-                <div align="right">
+                <div align="right" style={{ paddingTop: '10px' }}>
                   <Button
                     type="primary"
                     onClick={() => {
@@ -475,6 +512,91 @@ class QueriesListTabs extends React.Component {
                   </Form>
                 </div>
               </div>
+              <Divider />
+              <div style={{ width: '100%', float: 'left' }}>
+                <b style={{ fontSize: '14px' }}>数据集参数配置:</b>
+                {this.state.query.getParametersDefs().length <= 0 ? (
+                  <Row>
+                    <Col span={24}>
+                      <p>该数据集没有设置参数</p>
+                      <div align="right">
+                        <ButtonGroup>
+                          <Button type="primary" disabled>
+                            <Icon type="sync" />
+                            刷新预览
+                          </Button>
+                          <Button
+                            type="primary"
+                            onClick={e => {
+                              navigateToWithSearch(
+                                '/queries/' + this.props.queryId + '/source'
+                              );
+                            }}
+                          >
+                            <Icon type="setting" />
+                            设置参数
+                          </Button>
+                        </ButtonGroup>
+                      </div>
+                    </Col>
+                  </Row>
+                ) : (
+                  <Row>
+                    {_.map(this.state.query.getParametersDefs(), parameter => (
+                      <Col span={12}>
+                        <Form>
+                          <Form.Item
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 18 }}
+                            label={parameter.title}
+                            help={
+                              'ID:' + parameter.name + ',类型:' + parameter.type
+                            }
+                          >
+                            <ParameterValueInput
+                              type={parameter.type}
+                              value={parameter.normalizedValue}
+                              parameter={parameter}
+                              enumOptions={parameter.enumOptions}
+                              queryId={parameter.queryId}
+                              onSelect={value => {
+                                parameter.setValue(value);
+                              }}
+                            />
+                          </Form.Item>
+                        </Form>
+                      </Col>
+                    ))}
+                    <Col span={24}>
+                      <div align="right">
+                        <ButtonGroup>
+                          <Button
+                            type="primary"
+                            onClick={e => {
+                              message.info("注: 预览数据不会改变数据集原始数据,改变参数设置请点击'设置参数'按钮.");
+                              this.getTemporaryQueryResult();
+                            }}
+                          >
+                            <Icon type="sync" />
+                            刷新预览
+                          </Button>
+                          <Button
+                            type="primary"
+                            onClick={e => {
+                              navigateToWithSearch(
+                                '/queries/' + this.props.queryId + '/source'
+                              );
+                            }}
+                          >
+                            <Icon type="setting" />
+                            设置参数
+                          </Button>
+                        </ButtonGroup>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+              </div>
               <div style={{ width: '100%', float: 'left' }}>
                 <b style={{ fontSize: '14px' }}>数据集数据预览:</b>
                 {this.state.queryResult == null ? (
@@ -489,10 +611,14 @@ class QueriesListTabs extends React.Component {
                       }}
                       id="Preview"
                     >
-                      <TablePreviewDOM
-                        visualization={this.state.tableData}
-                        queryResult={this.state.queryResultRaw}
-                      />
+                      {this.state.runTimeLoading ? (
+                        <LoadingState />
+                      ) : (
+                        <TablePreviewDOM
+                          visualization={this.state.tableData}
+                          queryResult={this.state.queryResultRaw}
+                        />
+                      )}
                     </div>
                   </>
                 )}
