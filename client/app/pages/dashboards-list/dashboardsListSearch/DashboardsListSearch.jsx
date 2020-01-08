@@ -198,15 +198,6 @@ class DashboardsListSearch extends React.Component {
                     </div>
                   </Col>
                   <Col span={11} align="right">
-                    <Button
-                      ghost
-                      type="primary"
-                      size="small"
-                      onClick={this.showModal}
-                    >
-                      <i className="fa fa-plus m-r-5" />
-                      新建仪表盘
-                    </Button>
                     {policy.isCreateDashboardEnabled() ? (
                       <Modal
                         destroyOnClose
@@ -300,6 +291,12 @@ class DashboardsListSearch extends React.Component {
                   </Col>
                 </Row>
               </Col>
+            </Row>
+            <Row>
+              <Col span={8}><Button size="small" type="link" style={{color:"#3d4d66"}} onClick={this.showModal}><Icon type="plus-square" style={{color:"#13cd66"}} />新建仪表盘</Button></Col>
+              <Col span={8}><Button size="small" type="link" style={{color:"#3d4d66"}}><Icon type="folder-add" style={{color:"#faaa39"}} />新建文件夹</Button></Col>
+              <Col span={8}><Button size="small" type="link" style={{color:"#3d4d66"}}><Icon type="folder-open" style={{color:"#3685f2"}} />移动到</Button></Col>
+              <Col span={24}><Divider style={{marginTop:"5px", marginBottom:"0"}} /></Col>
             </Row>
             <Row>
               <Col style={{ paddingRight: '10px' }}>
