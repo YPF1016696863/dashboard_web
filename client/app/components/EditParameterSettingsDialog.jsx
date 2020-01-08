@@ -183,7 +183,7 @@ function EditParameterSettingsDialog(props) {
           </Form.Item>
         )}
         {param.type === 'enum' && (
-          <Form.Item label="Values" help="Dropdown list values (newline delimeted)" {...formItemProps}>
+          <Form.Item label="Values" help="下拉框 (换行符分隔)" {...formItemProps}>
             <Input.TextArea
               rows={3}
               value={param.enumOptions}
@@ -192,7 +192,7 @@ function EditParameterSettingsDialog(props) {
           </Form.Item>
         )}
         {param.type === 'query' && (
-          <Form.Item label="Query" help="Select query to load dropdown values from" {...formItemProps}>
+          <Form.Item label="Query" help="选择查询以从加载下拉框" {...formItemProps}>
             <QuerySelector
               selectedQuery={initialQuery}
               onChange={q => setParam({ ...param, queryId: q && q.id })}
