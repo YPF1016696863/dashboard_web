@@ -135,6 +135,12 @@ function ViewDashboardCtrl(
 
   this.extractGlobalParameters = () => {
     this.globalParameters = this.dashboard.getParametersDefs();
+    // 由参数设置url
+    const params = _.extend({}, $location.search());
+    this.globalParameters.forEach((param) => {
+      _.extend(params, param.toUrlParams());
+    });
+    $location.search(params);
   };
 
   $scope.$on('dashboard.update-parameters', () => {
@@ -146,6 +152,18 @@ function ViewDashboardCtrl(
     this.openParamDraw = true;
   }
   this.onPramClose = ()=>{
+    this.openParamDraw = false;
+  }
+  this.onSubmit = (updatedParameters)=>{
+    // Read parameter and reset url
+    // 由参数设置url
+    const params = _.extend({}, $location.search());
+    updatedParameters.forEach((param) => {
+      _.extend(params, param.toUrlParams());
+    });
+    $location.search(params);
+    vm.refreshDashboard();
+    $scope.$applyAsync();
     this.openParamDraw = false;
   }
 
