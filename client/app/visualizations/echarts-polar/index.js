@@ -80,7 +80,7 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
               }
 
             });
-
+         
             // 设置环形分割区域的间隔颜色
             _.set($scope.options, "radiusAxis.splitArea.areaStyle.color",
               [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),

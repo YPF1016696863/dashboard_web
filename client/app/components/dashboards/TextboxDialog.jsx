@@ -68,13 +68,13 @@ class TextboxDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={isNew ? translate.instant("TEXTBOXDIALOG.ADD") : translate.instant("TEXTBOXDIALOG.EDIT")}
+        title={isNew ? '添加文本框' : '编辑文本框'}
         onOk={() => this.saveWidget()}
         okButtonProps={{
           loading: this.state.saveInProgress,
           disabled: !this.state.text,
         }}
-        okText={isNew ? translate.instant("TEXTBOXDIALOG.ADD_TO_DASHBOARD") : translate.instant("TEXTBOXDIALOG.SAVE")}
+        okText={isNew ? '添加到可视化面板' : '保存文本框'}
         width={500}
         wrapProps={{ 'data-test': 'TextboxDialog' }}
       >
@@ -85,7 +85,7 @@ class TextboxDialog extends React.Component {
             value={this.state.text}
             onChange={this.onTextChanged}
             autoFocus
-            placeholder={translate.instant("TEXTBOXDIALOG.PLACEHOLDER")}
+            placeholder='请输入文本'
           />
           <small>
             Supports basic{' '}
@@ -100,7 +100,7 @@ class TextboxDialog extends React.Component {
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />
-              <strong className="preview-title">{translate.instant("TEXTBOXDIALOG.PREVIEW")}</strong>
+              <strong className="preview-title">预览文本框</strong>
               <p
                 dangerouslySetInnerHTML={{ __html: this.state.preview }} // eslint-disable-line react/no-danger
                 className="preview markdown"

@@ -23,9 +23,13 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
+import { angular2react } from 'angular2react';
 import * as _ from 'lodash';
 import { QueryTagsControl } from '@/components/tags-control/TagsControl';
 import { SchedulePhrase } from '@/components/queries/SchedulePhrase';
+// import QueriesList  from '@/components/queries-list/Querieslist';
+import { ChartsListSelectView } from '@/pages/dashboards/charts-list-select';
+
 
 import {
   wrap as itemsList,
@@ -53,6 +57,8 @@ const CHART_IMG_ROOT = '/static/images/';
 
 const emptyChart = '/static/images/emptyChart.png';
 const { Panel } = Collapse;
+let ChartsListSelectViewDOM;
+let QueriesListViewDOM;
 
 class ChartsSearch extends React.Component {
   state = {
@@ -61,10 +67,20 @@ class ChartsSearch extends React.Component {
   componentDidMount() {
     this.setState({
       isLoaded: true,
-      visualization: null     
+      visualization: null
     });
     // this.props.chartSearchCb('new');
     this.getQuery(this.props.queryId + ':' + this.props.chartId);
+    ChartsListSelectViewDOM = angular2react(
+      'chartsListSelectView',
+      ChartsListSelectView,
+      window.$injector
+    );
+    // QueriesListViewDOM = angular2react(
+    //   'queriesListView',
+    //   QueriesListView,
+    //   window.$injector
+    // );
   }
 
   getQuery(id) {
@@ -166,7 +182,7 @@ class ChartsSearch extends React.Component {
                       onChange={e => {
                         this.setState({
                           value: e.target.value,
-                          visualization:{type:e.target.value}// 
+                          visualization: { type: e.target.value }// 
                         });
                         // debugger
                         let type;
@@ -194,15 +210,15 @@ class ChartsSearch extends React.Component {
                           case 'SANKEY': type = 'SANKEY'; break;
                           case 'COUNTER': type = 'COUNTER'; break;
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
-                          default: type = 'ECHARTS';console.log("default(error)");
+                          default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");
-                        
+
                         this.props.chartSearchCb(type, true, chart);
                       }}
                     >
 
-                      <Collapse bordered={false} style={{position:"absolute",left:'0%', width: '100%' }}>
+                      <Collapse bordered={false} style={{ position: "absolute", left: '0%', width: '100%' }}>
                         {/* *** *****Radio value="ECHARTS" Echarts基础图  key 1 */}
                         <Panel header="Echarts基础图组" id="p1" key="1">
                           <Row gutter={[8, 8]}>
@@ -552,19 +568,20 @@ class ChartsSearch extends React.Component {
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
-
-
-
-
-
                       </Collapse>
                     </Radio.Group>
 
                   </Row>
                 </Col>
               </Row>
+
               <Row>
-                <Col style={{ paddingRight: '10px' }} />
+                {/* <QueriesList /> */}
+
+
+                {/* <QueriesListViewDOM /> */}
+                {/* <queries-list query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType"></queries-list> */}
+                {/* <Col style={{ paddingRight: '10px' }} /> */}
               </Row>
             </>
           )}

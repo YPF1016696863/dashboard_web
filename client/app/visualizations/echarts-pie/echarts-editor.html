@@ -3,7 +3,6 @@
         <li ng-class="{active: currentTab == 'general'}">
             <a ng-click="changeTab('general')">数据设置</a>
         </li>
-
         <li ng-class="{active: currentTab == 'style'}">
             <a ng-click="changeTab('style')">样式设置</a>
         </li>
@@ -12,10 +11,6 @@
         </li>
         <li ng-class="{active: currentTab == 'others'}">
             <a ng-click="changeTab('others')">其他设置</a>
-        </li>
-     
-        <li ng-class="{active: currentTab == 'code'}">
-            <a ng-click="changeTab('code')">用户自定义</a>
         </li>
     </ul>
     <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
@@ -46,17 +41,13 @@
                 </ui-select-choices>
             </ui-select>
         </div>
-
-
-
     </div>
-
 
     <div ng-if="currentTab == 'style'" class="m-t-10 m-b-10">
         <table class="table table-condensed col-table">
             <thead>
                 <th>系列</th>
-                <th>{{'CHART_EDITOR.TYPE' | translate}}</th>
+                <th>类型</th>
             </thead>
             <tbody>
                 <tr ng-repeat="yAxisColumn in options.form.yAxisColumns">
@@ -65,7 +56,6 @@
                             ng-model="yAxisColumn">
                     </td>
                     <td style="padding: 3px; width: 105px;">
-
                         <e-chart-pie-types serie="yAxisColumn" chart-type="options.form.yAxisColumnTypes[yAxisColumn]"
                             chart-type-cb="selectChartTypeCb"></e-chart-pie-types>
 
@@ -89,154 +79,60 @@
             </tbody>
         </table>
         <hr>
-        <hr>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.titleShow">
-                显示主标题设置
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.titleShow">
-            <div class="form-group">
-                <label class="control-label">图表主标题</label>
-                <input name="name" type="text" class="form-control" ng-model="options.title.text" placeholder="" />
-            </div>
-
-            <div class="form-group">
+        <div class="form-group" ng-init="Show = 0">
+            <div class="form-group" style="width:49%;float:left">
                 <label>
-                    <input type="checkbox" ng-model="options.titleStyleShow">
-                    显示主标题字体设置
+                    <input type="radio" value="0" ng-model="Show">
+                    标题设置
                 </label>
             </div>
-
-            <div class="form-group" ng-if="options.titleStyleShow">
-                <div class="form-group">
-                    <label class="control-label">图表主标题字体大小</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.title.textStyle.fontSize"
-                        placeholder="25" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表主标题字体颜色</label>
-                    <ui-select ng-model="options.title.textStyle.color">
-                        <ui-select-match placeholder="主标题字体颜色...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="Color.value as Color in Colors">
-                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表主标题粗细</label>
-                    <ui-select ng-model="options.title.textStyle.fontWeight">
-                        <ui-select-match placeholder="主标题字体粗细...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
-                            <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表主标题字体风格</label>
-                    <ui-select ng-model="options.title.textStyle.fontStyle">
-                        <ui-select-match placeholder="字体风格...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="FontStyle.value as FontStyle in FontStyles">
-                            <div ng-bind-html="FontStyle.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表主标题字体系列</label>
-                    <ui-select ng-model="options.title.textStyle.fontFamily">
-                        <ui-select-match placeholder="字体系列...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="LabelFontFamily.value as LabelFontFamily in LabelFontFamilys">
-                            <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-            <hr>
-            <hr>
-        </div>
-
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.subtitleShow">
-                显示副标题设置
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.subtitleShow">
-            <div class="form-group">
-                <label class="control-label">图表副标题</label>
-                <input name="name" type="text" class="form-control" ng-model="options.title.subtext" placeholder="" />
-            </div>
-            <div class="form-group">
+            <div class="form-group" style="width:49%;float:right">
                 <label>
-                    <input type="checkbox" ng-model="options.subtitleStyleShow">
-                    显示副标题字体设置
+                    <input type="radio" value="1" ng-model="Show">
+                    图表设置
                 </label>
             </div>
-            <div class="form-group" ng-if="options.subtitleStyleShow">
-                <div class="form-group">
-                    <label class="control-label">图表副标题字体大小</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.title.subtextStyle.fontSize"
-                        placeholder="18" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表副标题字体颜色</label>
-                    <ui-select ng-model="options.title.subtextStyle.color">
-                        <ui-select-match placeholder="副标题字体颜色...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="Color.value as Color in Colors">
-                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表副标题粗细</label>
-                    <ui-select ng-model="options.title.subtextStyle.fontWeight">
-                        <ui-select-match placeholder="副标题字体粗细...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
-                            <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表副标题字体风格</label>
-                    <ui-select ng-model="options.title.subtextStyle.fontStyle">
-                        <ui-select-match placeholder="字体风格...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="FontStyle.value as FontStyle in FontStyles">
-                            <div ng-bind-html="FontStyle.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">图表副标题字体系列</label>
-                    <ui-select ng-model="options.title.subtextStyle.fontFamily">
-                        <ui-select-match placeholder="字体系列...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="LabelFontFamily.value as LabelFontFamily in LabelFontFamilys">
-                            <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <hr>
-                <hr>
-            </div>
-
         </div>
 
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.titleLocationShow">
-                显示标题位置设置
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.titleLocationShow">
-            <div class="form-group">
-                <label class="control-label">图表标题水平位置(百分比:如50%)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.title.left" placeholder="" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">图表标题垂直位置(百分比:如50%)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.title.top" placeholder="" />
-            </div>
-            <div class="form-group">
+        <div class="form-group" ng-if="Show == 0">
+            <div class="form-group" style="width:49%;float:left">
+                <label class="control-label">图表标题水平位置(单位:百分比，如50%)</label>
+                <input name="name" style="width:100%" type="text" class="form-control" ng-model="options.title.left"
+                    placeholder="" />
+                <label class="control-label">主标题</label>
+                <input name="name" style="width:100%" type="text" class="form-control" ng-model="options.title.text"
+                    placeholder="" />
+                <label class="control-label">主标题字体大小</label>
+                <input name="name" style="width:100%" type="text" class="form-control"
+                    ng-model="options.title.textStyle.fontSize" placeholder="" />
+                <label class="control-label">主标题字体颜色</label>
+                <ui-select class="mini" ng-model="options.title.textStyle.color">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in Colors">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">主标题粗细</label>
+                <ui-select ng-model="options.title.textStyle.fontWeight">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
+                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">主标题字体风格</label>
+                <ui-select ng-model="options.title.textStyle.fontStyle">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="FontStyle.value as FontStyle in FontStyles">
+                        <div ng-bind-html="FontStyle.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">主标题字体系列</label>
+                <ui-select ng-model="options.title.textStyle.fontFamily">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="LabelFontFamily.value as LabelFontFamily in LabelFontFamilys">
+                        <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
                 <label class="control-label">主副标题对齐方式</label>
                 <ui-select ng-model="options.title.textAlign">
                     <ui-select-match placeholder="对齐方式...">{{$select.selected.label}}</ui-select-match>
@@ -245,224 +141,101 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-        </div>
-        <hr>
-        <hr>
-        <div class="form-group">
-            <label class="control-label">设置整体主题颜色</label>
-            <ui-select ng-model="options.color">
-                <ui-select-match placeholder="选择色系颜色...">{{$select.selected.label}}</ui-select-match>
-                <ui-select-choices repeat="Color.value as Color in ThemeColor">
-                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group">
-            <label class="control-label">背景颜色</label>
-            <ui-select ng-model="options.backgroundColor">
-                <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
-                <ui-select-choices repeat="Color.value as Color in BackgroundColors">
-                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group">
-                <label class="control-label">引导线颜色</label>
-                <ui-select ng-model="options.series_LabelLine_LineStyle_Color">
-                    <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
+
+            <div class="form-group" style="width:49%;float:right">
+                <label class="control-label">图表标题垂直位置(单位:百分比，如50%)</label>
+                <input name="name" style="width:100%" type="text" class="form-control" ng-model="options.title.top"
+                    placeholder="" />
+                <label class="control-label">副标题</label>
+                <input name="name" style="width:100%" type="text" class="form-control" ng-model="options.title.subtext"
+                    placeholder="" />
+                <label class="control-label">副标题字体大小</label>
+                <input name="name" style="width:100%" type="text" class="form-control"
+                    ng-model="options.title.subtextStyle.fontSize" placeholder="" />
+                <label class="control-label">副标题字体颜色</label>
+                <ui-select ng-model="options.title.subtextStyle.color">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                     <ui-select-choices repeat="Color.value as Color in Colors">
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
+                <label class="control-label">副标题粗细</label>
+                <ui-select ng-model="options.title.subtextStyle.fontWeight">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
+                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">副标题字体风格</label>
+                <ui-select ng-model="options.title.subtextStyle.fontStyle">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="FontStyle.value as FontStyle in FontStyles">
+                        <div ng-bind-html="FontStyle.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">副标题字体系列</label>
+                <ui-select style="height:10px;" ng-model="options.title.subtextStyle.fontFamily">
+                    <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="LabelFontFamily.value as LabelFontFamily in LabelFontFamilys">
+                        <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
-    </div>
-
-    <div ng-if="currentTab == 'dataseries'" class="m-t-10 m-b-10">
-        <div class="form-group">
-            <label class="control-label">选择设置系列</label>
-            <ui-select name="serise" required ng-model="options.useSerie">
-                <ui-select-match placeholder="选择系列...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in options.form.yAxisColumns ">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <!-- 系列提示文字设置 -->
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.serieShow">
-                显示系列文字设置
-            </label>
         </div>
 
-        <div class="form-group" ng-if="options.serieShow">
+        <div class="form-group" ng-if="Show == 1">
+            <div class="form-group" style="width:49%;float:left">
 
-            
+                <label class="control-label">组件离容器左侧的距离(单位:百分比，如50%)</label>
+                <input style="width:100%" ng-model="options.grid.left" type="text" class="form-control" placeholder="0">
+                <label class="control-label">设置整体主题颜色</label>
+                <ui-select ng-model="options.color">
+                    <ui-select-match placeholder="选择色系颜色...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in ThemeColor">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+
+            </div>
+            <div class="form-group" style="width:49%;float:right">
+
+                <label class="control-label">组件离容器下侧的距离(单位:百分比，如50%)</label>
+                <input style="width:100%" ng-model="options.grid.bottom" type="text" class="form-control"
+                    placeholder="0">
+                <label class="control-label">设置背景颜色</label>
+                <ui-select ng-model="options.backgroundColor">
+                    <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in BackgroundColors">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" ng-model="options.size.responsive">
+                    图表尺寸自适应
+                </label>
+            </div>
+            <div class="form-group" style="width:49%;float:left" ng-if="!options.size.responsive">
+                <label class="control-label">图表宽度(单位:px)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.size.width" placeholder="600" />
+            </div>
+            <div class="form-group" style="width:49%;float:right" ng-if="!options.size.responsive">
+                <label class="control-label">图表高度(单位:px)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.size.height" placeholder="400" />
+            </div>
 
             <div class="form-group">
                 <label>
-                    <input type="checkbox" ng-model="options.serieDetShow">
-                    显示文字详细设置
+                    <input type="checkbox" ng-model="options.legend.show">
+                    显示图例
                 </label>
             </div>
-
-            <div class="form-group" ng-if="options.serieDetShow">
-                <div class="form-group">
-                    <label class="control-label">标注文字位置</label>
-                    <ui-select ng-model="options.series_Label_Position[options.useSerie_Index]">
-                        <ui-select-match placeholder="选择位置...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="LablePosition.value as LablePosition in LablePositions">
-                            <div ng-bind-html="LablePosition.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label">指示文字大小(单位:px)</label>
-                    <input name="name" type="text" class="form-control"
-                        ng-model="options.series_Label_FontSize[options.useSerie_Index]" placeholder="25" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">选中时指示文字大小(单位:px)</label>
-                    <input name="name" type="text" class="form-control"
-                        ng-model="options.series_Label_Normal_FontSize[options.useSerie_Index]" placeholder="25" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">选中时指示文字大小粗细</label>
-                    <ui-select ng-model="options.series_Label_Normal_FontWeights[options.useSerie_Index]">
-                        <ui-select-match placeholder="字体粗细...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
-                            <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.seriesShow">
-                显示扇瓣设置
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.seriesShow">
-            <div class="form-group">
-                <label class="control-label">选择设置扇瓣</label>
-                <ui-select name="serise" required ng-model="options.useFan">
-                    <ui-select-match placeholder="选择扇瓣...">{{$select.selected}}</ui-select-match>
-                    <ui-select-choices repeat="column in options.Fans ">
-                        <span ng-bind-html="column | highlight: $select.search"></span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-
-
-            <div class="form-group">
-                <label class="control-label">扇瓣颜色</label>
-                <ui-select ng-model="options.series_ItemStyle_Color">
-                    <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
-                    <ui-select-choices repeat="Color.value as Color in Colors">
-                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-            <hr>
-            <hr>
-
-            <!-- <div class="form-group">
-                <label class="control-label">标注文字颜色</label>
-                <ui-select ng-model="options.series_Label_Color">
-                    <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
-                    <ui-select-choices repeat="Color.value as Color in Colors">
-                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
-            </div> -->
-
-        </div>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.serieRadShow">
-                显示半径圆心详细设置
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.serieRadShow">
-            <div class="form-group">
-                <label class="control-label">系列最大半径(百分比:如50%)</label>
-                <input name="name" type="text" class="form-control"
-                    ng-model="options.series_RadiusMax[options.useSerie_Index]" placeholder="200" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">系列最小半径(百分比:如50%)</label>
-                <input name="name" type="text" class="form-control"
-                    ng-model="options.series_RadiusMin[options.useSerie_Index]" placeholder="100" />
-            </div>
-            <hr>
-            <div class="form-group">
-                <label class="control-label">饼图的中心（圆心）坐标X(百分比%)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.series_CenterX"
-                    placeholder="50%" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">饼图的中心（圆心）坐标Y(百分比%)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.series_CenterY"
-                    placeholder="50%" />
-            </div>
-        </div>
-
-    </div>
-
-
-    <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
-        <div class="form-group">
-            <label class="control-label">系列名称</label>
-            <input name="name" type="text" class="form-control" ng-model="options.series_Name" placeholder="" />
-        </div>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.tooltip.show">
-                显示鼠标提示框
-            </label>
-        </div>
-
-        <div class="form-group" ng-if="options.tooltip.show">
-            <label class="control-label">提示框格式</label>
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" ng-model="options.show_Persant">
-                    显示百分比
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.toolbox.show">
-                显示工具栏
-            </label>
-        </div>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.size.responsive">
-                图表尺寸自适应
-            </label>
-        </div>
-
-        <div class="form-group" ng-if="!options.size.responsive">
-            <label class="control-label">图表宽度(单位:px)</label>
-            <input name="name" type="text" class="form-control" ng-model="options.size.width" placeholder="600" />
-        </div>
-        <div class="form-group" ng-if="!options.size.responsive">
-            <label class="control-label">图表高度(单位:px)</label>
-            <input name="name" type="text" class="form-control" ng-model="options.size.height" placeholder="400" />
-        </div>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.legend.show">
-                显示图例
-            </label>
-        </div>
-        <div class="form-group" np-if="options.legend.show">
-            <div class="form-group">
+            <div class="form-group" style="width:49%;float:left" ng-if="options.legend.show">
+                <label class="control-label">图例宽度(单位:px)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.legend.width" placeholder="" />
+                <label class="control-label">图例左侧距离(单位:百分比，如50%)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.legend.left" placeholder="" />
                 <label class="control-label">图例对齐方式</label>
                 <ui-select ng-model="options.legend.left">
                     <ui-select-match placeholder="对齐方式...">{{$select.selected.label}}</ui-select-match>
@@ -471,20 +244,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-            <div class="form-group">
-                <label class="control-label">图例宽度(单位:px)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.legend.width" placeholder="" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">图例左侧距离(单位:百分比，如50%)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.legend.left" placeholder="" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">图例顶部距离(单位:百分比，如50%)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.legend.top" placeholder="" />
-            </div>
-           
-            <div class="form-group">
+            <div class="form-group" style="width:49%;float:right" ng-if="options.legend.show">
                 <label class="control-label">图例文字颜色</label>
                 <ui-select ng-model="options.legend.textStyle.color">
                     <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
@@ -492,27 +252,137 @@
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
+                <label class="control-label">图例顶部距离(单位:百分比，如50%)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.legend.top" placeholder="" />
             </div>
+
         </div>
 
 
     </div>
 
+    <div ng-if="currentTab == 'dataseries'" class="m-t-10 m-b-10">
+        <div class="form-group" ng-init="Show = 0"> 
+            <div class="form-group" style="width:49%;float:left">
+                <label>
+                    <input type="radio" value="0" ng-model="Show">
+                    选择设置系列
+                </label>
+            </div>
+            <div class="form-group" style="width:49%;float:right">
+                <label>
+                    <input type="radio" value="1" ng-model="Show">
+                    显示饼图设置
+                </label>
+            </div>
+        </div>
+        <div class="form-group" ng-if="Show == 0">
+            <div class="form-group" style="width:49%;float:left">
+                <label class="control-label">选择设置系列</label>
+                <ui-select name="serise" required ng-model="options.useSerie">
+                    <ui-select-match placeholder="选择系列...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="column in options.form.yAxisColumns ">
+                        <span ng-bind-html="column | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">最大半径(百分比)</label>
+                <input name="name" type="text" class="form-control"
+                    ng-model="options.series_RadiusMax[options.useSerie_Index]" placeholder="200" />
+                <label class="control-label">标注文字位置</label>
+                <ui-select ng-model="options.series_Label_Position[options.useSerie_Index]">
+                    <ui-select-match placeholder="选择位置...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="LablePosition.value as LablePosition in LablePositions">
+                        <div ng-bind-html="LablePosition.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">选中时指示文字大小(px)</label>
+                <input name="name" type="text" class="form-control"
+                    ng-model="options.series_Label_Normal_FontSize[options.useSerie_Index]" placeholder="25" />
+            </div>
+            <div class="form-group" style="width:49%;float:right">
+                <label class="control-label">系列名称</label>
+                <input name="name" type="text" class="form-control" ng-model="options.series_Name" placeholder="" />
+                <label class="control-label">最小半径(百分比)</label>
+                <input name="name" type="text" class="form-control"
+                    ng-model="options.series_RadiusMin[options.useSerie_Index]" placeholder="100" />
+                <label class="control-label">指示文字大小(px)</label>
+                <input name="name" type="text" class="form-control"
+                    ng-model="options.series_Label_FontSize[options.useSerie_Index]" placeholder="25" />
+                <label class="control-label">选中时指示文字粗细</label>
+                <ui-select ng-model="options.series_Label_Normal_FontWeights[options.useSerie_Index]">
+                    <ui-select-match placeholder="字体粗细...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
+                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
 
+        <div class="form-group" ng-if="Show == 1">
+            <div class="form-group" style="width:49%;float:left">
+                <label class="control-label">选择设置扇瓣</label>
+                <ui-select name="serise" required ng-model="options.useFan">
+                    <ui-select-match placeholder="选择扇瓣...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="column in options.Fans ">
+                        <span ng-bind-html="column | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">饼图的中心（圆心）坐标X(百分比%)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.series_CenterX"
+                    placeholder="50%" />
+                <label class="control-label">引导线颜色</label>
+                <ui-select ng-model="options.series_LabelLine_LineStyle_Color">
+                    <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in Colors">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group" style="width:49%;float:right">
+                <label class="control-label">扇瓣颜色</label>
+                <ui-select ng-model="options.series_ItemStyle_Color">
+                    <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in Colors">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <label class="control-label">饼图的中心（圆心）坐标Y(百分比%)</label>
+                <input name="name" type="text" class="form-control" ng-model="options.series_CenterY"
+                    placeholder="50%" />
+            </div>
 
+        </div>
+    </div>
 
-    <div ng-if="currentTab == 'code'" class="m-t-10 m-b-10">
+    <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-model="options.toolbox.show">
+                显示工具栏
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-model="options.tooltip.show">
+                显示鼠标提示框
+            </label>
+        </div>
+        <div class="form-group" ng-if="options.tooltip.show">
+            <label>
+                <input type="checkbox" ng-model="options.show_Persant">
+                显示百分比
+            </label>
+        </div>
         <div class="form-group">
             <label>
                 <input type="checkbox" ng-model="options.form.isCodeEnabled">
                 使用用户自定义代码设置图表
             </label>
         </div>
-
-        <div class="form-group">
+        <div class="form-group" ng-if="options.form.isCodeEnabled">
             <textarea rows="15" style="width:100%;resize: none;" ng-model="options.form.code"></textarea>
         </div>
-    </div>
 
+    </div>
 
 </div>

@@ -99,6 +99,9 @@ export function defaultPolarChartOptions() {
             },
             axisLine: {
                 show: true,
+                lineStyle: {   // 坐标轴线的颜色
+                    color: '#333',
+                },
             }
         },
         series: []
