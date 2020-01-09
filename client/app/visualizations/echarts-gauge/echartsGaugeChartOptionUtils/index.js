@@ -19,6 +19,8 @@ export function defaultGaugeChartOptions() {
                 saveAsImage: {}
             }
         },
+        grid: {
+        },
         legend: {
             show: true,
             // x: 'left'

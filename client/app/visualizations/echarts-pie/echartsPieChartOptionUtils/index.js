@@ -48,6 +48,8 @@ export function defaultPieChartOptions() {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
+        grid: {
+        },
         toolbox: {
             show: false,
             feature: {               
