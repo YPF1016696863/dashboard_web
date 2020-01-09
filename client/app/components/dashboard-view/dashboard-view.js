@@ -141,6 +141,14 @@ function ViewDashboardCtrl(
     this.extractGlobalParameters();
   });
 
+  this.openParamDraw = false;
+  this.openParameterDialog = ()=>{
+    this.openParamDraw = true;
+  }
+  this.onPramClose = ()=>{
+    this.openParamDraw = false;
+  }
+
   const collectFilters = (dashboard, forceRefresh) => {
     const queryResultPromises = _.compact(
       this.dashboard.widgets.map(widget => {
