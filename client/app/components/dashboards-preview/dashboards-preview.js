@@ -135,9 +135,13 @@ function DashboardPreviewCtrl(
       }
   );
 
-
-
-
+  this.openParamDraw = false;
+  this.openParameterDialog = ()=>{
+    this.openParamDraw = true;
+  }
+  this.onPramClose = ()=>{
+    this.openParamDraw = false;
+  }
 
   this.saveDashboardLayout = () => {
     if (!this.dashboard.canEdit()) {
