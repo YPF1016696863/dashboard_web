@@ -14,6 +14,7 @@ import TextboxDialog from '@/components/dashboards/TextboxDialog';
 import notification from '@/services/notification';
 
 import './dashboards-preview.less';
+import parameters from "@/components/parameters";
 
 function isWidgetPositionChanged(oldPosition, newPosition) {
   const fields = ['col', 'row', 'sizeX', 'sizeY', 'autoHeight'];
@@ -142,6 +143,18 @@ function DashboardPreviewCtrl(
   this.onPramClose = ()=>{
     this.openParamDraw = false;
   }
+  this.onSubmit = (updatedParameters)=>{
+    // Read parameter and reset url
+    // 由参数设置url
+    const params = _.extend({}, $location.search());
+    updatedParameters.forEach((param) => {
+      _.extend(params, param.toUrlParams());
+    });
+    $location.search(params);
+    vm.refreshDashboard();
+    $scope.$applyAsync();
+    this.openParamDraw = false;
+  }
 
   this.saveDashboardLayout = () => {
     if (!this.dashboard.canEdit()) {
@@ -253,6 +266,12 @@ function DashboardPreviewCtrl(
 
   this.extractGlobalParameters = () => {
     this.globalParameters = this.dashboard.getParametersDefs();
+    // 由参数设置url
+    const params = _.extend({}, $location.search());
+    this.globalParameters.forEach((param) => {
+      _.extend(params, param.toUrlParams());
+    });
+    $location.search(params);
   };
 
   $scope.$on('dashboard.update-parameters', () => {

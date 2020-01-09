@@ -51,7 +51,7 @@ class ParameterDrawer extends React.Component {
       visible: false
     });
     this.props.onClose();
-    this.props.onSubmit();
+    this.props.onSubmit(this.props.params);
   };
 
   render() {
