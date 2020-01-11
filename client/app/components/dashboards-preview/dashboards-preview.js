@@ -554,8 +554,9 @@ function DashboardPreviewCtrl(
     // Save position of newly added widget (but not entire layout)
     const widget = _.last(this.dashboard.widgets);
     if (_.isObject(widget)) {
-      return widget.save();
+      widget.save();
     }
+    vm.refreshDashboard();
     $scope.$applyAsync();
   };
 
@@ -564,6 +565,7 @@ function DashboardPreviewCtrl(
       w => w.id !== undefined && w.id !== widgetId
     );
     this.extractGlobalParameters();
+    vm.refreshDashboard();
     $scope.$applyAsync();
 
     if (!this.layoutEditing) {

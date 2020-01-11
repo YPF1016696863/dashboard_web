@@ -8,6 +8,9 @@ import { policy } from '@/services/policy';
 
 import './DashboardAddWidgets.less';
 import { ChartsListSelectView } from '../charts-list-select';
+import { Dashboard } from '@/services/dashboard';
+import { currentUser } from '@/services/auth';
+import LoadingState from '@/components/items-list/components/LoadingState';
 
 let ChartsListSelectViewDOM;
 
@@ -17,9 +20,21 @@ class DashboardAddWidgets extends React.Component {
       super(props);
     }
     */
-  state = { visible: false, selectedWidget: null };
+  state = {
+    visible: false,
+    selectedWidget: null,
+    parameterMappings: null,
+    isLoaded: false,
+    dashboard: null
+  };
 
   componentDidMount() {
+    const { slugId } = this.props;
+
+    if (slugId) {
+      this.getDashboard(slugId);
+    }
+
     ChartsListSelectViewDOM = angular2react(
       'chartsListSelectView',
       ChartsListSelectView,
@@ -38,7 +53,10 @@ class DashboardAddWidgets extends React.Component {
     this.setState({
       visible: false
     });
-    this.props.addWidgetCb({widget:this.state.selectedWidget,paramMapping:{}});
+    this.props.addWidgetCb({
+      widget: this.state.selectedWidget,
+      paramMapping: this.state.parameterMappings
+    });
   };
 
   handleCancel = e => {
@@ -47,12 +65,35 @@ class DashboardAddWidgets extends React.Component {
     });
   };
 
-  selectWidgetCb = selectedWidget => {
-    if(selectedWidget) {
+  selectWidgetCb = (selectedWidget, parameterMappings) => {
+    if (selectedWidget) {
       this.setState({
-        selectedWidget
+        selectedWidget,
+        parameterMappings: parameterMappings || []
       });
     }
+  };
+
+  getDashboard = slugId => {
+    this.setState({
+      isLoaded: false,
+      dashboard: null
+    });
+    Dashboard.get(
+      { slug: slugId },
+      dashboard => {
+        this.setState({
+          isLoaded: true,
+          dashboard
+        });
+      },
+      rejection => {
+        this.setState({
+          isLoaded: true,
+          dashboard: null
+        });
+      }
+    );
   };
 
   render() {
@@ -69,7 +110,16 @@ class DashboardAddWidgets extends React.Component {
           cancelText="取消"
           okText="添加"
         >
-          <ChartsListSelectViewDOM selectWidgetCb={this.selectWidgetCb} />
+          {!this.state.isLoaded ? (
+            <div className="align-center-div" style={{ paddingTop: '15%' }}>
+              <LoadingState />
+            </div>
+          ) : (
+            <ChartsListSelectViewDOM
+              selectWidgetCb={this.selectWidgetCb}
+              dashboard={this.state.dashboard}
+            />
+          )}
         </Modal>
       </div>
     );
@@ -77,10 +127,12 @@ class DashboardAddWidgets extends React.Component {
 }
 
 DashboardAddWidgets.propTypes = {
-  addWidgetCb: PropTypes.func
+  addWidgetCb: PropTypes.func,
+  slugId: PropTypes.string
 };
 DashboardAddWidgets.defaultProps = {
-  addWidgetCb: data => {}
+  addWidgetCb: data => {},
+  slugId: ''
 };
 
 export default function init(ngModule) {

@@ -322,36 +322,38 @@ class ChartsListSearch extends React.Component {
                 </Row>
               </Col>
             </Row>
-            <Row>
-              <Col span={8}>
-                <Button
-                  size="small"
-                  type="link"
-                  style={{ color: '#3d4d66' }}
-                  onClick={e => {
-                    navigateToWithSearch('/query/unset/charts/new');
-                  }}
-                >
-                  <Icon type="plus-square" style={{ color: '#13cd66' }} />
-                  新建组件
-                </Button>
-              </Col>
-              <Col span={8}>
-                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
-                  <Icon type="folder-add" style={{ color: '#faaa39' }} />
-                  新建文件夹
-                </Button>
-              </Col>
-              <Col span={8}>
-                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
-                  <Icon type="folder-open" style={{ color: '#3685f2' }} />
-                  移动到
-                </Button>
-              </Col>
-              <Col span={24}>
-                <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
-              </Col>
-            </Row>
+            {this.props.simpleMode ? null : (
+              <Row>
+                <Col span={8}>
+                  <Button
+                    size="small"
+                    type="link"
+                    style={{ color: '#3d4d66' }}
+                    onClick={e => {
+                      navigateToWithSearch('/query/unset/charts/new');
+                    }}
+                  >
+                    <Icon type="plus-square" style={{ color: '#13cd66' }} />
+                    新建组件
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                    <Icon type="folder-add" style={{ color: '#faaa39' }} />
+                    新建文件夹
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button size="small" type="link" style={{ color: '#3d4d66' }}>
+                    <Icon type="folder-open" style={{ color: '#3685f2' }} />
+                    移动到
+                  </Button>
+                </Col>
+                <Col span={24}>
+                  <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
+                </Col>
+              </Row>
+            )}
             <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
@@ -389,12 +391,14 @@ class ChartsListSearch extends React.Component {
 
 ChartsListSearch.propTypes = {
   displayId: PropTypes.string,
-  querySearchCb: PropTypes.func
+  querySearchCb: PropTypes.func,
+  simpleMode: PropTypes.bool
 };
 
 ChartsListSearch.defaultProps = {
   displayId: null,
-  querySearchCb: (a, b) => {}
+  querySearchCb: (a, b) => {},
+  simpleMode: false
 };
 
 export default function init(ngModule) {

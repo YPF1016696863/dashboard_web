@@ -43,6 +43,7 @@ function ChartsListSelectViewCtrl(
   $scope.currentUser = currentUser;
   $scope.displayType = null;
   $scope.displayId = null;
+  $scope.dashboard = this.dashboard;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
 
   $scope.querySearchCb = (type, id) => {
@@ -51,8 +52,8 @@ function ChartsListSelectViewCtrl(
     $scope.$apply();
   };
 
-  $scope.getVisCb = (vis) => {
-    this.selectWidgetCb(vis);
+  $scope.getVisCb = (vis,params) => {
+    this.selectWidgetCb(vis,params);
   };
 
   // currentUser.hasPermission('admin');
@@ -63,7 +64,8 @@ function ChartsListSelectViewCtrl(
 export const ChartsListSelectView = {
   template,
   bindings: {
-    selectWidgetCb:'<'
+    selectWidgetCb:'<',
+    dashboard:'<'
   },
   controller: ChartsListSelectViewCtrl
 };
