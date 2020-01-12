@@ -48,7 +48,7 @@ npm install'''
       }
     }
 
-    stage('') {
+    stage('Deploy datavis') {
       steps {
         build 'deploy_datavis'
       }
