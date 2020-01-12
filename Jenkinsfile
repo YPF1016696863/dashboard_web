@@ -48,6 +48,12 @@ npm install'''
       }
     }
 
+    stage('') {
+      steps {
+        build 'deploy_datavis'
+      }
+    }
+
   }
   environment {
     registry = 'guwenqing/datavis-dashboard'
