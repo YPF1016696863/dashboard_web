@@ -201,23 +201,22 @@ class DataSourceTabs extends React.Component {
                 src={`${IMG_ROOT}/${type.type}.png`}
               />
             </Row>
-            <Row>
-              <Col span={12}>
-                {' '}
-                <Button type="primary" onClick={this.testConnection}>
-                  <Icon type="link" />
-                  连接测试
-                </Button>
-              </Col>
-              <Col span={12}>
-                {' '}
-                <Button type="primary" href="/queries/new" target="_blank">
-                  <Icon type="filter" />
-                  新建数据集
-                </Button>
-              </Col>
-            </Row>
           </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Button.Group size="small">
+              <Button type="primary" onClick={this.testConnection}>
+                <Icon type="link" />
+                连接测试
+              </Button>
+              <Button type="primary" href="/queries/new" target="_blank">
+                <Icon type="filter" />
+                新建数据集
+              </Button>
+            </Button.Group>
+          </Col>
+
         </Row>
         <Divider className="p-l-10 p-r-10">数据源设置</Divider>
         <div>

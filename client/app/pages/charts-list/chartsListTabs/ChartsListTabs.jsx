@@ -578,8 +578,8 @@ class ChartsListTabs extends React.Component {
                           <Form.Item
                             label="共享可视化组件"
                             labelAlign="left"
-                            labelCol={{ span: 6 }}
-                            wrapperCol={{ span: 1, offset: 15 }}
+                            labelCol={{ span: 10 }}
+                            wrapperCol={{ span: 4, offset: 10 }}
                           >
                             <Switch
                               checkedChildren="开"

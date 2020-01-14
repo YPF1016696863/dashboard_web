@@ -32,6 +32,8 @@ import { $route } from '@/services/ng';
 import { navigateTo } from '@/services/navigateTo';
 import CreateSourceDialog from '@/components/CreateSourceDialog';
 import helper from '@/components/dynamic-form/dynamicFormHelper';
+import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
+import {MoveToFolder} from "@/components/move-to-folder/MoveToFolder";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -42,7 +44,17 @@ class DataSourceSearch extends React.Component {
     all: null,
     filtered: null,
     loading: true,
-    dataSourceTypes: null
+    dataSourceTypes: null,
+    runtime: {
+      selected: null,
+      editing: false
+    }
+    /*
+    structure:{
+      current: null,
+      parent: null
+    }
+    */
   };
 
   componentDidMount() {
@@ -202,16 +214,10 @@ class DataSourceSearch extends React.Component {
                 </Button>
               </Col>
               <Col span={8}>
-                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
-                  <Icon type="folder-add" style={{ color: '#faaa39' }} />
-                  新建文件夹
-                </Button>
+                <CreateNewFolder onSuccess={name => alert(name)} />
               </Col>
               <Col span={8}>
-                <Button size="small" type="link" style={{ color: '#3d4d66' }}>
-                  <Icon type="folder-open" style={{ color: '#3685f2' }} />
-                  移动到
-                </Button>
+                <MoveToFolder current={null} structure={null} />
               </Col>
               <Col span={24}>
                 <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
@@ -220,16 +226,43 @@ class DataSourceSearch extends React.Component {
             <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
-                  defaultExpandAll
+                  expandAction="doubleClick"
                   onSelect={(value, node, extra) => {
                     localStorage.setItem(
                       'lastSelectedDataSourceId',
                       value && value.length ? value[0] : null
                     );
+
+                    this.setState({
+                      runtime: {
+                        selected: node.node.props,
+                        editing:
+                          value[0] ===
+                          _.get(this.state.runtime, 'selected.eventKey', null)
+                      }
+                    });
+
                     this.props.sourceSearchCb(value);
                   }}
                 >
-                  <TreeNode title="数据源(无分组)" key="ungrouped">
+                  <TreeNode
+                    title={
+                      _.get(this.state.runtime, 'selected.eventKey', null) ===
+                        'root' && this.state.runtime.editing ? (
+                          <Input
+                            autoFocus
+                            size="small"
+                            value="需要从API获取"
+                            onBlur={() => {
+                              this.setState({ runtime: { editing: false } });
+                            }}
+                          />
+                      ) : (
+                        '需要从API获取'
+                      )
+                    }
+                    key="root"
+                  >
                     {_.map(this.state.filtered, item => (
                       <TreeNode
                         icon={
