@@ -5,10 +5,6 @@ import template from './alert.html';
 function AlertCtrl($scope, $routeParams, $location, $sce, currentUser, Query, Events, Alert, $translate) {
   this.alertId = $routeParams.alertId;
 
-  if (this.alertId === 'new') {
-    Events.record('view', 'page', 'alerts/new');
-  }
-
   this.$translate = $translate;
   this.trustAsHtml = html => $sce.trustAsHtml(html);
 

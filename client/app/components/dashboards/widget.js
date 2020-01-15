@@ -81,8 +81,6 @@ function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, 
     });
   };
 
-  Events.record('view', 'widget', this.widget.id);
-
   this.load = (refresh = false) => {
     const maxAge = $location.search().maxAge;
     this.widget.load(refresh, maxAge);
@@ -93,8 +91,6 @@ function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, 
   };
 
   if (this.widget.visualization) {
-    Events.record('view', 'query', this.widget.visualization.query.id, { dashboard: true });
-    Events.record('view', 'visualization', this.widget.visualization.id, { dashboard: true });
 
     this.type = 'visualization';
     this.load();

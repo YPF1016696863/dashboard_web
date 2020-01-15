@@ -238,7 +238,6 @@ function ViewDashboardCtrl(
         this.isDashboardOwner =
           currentUser.id === dashboard.user.id ||
           currentUser.hasPermission('admin');
-        Events.record('view', 'dashboard', dashboard.id);
         renderDashboard(dashboard, force);
 
         if ($location.search().refresh !== undefined) {

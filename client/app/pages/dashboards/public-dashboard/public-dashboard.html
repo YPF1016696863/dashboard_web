@@ -2,10 +2,7 @@
   class="layout-content-wrapper-full-height"
   style="padding:0 !important;background-color: #25374C"
 >
-  <main
-    class="dashboard-fullscreen"
-    style="background-color: #25374C"
-  >
+  <main class="dashboard-fullscreen" style="background-color: #25374C">
     <div class="flex-fill p-relative">
       <div
         class="p-absolute d-flex flex-column"
@@ -28,57 +25,65 @@
                 class="d-flex flex-column p-absolute static-position__mobile"
                 style="left: 0; top: 0; right: 0; bottom: 0;"
               >
-                <div class="query__vis scrollbox">
-                  <div
-                    class="dashboard-dark-theme p-5"
-                    style="height:100vh;width:100vw;overflow: hidden;"
-                    ng-style="$ctrl.dashboardStyle"
-                    ng-if="$ctrl.dashboard.widgets.length > 0"
-                  >
-                    <div
-                      class="dashboard-dark-theme"
-                      ng-if="$ctrl.globalParameters.length > 0"
-                    >
-                      <parameters
-                        parameters="$ctrl.globalParameters"
-                      ></parameters>
-                    </div>
+                <div
+                  class="dashboard-dark-theme"
+                  style="height:100vh;width:100vw;overflow: hidden;"
+                  ng-style="$ctrl.dashboardStyle"
+                  ng-if="$ctrl.dashboard.widgets.length > 0"
+                >
 
-                    <div
-                      gridstack
-                      editing="false"
-                      class="dashboard-wrapper preview-mode"
-                    >
-                      <div
-                        class="dashboard-widget-wrapper"
-                        ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
-                        gridstack-item="widget.options.position"
-                        gridstack-item-id="{{ widget.id }}"
-                      >
-                        <div class="grid-stack-item-content">
-                          <dashboard-widget
-                            widget="widget"
-                            dashboard="$ctrl.dashboard"
-                            public="true"
-                          ></dashboard-widget>
-                        </div>
+                  <div class="row" style="background: rgba(37, 55, 76, 0.2)">
+                    <div class="col-sm-3" align="left"></div>
+                    <div class="col-sm-6" align="center" style="font-size: 16px; color:white">
+                      {{$ctrl.dashboard.name}}
+                    </div>
+                    <div class="col-sm-3" align="right">
+                      <div ng-click="$ctrl.openParameterDialog()" ng-if="$ctrl.globalParameters.length > 0" >
+                        <i
+                                class="fa fa-cog animated flipInY"
+                                style="color: #fff; font-size:20px; padding-right:10px;padding-top:10px"
+                        ><md-tooltip md-direction="left">参数设置</md-tooltip></i
+                        >
                       </div>
                     </div>
                   </div>
 
+                  <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose"  on-submit="$ctrl.onSubmit" params="$ctrl.globalParameters"></parameter-drawer>
+
                   <div
-                    class="dashboard-dark-theme"
-                    style="height:100vh;display:flex;"
-                    ng-if="$ctrl.dashboard.widgets.length == 0"
+                    gridstack
+                    editing="false"
+                    class="dashboard-wrapper preview-mode"
                   >
-                    <div style="margin:auto;text-align: center">
-                      <img
-                        src="/static/images/brandImg.png"
-                        width="64"
-                        height="64"
-                      />
-                      <p style="color:#fff">数据可视化面板</p>
+                    <div
+                      class="dashboard-widget-wrapper"
+                      ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
+                      gridstack-item="widget.options.position"
+                      gridstack-item-id="{{ widget.id }}"
+                    >
+                      <div class="grid-stack-item-content">
+                        <dashboard-widget
+                          widget="widget"
+                          dashboard="$ctrl.dashboard"
+                          public="true"
+                        ></dashboard-widget>
+                      </div>
                     </div>
+                  </div>
+                </div>
+
+                <div
+                  class="dashboard-dark-theme"
+                  style="height:100vh;display:flex;"
+                  ng-if="$ctrl.dashboard.widgets.length == 0"
+                >
+                  <div style="margin:auto;text-align: center">
+                    <img
+                      src="/static/images/brandImg.png"
+                      width="64"
+                      height="64"
+                    />
+                    <p style="color:#fff">数据可视化面板</p>
                   </div>
                 </div>
               </div>

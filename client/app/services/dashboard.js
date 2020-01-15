@@ -104,12 +104,17 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
         method: 'get',
         isArray: true,
         url: apiServerUrl + '/api/dashboards?all',
-      },      
+      },
       dashboardsOverview: {
         method: 'get',
         isArray: true,
         url: apiServerUrl + '/api/dashboards?overview',
-      }
+      },
+      public: {
+        method: 'GET',
+        transformResponse: transform,
+        url: apiServerUrl + '/api/dashboards/public/:token'
+      },
     },
   );
 
