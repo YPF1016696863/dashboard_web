@@ -35,7 +35,6 @@ const EditDashboardDialog = {
             .search('edit')
             .replace();
         });
-      Events.record('create', 'dashboard');
     };
   },
 };

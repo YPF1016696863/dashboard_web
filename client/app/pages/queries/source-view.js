@@ -15,8 +15,6 @@ function QuerySourceCtrl(
   // extends QueryViewCtrl
   $controller('QueryViewCtrl', { $scope });
 
-  Events.record('view_source', 'query', $scope.query.id);
-
   const isNewQuery = !$scope.query.id;
   let queryText = $scope.query.query;
   const saveQuery = $scope.saveQuery;

@@ -349,7 +349,6 @@ function DashboardPreviewCtrl(
         this.isDashboardOwner =
           currentUser.id === dashboard.user.id ||
           currentUser.hasPermission('admin');
-        Events.record('view', 'dashboard', dashboard.id);
         renderDashboard(dashboard, force);
 
         if ($location.search().edit === true) {
@@ -402,7 +401,6 @@ function DashboardPreviewCtrl(
 
   this.archiveDashboard = () => {
     const archive = () => {
-      Events.record('archive', 'dashboard', this.dashboard.id);
       this.dashboard.$delete();
     };
 
@@ -586,7 +584,6 @@ function DashboardPreviewCtrl(
   };
 
   this.togglePublished = () => {
-    Events.record('toggle_published', 'dashboard', this.dashboard.id);
     this.dashboard.is_draft = !this.dashboard.is_draft;
     this.saveInProgress = true;
     Dashboard.save(

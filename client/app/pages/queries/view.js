@@ -149,7 +149,6 @@ function QueryViewCtrl(
     getQueryResult(0, $scope.selectedQueryText);
     $scope.lockButton(true);
     $scope.cancelling = false;
-    Events.record('execute', 'query', $scope.query.id);
 
     Notifications.getPermissions();
   };
@@ -318,20 +317,17 @@ function QueryViewCtrl(
   };
 
   $scope.togglePublished = () => {
-    Events.record('toggle_published', 'query', $scope.query.id);
     $scope.query.is_draft = !$scope.query.is_draft;
     $scope.saveQuery(undefined, { is_draft: $scope.query.is_draft });
   };
 
   $scope.saveDescription = desc => {
     $scope.query.description = desc;
-    Events.record('edit_description', 'query', $scope.query.id);
     $scope.saveQuery(undefined, { description: $scope.query.description });
   };
 
   $scope.saveName = name => {
     $scope.query.name = name;
-    Events.record('edit_name', 'query', $scope.query.id);
     if (
         $scope.query.is_draft &&
         clientConfig.autoPublishNamedQueries &&
@@ -349,7 +345,6 @@ function QueryViewCtrl(
   $scope.cancelExecution = () => {
     $scope.cancelling = true;
     $scope.queryResult.cancelExecution();
-    Events.record('cancel_execute', 'query', $scope.query.id);
   };
 
   $scope.archiveQuery = () => {
@@ -375,7 +370,6 @@ function QueryViewCtrl(
   };
 
   $scope.updateDataSource = () => {
-    Events.record('update_data_source', 'query', $scope.query.id);
     localStorage.lastSelectedDataSourceId = $scope.query.data_source_id;
 
     $scope.query.latest_query_data = null;

@@ -98,17 +98,6 @@ export const EditVisualizationDialog = {
     };
 
     this.submit = () => {
-      if (this.visualization.id) {
-        Events.record('update', 'visualization', this.visualization.id, {
-          type: this.visualization.type          
-        });
-        
-      } else {
-        Events.record('create', 'visualization', null, {
-          type: this.visualization.type
-        });
-      }
-
       this.visualization.query_id = this.query.id;
 
       Visualization.save(

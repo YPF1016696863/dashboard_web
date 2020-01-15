@@ -3,7 +3,6 @@ import notification from '@/services/notification';
 import template from './organization.html';
 
 function OrganizationSettingsCtrl($http, clientConfig, Events, appSettings) {
-  Events.record('view', 'page', 'org_settings');
 
   this.settings = {};
   $http.get(appSettings.server.backendUrl + '/api/settings/organization').then((response) => {
