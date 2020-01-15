@@ -1,6 +1,6 @@
 <div
   class="dashboard-dark-theme"
-  style="height:100%;width:100%;overflow: hidden;"
+  style="height:calc(100vh - 35px);width:100%;overflow: hidden;"
   ng-style="$ctrl.dashboardStyle"
   ng-if="$ctrl.dashboard.widgets.length > 0"
 >
@@ -10,7 +10,7 @@
   </div>
 -->
 
-  <div class="row" style="background: rgba(37, 55, 76, 0.2)">
+  <div class="row" style="background: rgba(37, 55, 76, 0)">
     <div class="col-sm-3" align="left"></div>
     <div class="col-sm-6" align="center" style="font-size: 16px; color:white">
       {{$ctrl.dashboard.name}}

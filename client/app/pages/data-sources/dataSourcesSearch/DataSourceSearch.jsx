@@ -252,13 +252,13 @@ class DataSourceSearch extends React.Component {
                           <Input
                             autoFocus
                             size="small"
-                            value="需要从API获取"
+                            value="数据源(无分组)"
                             onBlur={() => {
                               this.setState({ runtime: { editing: false } });
                             }}
                           />
                       ) : (
-                        '需要从API获取'
+                        '数据源(无分组)'
                       )
                     }
                     key="root"

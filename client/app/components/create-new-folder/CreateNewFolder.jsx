@@ -89,7 +89,7 @@ export class CreateNewFolder extends React.Component {
         </Button>
         <Modal
           destroyOnClose
-          title="新建文件夹"
+          title="新建文件夹[正在开发]"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -97,7 +97,7 @@ export class CreateNewFolder extends React.Component {
           cancelText="取消"
           okText="确认"
           okButtonProps={{
-            disabled: !this.state.name
+            disabled: true // !this.state.name
           }}
         >
           <Form>

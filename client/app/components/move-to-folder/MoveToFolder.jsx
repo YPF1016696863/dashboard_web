@@ -53,8 +53,8 @@ const { Search } = Input;
 export class MoveToFolder extends React.Component {
   state = {
     visible: false,
-    structure: null,
-    current: null
+    // structure: null,
+    // current: null
   };
 
   componentDidMount() {}
@@ -98,10 +98,10 @@ export class MoveToFolder extends React.Component {
           cancelText="取消"
           okText="确认"
           okButtonProps={{
-            disabled: !this.state.name
+            disabled: true // !this.state.name
           }}
         >
-          {this.state.current},{this.state.structure}
+          正在开发
         </Modal>
       </>
     );

@@ -43,6 +43,8 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import './dashboards-search.css';
 
 import { policy } from '@/services/policy';
+import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
+import { MoveToFolder } from '@/components/move-to-folder/MoveToFolder';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -68,7 +70,7 @@ class DashboardsListSearch extends React.Component {
         loading: false
       });
 
-      if(this.props.slugId) {
+      if (this.props.slugId) {
         this.setState({
           selected: this.props.slugId
         });
@@ -208,10 +210,7 @@ class DashboardsListSearch extends React.Component {
                         okText="确认"
                         cancelText="取消"
                       >
-                        <Form
-                          onSubmit={this.handleSubmit}
-                          className="login-form"
-                        >
+                        <Form onSubmit={this.handleSubmit}>
                           <Form.Item label="仪表盘名称">
                             <Input
                               prefix={
@@ -293,10 +292,26 @@ class DashboardsListSearch extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={8}><Button size="small" type="link" style={{color:"#3d4d66"}} onClick={this.showModal}><Icon type="plus-square" style={{color:"#13cd66"}} />新建仪表盘</Button></Col>
-              <Col span={8}><Button size="small" type="link" style={{color:"#3d4d66"}}><Icon type="folder-add" style={{color:"#faaa39"}} />新建文件夹</Button></Col>
-              <Col span={8}><Button size="small" type="link" style={{color:"#3d4d66"}}><Icon type="folder-open" style={{color:"#3685f2"}} />移动到</Button></Col>
-              <Col span={24}><Divider style={{marginTop:"5px", marginBottom:"0"}} /></Col>
+              <Col span={8}>
+                <Button
+                  size="small"
+                  type="link"
+                  style={{ color: '#3d4d66' }}
+                  onClick={this.showModal}
+                >
+                  <Icon type="plus-square" style={{ color: '#13cd66' }} />
+                  新建仪表盘
+                </Button>
+              </Col>
+              <Col span={8}>
+                <CreateNewFolder onSuccess={name => alert(name)} />
+              </Col>
+              <Col span={8}>
+                <MoveToFolder current={null} structure={null} />
+              </Col>
+              <Col span={24}>
+                <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
+              </Col>
             </Row>
             <Row>
               <Col style={{ paddingRight: '10px' }}>
@@ -404,7 +419,7 @@ DashboardsListSearch.propTypes = {
 };
 
 DashboardsListSearch.defaultProps = {
-  slugId:null
+  slugId: null
 };
 
 export default function init(ngModule) {

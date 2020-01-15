@@ -51,51 +51,12 @@ const PublicDashboardPage = {
             return widget.load(forceRefresh);
           })
       );
-
-      $q.all(queryResultPromises).then(queryResults => {
-        const filters = {};
-        queryResults.forEach(queryResult => {
-          const queryFilters = queryResult.getFilters();
-          queryFilters.forEach(queryFilter => {
-            const hasQueryStringValue = _.has(
-                $location.search(),
-                queryFilter.name
-            );
-
-            if (!(hasQueryStringValue || dashboard.dashboard_filters_enabled)) {
-              // If dashboard filters not enabled, or no query string value given,
-              // skip filters linking.
-              return;
-            }
-
-            if (hasQueryStringValue) {
-              queryFilter.current = $location.search()[queryFilter.name];
-            }
-
-            if (!_.has(filters, queryFilter.name)) {
-              const filter = _.extend({}, queryFilter);
-              filters[filter.name] = filter;
-              filters[filter.name].originFilters = [];
-            }
-
-            // TODO: merge values.
-            filters[queryFilter.name].originFilters.push(queryFilter);
-          });
-        });
-
-        this.filters = _.values(filters);
-        this.filtersOnChange = filter => {
-          _.each(filter.originFilters, originFilter => {
-            originFilter.current = filter.current;
-          });
-        };
-      });
     };
 
     const renderDashboard = (dashboard, force) => {
       Title.set(dashboard.name);
       this.extractGlobalParameters();
-      // collectFilters(dashboard, force);
+      collectFilters(dashboard, force);
     };
 
 /*
