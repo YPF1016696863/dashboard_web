@@ -14,10 +14,10 @@
         </li>
     </ul>
     <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label class="control-label">数据集</label>
             <queries-list query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType"></queries-list>
-        </div>
+        </div> -->
         <div class="form-group">
             <label class="control-label">维度数据</label>
             <ui-select name="xAxisColumn" required ng-model="options.form.xAxisColumn">
@@ -320,13 +320,13 @@
 
         <div class="form-group" ng-if="Show == 1">
             <div class="form-group" style="width:49%;float:left">
-                <label class="control-label">选择设置扇瓣</label>
+                <!-- <label class="control-label">选择设置扇瓣</label>
                 <ui-select name="serise" required ng-model="options.useFan">
                     <ui-select-match placeholder="选择扇瓣...">{{$select.selected}}</ui-select-match>
                     <ui-select-choices repeat="column in options.Fans ">
                         <span ng-bind-html="column | highlight: $select.search"></span>
                     </ui-select-choices>
-                </ui-select>
+                </ui-select> -->
                 <label class="control-label">饼图的中心（圆心）坐标X(百分比%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.series_CenterX"
                     placeholder="50%" />
@@ -339,13 +339,13 @@
                 </ui-select>
             </div>
             <div class="form-group" style="width:49%;float:right">
-                <label class="control-label">扇瓣颜色</label>
+                <!-- <label class="control-label">扇瓣颜色</label>
                 <ui-select ng-model="options.series_ItemStyle_Color">
                     <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
                     <ui-select-choices repeat="Color.value as Color in Colors">
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
                     </ui-select-choices>
-                </ui-select>
+                </ui-select> -->
                 <label class="control-label">饼图的中心（圆心）坐标Y(百分比%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.series_CenterY"
                     placeholder="50%" />

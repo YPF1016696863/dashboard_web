@@ -21,6 +21,11 @@ export function defaultGaugeChartOptions() {
         },
         grid: {
         },
+        size: {
+            responsive: true,
+            width: "600px",
+            height: "400px"
+        },
         legend: {
             show: true,
             // x: 'left'
