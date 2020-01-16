@@ -61,6 +61,7 @@ export function defaultPolarChartOptions() {
         angleAxis: {
             min: 0,
             max: 360,
+            name: '角度(°)',
             interval: 90,// 角度间隔
             startAngle: 90,
 
@@ -87,7 +88,7 @@ export function defaultPolarChartOptions() {
         radiusAxis: {
             min: 0,
             max: 500,// 最大值
-            name: '距离',
+            name: '距离(km)',
             interval: 100, //  刻度
 
             splitLine: {  // 分割线
@@ -99,7 +100,7 @@ export function defaultPolarChartOptions() {
             },
             axisLine: {
                 show: true,
-                lineStyle: {   // 坐标轴线的颜色
+                lineStyle: {   // 径向轴轴线的颜色
                     color: '#333',
                 },
             }
@@ -188,6 +189,9 @@ export function setThemeColor(options, theme) {
         if (_.get(options, "angleAxis.axisLine.lineStyle.color", "") === "#ccc") {
             _.set(options, "angleAxis.axisLine.lineStyle.color", "#333");
         }
+        if (_.get(options, "radiusAxis.axisLine.lineStyle.color", "") === "#ccc") {
+            _.set(options, "radiusAxis.axisLine.lineStyle.color", "#333");
+        }
 
     }
 
@@ -204,6 +208,9 @@ export function setThemeColor(options, theme) {
         }
         if (_.get(options, "angleAxis.axisLine.lineStyle.color", "") === "#333") {
             _.set(options, "angleAxis.axisLine.lineStyle.color", "#ccc");
+        }
+        if (_.get(options, "radiusAxis.axisLine.lineStyle.color", "") === "#333") {
+            _.set(options, "radiusAxis.axisLine.lineStyle.color", "#ccc");
         }
     }
 }

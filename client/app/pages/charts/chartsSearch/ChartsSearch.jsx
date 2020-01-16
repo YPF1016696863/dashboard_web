@@ -142,7 +142,7 @@ class ChartsSearch extends React.Component {
     return (
       <>
         {!this.state.isLoaded && (
-          <div style={{ paddingTop: '20vh' }}>
+          <div style={{ paddingTop: '2vh' }}>
             <LoadingState />
           </div>
         )}
@@ -163,17 +163,7 @@ class ChartsSearch extends React.Component {
           this.state.visualization.type && (
             <>
               <Row>
-                <Col>
-                  <Row gutter={[16, 16]}>
-                    <Col span={12}>
-                      <div
-                        style={{ fontWeight: 'bold', paddingBottom: '10px' }}
-                      >
-                        图表类型
-                      </div>
-                    </Col>
-                  </Row>
-
+                <Col>  
                   <Row>
                     <Radio.Group
                       // disabled={this.state.visualization.type !== 'new'}// 开放随意变换图表类型
@@ -570,18 +560,8 @@ class ChartsSearch extends React.Component {
                         </Panel>
                       </Collapse>
                     </Radio.Group>
-
                   </Row>
                 </Col>
-              </Row>
-
-              <Row>
-                {/* <QueriesList /> */}
-
-
-                {/* <QueriesListViewDOM /> */}
-                {/* <queries-list query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType"></queries-list> */}
-                {/* <Col style={{ paddingRight: '10px' }} /> */}
               </Row>
             </>
           )}
