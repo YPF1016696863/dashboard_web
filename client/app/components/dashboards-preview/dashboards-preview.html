@@ -1,6 +1,6 @@
 <div
   class="dashboard-dark-theme"
-  style="height:calc(100vh - 35px);width:100%;overflow: hidden;"
+  style="height:calc(100vh - 35px);width:calc(100% - 1px);overflow: hidden;border: 1px dotted #888888 !important;"
   ng-style="$ctrl.dashboardStyle"
   ng-if="$ctrl.dashboard.widgets.length > 0"
 >
@@ -10,16 +10,16 @@
   </div>
 -->
 
-  <div class="row" style="background: rgba(37, 55, 76, 0)">
+  <div class="row" style="background: rgba(37, 55, 76, 0);border: 1px dotted #888888 !important;">
     <div class="col-sm-3" align="left"></div>
-    <div class="col-sm-6" align="center" style="font-size: 16px; color:white">
+    <div class="col-sm-6" align="center" style="font-size: 16px; color:white;border: 1px dotted #888888 !important;margin-top: 10px">
       {{$ctrl.dashboard.name}}
     </div>
     <div class="col-sm-3" align="right">
       <div ng-click="$ctrl.openParameterDialog()" ng-if="$ctrl.globalParameters.length > 0" >
         <i
           class="fa fa-cog animated flipInY"
-          style="color: #fff; font-size:20px; padding-right:10px;padding-top:10px"
+          style="color: #fff; font-size:20px; margin-right:10px;margin-top:10px;border: 1px dotted #888888 !important;"
           ><md-tooltip md-direction="left">参数设置</md-tooltip></i
         >
       </div>

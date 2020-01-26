@@ -1,7 +1,7 @@
 const dashboardGridOptions = {
   columns: 6, // grid columns count 6 
   rowHeight: 25, // grid row height (incl. bottom padding) 50
-  margins: 1, // widget margins 15
+  margins: 0, // widget margins 15
   mobileBreakPoint: 1000,// 800
   // defaults for widgets
   defaultSizeX: 3,
