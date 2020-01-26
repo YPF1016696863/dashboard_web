@@ -11,19 +11,11 @@
     <md-whiteframe
       ng-if="!loading"
       class="md-whiteframe-4dp"
-      style="width: 33vw;"
+      style="width:400px;height:375px"
     >
       <div layout="row">
-        <div flex="40">
-          <img
-            src="/static/images/illustrations/loginside.png"
-            width="100%"
-            height="100%"
-            alt="login"
-          />
-        </div>
         <div
-          flex="60"
+          flex="100"
           style="padding-top: 30px;padding-left: 20px;padding-right: 20px; padding-bottom: 0px"
         >
           <div style="font-size: 18px;font-weight: bold;color: #092c4e">
@@ -51,7 +43,7 @@
                 </div>
               </div>
             </md-input-container>
-            <md-input-container class="md-block">
+            <md-input-container class="md-block" style="margin-bottom: 5px !important;">
               <label>密码:</label>
               <input
                 ng-disabled="loading"
@@ -68,7 +60,7 @@
                 </div>
               </div>
             </md-input-container>
-            <md-input-container class="md-block">
+            <md-input-container class="md-block" style="margin-top: 5px !important;margin-bottom: 5px !important;">
               <md-button
                 ng-disabled="!password || !username || loading"
                 style="width: 120px"
