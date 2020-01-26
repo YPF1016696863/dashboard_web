@@ -55,7 +55,7 @@ function DashboardPreviewCtrl(
   this.saveInProgress = false;
   this.saveDelay = false;
   const vm = this;
-  const updateDashboard = data => {
+  const updateDashboard = (data,isForced) => {
 
     if (!this.dashboard) {
       return;
@@ -63,9 +63,15 @@ function DashboardPreviewCtrl(
 
     _.extend(this.dashboard, data);
     data = _.extend({}, data, {
-      slug: this.dashboard.id,
-      version: this.dashboard.version
+      slug: this.dashboard.id
     });
+
+    if(!isForced) {
+      data = _.extend({}, data, {
+        version: this.dashboard.version
+      });
+    }
+
     Dashboard.save(
         data,
         dashboard => {
@@ -121,7 +127,7 @@ function DashboardPreviewCtrl(
         if(_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
           vm.dashboardStyle = {
           };
-          updateDashboard({ background_image:"" });
+          updateDashboard({ background_image:"" }, true);
           return;
         }
         vm.dashboardStyle = {
@@ -131,7 +137,7 @@ function DashboardPreviewCtrl(
           'background-size': 'cover'
         };
 
-        updateDashboard({ background_image:vm.dashboardBgImg });
+        updateDashboard({ background_image:vm.dashboardBgImg },true);
 
       }
   );
