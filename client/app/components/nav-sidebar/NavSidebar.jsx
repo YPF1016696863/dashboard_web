@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import { Icon, Menu } from 'semantic-ui-react';
 import { appSettingsConfig } from '@/config/app-settings';
-import {navigateTo} from '@/services/navigateTo';
+import { policy } from '@/services/policy';
+import { currentUser, clientConfig } from '@/services/auth';
+import { navigateTo } from '@/services/navigateTo';
 import 'semantic-ui-css/semantic.min.css';
 import './nav-sidebar.less';
 
@@ -16,31 +18,32 @@ class NavSidebar extends React.Component {
   }
 
   componentDidMount() {
-      const { $location, $scope } = this.props;
-      this.setState({
-          activeItem: $location.path().split("/")[1]||"Unknown"
-      });
+    const { $location, $scope } = this.props;
+    this.setState({
+      activeItem: $location.path().split('/')[1] || 'Unknown'
+    });
   }
 
   render() {
     const { $location, $scope } = this.props;
     return (
       <Menu icon="labeled" vertical size="datavis">
-        <Menu.Item
-          name="data_sources"
-          active={this.state.activeItem === 'data_sources'}
-          onClick={() => {
-            this.setState({
-              activeItem: 'data_sources'
-            });
-            navigateTo('/data_sources');
-          }}
-        >
-          <Icon name="database" style={{ fontSize: '4em !important' }} />
-          <br />
-          <span className="navbar-font">数据源</span>
-        </Menu.Item>
-
+        {currentUser.isAdmin ? (
+          <Menu.Item
+            name="data_sources"
+            active={this.state.activeItem === 'data_sources'}
+            onClick={() => {
+              this.setState({
+                activeItem: 'data_sources'
+              });
+              navigateTo('/data_sources');
+            }}
+          >
+            <Icon name="database" style={{ fontSize: '4em !important' }} />
+            <br />
+            <span className="navbar-font">数据源</span>
+          </Menu.Item>
+        ) : null}
         <Menu.Item
           name="queries"
           active={this.state.activeItem === 'queries'}
