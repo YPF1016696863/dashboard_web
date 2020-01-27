@@ -54,12 +54,12 @@
               ng-if="$ctrl.currentUser.hasPermission('super_admin')"
             ></li>
 
-            <li ng-show="$ctrl.showSettingsMenu">
+            <li ng-show="$ctrl.showSettingsMenu" ng-if="$ctrl.currentUser.hasPermission('super_admin')">
               <a href="groups" title="Settings">{{
                 'HEADER.GROUPS' | translate
               }}</a>
             </li>
-            <li ng-show="$ctrl.showSettingsMenu">
+            <li ng-show="$ctrl.showSettingsMenu" ng-if="$ctrl.currentUser.hasPermission('super_admin')">
               <a href="users" title="Settings">{{
                 'HEADER.USERS' | translate
               }}</a>

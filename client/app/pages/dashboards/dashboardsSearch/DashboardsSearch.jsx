@@ -251,11 +251,11 @@ class DashboardsSearch extends React.Component {
                     <Button style={{ color: '#fff' , backgroundColor: '#20263B' }} onClick={this.showModal} block>点击设置背景图片</Button>
                     <Modal
                       destroyOnClose
-                      title="添加可视化组件"
+                      title="设置背景图片"
                       visible={this.state.visible}
                       onOk={this.handleOk}
                       onCancel={this.handleCancel}
-                      width="60vw"
+                      width="40vw"
                       okText="添加"
                       cancelText="取消设置"
                     >  
