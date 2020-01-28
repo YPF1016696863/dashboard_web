@@ -356,6 +356,7 @@ class DashboardsListTabs extends React.Component {
                     wrapperCol={{ span: 4, offset: 10 }}
                   >
                     <Switch
+                      disabled={!this.state.dashboard.can_edit}
                       checkedChildren="开"
                       unCheckedChildren="关"
                       defaultChecked={!this.state.dashboard.is_draft}
@@ -390,7 +391,7 @@ class DashboardsListTabs extends React.Component {
                     wrapperCol={{ span: 4, offset: 10 }}
                   >
                     <Switch
-                      disabled={this.state.runtime.share.disabled}
+                      disabled={this.state.runtime.share.disabled || !this.state.dashboard.can_edit}
                       checkedChildren="开"
                       unCheckedChildren="关"
                       checked={this.state.dashboard.publicAccessEnabled}
@@ -415,6 +416,7 @@ class DashboardsListTabs extends React.Component {
             <div style={{ width: '50%', float: 'right',paddingRight: '10px',}}>
               <b style={{ fontSize: '14px' }}>可视化仪表板描述:</b>
               <TextArea
+                disabled={!this.state.dashboard.can_edit}
                 placeholder="可视化仪表板描述"
                 rows={6}
                 value={this.state.dashboard.description}
@@ -428,6 +430,7 @@ class DashboardsListTabs extends React.Component {
               />
               <div align="right">
                 <Button
+                  disabled={!this.state.dashboard.can_edit}
                   type="primary"
                   onClick={e => {
                     this.updateDashboard({
@@ -455,7 +458,7 @@ class DashboardsListTabs extends React.Component {
               <br />
               <Button
                 type="primary"
-                disabled={slugId == null}
+                disabled={slugId == null || !this.state.dashboard.can_edit}
                 onClick={e => {
                   navigateToWithSearch('dashboards/' + slugId);
                 }}
@@ -471,7 +474,7 @@ class DashboardsListTabs extends React.Component {
                 okText="确认"
                 cancelText="取消"
               >
-                <Button type="danger">
+                <Button type="danger" disabled={!this.state.dashboard.can_edit}>
                   <Icon type="delete" />
                   删除可视化面板
                 </Button>
