@@ -45,15 +45,41 @@ import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
-
+let selectName='';
 class QueriesListNomodal extends React.Component {
+  // 初始化方法 获取url中的id 得到对应 数据集名称  (如何及时更新)
+  constructor(props) {
+    super(props);
+    selectName='';
+    const url = window.location.href;
+    let str = "";
+    for (let i = url.indexOf("query") + 6; i < url.length; i+=1) {
+      if (url[i] === '/') {
+        break;
+      } else {
+        str += url[i];
+      }
+    }
+
+    Query.allQueries().$promise.then(res => {
+      _.forEach(res, function(value, key) { 
+        if(value.id+""===str){
+          // console.log(value.id+"::"+value.name);
+          selectName=value.name;
+        }
+        
+      });
+    })
+    
+  }
+  
   state = {
     visible: false,
     selected: null,
     all: null,
     filtered: null,
     loading: true,
-    selectedName: '选择数据集'
+    selectedName: selectName
   };
 
   componentDidUpdate(prevProps) {
@@ -73,7 +99,8 @@ class QueriesListNomodal extends React.Component {
       this.setState({
         all: res,
         filtered: res,
-        loading: false
+        loading: false,
+        selectedName: selectName
       });
     });
   };
@@ -84,17 +111,15 @@ class QueriesListNomodal extends React.Component {
       return;
     }
     const allItems = _.cloneDeep(this.state.all);
-
-    _.filter(allItems, item => {
-      if (item.id + '' === this.state.selected) {
-        this.setState({
-          selectedName: item.name
-        });
-      }
-    });
+    // var sName = '';
+    // _.filter(allItems, item => {
+    //   if (item.id + '' === this.state.selected) {
+    //     sName = item.name
+    //   }
+    // });
 
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
-
+    // localStorage.setItem('lastSelectedDataSourceName', sName);
     // 修改url不跳转页面
     let start = '';
     let newURL = '';
@@ -115,14 +140,13 @@ class QueriesListNomodal extends React.Component {
 
     window.history.pushState({}, 0, url);
     window.history.replaceState({}, 0, newURL);
-
-    // console.log(this.props.chartType);
+ 
 
     // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
 
     this.setState({
       visible: false,
-      selected: null
+      selected: null, 
     });
   };
 
@@ -174,10 +198,10 @@ class QueriesListNomodal extends React.Component {
   render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
-    // console.log(selectedName);
+
     return (
       <>
-        <Input placeholder={selectedName} onClick={this.showModal} />
+        <Input placeholder={selectName} onClick={this.showModal} />
         <Modal
           destroyOnClose
           title="选择数据集"
