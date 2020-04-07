@@ -1,14 +1,15 @@
 /* eslint-disable func-names */
 import * as _ from 'lodash';
 import $ from 'jquery';
+// eslint-disable-next-line no-unused-vars
 import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
+import 'echarts-liquidfill';
 
+import { defaultLiquidChartOptions, getChartType, setThemeColor } from './echartsLiquidChartOptionUtils';
 
-import { defaultGraphChartOptions, getChartType, setThemeColor } from './echartsGraphChartOptionUtils';
-
-function EchartsGraphRenderer($rootScope) {
+function EchartsLiquidRenderer($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -18,113 +19,68 @@ function EchartsGraphRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-
-
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "GraphChart") {
-        $scope.options = defaultGraphChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "LiquidChart") {
+        $scope.options = defaultLiquidChartOptions();
       }
+      let echartsData = [];
+      let getTemp = 0;
 
-      let seriesData = [];
-      let linkData = [];
-      let node = [];
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
-            seriesData = [];
-            linkData = [];
-            node = [];
+            
+            echartsData = [];            
+            getTemp = 0;
+            // eslint-disable-next-line func-names
             _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
               // eslint-disable-next-line func-names
               _.forEach(value, function (valueChildren, keyChildren) {
                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
-                  node.push(valueChildren);
+                  getTemp = valueChildren;
                 }
 
               });
             });
-            _.set($scope.options, "node", node);
+            for (let i = 0; i < 5; i += 1) {
+              echartsData.push(getTemp);
+            }
 
-            // 找到选中serise的下标        
-            _.set($scope.options, 'useNode_Index',
-              _.findIndex(
-                _.get($scope.options, "node", []),
-                function (o) { return o === _.get($scope.options, 'useNode', ''); }
-              ));
-            let useIndex = 0;
 
-            _.forEach(node, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
-              // eslint-disable-next-line func-names 
-              seriesData.push({
-                name: value,
-                x: _.get($scope.options, "nodeX", [])[useIndex] === undefined ?
-                  0 : _.get($scope.options, "nodeX", [])[useIndex],
-                y: _.get($scope.options, "nodeY", [])[useIndex] === undefined ?
-                  0 : _.get($scope.options, "nodeY", [])[useIndex],
-                symbolSize: _.get($scope.options, "nodeSize", [])[useIndex] === undefined ?
-                  35 : _.get($scope.options, "nodeSize", [])[useIndex],
-                symbol: _.get($scope.options, "nodeSymbol", [])[useIndex] === undefined ?
-                  "circle" : _.get($scope.options, "nodeSymbol", [])[useIndex],
-                itemStyle: {
-                  color: _.get($scope.options, "nodeColor", [])[useIndex] === undefined ?
-                    "#ed4d50" : _.get($scope.options, "nodeColor", [])[useIndex],
-
-                },
-                label: {
-                  color: _.get($scope.options, "nodeLabColor", [])[useIndex] === undefined ?
-                    "#fff" : _.get($scope.options, "nodeLabColor", [])[useIndex],
-                }
-              });
-              linkData.push({
-                source: value,
-                target: _.get($scope.options, "targetNode", [])[useIndex] === undefined ?
-                  "" : _.get($scope.options, "targetNode", [])[useIndex],
-                // name:,
-
-                lineStyle: {
-                  color: _.get($scope.options, "linkColor", [])[useIndex] === undefined ?
-                    "#ccc" : _.get($scope.options, "linkColor", [])[useIndex],
-                  type: _.get($scope.options, "linkStyle", [])[useIndex] === undefined ?
-                    "solid" : _.get($scope.options, "linkStyle", [])[useIndex],
-                  width: _.get($scope.options, "linkSize", [])[useIndex] === undefined || _.get($scope.options, "linkSize", [])[useIndex] === '' ?
-                    2 : _.get($scope.options, "linkSize", [])[useIndex],
-                }
-              });
-              useIndex += 1;
-            });
-
-            // console.log(linkData);
+            // console.log(echartsData);
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
             _.set($scope.options, "series", []);// 清空设置           
             $scope.options.series.push({
-              type: 'graph',
-              layout: _.get($scope.options, "layout", 'none'),
-              // symbolSize: 50,
-              roam: true,
+              type: 'liquidFill',
+              radius:_.get($scope.options,"radius",'70%')===''?'70%':_.get($scope.options,"radius",'70%'),
+              center: ['50%', '40%'],
+              data: echartsData,
+              backgroundStyle: {
+                borderWidth: 5,
+                borderColor: '#1daaeb',
+                color: _.get($scope.options,"bollColor",'transparent'),
+              },
               label: {
-                show: true
-              },
-              edgeSymbol: ['circle', 'arrow'],
-              edgeSymbolSize: [4, 10],
-              // edgeLabel: {
-              //   fontSize: 20
-              // },
-              data: seriesData,
-              links: linkData,
-              tooltip: {
-                formatter: "{b}",
-                textStyle: {
-                  color: '#fff',
+                normal: {
+                  formatter: (getTemp * 100).toFixed(2) + '%',
+                  textStyle: {
+                    fontSize: _.get($scope.options,"fontSize",50)===''||
+                    _.get($scope.options,"fontSize",50)===undefined?
+                    50:_.get($scope.options,"fontSize",50),
+                  }
                 }
-              },
+              }
+
+
             });
+
 
             let myChart = null;
 
-            if (document.getElementById("graph-main")) {
-              document.getElementById("graph-main").id = $scope.options.id;
+            if (document.getElementById("liquid-main")) {
+              document.getElementById("liquid-main").id = $scope.options.id;
               // eslint-disable-next-line
               myChart = echarts.init(document.getElementById($scope.options.id));
             } else {
@@ -173,7 +129,7 @@ function EchartsGraphRenderer($rootScope) {
 }
 
 
-function EchartsGraphEditor() {
+function EchartsLiquidEditor() {
   return {
     restrict: 'E',
     template: echartsEditorTemplate,
@@ -189,8 +145,8 @@ function EchartsGraphEditor() {
         console.log("some error");
       }
       // Set default options for new vis// 20191203 bug fix 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "GraphChart") {
-        $scope.options = defaultGraphChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "LiquidChart") {
+        $scope.options = defaultLiquidChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
 
@@ -198,22 +154,21 @@ function EchartsGraphEditor() {
       $scope.changeTab = (tab) => {
         $scope.currentTab = tab;
       };
-      $scope.chartTypes = {
-        graph: { name: 'Echarts拓扑图', icon: 'graph-chart' },
-      };
-      $scope.Layouts = [
-        { label: '坐标布局', value: 'none' },
-        { label: '环形布局', value: 'circular' }
-      ];
-      $scope.Symbols = [
-        { label: '圆形', value: 'circle' },
-        { label: '三角形', value: 'triangle' },
-        { label: '菱形', value: 'diamond' },
-        { label: '圆角方形', value: 'roundRect' },
-        { label: '大头针', value: 'pin' },
-        { label: '方形', value: 'rect' }
+      $scope.xAxisLocations = [
+        { label: '数据轴起始位置', value: 'start' },
+        { label: '数据轴居中位置', value: 'center' },
+        { label: '数据轴末端位置', value: 'end' }
       ];
 
+      $scope.Symbols = [
+        { label: '圆形', value: 'circle' },
+        { label: '空心圆', value: 'emptyCircle' },
+        { label: '圆角矩形', value: 'roundRect' },
+        { label: '三角形', value: 'triangle' },
+        { label: '菱形', value: 'diamond' },
+        { label: '水滴', value: 'pin' },
+        { label: '箭头', value: 'arrow' }
+      ];
       $scope.LablePositions = [
         { label: '标注点上', value: 'top' },
         { label: '标注点左', value: 'left' },
@@ -256,7 +211,7 @@ function EchartsGraphEditor() {
         { label: 'oblique', value: 'oblique' }
       ];
       $scope.Colors = [
-        { label: '默认', value: 'auto' },
+        { label: '默认', value: '' },
         { label: '透明', value: 'transparent' },
         { label: '白色', value: '#fff' },
         { label: '红色', value: '#ed4d50' },
@@ -273,8 +228,19 @@ function EchartsGraphEditor() {
         { label: '赤丹', value: '#d64f44' }
       ];
 
+      $scope.ThemeColor = [
+        { label: '基础色', value: ['#3b6291', '#943c39', '#779043', '#624c7c', '#388498', '#bf7334', '#3f6899', '#9c403d', '#7d9847 ', '#675083 '] },
+        { label: '小清新', value: ['#63b2ee', '#76da91', '#f8cb7f', '#f89588', '#7cd6cf', '#9192ab', '#7898e1', '#efa666', '#eddd86', '#9987ce'] },
+        { label: '复古色', value: ['#71ae46', '#c4cc38', '#ebe12a', '#eab026', '#e3852b', '#d85d2a', '#ce2626', '#ac2026', '#96b744', '#c4cc38'] },
+        { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
+        { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
+        { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
+        { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
+        { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
+
+      ];
       $scope.BackgroundColors = [
-        { label: '默认', value: 'auto' },
+        { label: '默认', value: '' },
         { label: '透明', value: 'transparent' },
         { label: '白色', value: '#fff' },
         { label: '红色', value: '#ed4d50' },
@@ -303,7 +269,8 @@ function EchartsGraphEditor() {
       ];
       $scope.LineStyles = [
         { label: '实线', value: 'solid' },
-        { label: '虚线', value: 'dotted' }
+        { label: '虚线', value: 'dashed' },
+        { label: '点线', value: 'dotted' }
 
       ];
       $scope.TextVerticalAligns = [
@@ -321,21 +288,21 @@ function EchartsGraphEditor() {
 }
 
 export default function init(ngModule) {
-  ngModule.directive('echartsGraphEditor', EchartsGraphEditor);
-  ngModule.directive('echartsGraphRenderer', EchartsGraphRenderer);
+  ngModule.directive('echartsLiquidEditor', EchartsLiquidEditor);
+  ngModule.directive('echartsLiquidRenderer', EchartsLiquidRenderer);
 
   ngModule.config((VisualizationProvider) => {
     const renderTemplate =
-      '<echarts-graph-renderer options="visualization.options" query-result="queryResult"></echarts-graph-renderer>';
+      '<echarts-liquid-renderer options="visualization.options" query-result="queryResult"></echarts-liquid-renderer>';
 
-    const editorTemplate = '<echarts-graph-editor options="visualization.options" query-result="queryResult"></echarts-graph-editor>';
+    const editorTemplate = '<echarts-liquid-editor options="visualization.options" query-result="queryResult"></echarts-liquid-editor>';
     const defaultOptions = {
 
     };
 
     VisualizationProvider.registerVisualization({
-      type: 'ECHARTS-GRAPH',
-      name: 'Echarts拓扑图',
+      type: 'ECHARTS-LIQUID',
+      name: 'Echarts指标球',
       renderTemplate,
       editorTemplate,
       defaultOptions,

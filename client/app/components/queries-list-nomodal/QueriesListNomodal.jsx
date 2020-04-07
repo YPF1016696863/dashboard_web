@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import React from 'react';
 import {
   PageHeader,
@@ -45,15 +46,15 @@ import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
-let selectName='';
+let selectName = '';
 class QueriesListNomodal extends React.Component {
   // 初始化方法 获取url中的id 得到对应 数据集名称  (如何及时更新)
   constructor(props) {
     super(props);
-    selectName='';
+    selectName = '';
     const url = window.location.href;
     let str = "";
-    for (let i = url.indexOf("query") + 6; i < url.length; i+=1) {
+    for (let i = url.indexOf("query") + 6; i < url.length; i += 1) {
       if (url[i] === '/') {
         break;
       } else {
@@ -62,17 +63,19 @@ class QueriesListNomodal extends React.Component {
     }
 
     Query.allQueries().$promise.then(res => {
-      _.forEach(res, function(value, key) { 
-        if(value.id+""===str){
+      _.forEach(res, function (value, key) {
+        if (value.id + "" === str) {
           // console.log(value.id+"::"+value.name);
-          selectName=value.name;
+          selectName = value.name;
         }
-        
+
       });
     })
-    
+    console.log(selectName);
+    localStorage.setItem('lastSelectedDataSourceName', selectName);
+    console.log(localStorage.getItem('lastSelectedDataSourceName'));
   }
-  
+
   state = {
     visible: false,
     selected: null,
@@ -119,7 +122,7 @@ class QueriesListNomodal extends React.Component {
     // });
 
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
-    // localStorage.setItem('lastSelectedDataSourceName', sName);
+    localStorage.setItem('lastSelectedDataSourceName', selectName);
     // 修改url不跳转页面
     let start = '';
     let newURL = '';
@@ -140,13 +143,13 @@ class QueriesListNomodal extends React.Component {
 
     window.history.pushState({}, 0, url);
     window.history.replaceState({}, 0, newURL);
- 
+
 
     // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
 
     this.setState({
       visible: false,
-      selected: null, 
+      selected: null,
     });
   };
 
@@ -195,13 +198,17 @@ class QueriesListNomodal extends React.Component {
     });
   }
 
+
   render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
 
     return (
       <>
-        <Input placeholder={selectName} onClick={this.showModal} />
+        <Input
+          placeholder={selectName}
+          onClick={this.showModal}
+        />
         <Modal
           destroyOnClose
           title="选择数据集"
@@ -245,7 +252,7 @@ class QueriesListNomodal extends React.Component {
                     </Col>
                     <Col span={2} offset={1}>
                       <Dropdown
-                        overlay={
+                        overlay={(
                           <Menu>
                             <Menu.Item
                               key="1"
@@ -262,7 +269,7 @@ class QueriesListNomodal extends React.Component {
                               按创建时间排序
                             </Menu.Item>
                           </Menu>
-                        }
+                        )}
                       >
                         <Button icon="menu-fold" size="small" />
                       </Dropdown>
@@ -299,12 +306,12 @@ class QueriesListNomodal extends React.Component {
                       >
                         {_.map(this.state.filtered, item => (
                           <TreeNode
-                            icon={
+                            icon={(
                               <Icon
                                 type="file-search"
                                 style={{ color: '#FAAA39' }}
                               />
-                            }
+                            )}
                             title={item.name}
                             // + ', id: [' + item.id + ']'
                             key={item.id}

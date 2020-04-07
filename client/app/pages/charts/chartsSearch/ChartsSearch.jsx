@@ -190,6 +190,7 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-GRAPH': type = 'ECHARTS-GRAPH'; break;// 拓扑图
                           case 'ECHARTS-TRAJECTORY': type = 'ECHARTS-TRAJECTORY'; break;// 轨迹图
                           case 'ECHARTS-THREEDBAR': type = 'ECHARTS-THREEDBAR'; break;// 3d 柱状图
+                          case 'ECHARTS-LIQUID': type = 'ECHARTS-LIQUID'; break;// 指标球
                           case 'PIVOT': type = 'PIVOT'; break; // 透视表
                           case 'CHART_line': type = 'CHART'; chart = 'line'; break;
                           case 'CHART_bar': type = 'CHART'; chart = 'bar'; break;
@@ -274,6 +275,20 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图</p>
                               </Radio>
                             </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-TRAJECTORY" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-trajectory.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>轨迹图</p>
+                              </Radio>
+                            </Col>
                           </Row>
 
                           <Divider style={{ margin: ' 0' }} />
@@ -341,6 +356,20 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-gauge.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>仪表</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-LIQUID" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-liquidfill.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>指标球</p>
                               </Radio>
                             </Col>
                           </Row>
@@ -598,29 +627,9 @@ class ChartsSearch extends React.Component {
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
 
-                        {/* ** *Radio value="ECHARTS-MMAX"**E-charts条形覆盖图  key 8 */}
-                        <Panel header="E-charts轨迹图" id="p1" key="8">
-                          <Row gutter={[8, 8]}>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="ECHARTS-TRAJECTORY" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-trajectory.png`}
-                                />
-                                <p style={{ fontSize: '12px' }}>轨迹图</p>
-                              </Radio>
-                            </Col>
-                          </Row>
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
 
                         {/* ** *Radio value="ECHARTS-THREEDBAR"**E-charts3D柱状图  key 9 */}
-                        <Panel header="E-charts3D柱状图" id="p1" key="9">
+                        <Panel header="E-charts3D图" id="p1" key="8">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -633,12 +642,13 @@ class ChartsSearch extends React.Component {
                                   size="large"
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-threebar.png`}
                                 />
-                                <p style={{ fontSize: '12px' }}>3D柱状图</p>
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>3D柱状图</p>
                               </Radio>
                             </Col>
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
+
 
                       </Collapse>
                     </Radio.Group>
