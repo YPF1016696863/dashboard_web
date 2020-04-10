@@ -47,33 +47,33 @@ import { policy } from '@/services/policy';
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 let selectName = '';
+let selectId = '';
 class QueriesListNomodal extends React.Component {
   // 初始化方法 获取url中的id 得到对应 数据集名称  (如何及时更新)
   constructor(props) {
     super(props);
     selectName = '';
     const url = window.location.href;
-    let str = "";
+    selectId = "";
     for (let i = url.indexOf("query") + 6; i < url.length; i += 1) {
       if (url[i] === '/') {
         break;
       } else {
-        str += url[i];
+        selectId += url[i];
       }
     }
 
     Query.allQueries().$promise.then(res => {
       _.forEach(res, function (value, key) {
-        if (value.id + "" === str) {
+        if (value.id + "" === selectId) {
           // console.log(value.id+"::"+value.name);
-          selectName = value.name;
+          selectName = value.name; 
+          localStorage.setItem('lastSelectedDataSourceName', selectName);
         }
 
       });
     })
-    console.log(selectName);
-    localStorage.setItem('lastSelectedDataSourceName', selectName);
-    console.log(localStorage.getItem('lastSelectedDataSourceName'));
+    
   }
 
   state = {
@@ -84,7 +84,7 @@ class QueriesListNomodal extends React.Component {
     loading: true,
     selectedName: selectName
   };
-
+  
   componentDidUpdate(prevProps) {
     if (!_.isEqual(this.props.reload, prevProps.reload)) {
       this.reload(true);
@@ -108,20 +108,22 @@ class QueriesListNomodal extends React.Component {
     });
   };
 
+  
   handleOk = (e, $scope) => {
     if (this.state.selected === null) {
       message.warning('请选择一个数据集.');
       return;
     }
     const allItems = _.cloneDeep(this.state.all);
-    // var sName = '';
-    // _.filter(allItems, item => {
-    //   if (item.id + '' === this.state.selected) {
-    //     sName = item.name
-    //   }
-    // });
+
+    _.filter(allItems, item => {
+      if (item.id + '' === this.state.selected) {
+        selectName = item.name
+      }
+    });
 
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
+
     localStorage.setItem('lastSelectedDataSourceName', selectName);
     // 修改url不跳转页面
     let start = '';
@@ -202,6 +204,9 @@ class QueriesListNomodal extends React.Component {
   render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
+
+    
+  selectName= localStorage.getItem('lastSelectedDataSourceName');
 
     return (
       <>

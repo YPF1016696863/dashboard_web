@@ -1,3 +1,5 @@
+/* eslint-disable no-else-return */
+/* eslint-disable object-shorthand */
 /* eslint-disable func-names */
 import * as _ from 'lodash';
 import $ from 'jquery';
@@ -6,9 +8,9 @@ import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
 
-import { defaultTrajectoryChartOptions, getChartType, setThemeColor } from './echartsTrajectoryChartOptionUtils';
+import { defaultTubeChartOptions, getChartType, setThemeColor } from './echartsTubeChartOptionUtils';
 
-function EchartsTrajectoryRenderer($rootScope) {
+function EchartsTubeRenderer($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -18,63 +20,200 @@ function EchartsTrajectoryRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
-        $scope.options = defaultTrajectoryChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TubeChart") {
+        $scope.options = defaultTubeChartOptions();
       }
+
+      let mercuryColor = '#fd4d49';
+      let borderColor = '#fd4d49';
+      // 刻度使用柱状图模拟，短设置3，长的设置5；构造一个数据
+      const kd = [];
+      for (let i = 0, len = 160; i <= len; i += 1) {
+        if (i > 130 || i < 30) {
+          kd.push('0')
+        } else {
+          if (i % 5 === 0) {
+            kd.push('5');
+          } else {
+            kd.push('3');
+          }
+        }
+
+      }
+
+
+      // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
+
       let echartsData = [];
-      let dataX = [];
-      let dataY = [];
+
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
             echartsData = [];
-            dataX = [];
-            dataY = [];
+            // eslint-disable-next-line func-names
             _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
               // eslint-disable-next-line func-names
               _.forEach(value, function (valueChildren, keyChildren) {
                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
-                  dataX.push(valueChildren);
-                }
-                if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
-                  dataY.push(valueChildren);
+                  echartsData.push(valueChildren);
                 }
 
               });
             });
+            mercuryColor = _.get($scope.options, "inColor", '#fd4d49');
+            borderColor = _.get($scope.options, "outColor", '#fd4d49');
 
-            for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
-              echartsData.push([
-                dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
-                dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i]
-              ]);
-            }
             // console.log(echartsData);
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
             _.set($scope.options, "series", []);// 清空设置           
             $scope.options.series.push({
+
+              name: '条',
+              type: 'bar',
+              // 对应上面XAxis的第一个对象配置
+              xAxisIndex: 0,
               data: echartsData,
-              type: 'line',
-              symbol: _.get($scope.options, 'pointSymbols', 'circle'),
-              symbolSize: _.get($scope.options, 'pointSize', 15) === null || _.get($scope.options, 'pointSize', 15) === '' ? 
-              15 : _.get($scope.options, 'pointSize', 15),
+              barWidth: 18,
               itemStyle: {
-                color: _.get($scope.options, 'pointColor', '#ed4d50'),
+                normal: {
+                  color: mercuryColor,
+                  barBorderRadius: 0,
+                }
               },
-              lineStyle: {
-                color:_.get($scope.options, 'lineColor', '#ed4d50'),
+              label: {
+                normal: {
+                  show: true,
+                  position: 'top',
+                  formatter: function (param) {
+                    // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
+                    return param.value - 30 + '°C';
+                  },
+                  textStyle: {
+                    color: _.get($scope.options, "textColor", '#000'),
+                    fontSize: '10',
+                  }
+                }
               },
-              
+              z: 2
+            }, {
+              name: '白框',
+              type: 'bar',
+              xAxisIndex: 1,
+              barGap: '-100%',
+              data: [139],
+              barWidth: 28,
+              itemStyle: {
+                normal: {
+                  color: '#ffffff',
+                  barBorderRadius: 50,
+                }
+              },
+              z: 1
+            }, {
+              name: '外框',
+              type: 'bar',
+              xAxisIndex: 2,
+              barGap: '-100%',
+              data: [140],
+              barWidth: 38,
+              itemStyle: {
+                normal: {
+                  color: borderColor,
+                  barBorderRadius: 50,
+                }
+              },
+              z: 0
+            }, {
+              name: '圆',
+              type: 'scatter',
+              hoverAnimation: false,
+              data: [0],
+              xAxisIndex: 0,
+              symbolSize: 48,
+              itemStyle: {
+                normal: {
+                  color: mercuryColor,
+                  opacity: 1,
+                }
+              },
+              z: 2
+            }, {
+              name: '白圆',
+              type: 'scatter',
+              hoverAnimation: false,
+              data: [0],
+              xAxisIndex: 1,
+              symbolSize: 60,
+              itemStyle: {
+                normal: {
+                  color: '#ffffff',
+                  opacity: 1,
+                }
+              },
+              z: 1
+            }, {
+              name: '外圆',
+              type: 'scatter',
+              hoverAnimation: false,
+              data: [0],
+              xAxisIndex: 2,
+              symbolSize: 70,
+              itemStyle: {
+                normal: {
+                  color: borderColor,
+                  opacity: 1,
+                }
+              },
+              z: 0
+            }, {
+              name: '刻度',
+              type: 'bar',
+              yAxisIndex: 1,
+              xAxisIndex: 3,
+              label: {
+                normal: {
+                  show: true,
+                  position: 'right',
+                  distance: 5,
+                  color: _.get($scope.options, "kdColor", '#525252'),
+                  fontSize: 10,
+                  formatter: function (params) {
+                    // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
+                    if (params.dataIndex > 130 || params.dataIndex < 30) {
+                      return '';
+                    } else {
+                      if (params.dataIndex % 5 === 0) {
+                        return params.dataIndex - 30;
+                      } else {
+                        return '';
+                      }
+                    }
+                  }
+                }
+              },
+              barGap: '-100%',
+              data: kd,
+              barWidth: 1,
+              itemStyle: {
+                normal: {
+                  color: borderColor,
+                  barBorderRadius: 10,
+                }
+              },
+              z: 0
+
+
+
             });
-            
+
 
             let myChart = null;
 
-            if (document.getElementById("trajectory-main")) {
-              document.getElementById("trajectory-main").id = $scope.options.id;
+            if (document.getElementById("tube-main")) {
+              document.getElementById("tube-main").id = $scope.options.id;
               // eslint-disable-next-line
               myChart = echarts.init(document.getElementById($scope.options.id));
             } else {
@@ -88,7 +227,7 @@ function EchartsTrajectoryRenderer($rootScope) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight ;// + 50
+              let height = $element.parent().parent()["0"].clientHeight;// + 50
               let width = $element.parent().parent()["0"].clientWidth;
 
 
@@ -123,7 +262,7 @@ function EchartsTrajectoryRenderer($rootScope) {
 }
 
 
-function EchartsTrajectoryEditor() {
+function EchartsTubeEditor() {
   return {
     restrict: 'E',
     template: echartsEditorTemplate,
@@ -139,8 +278,8 @@ function EchartsTrajectoryEditor() {
         console.log("some error");
       }
       // Set default options for new vis// 20191203 bug fix 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
-        $scope.options = defaultTrajectoryChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TubeChart") {
+        $scope.options = defaultTubeChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
 
@@ -282,21 +421,21 @@ function EchartsTrajectoryEditor() {
 }
 
 export default function init(ngModule) {
-  ngModule.directive('echartsTrajectoryEditor', EchartsTrajectoryEditor);
-  ngModule.directive('echartsTrajectoryRenderer', EchartsTrajectoryRenderer);
+  ngModule.directive('echartsTubeEditor', EchartsTubeEditor);
+  ngModule.directive('echartsTubeRenderer', EchartsTubeRenderer);
 
   ngModule.config((VisualizationProvider) => {
     const renderTemplate =
-      '<echarts-trajectory-renderer options="visualization.options" query-result="queryResult"></echarts-trajectory-renderer>';
+      '<echarts-tube-renderer options="visualization.options" query-result="queryResult"></echarts-tube-renderer>';
 
-    const editorTemplate = '<echarts-trajectory-editor options="visualization.options" query-result="queryResult"></echarts-trajectory-editor>';
+    const editorTemplate = '<echarts-tube-editor options="visualization.options" query-result="queryResult"></echarts-tube-editor>';
     const defaultOptions = {
 
     };
 
     VisualizationProvider.registerVisualization({
-      type: 'ECHARTS-TRAJECTORY',
-      name: 'Echarts轨迹图',
+      type: 'ECHARTS-TUBE',
+      name: 'Echarts试管图',
       renderTemplate,
       editorTemplate,
       defaultOptions,

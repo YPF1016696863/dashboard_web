@@ -1,3 +1,5 @@
+/* eslint-disable no-else-return */
+/* eslint-disable object-shorthand */
 /* eslint-disable func-names */
 import * as _ from 'lodash';
 import $ from 'jquery';
@@ -6,9 +8,9 @@ import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
 
-import { defaultTrajectoryChartOptions, getChartType, setThemeColor } from './echartsTrajectoryChartOptionUtils';
+import { defaultGanteChartOptions, getChartType, setThemeColor } from './echartsGanteChartOptionUtils';
 
-function EchartsTrajectoryRenderer($rootScope) {
+function EchartsGanteRenderer($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -18,63 +20,104 @@ function EchartsTrajectoryRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
-        $scope.options = defaultTrajectoryChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "GanteChart") {
+        $scope.options = defaultGanteChartOptions();
       }
-      let echartsData = [];
-      let dataX = [];
-      let dataY = [];
+
+      let startData = [];
+      let endData = [];
+      let startDatatemp = [];
+      let endDatatemp = [];
+      let nameData = [];
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
-            echartsData = [];
-            dataX = [];
-            dataY = [];
+            startData = [];
+            endData = [];
+            startDatatemp = [];
+            endDatatemp = [];
+            nameData = [];
             _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
               // eslint-disable-next-line func-names
               _.forEach(value, function (valueChildren, keyChildren) {
                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
-                  dataX.push(valueChildren);
+                  startDatatemp.push(valueChildren)
                 }
                 if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
-                  dataY.push(valueChildren);
+                  endDatatemp.push(valueChildren);
+                }
+                if (keyChildren === _.get($scope.options, "form.nameAxisColumn", '')) {
+                  nameData.push(valueChildren);
                 }
 
               });
             });
+            _.forEach(startDatatemp, function (v, k) {
+              // eslint-disable-next-line func-names
+              startData.push(v._i);
+            });
+            _.forEach(endDatatemp, function (v, k) {
+              // eslint-disable-next-line func-names
+              endData.push(v._i);
+            });
 
-            for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
-              echartsData.push([
-                dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
-                dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i]
-              ]);
-            }
-            // console.log(echartsData);
+            _.set($scope.options, "yAxis.data", nameData);
+            _.set($scope.options, "tooltip.formatter", function (params) {
+              const start = params[0];
+              const tar = params[1];
+              return tar.name + '<br/>' +
+                start.seriesName + ':' + start.value + '<br/>' +
+                tar.seriesName + ' : ' + tar.value;
+            });
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
             _.set($scope.options, "series", []);// 清空设置           
-            $scope.options.series.push({
-              data: echartsData,
-              type: 'line',
-              symbol: _.get($scope.options, 'pointSymbols', 'circle'),
-              symbolSize: _.get($scope.options, 'pointSize', 15) === null || _.get($scope.options, 'pointSize', 15) === '' ? 
-              15 : _.get($scope.options, 'pointSize', 15),
-              itemStyle: {
-                color: _.get($scope.options, 'pointColor', '#ed4d50'),
+            $scope.options.series.push(
+
+              {
+                name: '开始时间',
+                type: 'bar',
+                zlevel: 1,
+                z: 2,
+                itemStyle: {
+                  color: _.get($scope.options, 'backgroundColor'),// transparent
+                  borderColor :'transparent'
+                },
+                data: startData
+
               },
-              lineStyle: {
-                color:_.get($scope.options, 'lineColor', '#ed4d50'),
-              },
-              
-            });
-            
+              {
+                name: '结束时间',
+                type: 'bar',
+                label: {
+                  show: true,
+                  position: 'inside'
+                },
+                itemStyle: {
+                  normal: {
+                    color: function (params) {
+                      // 给出颜色组                        
+                      const colorList = 
+                      ['#66FF66', '#cca272', '#74608f','#FF1493', '#d7a02b',
+                       '#4B0082','#c8ba23','#00BFFF', '#333399','#228B22', 
+                       '#FF4500', '#CC0033','#FFD700'];
+                      return colorList[params.dataIndex]
+                    },
+                    borderColor :'transparent',
+                  }
+                },
+                data: endData
+              }
+
+            );
+
 
             let myChart = null;
 
-            if (document.getElementById("trajectory-main")) {
-              document.getElementById("trajectory-main").id = $scope.options.id;
+            if (document.getElementById("gante-main")) {
+              document.getElementById("gante-main").id = $scope.options.id;
               // eslint-disable-next-line
               myChart = echarts.init(document.getElementById($scope.options.id));
             } else {
@@ -88,7 +131,7 @@ function EchartsTrajectoryRenderer($rootScope) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight ;// + 50
+              let height = $element.parent().parent()["0"].clientHeight;// + 50
               let width = $element.parent().parent()["0"].clientWidth;
 
 
@@ -123,7 +166,7 @@ function EchartsTrajectoryRenderer($rootScope) {
 }
 
 
-function EchartsTrajectoryEditor() {
+function EchartsGanteEditor() {
   return {
     restrict: 'E',
     template: echartsEditorTemplate,
@@ -139,8 +182,8 @@ function EchartsTrajectoryEditor() {
         console.log("some error");
       }
       // Set default options for new vis// 20191203 bug fix 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
-        $scope.options = defaultTrajectoryChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "GanteChart") {
+        $scope.options = defaultGanteChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
 
@@ -205,8 +248,8 @@ function EchartsTrajectoryEditor() {
         { label: 'oblique', value: 'oblique' }
       ];
       $scope.Colors = [
-        { label: '默认', value: '' },
-        { label: '透明', value: 'transparent' },
+        // { label: '默认', value: '' },
+        // { label: '透明', value: 'transparent' },
         { label: '白色', value: '#fff' },
         { label: '红色', value: '#ed4d50' },
         { label: '绿色', value: '#6eb37a' },
@@ -282,21 +325,21 @@ function EchartsTrajectoryEditor() {
 }
 
 export default function init(ngModule) {
-  ngModule.directive('echartsTrajectoryEditor', EchartsTrajectoryEditor);
-  ngModule.directive('echartsTrajectoryRenderer', EchartsTrajectoryRenderer);
+  ngModule.directive('echartsGanteEditor', EchartsGanteEditor);
+  ngModule.directive('echartsGanteRenderer', EchartsGanteRenderer);
 
   ngModule.config((VisualizationProvider) => {
     const renderTemplate =
-      '<echarts-trajectory-renderer options="visualization.options" query-result="queryResult"></echarts-trajectory-renderer>';
+      '<echarts-gante-renderer options="visualization.options" query-result="queryResult"></echarts-gante-renderer>';
 
-    const editorTemplate = '<echarts-trajectory-editor options="visualization.options" query-result="queryResult"></echarts-trajectory-editor>';
+    const editorTemplate = '<echarts-gante-editor options="visualization.options" query-result="queryResult"></echarts-gante-editor>';
     const defaultOptions = {
 
     };
 
     VisualizationProvider.registerVisualization({
-      type: 'ECHARTS-TRAJECTORY',
-      name: 'Echarts轨迹图',
+      type: 'ECHARTS-GANTE',
+      name: 'Echarts甘特图',
       renderTemplate,
       editorTemplate,
       defaultOptions,

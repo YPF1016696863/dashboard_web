@@ -131,7 +131,7 @@ function EchartsThreedbarRenderer($rootScope) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight + 50;
+              let height = $element.parent().parent()["0"].clientHeight ;// +50
               let width = $element.parent().parent()["0"].clientWidth;
 
 

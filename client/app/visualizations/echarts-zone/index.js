@@ -6,9 +6,9 @@ import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
 
-import { defaultTrajectoryChartOptions, getChartType, setThemeColor } from './echartsTrajectoryChartOptionUtils';
+import { defaultZoneChartOptions, getChartType, setThemeColor } from './echartsZoneChartOptionUtils';
 
-function EchartsTrajectoryRenderer($rootScope) {
+function EchartsZoneRenderer($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -18,63 +18,93 @@ function EchartsTrajectoryRenderer($rootScope) {
     template: echartsTemplate,
     link($scope, $element) {
 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
-        $scope.options = defaultTrajectoryChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "ZoneChart") {
+        $scope.options = defaultZoneChartOptions();
       }
-      let echartsData = [];
+
       let dataX = [];
-      let dataY = [];
+      let dataMaxtemp = [];
+      let dataMin = [];
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
-            echartsData = [];
+
             dataX = [];
-            dataY = [];
+            dataMaxtemp = [];
+            dataMin = [];
             _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
               // eslint-disable-next-line func-names
               _.forEach(value, function (valueChildren, keyChildren) {
                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
                   dataX.push(valueChildren);
                 }
-                if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
-                  dataY.push(valueChildren);
+                if (keyChildren === _.get($scope.options, "form.maxAxisColumn", '')) {
+                  dataMaxtemp.push(valueChildren);
+                }
+                if (keyChildren === _.get($scope.options, "form.minAxisColumn", '')) {
+                  dataMin.push(valueChildren);
                 }
 
               });
             });
-
-            for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
-              echartsData.push([
-                dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
-                dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i]
-              ]);
+            for (let i = 0; i < dataMaxtemp.length; i += 1) {
+              // eslint-disable-next-line operator-assignment
+              dataMaxtemp[i] = dataMaxtemp[i] - dataMin[i];
             }
-            // console.log(echartsData);
+            _.set($scope.options, "xAxis.data", dataX);
+            console.log(dataMaxtemp);
+
+
+            _.set($scope.options, "tooltip.formatter", function (params) {
+              const start = params[0];
+              const tar = params[1];
+              const max= Number(tar.value)+Number(start.value);
+              return tar.name + '<br/>' +
+                tar.seriesName + ' : ' + max + '<br/>'
+                + start.seriesName + ':' + start.value;
+
+            });
+
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
             _.set($scope.options, "series", []);// 清空设置           
-            $scope.options.series.push({
-              data: echartsData,
-              type: 'line',
-              symbol: _.get($scope.options, 'pointSymbols', 'circle'),
-              symbolSize: _.get($scope.options, 'pointSize', 15) === null || _.get($scope.options, 'pointSize', 15) === '' ? 
-              15 : _.get($scope.options, 'pointSize', 15),
-              itemStyle: {
-                color: _.get($scope.options, 'pointColor', '#ed4d50'),
+            $scope.options.series.push(
+              {
+                name: '最小值',
+                type: 'bar',
+                itemStyle: {
+                  barBorderColor: 'rgba(0,0,0,0)',
+                  color: 'rgba(0,0,0,0)'
+                },
+                emphasis: {
+                  itemStyle: {
+                    barBorderColor: 'rgba(0,0,0,0)',
+                    color: 'rgba(0,0,0,0)'
+                  }
+                },
+                data: dataMin
               },
-              lineStyle: {
-                color:_.get($scope.options, 'lineColor', '#ed4d50'),
-              },
-              
-            });
-            
+              {
+                name: '最大值',
+                type: 'bar',
+                // label: {
+                //   show: true,
+                //   position: 'inside'
+                // },
+                itemStyle: { 
+                  color: _.get($scope.options,"colorBar",''),
+                },
+                data: dataMaxtemp
+              }
+            );
+
 
             let myChart = null;
 
-            if (document.getElementById("trajectory-main")) {
-              document.getElementById("trajectory-main").id = $scope.options.id;
+            if (document.getElementById("zone-main")) {
+              document.getElementById("zone-main").id = $scope.options.id;
               // eslint-disable-next-line
               myChart = echarts.init(document.getElementById($scope.options.id));
             } else {
@@ -88,7 +118,7 @@ function EchartsTrajectoryRenderer($rootScope) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight ;// + 50
+              let height = $element.parent().parent()["0"].clientHeight;// + 50
               let width = $element.parent().parent()["0"].clientWidth;
 
 
@@ -123,7 +153,7 @@ function EchartsTrajectoryRenderer($rootScope) {
 }
 
 
-function EchartsTrajectoryEditor() {
+function EchartsZoneEditor() {
   return {
     restrict: 'E',
     template: echartsEditorTemplate,
@@ -139,8 +169,8 @@ function EchartsTrajectoryEditor() {
         console.log("some error");
       }
       // Set default options for new vis// 20191203 bug fix 
-      if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
-        $scope.options = defaultTrajectoryChartOptions();
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "ZoneChart") {
+        $scope.options = defaultZoneChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
 
@@ -282,21 +312,21 @@ function EchartsTrajectoryEditor() {
 }
 
 export default function init(ngModule) {
-  ngModule.directive('echartsTrajectoryEditor', EchartsTrajectoryEditor);
-  ngModule.directive('echartsTrajectoryRenderer', EchartsTrajectoryRenderer);
+  ngModule.directive('echartsZoneEditor', EchartsZoneEditor);
+  ngModule.directive('echartsZoneRenderer', EchartsZoneRenderer);
 
   ngModule.config((VisualizationProvider) => {
     const renderTemplate =
-      '<echarts-trajectory-renderer options="visualization.options" query-result="queryResult"></echarts-trajectory-renderer>';
+      '<echarts-zone-renderer options="visualization.options" query-result="queryResult"></echarts-zone-renderer>';
 
-    const editorTemplate = '<echarts-trajectory-editor options="visualization.options" query-result="queryResult"></echarts-trajectory-editor>';
+    const editorTemplate = '<echarts-zone-editor options="visualization.options" query-result="queryResult"></echarts-zone-editor>';
     const defaultOptions = {
 
     };
 
     VisualizationProvider.registerVisualization({
-      type: 'ECHARTS-TRAJECTORY',
-      name: 'Echarts轨迹图',
+      type: 'ECHARTS-ZONE',
+      name: 'Echarts区域图',
       renderTemplate,
       editorTemplate,
       defaultOptions,

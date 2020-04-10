@@ -174,7 +174,6 @@ class ChartsSearch extends React.Component {
                           value: e.target.value,
                           visualization: { type: e.target.value }// 
                         });
-                        // debugger
                         let type;
                         let chart;
                         switch (e.target.value) {
@@ -191,6 +190,10 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-TRAJECTORY': type = 'ECHARTS-TRAJECTORY'; break;// 轨迹图
                           case 'ECHARTS-THREEDBAR': type = 'ECHARTS-THREEDBAR'; break;// 3d 柱状图
                           case 'ECHARTS-LIQUID': type = 'ECHARTS-LIQUID'; break;// 指标球
+                          case 'ECHARTS-TUBE': type = 'ECHARTS-TUBE'; break;// 试管温度计
+                          case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
+                          case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
+                          case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 区间图
                           case 'PIVOT': type = 'PIVOT'; break; // 透视表
                           case 'CHART_line': type = 'CHART'; chart = 'line'; break;
                           case 'CHART_bar': type = 'CHART'; chart = 'bar'; break;
@@ -289,6 +292,20 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>轨迹图</p>
                               </Radio>
                             </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-ZONE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-zone.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>区间图</p>
+                              </Radio>
+                            </Col>
                           </Row>
 
                           <Divider style={{ margin: ' 0' }} />
@@ -372,6 +389,21 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>指标球</p>
                               </Radio>
                             </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-TUBE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-tube.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>试管图</p>
+                              </Radio>
+                            </Col>
+
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
@@ -607,7 +639,7 @@ class ChartsSearch extends React.Component {
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
                         {/* ** *Radio value="ECHARTS-GRAPH"**E-charts拓扑图  key 7 */}
-                        <Panel header="E-charts拓扑图" id="p1" key="7">
+                        <Panel header="E-charts拓展图" id="p1" key="7">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -621,6 +653,20 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-graph.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>拓扑图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-GANTE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-gante.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>甘特图</p>
                               </Radio>
                             </Col>
                           </Row>
@@ -645,7 +691,23 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>3D柱状图</p>
                               </Radio>
                             </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-CHINA" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-china.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>3D地图</p>
+                              </Radio>
+                            </Col>
+
                           </Row>
+
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
 
