@@ -194,6 +194,9 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
                           case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
                           case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 区间图
+                          case 'ECHARTS-CONTRAST': type = 'ECHARTS-CONTRAST'; break;// 双数值对比图
+                          case 'ECHARTS-SCATTER': type = 'ECHARTS-SCATTER'; chart = 'scatter'; break;// 散点图重构(颜色)图
+                          case 'ECHARTS-SCATTER-COORDINATES': type = 'ECHARTS-SCATTER-COORDINATES'; break;// 散点图重构(二维坐标)图
                           case 'PIVOT': type = 'PIVOT'; break; // 透视表
                           case 'CHART_line': type = 'CHART'; chart = 'line'; break;
                           case 'CHART_bar': type = 'CHART'; chart = 'bar'; break;
@@ -674,7 +677,7 @@ class ChartsSearch extends React.Component {
                         </Panel>
 
 
-                        {/* ** *Radio value="ECHARTS-THREEDBAR"**E-charts3D柱状图  key 9 */}
+                        {/* ** *Radio value="ECHARTS-THREEDBAR"**E-charts3D柱状图  key 8 */}
                         <Panel header="E-charts3D图" id="p1" key="8">
                           <Row gutter={[8, 8]}>
                             <Col
@@ -711,6 +714,54 @@ class ChartsSearch extends React.Component {
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
 
+                        {/* ** *Radio value="ECHARTS-CONTRAST"**E-charts重构图  key 9 */}
+                        <Panel header="E-charts重构图" id="p1" key="9">
+                          <Row gutter={[8, 8]}>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-SCATTER" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-scatter-color.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图(颜色)</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-SCATTER-COORDINATES" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-scatter-coordinates.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图(坐标)</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-CONTRAST" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-threebar1.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>柱状图</p>
+                              </Radio>
+                            </Col>
+                          </Row>
+                          <Divider style={{ margin: ' 0' }} />
+                        </Panel>
 
                       </Collapse>
                     </Radio.Group>
