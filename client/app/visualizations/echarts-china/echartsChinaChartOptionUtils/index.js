@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import UUIDv4 from 'uuid/v4';
+import { setAsPrimitive } from 'echarts-gl';
 
 export function defaultChinaChartOptions() {
     return {
@@ -7,9 +8,12 @@ export function defaultChinaChartOptions() {
         chartType: "ChinaChart",
         backgroundColor: '#324B76',
         form: {
-            xAxisColumn: "",
-            maxAxisColumn: "",
-            minAxisColumn: "",
+            barNameAxisColumn: "",
+            barAxisColumn: "",
+            scatterNameAxisColumn: "",
+            scatterAxisColumn:"",
+            lineNameAxisColumn:"",// source
+            lineAxisColumn:"",// target
         },
         toolbox: {
             show: false,
@@ -70,6 +74,7 @@ export function defaultChinaChartOptions() {
             },
             label: {
                 show: true,
+                distance:2,
                 textStyle: {
                     color: '#fff', // 地图初始化区域字体颜色
                     fontSize: 10,
@@ -82,7 +87,7 @@ export function defaultChinaChartOptions() {
                     show: true,
                     textStyle: {
                         color: '#fff',
-                        fontSize: 3,
+                        fontSize: 8,
                         backgroundColor: 'rgba(0,23,11,0)'
                     }
                 }
@@ -91,7 +96,8 @@ export function defaultChinaChartOptions() {
             //     name: '广东',
             //     regionHeight: 123,// 区域的高度
             // },
-            shading: 'lambert',
+            
+            shading: 'lambert',// lambert
             light: { // 光照阴影
                 main: {
                     color: '#fff', // 光照颜色
@@ -106,15 +112,21 @@ export function defaultChinaChartOptions() {
                     intensity: 0.3
                 }
             },
-            // postEffect: {
-            //     enable: true,// 是否开启后处理特效。默认关闭。
-            //     bloom: {
-            //         enable: true// 是否开启光晕特效。
-            //     },
-            //     depthOfField:{
-            //         enable: true// 是否开启景深。
-            //     }
-            // }
+            postEffect: {
+                enable: true,// 是否开启后处理特效。默认关闭。
+                bloom: {
+                    enable: true// 是否开启光晕特效。
+                },
+                depthOfField:{
+                    enable: false// 是否开启景深。
+                },
+                SSAO:{
+                    enable:false,
+                    quality:'medium',
+                    radius:2,
+                    intensity:1,
+                }
+            }
         },
         series: [],
         size: {
