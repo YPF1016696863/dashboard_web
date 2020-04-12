@@ -193,7 +193,8 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-TUBE': type = 'ECHARTS-TUBE'; break;// 试管温度计
                           case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
                           case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
-                          case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 区间图
+                          case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 3D地图
+                          case 'ECHARTS-POLARPIE': type = 'ECHARTS-POLARPIE'; break;// 扇形
                           case 'ECHARTS-CONTRAST': type = 'ECHARTS-CONTRAST'; break;// 双数值对比图
                           case 'ECHARTS-SCATTER': type = 'ECHARTS-SCATTER'; chart = 'scatter'; break;// 散点图重构(颜色)图
                           case 'ECHARTS-SCATTER-COORDINATES': type = 'ECHARTS-SCATTER-COORDINATES'; break;// 散点图重构(二维坐标)图
@@ -425,6 +426,21 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-polar.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>极坐标图</p>
+                              </Radio>
+                            </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-POLARPIE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-polarpie.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>扇形图</p>
                               </Radio>
                             </Col>
                           </Row>

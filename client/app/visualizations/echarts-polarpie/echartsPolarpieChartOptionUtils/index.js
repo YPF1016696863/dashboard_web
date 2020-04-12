@@ -1,19 +1,15 @@
 import * as _ from 'lodash';
 import UUIDv4 from 'uuid/v4';
-import { setAsPrimitive } from 'echarts-gl';
 
-export function defaultChinaChartOptions() {
+export function defaultPolarpieChartOptions() {
     return {
         id: UUIDv4(),
-        chartType: "ChinaChart",
-        backgroundColor: '#324B76',
+        chartType: "PolarpieChart",
+        backgroundColor: 'transparent',
         form: {
-            barNameAxisColumn: "",
-            barAxisColumn: "",
-            scatterNameAxisColumn: "",
-            scatterAxisColumn:"",
-            lineNameAxisColumn:"",// source
-            lineAxisColumn:"",// target
+            xAxisColumn: "",
+            maxAxisColumn: "",
+            minAxisColumn: "",
         },
         toolbox: {
             show: false,
@@ -23,111 +19,95 @@ export function defaultChinaChartOptions() {
         },
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
-
         title: {
             text: '',
-            x: 'left',
-            top: "10",
+            subtext: '',
+            x: 'center',
+            backgroundColor: 'transparent',// 
             textStyle: {
-                color: '#fff',
-                fontSize: 14
-            }
+                color: '#333',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 25,
+            },
+            subtextStyle: {
+                color: '#333',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 18,
+            },
         },
         tooltip: {
             show: true,
-            // formatter:(params)=>{
-            //   let data = "测试1:"+params.name + "<br/>"+"值:"+ params.value[2]+"<br/>"+"地理坐标:[" + params.value[0]+","+params.value[1] +"]";
-            //   return data;
-            // },
-        },
-        visualMap: [
-        //     {
-        //     type: 'continuous',
-        //     seriesIndex: 0,
-        //     text: ['bar3D'],
-        //     calculable: true,
-        //     max: 300,
-        //     inRange: {
-        //         color: ['#87aa66', '#eba438', '#d94d4c']
-        //     }
-        // }, {
-        //     type: 'continuous',
-        //     seriesIndex: 1,
-        //     text: ['scatter3D'],
-        //     left: 'right',
-        //     max: 100,
-        //     calculable: true,
-        //     inRange: {
-        //         color: ['#000', 'blue', 'purple']
-        //     }
-        // }
-    ],
-        geo3D: {
-            map: 'china',
-            roam: true, 
-            itemStyle: {
-                color: '#3B9EF5',// #1d5e98
-                opacity: 1,
-                borderWidth: 0.4,// 图形描边的宽度。加上描边后可以更清晰的区分每个区域
-                borderColor: '#fff' 
-
-            },
-            label: {
-                show: true,
-                distance:2,
-                textStyle: {
-                    color: '#fff', // 地图初始化区域字体颜色
-                    fontSize: 10,
-                    opacity: 1,
-                    backgroundColor: 'rgba(0,23,11,0)'
-                },
-            },
-            emphasis: { // 当鼠标放上去  地区区域是否显示名称
-                label: {
-                    show: true,
-                    textStyle: {
-                        color: '#fff',
-                        fontSize: 8,
-                        backgroundColor: 'rgba(0,23,11,0)'
-                    }
-                }
-            },
-            // regions: {// 所对应的地图区域的名称，例如 '广东'，'浙江'。
-            //     name: '广东',
-            //     regionHeight: 123,// 区域的高度
-            // },
-            
-            shading: 'lambert',// lambert
-            light: { // 光照阴影
-                main: {
-                    color: '#fff', // 光照颜色
-                    intensity: 1.2, // 光照强度
-                    // shadowQuality: 'high', //阴影亮度
-                    shadow: true, // 是否显示阴影
-                    alpha: 55,
-                    beta: 10
-
-                },
-                ambient: {
-                    intensity: 0.3
-                }
-            },
-            postEffect: {
-                enable: true,// 是否开启后处理特效。默认关闭。
-                bloom: {
-                    enable: true// 是否开启光晕特效。
-                },
-                depthOfField:{
-                    enable: false// 是否开启景深。
-                },
-                SSAO:{
-                    enable:false,
-                    quality:'medium',
-                    radius:2,
-                    intensity:1,
-                }
+            trigger: 'item', // 触发类型,'item'数据项图形触发，
+            axisPointer: {
+                type: 'cross'
             }
         },
+        grid: {
+        },
+        legend: {
+            show: false
+        }, 
+        polar: {
+            center: ['50%', '50%']
+        },
+
+        // 角度坐标系的角度轴
+        angleAxis: {
+            min: 0,
+            max: 360,
+            name: '角度(°)',
+            interval: 90,// 角度间隔
+            startAngle: 90,
+
+            splitLine: {  // 分割线
+                show: true,
+                interval: 'auto',
+            },
+
+            splitArea: {  // 分割区域
+                show: true,
+            },
+
+            // 坐标轴的设置--外围的轴
+            axisLine: {
+                show: true,
+                lineStyle: {   // 坐标轴线的颜色
+                    color: '#fff',
+                },
+            }
+
+
+        },
+        // 极坐标系的径向轴
+        radiusAxis: {
+            min: 0,
+            max: 500,// 最大值
+            name: '距离(km)',
+            interval: 100, //  刻度
+
+            splitLine: {  // 分割线
+                show: true,
+            },
+
+            splitArea: {  // 分割区域
+                show: true,
+            },
+            axisLine: {
+                show: true,
+                lineStyle: {   // 径向轴轴线的颜色
+                    color: '#fff',
+                },
+            }
+        },
+        dataset: {
+            source: [
+                ['a', 20],// 宽度
+                ['b', 60]
+            ]
+        },
+
         series: [],
         size: {
             responsive: true,
