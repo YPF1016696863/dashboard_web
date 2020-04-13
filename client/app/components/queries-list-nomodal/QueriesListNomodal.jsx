@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import React from 'react';
 import {
   PageHeader,
@@ -45,17 +46,45 @@ import { policy } from '@/services/policy';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
-
+let selectName = '';
+let selectId = '';
 class QueriesListNomodal extends React.Component {
+  // 初始化方法 获取url中的id 得到对应 数据集名称  (如何及时更新)
+  constructor(props) {
+    super(props);
+    selectName = '';
+    const url = window.location.href;
+    selectId = "";
+    for (let i = url.indexOf("query") + 6; i < url.length; i += 1) {
+      if (url[i] === '/') {
+        break;
+      } else {
+        selectId += url[i];
+      }
+    }
+
+    Query.allQueries().$promise.then(res => {
+      _.forEach(res, function (value, key) {
+        if (value.id + "" === selectId) {
+          // console.log(value.id+"::"+value.name);
+          selectName = value.name; 
+          localStorage.setItem('lastSelectedDataSourceName', selectName);
+        }
+
+      });
+    })
+    
+  }
+
   state = {
     visible: false,
     selected: null,
     all: null,
     filtered: null,
     loading: true,
-    selectedName: '选择数据集'
+    selectedName: selectName
   };
-
+  
   componentDidUpdate(prevProps) {
     if (!_.isEqual(this.props.reload, prevProps.reload)) {
       this.reload(true);
@@ -73,11 +102,13 @@ class QueriesListNomodal extends React.Component {
       this.setState({
         all: res,
         filtered: res,
-        loading: false
+        loading: false,
+        selectedName: selectName
       });
     });
   };
 
+  
   handleOk = (e, $scope) => {
     if (this.state.selected === null) {
       message.warning('请选择一个数据集.');
@@ -87,14 +118,13 @@ class QueriesListNomodal extends React.Component {
 
     _.filter(allItems, item => {
       if (item.id + '' === this.state.selected) {
-        this.setState({
-          selectedName: item.name
-        });
+        selectName = item.name
       }
     });
 
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
+    localStorage.setItem('lastSelectedDataSourceName', selectName);
     // 修改url不跳转页面
     let start = '';
     let newURL = '';
@@ -116,13 +146,12 @@ class QueriesListNomodal extends React.Component {
     window.history.pushState({}, 0, url);
     window.history.replaceState({}, 0, newURL);
 
-    // console.log(this.props.chartType);
 
     // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
 
     this.setState({
       visible: false,
-      selected: null
+      selected: null,
     });
   };
 
@@ -171,13 +200,20 @@ class QueriesListNomodal extends React.Component {
     });
   }
 
+
   render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
-    // console.log(selectedName);
+
+    
+  selectName= localStorage.getItem('lastSelectedDataSourceName');
+
     return (
       <>
-        <Input placeholder={selectedName} onClick={this.showModal} />
+        <Input
+          placeholder={selectName}
+          onClick={this.showModal}
+        />
         <Modal
           destroyOnClose
           title="选择数据集"
@@ -221,7 +257,7 @@ class QueriesListNomodal extends React.Component {
                     </Col>
                     <Col span={2} offset={1}>
                       <Dropdown
-                        overlay={
+                        overlay={(
                           <Menu>
                             <Menu.Item
                               key="1"
@@ -238,7 +274,7 @@ class QueriesListNomodal extends React.Component {
                               按创建时间排序
                             </Menu.Item>
                           </Menu>
-                        }
+                        )}
                       >
                         <Button icon="menu-fold" size="small" />
                       </Dropdown>
@@ -275,12 +311,12 @@ class QueriesListNomodal extends React.Component {
                       >
                         {_.map(this.state.filtered, item => (
                           <TreeNode
-                            icon={
+                            icon={(
                               <Icon
                                 type="file-search"
                                 style={{ color: '#FAAA39' }}
                               />
-                            }
+                            )}
                             title={item.name}
                             // + ', id: [' + item.id + ']'
                             key={item.id}

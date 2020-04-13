@@ -92,9 +92,10 @@ class QueriesList extends React.Component {
         });
       }
     });
-
+    
+     
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
-
+    
     // 修改url不跳转页面
     let start = '';
     let newURL = '';
@@ -115,7 +116,7 @@ class QueriesList extends React.Component {
 
     window.history.pushState({}, 0, url);
     window.history.replaceState({}, 0, newURL);
-
+    
     // console.log(this.props.chartType);
 
     // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
@@ -173,8 +174,7 @@ class QueriesList extends React.Component {
 
   render() {
     const { appSettings } = this.props;
-    const { selectedName } = this.state;
-    // console.log(selectedName);
+    const { selectedName } = this.state; 
     return (
       <>
         <Input placeholder={selectedName} onClick={this.showModal} />

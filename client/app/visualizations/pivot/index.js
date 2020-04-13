@@ -102,4 +102,4 @@ export default function init(ngModule) {
   });
 }
 
-init.init = false;
+init.init = true;
