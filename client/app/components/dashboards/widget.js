@@ -1,8 +1,10 @@
 import { filter } from 'lodash';
 import TextboxDialog from '@/components/dashboards/TextboxDialog';
-import template from './widget.html';
 import EditParameterMappingsDialog from '@/components/dashboards/EditParameterMappingsDialog';
+
+import template from './widget.html';
 import widgetDialogTemplate from './widget-dialog.html';
+
 import './widget.less';
 import './widget-dialog.less';
 

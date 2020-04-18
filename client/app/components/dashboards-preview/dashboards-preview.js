@@ -8,13 +8,14 @@ import {
   synchronizeWidgetTitles
 } from '@/components/ParameterMappingInput';
 import { durationHumanize } from '@/filters';
-import template from './dashboards-preview.html';
+
 import AddWidgetDialog from '@/components/dashboards/AddWidgetDialog';
 import TextboxDialog from '@/components/dashboards/TextboxDialog';
 import notification from '@/services/notification';
 
+import template from './dashboards-preview.html';
+
 import './dashboards-preview.less';
-import parameters from "@/components/parameters";
 
 function isWidgetPositionChanged(oldPosition, newPosition) {
   const fields = ['col', 'row', 'sizeX', 'sizeY', 'autoHeight'];
