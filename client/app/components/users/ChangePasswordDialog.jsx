@@ -5,8 +5,8 @@ import Input from 'antd/lib/input';
 import { isFunction } from 'lodash';
 import { User } from '@/services/user';
 import notification from '@/services/notification';
-import { UserProfile } from '../proptypes';
 import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
+import { UserProfile } from '../proptypes';
 
 class ChangePasswordDialog extends React.Component {
   static propTypes = {

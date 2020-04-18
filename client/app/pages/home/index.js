@@ -1,5 +1,6 @@
-import template from './home.html';
 import notification from '@/services/notification';
+import template from './home.html';
+
 
 function HomeCtrl(Events, Dashboard, Query, $http, $translate, messages) {
 

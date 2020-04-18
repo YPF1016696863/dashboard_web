@@ -18,8 +18,8 @@ import Notifications from '@/services/notifications';
 import ScheduleDialog from '@/components/queries/ScheduleDialog';
 import notification from '@/services/notification';
 
-import template from './content-layout.html';
 import {DashboardsPreview} from "@/components/dashboards-preview/dashboards-preview";
+import template from './content-layout.html';
 
 function ChartsListSelectViewCtrl(
   $scope,

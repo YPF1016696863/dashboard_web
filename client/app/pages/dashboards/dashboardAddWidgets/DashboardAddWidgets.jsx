@@ -6,11 +6,11 @@ import { Modal, Button } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
-import './DashboardAddWidgets.less';
-import { ChartsListSelectView } from '../charts-list-select';
+import './DashboardAddWidgets.less'; 
 import { Dashboard } from '@/services/dashboard';
 import { currentUser } from '@/services/auth';
 import LoadingState from '@/components/items-list/components/LoadingState';
+import { ChartsListSelectView } from '../charts-list-select';
 
 let ChartsListSelectViewDOM;
 

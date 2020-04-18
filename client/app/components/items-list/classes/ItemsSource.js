@@ -1,7 +1,7 @@
 import { isFunction, identity, map, extend } from 'lodash';
-import Paginator from './Paginator';
-import Sorter from './Sorter';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
+import Paginator from './Paginator';
+import Sorter from './Sorter'; 
 import { PlainListFetcher, PaginatedListFetcher } from './ItemsFetcher';
 
 export class ItemsSource {

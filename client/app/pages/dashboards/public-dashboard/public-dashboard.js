@@ -1,10 +1,8 @@
-import * as _ from "lodash";
-
-import template from './public-dashboard.html';
-
+import * as _ from "lodash"; 
 import './public-dashboard.less';
 import { Widget } from '@/services/widget';
 import { Dashboard } from '@/services/dashboard';
+import template from './public-dashboard.html';
 
 function loadToken($route, appSettings) {
   return Promise.resolve($route.current.params.token);
