@@ -36,7 +36,9 @@ export function defaultChinaChartOptions() {
         tooltip: {
             show: true,
             // formatter:(params)=>{
-            //   let data = "测试1:"+params.name + "<br/>"+"值:"+ params.value[2]+"<br/>"+"地理坐标:[" + params.value[0]+","+params.value[1] +"]";
+            //   let data = "测试1:"+params.name + "<br/>"+"值:"+ 
+            // params.value[2]+"<br/>"+"地理坐标:[" + params.value[0]+","
+            // +params.value[1] +"]";
             //   return data;
             // },
         },
@@ -68,7 +70,8 @@ export function defaultChinaChartOptions() {
             itemStyle: {
                 color: '#3B9EF5',// #1d5e98
                 opacity: 1,
-                borderWidth: 0.4,// 图形描边的宽度。加上描边后可以更清晰的区分每个区域
+                borderWidth: 0.4,
+                // 图形描边的宽度。加上描边后可以更清晰的区分每个区域
                 borderColor: '#fff' 
 
             },

@@ -1,9 +1,9 @@
 import { map, find,set,get } from 'lodash';
 import { copy } from 'angular';
-import notification from '@/services/notification';
-import template from './edit-visualization-dialog.html';
+import notification from '@/services/notification'; 
 import {navigateTo} from '@/services/navigateTo';
 import { Query } from '@/services/query';
+import template from './edit-visualization-dialog.html';
 
 // eslint-disable-next-line import/prefer-default-export
 export const EditVisualizationDialog = {
