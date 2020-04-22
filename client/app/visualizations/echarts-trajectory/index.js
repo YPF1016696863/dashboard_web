@@ -28,7 +28,60 @@ function EchartsTrajectoryRenderer($rootScope) {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
+
+            // 找到选中serise的下标        
+            _.set($scope.options, 'useSerie_Index',
+              _.findIndex(
+                _.get($scope.options, "form.yAxisColumns", []),
+                function (o) { return o === _.get($scope.options, 'useSerie', ''); }
+              ));
+
+            // 输入的数据格式转换 
+            const yData = [];
+            // y 的数据单独做一个数组
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+              const tempData = [];
+              _.forEach(data, function (value, key) {
+                _.forEach(value, function (onevalue, onekey) {
+                  if (onekey === yAxisColumn) {
+                    tempData.push(onevalue);
+                  }
+                });
+              });
+              yData.push(tempData);
+            });
+            // console.log(yData);
+
+            const xData = [];
+            // x 的数据单独做一个数组
+            _.each(_.get($scope.options, "form.xAxisColumns", []), (xAxisColumn) => {
+              const tempData = [];
+              _.forEach(data, function (value, key) {
+                _.forEach(value, function (onevalue, onekey) {
+                  if (onekey === xAxisColumn) {
+                    tempData.push(onevalue);
+                  }
+                });
+              });
+              xData.push(tempData);
+            });
+            // console.log(xData);
+
             echartsData = [];
+            for (let i = 0; i < Math.max(yData.length, xData.length); i += 1) {// 有多少系列
+              const tempData = [];
+              for (let j = 0; j < Math.max(yData[i].length, xData[i].length); j += 1) {// 对应系列的xy数组
+                // xy数组配对
+                tempData.push([
+                  xData[i][j] === null || xData[i][j] === undefined ? 0 : xData[i][j],
+                  yData[i][j] === null || yData[i][j] === undefined ? 0 : yData[i][j]
+                ]);
+              }
+              echartsData.push(tempData);
+            }
+
+            // console.log(echartsData);  
+
             dataX = [];
             dataY = [];
             _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
@@ -43,33 +96,39 @@ function EchartsTrajectoryRenderer($rootScope) {
 
               });
             });
-
-            for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
-              echartsData.push([
-                dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
-                dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i]
-              ]);
-            }
-            // console.log(echartsData);
+            // console.log(_.get($scope.options, 'pointSymbols', 'circle')[0]+_.get($scope.options, 'pointSymbols', 'circle')[1]);
             // 切换主题颜色
+            let seriesIndex = 0;
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
-
             _.set($scope.options, "series", []);// 清空设置           
-            $scope.options.series.push({
-              data: echartsData,
-              type: 'line',
-              symbol: _.get($scope.options, 'pointSymbols', 'circle'),
-              symbolSize: _.get($scope.options, 'pointSize', 15) === null || _.get($scope.options, 'pointSize', 15) === '' ? 
-              15 : _.get($scope.options, 'pointSize', 15),
-              itemStyle: {
-                color: _.get($scope.options, 'pointColor', '#ed4d50'),
-              },
-              lineStyle: {
-                color:_.get($scope.options, 'lineColor', '#ed4d50'),
-              },
-              
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+              $scope.options.series.push({
+                data: echartsData[seriesIndex],
+                type: 'line',
+                // _.get($scope.options, "series_Label_Position", '')[seriesIndex]
+                symbol: _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === null ||
+                _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === '' ?
+                'circle':_.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] , 
+                symbolSize: _.get($scope.options, 'pointSize', 15)[seriesIndex] === null ||
+                  _.get($scope.options, 'pointSize', 15)[seriesIndex] === '' ?
+                  15 : _.get($scope.options, 'pointSize', 15)[seriesIndex],
+                itemStyle: {
+                  color: _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex]=== null ||
+                   _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex]==='' ?
+                   '#ed4d50': _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex]
+                },
+                lineStyle: {
+                  color: _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex]=== null ||
+                  _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex]==='' ?
+                  '#ed4d50':_.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex],
+                },
+
+              });
+
+              seriesIndex += 1;
             });
-            
+
+
 
             let myChart = null;
 
@@ -88,7 +147,7 @@ function EchartsTrajectoryRenderer($rootScope) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight ;// + 50
+              let height = $element.parent().parent()["0"].clientHeight;// + 50
               let width = $element.parent().parent()["0"].clientWidth;
 
 

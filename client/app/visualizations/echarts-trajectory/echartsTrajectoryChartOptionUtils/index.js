@@ -8,7 +8,9 @@ export function defaultTrajectoryChartOptions() {
         backgroundColor: 'transparent',
         form: {
             xAxisColumn: "",
-            yAxisColumn: ""
+            yAxisColumn: "",
+            yAxisColumns: [],
+            xAxisColumns: []
         },
         title: {
             text: 'Trajectory 简单示例',
