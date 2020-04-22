@@ -15,23 +15,25 @@
         <!-- <div class="form-group">
             <label class="control-label">系列名称</label>
             <input name="name" type="text" class="form-control" ng-model="options.series_Name" placeholder="" />
-        </div> -->
+        </div> --> 
         <div class="form-group">
             <label class="control-label">X轴数据</label>
-            <ui-select name="xAxisColumn" required ng-model="options.form.xAxisColumn">
-                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
+            <ui-select multiple name="xAxisColumns" required ng-model="options.form.xAxisColumns">
+                <ui-select-match placeholder="选择数据值...">{{$item}}</ui-select-match>
+                <ui-select-choices
+                    repeat="column in columnNames | remove:form.groupby | remove:options.form.xAxisColumn">
                     <span ng-bind-html="column | highlight: $select.search"></span>
                     <span> </span>
                     <small class="text-muted" ng-bind="columns[column].type"></small>
                 </ui-select-choices>
             </ui-select>
-        </div>
+        </div> 
         <div class="form-group">
             <label class="control-label">Y轴数据</label>
-            <ui-select name="yAxisColumn" required ng-model="options.form.yAxisColumn">
-                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
+            <ui-select multiple name="yAxisColumns" required ng-model="options.form.yAxisColumns">
+                <ui-select-match placeholder="选择数据值...">{{$item}}</ui-select-match>
+                <ui-select-choices
+                    repeat="column in columnNames | remove:form.groupby | remove:options.form.xAxisColumn">
                     <span ng-bind-html="column | highlight: $select.search"></span>
                     <span> </span>
                     <small class="text-muted" ng-bind="columns[column].type"></small>
@@ -155,7 +157,7 @@
         </div>
 
         <div class="form-group" ng-if="Show == 1">
-            <div class="form-group" style="width:49%;float:left">
+            <div class="form-group" style="width:49%;float:left"> 
                 <label class="control-label">设置整体主题颜色</label>
                 <ui-select ng-model="options.color">
                     <ui-select-match placeholder="选择色系颜色...">{{$select.selected.label}}</ui-select-match>
@@ -165,15 +167,22 @@
                 </ui-select>
                 <label class="control-label">组件离容器左侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.left" type="text" class="form-control" placeholder="0">
+                <label class="control-label">选择设置系列</label>
+                <ui-select name="serise" required ng-model="options.useSerie">
+                    <ui-select-match placeholder="选择系列...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="column in options.form.yAxisColumns ">
+                        <span ng-bind-html="column | highlight: $select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
                 <label class="control-label">标记点形状</label>
-                <ui-select ng-model="options.pointSymbols">
+                <ui-select ng-model="options.pointSymbols[options.useSerie_Index]">
                     <ui-select-match placeholder="选择形状...">{{$select.selected.label}}</ui-select-match>
                     <ui-select-choices repeat="Color.value as Color in Symbols">
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
                 <label class="control-label">标记点颜色</label>
-                <ui-select ng-model="options.pointColor">
+                <ui-select ng-model="options.pointColor[options.useSerie_Index]">
                     <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
                     <ui-select-choices repeat="Color.value as Color in Colors">
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
@@ -193,9 +202,9 @@
                 <input style="width:100%" ng-model="options.grid.bottom" type="text" class="form-control"
                     placeholder="0">
                 <label class="control-label">标记点大小</label>
-                <input style="width:100%" ng-model="options.pointSize" type="text" class="form-control" placeholder="15">
+                <input style="width:100%" ng-model="options.pointSize[options.useSerie_Index]" type="text" class="form-control" placeholder="15">
                 <label class="control-label">轨迹颜色</label>
-                <ui-select ng-model="options.lineColor">
+                <ui-select ng-model="options.lineColor[options.useSerie_Index]">
                     <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
                     <ui-select-choices repeat="Color.value as Color in Colors">
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
