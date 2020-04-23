@@ -6,6 +6,7 @@ import { durationHumanize } from '@/filters';
 import template from './dashboard-view.html';
 
 import './dashboard-view.less';
+// import './switch.css'
 
 function ViewDashboardCtrl(
   $routeParams,

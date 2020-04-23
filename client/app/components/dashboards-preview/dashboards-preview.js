@@ -14,6 +14,7 @@ import TextboxDialog from '@/components/dashboards/TextboxDialog';
 import notification from '@/services/notification';
 
 import './dashboards-preview.less';
+import './switch.css'
 import parameters from "@/components/parameters";
 
 function isWidgetPositionChanged(oldPosition, newPosition) {

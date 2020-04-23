@@ -4,10 +4,10 @@ import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
-
+import Global from '../Global'
 
 import { defaultZoneChartOptions, getChartType, setThemeColor } from './echartsZoneChartOptionUtils';
-
+ 
 function EchartsZoneRenderer($rootScope) {
   return {
     restrict: 'E',
@@ -17,6 +17,7 @@ function EchartsZoneRenderer($rootScope) {
     },
     template: echartsTemplate,
     link($scope, $element) {
+ 
 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "ZoneChart") {
         $scope.options = defaultZoneChartOptions();
@@ -29,6 +30,8 @@ function EchartsZoneRenderer($rootScope) {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
+            // eslint-disable-next-line no-const-assign
+            Global.res=$scope.queryResult; 
 
             dataX = [];
             dataMaxtemp = [];
@@ -53,7 +56,7 @@ function EchartsZoneRenderer($rootScope) {
               dataMaxtemp[i] = dataMaxtemp[i] - dataMin[i];
             }
             _.set($scope.options, "xAxis.data", dataX);
-            console.log(dataMaxtemp);
+            // console.log(dataMaxtemp);
 
 
             _.set($scope.options, "tooltip.formatter", function (params) {
@@ -145,13 +148,27 @@ function EchartsZoneRenderer($rootScope) {
         }
       };
 
+      
+
       $scope.$watch('options', refreshData, true);
       $scope.$watch('queryResult && queryResult.getData()', refreshData);
       $rootScope.$watch('theme.theme', refreshData);
     },
   };
 }
+ 
 
+function drop(data,index,event)
+{
+  console.log(data);
+// ev.preventDefault();
+// const sSrc=ev.dataTransfer.getData("src");
+// const sId=ev.dataTransfer.getData("id");
+// const tSrc=target.children[0].src;
+// const tId=target.children[0].id;
+// $scope.chanage(sId,sSrc,tId,tSrc)
+// $scope.$apply();
+}
 
 function EchartsZoneEditor() {
   return {
@@ -173,6 +190,7 @@ function EchartsZoneEditor() {
         $scope.options = defaultZoneChartOptions();
       }
       $scope.selectedChartType = getChartType($scope.options);
+ 
 
       $scope.currentTab = 'general';
       $scope.changeTab = (tab) => {

@@ -16,13 +16,13 @@ import ngMaterial from 'angular-material';
 import 'angular-translate';
 import 'angular-translate-loader-static-files';
 import 'angular-translate-storage-cookie';
-import 'angular-translate-storage-local';
+import 'angular-translate-storage-local'; 
 import 'angular-local-storage';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiSelect from 'ui-select';
 import ngMessages from 'angular-messages';
 import ngUpload from 'angular-base64-upload';
-import vsRepeat from 'angular-vs-repeat';
+import vsRepeat from 'angular-vs-repeat'; 
 import 'brace';
 import 'angular-ui-ace';
 import 'angular-resizable';
@@ -67,7 +67,7 @@ const requirements = [
   'angularResizable',
   vsRepeat,
   'ui.sortable',
-  'ngMaterial'
+  'ngMaterial',  
 ];
 
 const ngModule = angular

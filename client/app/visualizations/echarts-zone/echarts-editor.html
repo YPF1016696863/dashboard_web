@@ -1,4 +1,4 @@
-<div>
+<div> 
     <ul class="tab-nav">
         <li ng-class="{active: currentTab == 'general'}">
             <a ng-click="changeTab('general')">数据设置</a>
@@ -14,8 +14,14 @@
     <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
         <!-- <div class="form-group">
             <label class="control-label">系列名称</label>
-            <input name="name" type="text" class="form-control" ng-model="options.series_Name" placeholder="" />
+            <input colorpicker colorpicker-close-on-select type="text" ng-model = "options.your_model" /> 
         </div> -->
+
+        <div class="form-group">
+            <label class="control-label">拖拽测试</label>
+            <input  type="text" ng-model = "options.your_model" ng-drop="true" ng-drop-success="drop($data,$index,$event)"/> 
+        </div>
+         
         <div class="form-group">
             <label class="control-label">维度数据</label>
             <ui-select name="xAxisColumn" required ng-model="options.form.xAxisColumn">
@@ -176,7 +182,7 @@
                 </ui-select>
                 <label class="control-label">组件离容器左侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.left" type="text" class="form-control" placeholder="0">
-            
+
                 <label class="control-label">区间颜色</label>
                 <ui-select ng-model="options.colorBar">
                     <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
@@ -196,8 +202,8 @@
                 </ui-select>
                 <label class="control-label">组件离容器下侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.bottom" type="text" class="form-control"
-                    placeholder="0"> 
-                
+                    placeholder="0">
+
             </div>
             <div class="form-group">
                 <label>

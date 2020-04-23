@@ -3,7 +3,7 @@ import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
-
+import Global from '../Global'
 import {
   defaultBasicChartOptions, parseChartType, getChartType, setxAxis, setyAxis,
   setScatter, setThemeColor
@@ -40,7 +40,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
             const data = $scope.queryResult.getData();
-
+            Global.res=$scope.queryResult; 
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 

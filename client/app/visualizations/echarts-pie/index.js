@@ -4,7 +4,7 @@ import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
-
+import Global from '../Global'
 import { defaultPieChartOptions, parseChartType, getChartType, setThemeColor, getRadius, } from './echartsPieChartOptionUtils';
 
 function EchartsPieRenderer($timeout, $rootScope, $window) {
@@ -28,7 +28,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
-
+            Global.res=$scope.queryResult; 
 
             // 切换主题颜色
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
