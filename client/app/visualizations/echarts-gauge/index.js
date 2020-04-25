@@ -96,10 +96,10 @@ function EchartsGaugeRenderer($rootScope) {
             if (_.get($scope.options, "size.responsive", false)) {
               let height = $element.parent().parent()["0"].clientHeight;  //  + 50
               let width = $element.parent().parent()["0"].clientWidth;
-              if ($("#dapingEditor").length !== 0) {
-                height = $("#dapingEditor")["0"].clientHeight;
-                width = $("#dapingEditor")["0"].clientWidth;
-              }
+              // if ($("#dapingEditor").length !== 0) {
+              //   height = $("#dapingEditor")["0"].clientHeight;
+              //   width = $("#dapingEditor")["0"].clientWidth;
+              // }
 
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;

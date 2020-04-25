@@ -230,10 +230,10 @@ function EchartsContrastRenderer($rootScope) {
               let width = $element.parent().parent()["0"].clientWidth;
 
 
-              if ($("#dapingEditor").length !== 0) {
-                height = $("#dapingEditor")["0"].clientHeight;
-                width = $("#dapingEditor")["0"].clientWidth;
-              }
+              // if ($("#dapingEditor").length !== 0) {
+              //   height = $("#dapingEditor")["0"].clientHeight;
+              //   width = $("#dapingEditor")["0"].clientWidth;
+              // }
               
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
