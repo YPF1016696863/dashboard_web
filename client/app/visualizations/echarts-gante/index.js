@@ -134,6 +134,10 @@ function EchartsGanteRenderer($rootScope) {
               let height = $element.parent().parent()["0"].clientHeight;// + 50
               let width = $element.parent().parent()["0"].clientWidth;
 
+              if ($("#dapingEditor").length !== 0) {
+                height = $("#dapingEditor")["0"].clientHeight;
+                width = $("#dapingEditor")["0"].clientWidth;
+              }
 
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
@@ -143,8 +147,7 @@ function EchartsGanteRenderer($rootScope) {
               if ($("#editor").length !== 0) {
                 height = $("#editor")["0"].clientHeight - 50;
                 width = $("#editor")["0"].clientWidth - 50;
-              }
-
+              } 
               _.set($scope.options, "size", {
                 responsive: true,
                 width,
