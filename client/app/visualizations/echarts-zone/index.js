@@ -33,9 +33,9 @@ function EchartsZoneRenderer($rootScope) {
                         dataX = [];
                         dataMaxtemp = [];
                         dataMin = [];
-                        _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
-                            _.forEach(value, function(valueChildren, keyChildren) {
+                            _.forEach(value, function (valueChildren, keyChildren) {
                                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
                                     dataX.push(valueChildren);
                                 }
@@ -56,7 +56,7 @@ function EchartsZoneRenderer($rootScope) {
                         // console.log(dataMaxtemp);
 
 
-                        _.set($scope.options, "tooltip.formatter", function(params) {
+                        _.set($scope.options, "tooltip.formatter", function (params) {
                             const start = params[0];
                             const tar = params[1];
                             const max = Number(tar.value) + Number(start.value);
@@ -115,13 +115,15 @@ function EchartsZoneRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height = $element.parent().parent()["0"].clientHeight; // + 50
-                            let width = $element.parent().parent()["0"].clientWidth;
+                            // let height = $element.parent().parent()["0"].clientHeight; // + 50
+                            // let width = $element.parent().parent()["0"].clientWidth;
 
-                            // if ($("#dapingEditor").length !== 0) {
-                            //   height = $("#dapingEditor")["0"].clientHeight;
-                            //   width = $("#dapingEditor")["0"].clientWidth;
-                            // }
+                            // let height =  $element.closest('.t-body').outerHeight(true);
+                            // let width = $element.closest('.t-body').outerWidth(true);
+                            
+                            let height ='100%';
+                            let width ='100%';
+
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -131,7 +133,7 @@ function EchartsZoneRenderer($rootScope) {
                                 height = $("#editor")["0"].clientHeight - 50;
                                 width = $("#editor")["0"].clientWidth - 50;
                             }
-
+                            // console.log(height+"::"+width);
                             _.set($scope.options, "size", {
                                 responsive: true,
                                 width,
@@ -144,6 +146,10 @@ function EchartsZoneRenderer($rootScope) {
                     console.log(e);
                 }
             };
+            $scope.handleResize = _.debounce(() => {
+                refreshData();  
+            }, 50);
+
 
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
@@ -161,7 +167,7 @@ function EchartsZoneEditor() {
             queryResult: '=',
             options: '=?',
         },
-        link($scope) {
+        link($scope, $element) {
             try {
                 $scope.columns = $scope.queryResult.getColumns();
                 $scope.columnNames = _.map($scope.columns, i => i.name);
@@ -173,6 +179,8 @@ function EchartsZoneEditor() {
                 $scope.options = defaultZoneChartOptions();
             }
             $scope.selectedChartType = getChartType($scope.options);
+
+
 
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {
@@ -259,7 +267,7 @@ function EchartsZoneEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];

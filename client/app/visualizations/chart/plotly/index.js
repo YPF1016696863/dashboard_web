@@ -86,7 +86,7 @@ const PlotlyChart = ($rootScope,$timeout) => ({
       }
     }, true);
 
-    scope.handleResize = debounce(() => {
+    scope.handleResize = debounce(() => { 
       updateLayout(plotlyElement, layout, (e, u) => Plotly.relayout(e, u));
     }, 50);
   },
@@ -132,7 +132,7 @@ const CustomPlotlyChart = clientConfig => ({
       });
     };
 
-    scope.handleResize = () => {
+    scope.handleResize = () => {// 大小改变是没有执行
       refresh();
     };
 

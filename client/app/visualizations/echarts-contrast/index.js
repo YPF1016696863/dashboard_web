@@ -227,8 +227,8 @@ function EchartsContrastRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height = $element.parent().parent()["0"].clientHeight + 50;
-                            let width = $element.parent().parent()["0"].clientWidth;
+                            let height ='100%';
+                            let width ='100%';
 
 
                             // if ($("#dapingEditor").length !== 0) {
@@ -258,6 +258,9 @@ function EchartsContrastRenderer($rootScope) {
                     console.log(e);
                 }
             };
+            $scope.handleResize = _.debounce(() => {
+                refreshData(); 
+            }, 50);
             const refreshType = () => { // 单独对xy类型做刷新
                 // 一旦选中了横向柱状图 x 为value y 为字符类型
                 _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
