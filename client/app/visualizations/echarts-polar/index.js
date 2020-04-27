@@ -33,14 +33,18 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
 
                         const polarData = [];
                         const xDataValue = [];
-                        const xData = _.get($scope.options, "form.xAxisColumn", "::"); // name string 这一列  AGENT_NAME
-                        _.forEach(data, function(value, key) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        const xData = _.get($scope.options, "form.xAxisColumn", "::"); 
+                        // name string 这一列  AGENT_NAME
+                        _.forEach(data, function(value, key) { 
+                            // [{0},{1}...] 筛选出每一个{0} {1} ...
                             const onesValue = value;
-                            _.forEach(onesValue, function(oneXvalue, oneXkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                            _.forEach(onesValue, function(oneXvalue, oneXkey) { 
+                                // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                                 if (oneXkey === xData) { // x
                                     const xValue = oneXvalue;
                                     xDataValue.push(xValue);
-                                    _.forEach(onesValue, function(oneYvalue, oneYkey) { // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                                    _.forEach(onesValue, function(oneYvalue, oneYkey) { 
+                                        // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                                         if (oneYkey === _.get($scope.options, "form.yAxisColumn", "")) {
                                             // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
                                             polarData.push(
@@ -125,12 +129,8 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height = $element.parent().parent()["0"].clientHeight; // + 50
-                            let width = $element.parent().parent()["0"].clientWidth;
-                            // if ($("#dapingEditor").length !== 0) {
-                            //   height = $("#dapingEditor")["0"].clientHeight;
-                            //   width = $("#dapingEditor")["0"].clientWidth;
-                            // }
+                            let height ='100%';
+                            let width ='100%';
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight - 50;
                                 width = $("#Preview")["0"].clientWidth;
@@ -154,6 +154,9 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                 }
             };
 
+            $scope.handleResize = _.debounce(() => {
+                refreshData(); 
+            }, 50);
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);

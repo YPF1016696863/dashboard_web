@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import * as _ from 'lodash';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
 import getTags from '@/services/getTags';

@@ -8,128 +8,128 @@ import echartsEditorTemplate from './echarts-editor.html';
 import { defaultPieChartOptions, parseChartType, getChartType, setThemeColor, getRadius, } from './echartsPieChartOptionUtils';
 
 function EchartsPieRenderer($timeout, $rootScope, $window) {
-    return {
-        restrict: 'E',
-        scope: {
-            queryResult: '=',
-            options: '=?',
-        },
-        template: echartsTemplate,
-        link($scope, $element) {
-            $scope.chartSeries = [];
+  return {
+    restrict: 'E',
+    scope: {
+      queryResult: '=',
+      options: '=?',
+    },
+    template: echartsTemplate,
+    link($scope, $element) {
+      $scope.chartSeries = [];
 
-            if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
-                $scope.options = defaultPieChartOptions();
-            }
-
-
+      if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
+        $scope.options = defaultPieChartOptions();
+      }
 
 
-            const refreshData = () => {
-                    try {
-                        if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
 
 
-                            // 切换主题颜色
-                            setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
+      const refreshData = () => {
+        try {
+          if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
 
 
-                            // 找到选中serise的下标        
-                            _.set($scope.options, 'useSerie_Index',
-                                _.findIndex(
-                                    _.get($scope.options, "form.yAxisColumns", []),
-                                    function(o) { return o === _.get($scope.options, 'useSerie', ''); }
-                                ));
-
-                            // 当xy数据有修改才刷新
-                            const data = $scope.queryResult.getData();
-                            // 输入的数据格式转换 
-                            const seriesData = [];
-                            let pieData = [];
-                            let xDataValue = [];
-                            const yData = _.get($scope.options, "form.yAxisColumns", ":::");
-                            // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
-                            const xData = _.get($scope.options, "form.xAxisColumn", "::");
-                            // name string 这一列  AGENT_NAME
-                            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-                                pieData = [];
-                                xDataValue = [];
-                                _.forEach(data, function(value, key) {
-                                    // [{0},{1}...] 筛选出每一个{0} {1} ...
-                                    const onesValue = value;
-                                    _.forEach(onesValue, function(oneXvalue, oneXkey) {
-                                        // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                                        if (oneXkey === xData) { // x
-                                            const xValue = oneXvalue;
-                                            xDataValue.push(xValue);
-                                            _.forEach(onesValue, function(oneYvalue, oneYkey) {
-                                                // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                                                if (oneYkey === yAxisColumn) { // 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
-                                                    // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
-                                                    pieData.push({
-                                                        name: xValue,
-                                                        value: oneYvalue,
-                                                        itemStyle: { color: '' }
-                                                    });
-                                                }
-                                            });
-
-                                        }
-                                    });
-                                });
-                                seriesData.push(pieData);
-                                // _.set($scope.options, 'fanFlag', false);
-                            });
+            // 切换主题颜色
+            setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
 
-                            // console.log(seriesData);
-                            // console.log(xDataValue);
+            // 找到选中serise的下标        
+            _.set($scope.options, 'useSerie_Index',
+              _.findIndex(
+                _.get($scope.options, "form.yAxisColumns", []),
+                function (o) { return o === _.get($scope.options, 'useSerie', ''); }
+              ));
 
-                            // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
-                            _.set($scope.options, "Fans", xDataValue);
-                            // 遍历x轴选中列 对应的所有值
-                            const selectFan = _.get($scope.options, "useFan", []);
-                            // 保存选中的扇瓣
-                            _.forEach(pieData, function(value, key) {
-                                // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
-                                const onesValue = value;
-                                // name: "王小斌", value: 50}
-                                _.forEach(onesValue, function(oneXvalue, oneXkey) {
-                                    // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                                    if (oneXvalue === selectFan) {
-                                        // 找到选中的x的数据 王小斌===选择的王小斌
-                                        _.set(onesValue, "itemStyle.color", _.get($scope.options, "series_ItemStyle_Color", ''));
-                                        // onesValue.itemStyle.color =
-                                        //   _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
-                                    }
-                                });
-                            });
+            // 当xy数据有修改才刷新
+            const data = $scope.queryResult.getData();
+            // 输入的数据格式转换 
+            const seriesData = [];
+            let pieData = [];
+            let xDataValue = [];
+            const yData = _.get($scope.options, "form.yAxisColumns", ":::");
+            // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
+            const xData = _.get($scope.options, "form.xAxisColumn", "::");
+            // name string 这一列  AGENT_NAME
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+              pieData = [];
+              xDataValue = [];
+              _.forEach(data, function (value, key) {
+                // [{0},{1}...] 筛选出每一个{0} {1} ...
+                const onesValue = value;
+                _.forEach(onesValue, function (oneXvalue, oneXkey) {
+                  // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                  if (oneXkey === xData) { // x
+                    const xValue = oneXvalue;
+                    xDataValue.push(xValue);
+                    _.forEach(onesValue, function (oneYvalue, oneYkey) {
+                      // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                      if (oneYkey === yAxisColumn) { // 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
+                        // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                        pieData.push({
+                          name: xValue,
+                          value: oneYvalue,
+                          itemStyle: { color: '' }
+                        });
+                      }
+                    });
 
-                            let seriesIndex = 0;
-                            _.set($scope.options, "series", []); // 清空设置
-                            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+                  }
+                });
+              });
+              seriesData.push(pieData);
+              // _.set($scope.options, 'fanFlag', false);
+            });
 
-                                        $scope.options.series.push({
-                                                    name: _.get($scope.options, "series_Name", ''),
-                                                    type: 'pie',
-                                                    radius: getRadius($scope.options,
-                                                        _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
-                                                            _.get($rootScope, 'selectChartType', 'pie')),
-                                                        seriesIndex), // 内外半径修改 多系列需动态
-                                                    center: [_.get($scope.options, "series_CenterX", "50%"),
-                                                        _.get($scope.options, "series_CenterY", "50%")
-                                                    ],
 
-                                                    data: seriesData[seriesIndex].sort(function(a, b) { return a.value - b.value; }), // 多系列需动态
-                                                    // 判断是玫瑰图
-                                                    roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
-                                                        _.get($rootScope, 'selectChartType', 'radius')) === "rose" ? 'radius' : undefined,
-                                                    label: {
-                                                        normal: {
-                                                            show: _.get($scope.options, "series_Label_Position", '')[seriesIndex] !== 'center',
-                                                            position: _.get($scope.options, "series_Label_Position", '')[seriesIndex],
-                                                            fontSize: _.get($scope.options, "series_Label_FontSize", 25)[seriesIndex],
-                                                            formatter: `{b}${_.get($scope.options, "show_Persant", false) ? `{d}%` : ``} `,
+            // console.log(seriesData);
+            // console.log(xDataValue);
+
+            // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
+            _.set($scope.options, "Fans", xDataValue);
+            // 遍历x轴选中列 对应的所有值
+            const selectFan = _.get($scope.options, "useFan", []);
+            // 保存选中的扇瓣
+            _.forEach(pieData, function (value, key) {
+              // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
+              const onesValue = value;
+              // name: "王小斌", value: 50}
+              _.forEach(onesValue, function (oneXvalue, oneXkey) {
+                // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
+                if (oneXvalue === selectFan) {
+                  // 找到选中的x的数据 王小斌===选择的王小斌
+                  _.set(onesValue, "itemStyle.color", _.get($scope.options, "series_ItemStyle_Color", ''));
+                  // onesValue.itemStyle.color =
+                  //   _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
+                }
+              });
+            });
+
+            let seriesIndex = 0;
+            _.set($scope.options, "series", []); // 清空设置
+            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+
+              $scope.options.series.push({
+                name: _.get($scope.options, "series_Name", ''),
+                type: 'pie',
+                radius: getRadius($scope.options,
+                  _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                    _.get($rootScope, 'selectChartType', 'pie')),
+                  seriesIndex), // 内外半径修改 多系列需动态
+                center: [_.get($scope.options, "series_CenterX", "50%"),
+                _.get($scope.options, "series_CenterY", "50%")
+                ],
+
+                data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }), // 多系列需动态
+                // 判断是玫瑰图
+                roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                  _.get($rootScope, 'selectChartType', 'radius')) === "rose" ? 'radius' : undefined,
+                label: {
+                  normal: {
+                    show: _.get($scope.options, "series_Label_Position", '')[seriesIndex] !== 'center',
+                    position: _.get($scope.options, "series_Label_Position", '')[seriesIndex],
+                    fontSize: _.get($scope.options, "series_Label_FontSize", 25)[seriesIndex],
+                    formatter: `{b}${_.get($scope.options, "show_Persant", false) ? `{d}%` : ``} `,
                     // formatter (params){ 
                     //   console.log(params);
                     //   let str =  params.name      
@@ -145,7 +145,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                     // },
 
 
-                    },
+                  },
                   emphasis: {
                     show: true,
                     textStyle: {
@@ -177,7 +177,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               seriesIndex += 1;
             });
 
-          
+
 
 
 
@@ -198,13 +198,8 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight ;// + 50
-              let width = $element.parent().parent()["0"].clientWidth;
-
-              // if ($("#dapingEditor").length !== 0) {
-              //   height = $("#dapingEditor")["0"].clientHeight;
-              //   width = $("#dapingEditor")["0"].clientWidth;
-              // }
+              let height ='100%';
+                            let width ='100%';
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
                 width = $("#Preview")["0"].clientWidth;
@@ -229,7 +224,9 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
           console.log("some error");
         }
       };
-
+      $scope.handleResize = _.debounce(() => {
+        refreshData();
+      }, 50);
 
       // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
       const selectChartType = () => {
@@ -373,15 +370,15 @@ function EchartsPieEditor() {
       ];
 
       $scope.ThemeColor = [
-        { label: '基础色', value: [ '#3b6291', '#943c39','#779043','#624c7c', '#388498','#bf7334','#3f6899', '#9c403d','#7d9847 ','#675083 '] },
-        { label: '小清新', value: [ '#63b2ee', '#76da91','#f8cb7f','#f89588', '#7cd6cf','#9192ab','#7898e1', '#efa666','#eddd86','#9987ce'] },
-        { label: '复古色', value: [ '#71ae46', '#c4cc38','#ebe12a','#eab026', '#e3852b','#d85d2a','#ce2626', '#ac2026','#96b744','#c4cc38'] },
-        { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288' ] },
-        { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00' ] },
-        { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD' ] },
-        { label: '黄色调渐变', value: ['#FFFFDD','#FFFFBB','#FFFF99','#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
-        { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792','#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029','#99001F'] },
-  
+        { label: '基础色', value: ['#3b6291', '#943c39', '#779043', '#624c7c', '#388498', '#bf7334', '#3f6899', '#9c403d', '#7d9847 ', '#675083 '] },
+        { label: '小清新', value: ['#63b2ee', '#76da91', '#f8cb7f', '#f89588', '#7cd6cf', '#9192ab', '#7898e1', '#efa666', '#eddd86', '#9987ce'] },
+        { label: '复古色', value: ['#71ae46', '#c4cc38', '#ebe12a', '#eab026', '#e3852b', '#d85d2a', '#ce2626', '#ac2026', '#96b744', '#c4cc38'] },
+        { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
+        { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
+        { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
+        { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
+        { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
+
       ];
 
       $scope.BackgroundColors = [

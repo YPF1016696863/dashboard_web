@@ -48,7 +48,7 @@ function VisualizationProvider() {
       ''
     );
 
-    mergedTemplates = `<div ng-switch on="visualization.type">${mergedTemplates}</div>`;
+    mergedTemplates = `<div id="visType" ng-switch on="visualization.type">${mergedTemplates}</div>`;
 
     return mergedTemplates;
   };

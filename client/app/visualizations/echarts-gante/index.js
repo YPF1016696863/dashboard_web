@@ -130,8 +130,8 @@ function EchartsGanteRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height = $element.parent().parent()["0"].clientHeight; // + 50
-                            let width = $element.parent().parent()["0"].clientWidth;
+                            let height ='100%';
+                            let width ='100%';
 
                             // if ($("#dapingEditor").length !== 0) {
                             //   height = $("#dapingEditor")["0"].clientHeight;
@@ -159,7 +159,10 @@ function EchartsGanteRenderer($rootScope) {
                     console.log(e);
                 }
             };
-
+            $scope.handleResize = _.debounce(() => {
+                refreshData(); 
+            }, 50);
+            
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);

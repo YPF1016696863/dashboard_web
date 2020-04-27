@@ -107,20 +107,21 @@ class RightClick extends React.Component {
       children: []
     };
     // console.log(this.props.params);
-    // const widgetsSourceName = _.map(this.props.params, '');
+    const widgetsSourceName = _.map(this.props.params, 'query.name');
     const widgetsSourceId = _.map(this.props.params, 'data.query_result.data_source_id')
     const widgetsName = _.map(this.props.params, 'visualization.name')
     const widgetsId = _.map(this.props.params, 'id')
-    // console.log(widgetsId);
+    // console.log(widgetsSourceName);
 
     // 除去重复id
     const cildId = _.uniq(widgetsSourceId);
-    // console.log(cildId);
+    const cildName = _.uniq(widgetsSourceName);
+    // console.log(cildName);
     // 对应数据源id生成child
     const childData = [];
     for (let i = 0; i < cildId.length; i += 1) {
       childData.push({
-        title: "数据源ID:" + cildId[i],
+        title: "数据来源:" + cildName[i],
         key: "ID" + cildId[i],// 前面加个id 到时候筛选出来不要
         children: []
       }
@@ -133,7 +134,7 @@ class RightClick extends React.Component {
     for (let i = 0; i < widgetsSourceId.length; i += 1) {// 第一个数据源 对应的组件名称
       for (let j = 0; j < cildId.length; j += 1) {
         // 找到数据源在child的位置，放入组件名称
-        if (dataHead.children[j].title === ("数据源ID:" + widgetsSourceId[i])) {
+        if (dataHead.children[j].key === ("ID" + widgetsSourceId[i])) {
           // console.log(dataHead.children[j].title);
           dataHead.children[j].children.push({
             title: widgetsName[i],

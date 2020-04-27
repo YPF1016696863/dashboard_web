@@ -227,13 +227,9 @@ function EchartsTubeRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height = $element.parent().parent()["0"].clientHeight; // + 50
-                            let width = $element.parent().parent()["0"].clientWidth;
-
-                            // if ($("#dapingEditor").length !== 0) {
-                            //   height = $("#dapingEditor")["0"].clientHeight;
-                            //   width = $("#dapingEditor")["0"].clientWidth;
-                            // }
+                            
+                            let height ='100%';
+                            let width ='100%';
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -257,6 +253,11 @@ function EchartsTubeRenderer($rootScope) {
                 }
             };
 
+
+            $scope.handleResize = _.debounce(() => {
+                refreshData(); 
+            }, 50);
+            
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);
