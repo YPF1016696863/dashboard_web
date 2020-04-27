@@ -82,28 +82,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             });
 
 
-            // console.log(seriesData);
-            // console.log(xDataValue);
-
-            // 每个扇瓣的颜色设置 (选择扇瓣)  选中系列再选扇瓣（未完成）
-            _.set($scope.options, "Fans", xDataValue);
-            // 遍历x轴选中列 对应的所有值
-            const selectFan = _.get($scope.options, "useFan", []);
-            // 保存选中的扇瓣
-            _.forEach(pieData, function (value, key) {
-              // [{name:yy,value:15,item..}},{1}...] 筛选出每一个{0} {1} ...分离
-              const onesValue = value;
-              // name: "王小斌", value: 50}
-              _.forEach(onesValue, function (oneXvalue, oneXkey) {
-                // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                if (oneXvalue === selectFan) {
-                  // 找到选中的x的数据 王小斌===选择的王小斌
-                  _.set(onesValue, "itemStyle.color", _.get($scope.options, "series_ItemStyle_Color", ''));
-                  // onesValue.itemStyle.color =
-                  //   _.get($scope.options, "series_ItemStyle_Color", '');// 把颜色值添加到对应的扇瓣
-                }
-              });
-            });
 
             let seriesIndex = 0;
             _.set($scope.options, "series", []); // 清空设置
@@ -199,7 +177,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             }
             if (_.get($scope.options, "size.responsive", false)) {
               let height ='100%';
-                            let width ='100%';
+              let width ='100%';
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
                 width = $("#Preview")["0"].clientWidth;

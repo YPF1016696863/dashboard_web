@@ -313,7 +313,7 @@ function EchartsZoneEditor() {
             ];
 
 
-            $scope.$watch('options', () => { }, true);
+            $scope.$watch('options', () => {}, true);
         },
     };
 }

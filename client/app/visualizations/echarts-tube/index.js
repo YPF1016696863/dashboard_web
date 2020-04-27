@@ -41,6 +41,7 @@ function EchartsTubeRenderer($rootScope) {
 
             }
 
+            
 
             // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
 
