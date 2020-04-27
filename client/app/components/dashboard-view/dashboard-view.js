@@ -1,6 +1,7 @@
 /* eslint-disable func-names */
 import * as _ from 'lodash';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
+import notification from '@/services/notification';
 import { policy } from '@/services/policy';
 
 import { durationHumanize } from '@/filters';
@@ -9,7 +10,7 @@ import template from './dashboard-view.html';
 import './dashboard-view.less';
 
 // import './switch.css'
-
+ 
 function ViewDashboardCtrl(
     $routeParams,
     $location,
@@ -30,10 +31,10 @@ function ViewDashboardCtrl(
     const vm = this;
 
     $scope.$watch(
-        function() {
+        function () {
             return vm.slugId;
         },
-        function(data) {
+        function (data) {
             vm.loadDashboard();
         }
     );
@@ -41,10 +42,10 @@ function ViewDashboardCtrl(
     //    $scope. $watch(watchFn,watchAction,deepWatch);
 
     $scope.$watch(
-        function() {
+        function () {
             return vm.widgetData;
         },
-        function(data) {
+        function (data) {
             if (vm.widgetData && vm.widgetData.widget) {
                 // console.log(vm.widgetData.widget);
                 vm.addWidget(
@@ -57,10 +58,10 @@ function ViewDashboardCtrl(
 
 
     $scope.$watch(
-        function() {
+        function () {
             return vm.dashboardBgImg;
         },
-        function(data) {
+        function (data) {
             if (_.isEmpty(vm.dashboardBgImg)) {
                 vm.dashboardStyle = {};
                 return;
@@ -74,7 +75,15 @@ function ViewDashboardCtrl(
         }
     );
 
-
+    // $scope.$watch(
+    //     function() {
+    //         return vm.modifiedWidget;
+    //     },
+    //     function(data) {
+    //         console.log('asd');
+    //         vm.refreshDashboard();
+    //     }
+    // );
 
     this.saveDelay = false;
     this.editBtnClickedWhileSaving = false;
@@ -124,6 +133,7 @@ function ViewDashboardCtrl(
         enabled: true
     }));
 
+  
     const allowedIntervals = policy.getDashboardRefreshIntervals();
 
     if (_.isArray(allowedIntervals)) {
@@ -161,7 +171,7 @@ function ViewDashboardCtrl(
     // 右键弹框 组件列表控制
     this.openRight = false;
     this.meau = () => {
-        this.openRight = true;
+        this.openRight = true
     }
 
     this.onRightClose = () => {
@@ -265,8 +275,8 @@ function ViewDashboardCtrl(
         });
     };
 
-    const renderDashboard = (dashboard, force) => {
 
+    const renderDashboard = (dashboard, force) => {
         Title.set(dashboard.name);
         this.extractGlobalParameters();
         collectFilters(dashboard, force);
@@ -298,9 +308,9 @@ function ViewDashboardCtrl(
                         );
 
                         this.setRefreshRate({
-                                name: durationHumanize(refreshRate),
-                                rate: refreshRate
-                            },
+                            name: durationHumanize(refreshRate),
+                            rate: refreshRate
+                        },
                             false
                         );
                     }
@@ -348,10 +358,10 @@ export const ViewDashboard = {
 
 export default function init(ngModule) {
     ngModule.component('viewDashboard', ViewDashboard);
-    ngModule.directive('ngRightClick', function($parse) {
-        return function(scope, element, attrs) {
+    ngModule.directive('ngRightClick', function ($parse) {
+        return function (scope, element, attrs) {
             const fn = $parse(attrs.ngRightClick);
-            element.bind('contextmenu', function(event) {
+            element.bind('contextmenu', function (event) {
                 this.isShow = true;
                 event.preventDefault();
                 fn(scope, { $event: event });

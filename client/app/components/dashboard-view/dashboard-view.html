@@ -1,4 +1,5 @@
-<div class="dashboard-dark-theme" style="height:100vh;width:100vw;overflow: hidden;" ng-style="$ctrl.dashboardStyle" ng-if="$ctrl.dashboard.widgets.length > 0">
+<div class="dashboard-dark-theme" style="height:100vh;width:100vw;overflow: hidden;" ng-style="$ctrl.dashboardStyle"
+    ng-if="$ctrl.dashboard.widgets.length > 0">
     <!--
   <div class="dashboard-dark-theme" ng-if="$ctrl.globalParameters.length > 0">
     <parameters parameters="$ctrl.globalParameters"></parameters>
@@ -11,26 +12,34 @@
         </div>
         <div class="col-sm-3" align="right">
             <div ng-click="$ctrl.openParameterDialog()" ng-if="$ctrl.globalParameters.length > 0">
-                <i class="fa fa-cog animated flipInY" style="color: #fff; font-size:20px; padding-right:10px;padding-top:10px">
-          <md-tooltip md-direction="left">参数设置</md-tooltip>
-        </i>
+                <i class="fa fa-cog animated flipInY"
+                    style="color: #fff; font-size:20px; padding-right:10px;padding-top:10px">
+                    <md-tooltip md-direction="left">参数设置</md-tooltip>
+                </i>
             </div>
         </div>
     </div>
     <!-- 屏幕左侧 右键唤出组件列表 -->
     <div ng-right-click="$ctrl.meau()">
-        <i class="fa fa-square" style="color: rgba(255, 255, 255, 0);position: absolute;top: 0%;left: 0%;width: 10%;height: 100%;z-index: 99; ">
-      <md-tooltip md-direction="left"> > </md-tooltip>
-    </i>
+        <i class="fa fa-square"
+            style="color: rgba(255, 255, 255, 0);position: absolute;top: 0%;left: 0%;width: 10%;height: 100%;z-index: 99; ">
+            <md-tooltip md-direction="left"> > </md-tooltip>
+        </i>
     </div>
     <!-- 组件列表 $ctrl.openRight-->
-    <right-click open="$ctrl.openRight" on-close="$ctrl.onRightClose" on-submit="$ctrl.onRightSubmit" params="$ctrl.widgetList"></right-click>
+    <right-click open="$ctrl.openRight" on-close="$ctrl.onRightClose" on-submit="$ctrl.onRightSubmit"
+        params="$ctrl.widgetList"></right-click>
 
-    <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit" params="$ctrl.globalParameters"></parameter-drawer>
+    <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit"
+        params="$ctrl.globalParameters"></parameter-drawer>
 
     <!--  widget in $ctrl.dashboard.widgets  -->
-    <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged" is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper" ng-class="{'preview-mode': true, 'editing-mode':false}">
-        <div class="dashboard-widget-wrapper" ng-repeat="widget in $ctrl.modifiedWidget track by widget.id" gridstack-item="widget.options.position" gridstack-item-id="{{ widget.id }}" data-test="WidgetId{{ widget.id }}">
+    <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged"
+        is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"
+        ng-class="{'preview-mode': true, 'editing-mode':false}">
+        <div class="dashboard-widget-wrapper" ng-repeat="widget in $ctrl.modifiedWidget track by widget.id"
+            gridstack-item="widget.options.position" gridstack-item-id="{{ widget.id }}"
+            data-test="WidgetId{{ widget.id }}">
             <div class="grid-stack-item-content">
                 <dashboard-widget widget="widget" dashboard="$ctrl.dashboard" on-delete="$ctrl.removeWidget(widget.id)">
                 </dashboard-widget>
@@ -39,7 +48,8 @@
     </div>
 </div>
 
-<div class="dashboard-dark-theme" style="height:100%;width:100%; position: absolute; right: 0; top: 0; display:flex;" ng-if="$ctrl.dashboard.widgets.length == 0">
+<div class="dashboard-dark-theme" style="height:100%;width:100%; position: absolute; right: 0; top: 0; display:flex;"
+    ng-if="$ctrl.dashboard.widgets.length == 0">
     <div style="margin:auto;text-align: center">
         <img src="/static/images/brandImg.png" width="64" height="64" />
         <p style="color:#fff">数据可视化面板</p>
