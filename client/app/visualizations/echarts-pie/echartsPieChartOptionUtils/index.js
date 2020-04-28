@@ -39,6 +39,8 @@ export function defaultPieChartOptions() {
         },
         legend: {
             show: true,
+            type: 'scroll',
+            orient: 'horizontal',
             // x: 'left'
             textStyle: {
                 color: '#333',

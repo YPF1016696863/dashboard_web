@@ -1,0 +1,32 @@
+#switch{
+    --antd-wave-shadow-color: #2196F3;
+    color: #595959;
+    font-size: 13px;
+    font-family: "Alibaba-PuHuiTi-Regular";
+    font-variant: tabular-nums;
+    line-height: 1.5;
+    font-feature-settings: 'tnum';
+    -webkit-font-smoothing: antialiased;
+    outline: none !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    box-sizing: border-box;
+    position: absolute;
+    padding: 0;
+    transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+    max-width: 100%;
+    /* width: 33.33333333%; */
+    /* left: 66.6%; */
+    min-width: 16.66666667%;
+    /* top: 0px; */
+    min-height: 25px;
+    /* height: 90px; */
+    /* z-index: 99; */
+}
+
+.item-last { 
+    
+    display: "block";  
+ }
+.item-not-last {  
+    display: "none"; 
+}

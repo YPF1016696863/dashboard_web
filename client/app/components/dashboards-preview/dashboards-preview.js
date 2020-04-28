@@ -503,7 +503,7 @@ function DashboardPreviewCtrl(
       visualization: null,
       visualization_id: null
     });
-
+    
     const position = this.dashboard.calculateNewWidgetPosition(widget);
     widget.options.position.col = position.col;
     widget.options.position.row = position.row;

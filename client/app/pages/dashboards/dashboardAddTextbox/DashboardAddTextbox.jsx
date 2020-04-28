@@ -64,6 +64,7 @@ class DashboardAddTextbox extends React.Component {
       visible: false
     });
     const widget = new Widget({
+      id:999,
       dashboard_id: null,
       options: {
         isHidden: false,
