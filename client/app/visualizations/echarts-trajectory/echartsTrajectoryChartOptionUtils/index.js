@@ -18,6 +18,10 @@ export function defaultTrajectoryChartOptions() {
                 color: '#fff'
             }
         },
+        legend: {
+            type: 'scroll',
+            orient: 'horizontal', 
+        },
         tooltip: {
             show: true,
             formatter: "{b} {c}",

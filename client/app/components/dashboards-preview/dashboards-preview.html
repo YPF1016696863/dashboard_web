@@ -1,16 +1,13 @@
-<div
-  class="dashboard-dark-theme"
+<div class="dashboard-dark-theme"
   style="height:calc(100vh - 35px);width:calc(100% - 1px);overflow: hidden;border: 1px dotted #888888 !important;"
-  ng-style="$ctrl.dashboardStyle"
-  ng-if="$ctrl.dashboard.widgets.length > 0"
->
+  ng-style="$ctrl.dashboardStyle" ng-if="$ctrl.dashboard.widgets.length > 0">
   <!--
   <div class="dashboard-dark-theme" ng-if="$ctrl.globalParameters.length > 0">
     <parameters parameters="$ctrl.globalParameters"></parameters>
   </div>
 -->
 
-  <div class="row" style="background: rgba(37, 55, 76, 0);border: 1px dotted #888888 !important;">
+  <!-- <div class="row" style="background: rgba(37, 55, 76, 0);border: 1px dotted #888888 !important;">
     <div class="col-sm-3" align="left"></div>
     <div class="col-sm-6" align="center" style="font-size: 16px; color:white;border: 1px dotted #888888 !important;margin-top: 10px">
       {{$ctrl.dashboard.name}}
@@ -24,44 +21,40 @@
         >
       </div>
     </div>
-  </div>
+  </div> -->
 
-  
 
-  <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit" params="$ctrl.globalParameters"></parameter-drawer>
 
-  <div
-    gridstack
-    editing="$ctrl.layoutEditing"
-    on-layout-changed="$ctrl.onLayoutChanged"
-    is-one-column-mode="$ctrl.isGridDisabled"
-    class="dashboard-wrapper"
-    ng-class="{'preview-mode': !$ctrl.editing, 'editing-mode':$ctrl.editing}"
-  >
-    <div
-      class="dashboard-widget-wrapper"
-      ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
-      gridstack-item="widget.options.position"
-      gridstack-item-id="{{ widget.id }}"
-      data-test="WidgetId{{ widget.id }}"
-    >
+  <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit"
+    params="$ctrl.globalParameters"></parameter-drawer>
+
+  <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged"
+    is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"
+    ng-class="{'preview-mode': !$ctrl.editing, 'editing-mode':$ctrl.editing}">
+    <div class="dashboard-widget-wrapper" ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
+      gridstack-item="widget.options.position" gridstack-item-id="{{ widget.id }}" data-test="WidgetId{{ widget.id }}">
       <div class="grid-stack-item-content grid-stack-item-content-design">
-        <dashboard-widget
-          widget="widget"
-          dashboard="$ctrl.dashboard"
-          on-delete="$ctrl.removeWidget(widget.id)"
-        ></dashboard-widget>
+        <dashboard-widget widget="widget" dashboard="$ctrl.dashboard" on-delete="$ctrl.removeWidget(widget.id)">
+        </dashboard-widget>
       </div>
     </div>
-  
+
+    <!-- 切换 -->
+    <!-- ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1" -->
+    <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0  "
+      ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 " gridstack-item="widget.options.position"
+      gridstack-item-id="a99" data-test="WidgetIda99" id="switch">
+      <div class="grid-stack-item-content grid-stack-item-content-design">
+        <parameter-drawer-c widget="widget" ng-if="$ctrl.globalParameters.length > 0" on-submit="$ctrl.onSubmit"
+          params="$ctrl.globalParameters"></parameter-drawer-c>
+      </div>
+    </div>
 
   </div>
 </div>
 
-<div
-  style="height:100%;width:100%; position: absolute; right: 0; top: 0; display:flex;"
-  ng-if="$ctrl.dashboard.widgets.length == 0"
->
+<div style="height:100%;width:100%; position: absolute; right: 0; top: 0; display:flex;"
+  ng-if="$ctrl.dashboard.widgets.length == 0">
   <div style="margin:auto;text-align: center">
     <img src="/static/images/brandImg.png" width="64" height="64" />
     <p style="color:#fff">数据可视化面板</p>

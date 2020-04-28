@@ -5,7 +5,7 @@
     <parameters parameters="$ctrl.globalParameters"></parameters>
   </div>
 -->
-    <div class="row" style="background: rgba(37, 55, 76, 0)">
+    <!-- <div class="row" style="background: rgba(37, 55, 76, 0)">
         <div class="col-sm-3" align="left"></div>
         <div class="col-sm-6" align="center" style="font-size: 16px; color:white">
             {{$ctrl.dashboard.name}}
@@ -18,7 +18,7 @@
                 </i>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- 屏幕左侧 右键唤出组件列表 -->
     <div ng-right-click="$ctrl.meau()">
         <i class="fa fa-square"
@@ -45,7 +45,19 @@
                 </dashboard-widget>
             </div>
         </div>
+
+
+        <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0  "
+            ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 " gridstack-item="widget.options.position"
+            gridstack-item-id="a99" data-test="WidgetIda99" id="switch">
+            <div class="grid-stack-item-content ">
+                <parameter-drawer-c widget="widget" ng-if="$ctrl.globalParameters.length > 0" on-submit="$ctrl.onSubmit"
+                    params="$ctrl.globalParameters"></parameter-drawer-c>
+            </div>
+        </div>
     </div>
+
+
 </div>
 
 <div class="dashboard-dark-theme" style="height:100%;width:100%; position: absolute; right: 0; top: 0; display:flex;"
