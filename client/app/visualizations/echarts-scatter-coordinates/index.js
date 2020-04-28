@@ -24,7 +24,7 @@ function EchartsScatterCoordinatesRenderer($rootScope) {
             let echartsData = [];
             let dataX = [];
             let dataY = [];
-            let dataZ = [];
+           
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
@@ -32,7 +32,7 @@ function EchartsScatterCoordinatesRenderer($rootScope) {
                         echartsData = [];
                         dataX = [];
                         dataY = [];
-                        dataZ = [];
+                     
                         _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
                             _.forEach(value, function(valueChildren, keyChildren) {
@@ -42,9 +42,7 @@ function EchartsScatterCoordinatesRenderer($rootScope) {
                                 if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
                                     dataY.push(valueChildren);
                                 }
-                                if (keyChildren === _.get($scope.options, "form.valueColumn", '')) {
-                                    dataZ.push(valueChildren);
-                                }
+                               
 
                             });
                         });
@@ -53,8 +51,7 @@ function EchartsScatterCoordinatesRenderer($rootScope) {
                             echartsData.push([
                                 dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
                                 dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i],
-                                dataZ[i] === null || dataZ[i] === undefined ? 0 : dataZ[i],
-                                20
+                              
                             ], );
                         }
 
@@ -62,12 +59,7 @@ function EchartsScatterCoordinatesRenderer($rootScope) {
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        // 视觉映射范围-若打开写入指定映射纬度值（现在默认映射2的数据），否则默认映射3的数据，散点大小相同
-                        if (_.get($scope.options, "visualMap.show", false)) {
-                            _.set($scope.options, "visualMap.dimension", 2);
-                        } else {
-                            _.set($scope.options, "visualMap.dimension", 3);
-                        }
+                        
 
                         _.set($scope.options, "series", []); // 清空设置  
 

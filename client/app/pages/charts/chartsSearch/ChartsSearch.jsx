@@ -196,8 +196,12 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 3D地图
                           case 'ECHARTS-POLARPIE': type = 'ECHARTS-POLARPIE'; break;// 扇形
                           case 'ECHARTS-CONTRAST': type = 'ECHARTS-CONTRAST'; break;// 双数值对比图
-                          case 'ECHARTS-SCATTER': type = 'ECHARTS-SCATTER'; chart = 'scatter'; break;// 散点图重构(颜色)图
-                          case 'ECHARTS-SCATTER-COORDINATES': type = 'ECHARTS-SCATTER-COORDINATES'; break;// 散点图重构(二维坐标)图
+                          // 散点图重构(颜色)图
+                          case 'ECHARTS-SCATTER': type = 'ECHARTS-SCATTER'; chart = 'scatter'; break;
+                          // 散点图重构(二维坐标-手动调节散点大小)
+                          case 'ECHARTS-SCATTER-COORDINATES': type = 'ECHARTS-SCATTER-COORDINATES'; break;
+                          // 散点图重构(二维坐标-根据数值自动调节散点，大小不可手动)
+                          case 'ECHARTS-SCATTER-NUMBER': type = 'ECHARTS-SCATTER-NUMBER'; break;
                           case 'PIVOT': type = 'PIVOT'; break; // 透视表
                           case 'CHART_line': type = 'CHART'; chart = 'line'; break;
                           case 'CHART_bar': type = 'CHART'; chart = 'bar'; break;
@@ -730,8 +734,8 @@ class ChartsSearch extends React.Component {
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
 
-                        {/* ** *Radio value="ECHARTS-CONTRAST"**E-charts重构图  key 9 */}
-                        <Panel header="E-charts重构图" id="p1" key="9">
+                        {/* ** *Radio value="ECHARTS-CONTRAST"**E-charts散点重构图  key 9 */}
+                        <Panel header="E-charts散点重构图" id="p1" key="9">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -761,6 +765,27 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图(坐标)</p>
                               </Radio>
                             </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-SCATTER-NUMBER" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-scatter-number.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图(数值)</p>
+                              </Radio>
+                            </Col>
+
+                          </Row>
+                          <Divider style={{ margin: ' 0' }} />
+                        </Panel>
+                        {/* ** *Radio value="ECHARTS-CONTRAST"**E-charts条形图重构  key 10 */}
+                        <Panel header="E-charts双数值对比图" id="p1" key="10">
+                          <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
