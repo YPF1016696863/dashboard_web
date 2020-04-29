@@ -184,7 +184,7 @@ function ViewDashboardCtrl(
         // console.log(checkedWidget);
         this.checkedWidgetIndashboard = [];
         this.checkedWidgetIndashboard = checkedWidget;
-        vm.refreshDashboard();
+        vm.refreshDashboard();        
     }
 
 

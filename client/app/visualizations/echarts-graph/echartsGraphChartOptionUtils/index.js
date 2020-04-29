@@ -17,6 +17,8 @@ export function defaultGraphChartOptions() {
         useNode_Index: 0,     // 选中的系列下标
         form: {
             xAxisColumn: "",
+            sAxisColumn: "",
+            tAxisColumn: "",
             yAxisColumns: []
         },
         title: {
