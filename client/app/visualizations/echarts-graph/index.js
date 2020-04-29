@@ -24,38 +24,35 @@ function EchartsGraphRenderer($rootScope) {
                 $scope.options = defaultGraphChartOptions();
             }
 
-            let seriesData = [];
+            let nameData = [];
+            let nodeSource = [];
+            let nodeTarget = [];
             let linkData = [];
-            let node = [];
+            let nodeName = [];
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         const data = $scope.queryResult.getData();
-                        seriesData = [];
-                        linkData = [];
-                        node = [];
-                        _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
-                            // eslint-disable-next-line func-names
-                            _.forEach(value, function(valueChildren, keyChildren) {
-                                if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
-                                    node.push(valueChildren);
-                                }
+                        // console.log(data);
+                        nameData = [];
 
-                            });
-                        });
-                        _.set($scope.options, "node", node);
+
+                        nodeName = [];
+                        nodeName = _.filter(_.map(data, _.get($scope.options, 'form.xAxisColumn', '')), function (o) { return o !== ''; });
+console.log(_.get($scope.options, 'form.xAxisColumn', ''));
+                        _.set($scope.options, "node", nodeName);
 
                         // 找到选中serise的下标        
                         _.set($scope.options, 'useNode_Index',
                             _.findIndex(
                                 _.get($scope.options, "node", []),
-                                function(o) { return o === _.get($scope.options, 'useNode', ''); }
+                                function (o) { return o === _.get($scope.options, 'useNode', ''); }
                             ));
                         let useIndex = 0;
 
-                        _.forEach(node, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
-                            // eslint-disable-next-line func-names 
-                            seriesData.push({
+                        _.forEach(nodeName, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                            // eslint-disable-next-line func-names  
+                            nameData.push({
                                 name: value,
                                 x: _.get($scope.options, "nodeX", [])[useIndex] === undefined ?
                                     0 : _.get($scope.options, "nodeX", [])[useIndex],
@@ -75,24 +72,39 @@ function EchartsGraphRenderer($rootScope) {
                                         "#fff" : _.get($scope.options, "nodeLabColor", [])[useIndex],
                                 }
                             });
-                            linkData.push({
-                                source: value,
-                                target: _.get($scope.options, "targetNode", [])[useIndex] === undefined ?
-                                    "" : _.get($scope.options, "targetNode", [])[useIndex],
-                                // name:,
-
-                                lineStyle: {
-                                    color: _.get($scope.options, "linkColor", [])[useIndex] === undefined ?
-                                        "#ccc" : _.get($scope.options, "linkColor", [])[useIndex],
-                                    type: _.get($scope.options, "linkStyle", [])[useIndex] === undefined ?
-                                        "solid" : _.get($scope.options, "linkStyle", [])[useIndex],
-                                    width: _.get($scope.options, "linkSize", [])[useIndex] === undefined || _.get($scope.options, "linkSize", [])[useIndex] === '' ?
-                                        2 : _.get($scope.options, "linkSize", [])[useIndex],
-                                }
-                            });
                             useIndex += 1;
                         });
 
+
+                        // 连接关系
+                        nodeSource = [];
+                        nodeSource = _.map(data, _.get($scope.options, 'form.sAxisColumn', ''));
+                        nodeTarget = [];
+                        nodeTarget = _.map(data, _.get($scope.options, 'form.tAxisColumn', ''));
+// console.log(nodeSource);
+// console.log(nodeTarget);
+                        linkData = [];
+                        for(let i=0;i<Math.max(nodeSource.length,nodeTarget.length);i+=1){
+                            linkData.push({
+                                source: nodeSource[i],
+                                target:nodeTarget[i],
+    
+                                lineStyle: {
+                                    color:"#ccc",
+                                    width:2, 
+                                    // color: _.get($scope.options, "linkColor", [])[useIndex] === undefined ?
+                                    //     "#ccc" : _.get($scope.options, "linkColor", [])[useIndex],
+                                    // type: _.get($scope.options, "linkStyle", [])[useIndex] === undefined ?
+                                    //     "solid" : _.get($scope.options, "linkStyle", [])[useIndex],
+                                    // width: _.get($scope.options, "linkSize", [])
+                                    // [useIndex] === undefined ||
+                                    //  _.get($scope.options, "linkSize", [])[useIndex] === '' ?
+                                    //     2 : _.get($scope.options, "linkSize", [])[useIndex],
+                                }
+                            });
+                        }
+                        
+                        // console.log(nameData);
                         // console.log(linkData);
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
@@ -111,7 +123,7 @@ function EchartsGraphRenderer($rootScope) {
                             // edgeLabel: {
                             //   fontSize: 20
                             // },
-                            data: seriesData,
+                            data: nameData,
                             links: linkData,
                             tooltip: {
                                 formatter: "{b}",
@@ -138,8 +150,8 @@ function EchartsGraphRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height ='100%';
-                            let width ='100%';
+                            let height = '100%';
+                            let width = '100%';
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -164,7 +176,7 @@ function EchartsGraphRenderer($rootScope) {
             };
 
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
@@ -315,7 +327,7 @@ function EchartsGraphEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }
