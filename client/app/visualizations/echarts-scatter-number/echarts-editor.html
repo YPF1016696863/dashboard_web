@@ -38,7 +38,23 @@
                 </ui-select-choices>
             </ui-select>
         </div>
-        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-model="options.visualMap.show">
+                是否根据数值大小显示散点
+            </label>
+        </div>
+        <div class="form-group" ng-if="options.visualMap.show">
+            <label class="control-label">数值数据</label>
+            <ui-select name="valueColumn" required ng-model="options.form.valueColumn">
+                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
+                <ui-select-choices repeat="column in columnNames">
+                    <span ng-bind-html="column | highlight: $select.search"></span>
+                    <span> </span>
+                    <small class="text-muted" ng-bind="columns[column].type"></small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
       
     </div>
 

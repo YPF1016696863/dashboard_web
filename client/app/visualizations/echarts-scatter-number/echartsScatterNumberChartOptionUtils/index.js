@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import UUIDv4 from 'uuid/v4';
 
-export function defaultScatterCoordinatesChartOptions() {
+export function defaultScatterNumberChartOptions() {
     return {
         id: UUIDv4(),
-        chartType: "ScatterCoordinatesChart",
+        chartType: "ScatterNumberChart",
         backgroundColor: 'transparent',
         form: {
             xAxisColumn: "",
@@ -64,7 +64,34 @@ export function defaultScatterCoordinatesChartOptions() {
             width: "600px",
             height: "400px"
         },
-     
+        visualMap: {
+            show: false,
+            textStyle: {
+                color: '#fff'
+            },
+            // min:0,
+            // max:0,      
+            // dimension: undefined,  // 指定映射的维度，默认以series。data的最后一个维度
+            right: 0,
+            top: '10%',
+            text: ['圆形大小：数值'],
+            calculable: true,
+            inRange: {
+                symbolSize: [10, 70]
+            },
+            outOfRange: {
+                symbolSize: [10, 70],
+                color: ['rgba(255,255,255,.2)']
+            },
+            controller: {
+                inRange: {
+                    color: ['#c23531']
+                },
+                outOfRange: {
+                    color: ['#444']
+                }
+            }
+        },
     };
 
 
@@ -91,7 +118,7 @@ export function setChartType(options, type) {
 export function parseChartType(type) {
     switch (type) {
         case undefined: {
-            return "scattercoordinates";
+            return "scatternumber";
         }
 
         default: {

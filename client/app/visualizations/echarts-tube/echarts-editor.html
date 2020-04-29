@@ -152,6 +152,8 @@
                 </ui-select>
                 <label class="control-label">组件离容器左侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.left" type="text" class="form-control" placeholder="0">
+                <label class="control-label">组件离容器上侧的距离(单位:百分比，如50%)</label>
+                <input style="width:100%" ng-model="options.grid.top" type="text" class="form-control" placeholder="0">
 
 
 
@@ -182,6 +184,9 @@
                         <div ng-bind-html="Color.label | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
+                <label class="control-label">组件离容器右侧的距离(单位:百分比，如50%)</label>
+                <input style="width:100%" ng-model="options.grid.right" type="text" class="form-control"
+                    placeholder="0">
                 <label class="control-label">组件离容器下侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.bottom" type="text" class="form-control"
                     placeholder="0">
