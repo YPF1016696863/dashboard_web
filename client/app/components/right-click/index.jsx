@@ -1,26 +1,19 @@
+/* eslint-disable func-names */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import * as _ from 'lodash';
 import {
-  Drawer,
   Form,
-  Button,
-  Col,
-  Row,
-  Input,
   Select,
-  DatePicker,
-  Icon,
-  Alert,
-  Divider,
+  TreeNode,
   Tree,
   Modal
 } from 'antd';
-import { appSettingsConfig } from '@/config/app-settings';
+// import { appSettingsConfig } from '@/config/app-settings';
 import './index.less';
 
-const { Option } = Select;
+// const { Option } = Select;
 
 class RightClick extends React.Component {
   state = {
@@ -28,7 +21,7 @@ class RightClick extends React.Component {
     treeData: [
       {
         title: '组件列表',
-        key: '0-0',
+        key: 'root',
         children: [
           {
             title: 'null',
@@ -37,7 +30,7 @@ class RightClick extends React.Component {
         ],
       }
     ],
-    checkWidget:[]
+    checkWidget: [], 
 
   };
 
@@ -45,7 +38,6 @@ class RightClick extends React.Component {
     this.setState({
       visible: this.props.open
     });
-    // console.log("componentDidMount");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,8 +45,12 @@ class RightClick extends React.Component {
     this.setState({
       visible: nextProps.open
     });
-    // console.log("nextProps.open::" + nextProps.open);
+    // console.log(this.props.params);
+    this.onExpand();
+    // 暂时解决树的刷新问题 但是选中函数要触发才可以获取treekey
+    // console.log("aaa");
   }
+
 
   // componentDidUpdate(prevProps) {
   //   console.log(this.props.open+"::::"+prevProps.open);
@@ -73,8 +69,8 @@ class RightClick extends React.Component {
     });
     this.props.onClose();
   };
-  
-   
+
+
 
   onSubmit = () => {
     // console.log(this.props.params);
@@ -87,7 +83,7 @@ class RightClick extends React.Component {
   };
 
   onCheck = (checkedKeys, info) => {// 得到选中的组件id数组
-    // console.log('onCheck', checkedKeys, info);
+    // console.log('onCheck', checkedKeys);
     const a = /[a-z]/i;// true,说明有英文字母 
     // eslint-disable-next-line func-names
     const checked = _.filter(checkedKeys, function (item) {
@@ -95,51 +91,162 @@ class RightClick extends React.Component {
     });
     // console.log(checked);
     this.setState({
-      checkWidget:checked
+      checkWidget: checked
     })
   };
 
   onExpand = (expandedKeys) => {
+    // debugger
     // data query_result data_source_id 数据源id
     const dataHead = {
       title: '组件列表',
-      key: '0-0',
-      children: []
+      key: 'root',
+      children: [
+        {
+          title: '普通组件',
+          key: 'Normal',
+          children: []
+        }, {
+          title: '参数组件',
+          key: 'Params',
+          children: []
+        }
+      ]
     };
     // console.log(this.props.params);
     const widgetsSourceName = _.map(this.props.params, 'query.name');
     const widgetsSourceId = _.map(this.props.params, 'data.query_result.data_source_id')
     const widgetsName = _.map(this.props.params, 'visualization.name')
     const widgetsId = _.map(this.props.params, 'id')
-    // console.log(widgetsSourceName);
-
-    // 除去重复id
-    const cildId = _.uniq(widgetsSourceId);
-    const cildName = _.uniq(widgetsSourceName);
-    // console.log(cildName);
-    // 对应数据源id生成child
-    const childData = [];
-    for (let i = 0; i < cildId.length; i += 1) {
-      childData.push({
-        title: "数据来源:" + cildName[i],
-        key: "ID" + cildId[i],// 前面加个id 到时候筛选出来不要
-        children: []
+    // 组件是否为参数组件
+    const isParamsTemp = _.map(this.props.params, 'options.parameterMappings');
+    const isParams = [];
+    _.forEach(isParamsTemp, function (value, key) {
+      isParams.push(JSON.stringify(value) !== "{}");
+    });
+    // 参数组件是否有值 有值才显示在列表上
+    const isDataTemp = _.map(this.props.params, 'queryResult.query_result.data.rows');
+    const isData = [];
+    _.forEach(isDataTemp, function (value, key) {
+      let flag = false;
+      if (value === undefined) {
+        flag = false;
       }
-      );
+      else if (value.length !== 0) {
+        flag = true;
+      } else {
+        flag = false;
+      }
+      isData.push(flag);
+    });
+
+    // 普通组件数据源的id 名称
+    let widgetsNormalSourceId = [];
+    let widgetsNormalSourceName = [];
+    let normalWidgetsId = [];
+    let normalWidgetsName = [];
+    // 参数组件数据源的id 名称
+    let widgetsParamsSourceId = [];
+    let widgetsParamsSourceName = [];
+    let paramsWidgetsId = [];
+    let paramsWidgetsName = [];
+    for (let i = 0; i < isParams.length; i += 1) {
+      if (!isParams[i]) {// 普通组件 
+        // 数据源
+        widgetsNormalSourceId[i] = widgetsSourceId[i];
+        widgetsNormalSourceName[i] = widgetsSourceName[i];
+        // 组件
+        normalWidgetsId[i] = widgetsId[i];
+        normalWidgetsName[i] = widgetsName[i];
+        // 参数数据源初始值
+        widgetsParamsSourceId[i] = 0;
+        widgetsParamsSourceName[i] = 0;
+        // 参数组件初始值
+        paramsWidgetsId[i] = 0;
+        paramsWidgetsName[i] = 0;
+      } else {// 是参数组件
+        if (isData[i]) {// 此时的参数有数据
+          widgetsParamsSourceId[i] = widgetsSourceId[i];
+          widgetsParamsSourceName[i] = widgetsSourceName[i];
+          paramsWidgetsId[i] = widgetsId[i];
+          paramsWidgetsName[i] = widgetsName[i];
+        } else { // 没有选中有效参数 不显示数据源和组件 
+          widgetsParamsSourceId[i] = 0;
+          widgetsParamsSourceName[i] = 0;
+          paramsWidgetsId[i] = 0;
+          paramsWidgetsName[i] = 0;
+        }
+        // 普通组件初始值
+        widgetsNormalSourceId[i] = 0;
+        widgetsNormalSourceName[i] = 0;
+        normalWidgetsId[i] = 0;
+        normalWidgetsName[i] = 0;
+      }
     }
-    // console.log(childData);
-    dataHead.children = childData;
+    widgetsNormalSourceId = _.pull(_.uniq(widgetsNormalSourceId), 0);
+    widgetsNormalSourceName = _.pull(_.uniq(widgetsNormalSourceName), 0);
+    widgetsParamsSourceId = _.pull(_.uniq(widgetsParamsSourceId), 0);
+    widgetsParamsSourceName = _.pull(_.uniq(widgetsParamsSourceName), 0);
+
+    normalWidgetsId = _.pull(_.uniq(normalWidgetsId), 0);
+    normalWidgetsName = _.pull(_.uniq(normalWidgetsName), 0);
+    paramsWidgetsId = _.pull(_.uniq(paramsWidgetsId), 0);
+    paramsWidgetsName = _.pull(_.uniq(paramsWidgetsName), 0);
+
+
+    const normalChild = [];
+    const paramsChild = [];
+    // 数据源层
+    for (let i = 0; i < widgetsNormalSourceId.length; i += 1) {
+      normalChild.push(
+        {
+          title: "数据来源:" + widgetsNormalSourceName[i],
+          key: "ID" + widgetsNormalSourceId[i],// 前面加个id 到时候筛选出来不要
+          children: []
+        }
+      )
+    }
+    for (let i = 0; i < widgetsParamsSourceId.length; i += 1) {
+      paramsChild.push(
+        {
+          title: "数据来源:" + widgetsParamsSourceName[i],
+          key: "ID" + widgetsParamsSourceId[i],// 前面加个id 到时候筛选出来不要
+          children: []
+        }
+      )
+    }
+    dataHead.children[0].children = normalChild;
+    dataHead.children[1].children = paramsChild;
     // console.log(dataHead);
-    // 和数据源一一对应 放入组件名称
-    for (let i = 0; i < widgetsSourceId.length; i += 1) {// 第一个数据源 对应的组件名称
-      for (let j = 0; j < cildId.length; j += 1) {
-        // 找到数据源在child的位置，放入组件名称
-        if (dataHead.children[j].key === ("ID" + widgetsSourceId[i])) {
-          // console.log(dataHead.children[j].title);
-          dataHead.children[j].children.push({
-            title: widgetsName[i],
-            key: widgetsId[i],
-          });
+    // 组件层 找到对应数据源id 放入child层 
+
+    for (let i = 0; i < normalWidgetsId.length; i += 1) {
+      // 找到普通组件在原id数组的位置  对应找到数据源的id 填入响应child
+      const index = _.findIndex(widgetsId, function (o) { return o === normalWidgetsId[i]; });
+      // console.log(dataHead.children[0].children.length); 
+      for (let j = 0; j < dataHead.children[0].children.length; j += 1) {
+        // 数据源匹配
+        if (dataHead.children[0].children[j].key + "" === "ID" + widgetsSourceId[index] + "") {
+          dataHead.children[0].children[j].children.push({
+            title: normalWidgetsName[i],
+            key: normalWidgetsId[i],
+            children: []
+          })
+        }
+      }
+    }
+
+    for (let i = 0; i < paramsWidgetsId.length; i += 1) {
+      // 找到参数组件在原id数组的位置  对应找到数据源的id 填入响应child
+      const index = _.findIndex(widgetsId, function (o) { return o === paramsWidgetsId[i]; });
+      for (let j = 0; j < dataHead.children[1].children.length; j += 1) {
+        // 数据源匹配
+        if (dataHead.children[1].children[j].key + "" === "ID" + widgetsSourceId[index] + "") {
+          dataHead.children[1].children[j].children.push({
+            title: paramsWidgetsName[i],
+            key: paramsWidgetsId[i],
+            children: []
+          })
         }
       }
     }
@@ -169,11 +276,15 @@ class RightClick extends React.Component {
             defaultExpandAll={false}
             // defaultSelectedKeys={ }
             // defaultCheckedKeys={ }
+            // eslint-disable-next-line react/jsx-no-duplicate-props
+            autoExpandParent={false}
             onExpand={this.onExpand}
             onCheck={this.onCheck}
             loadData={this.onLoadData}
             treeData={this.state.treeData}
           />
+
+
         </Modal>
       </div>
     );
