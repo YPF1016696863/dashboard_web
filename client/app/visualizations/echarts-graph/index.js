@@ -38,10 +38,17 @@ function EchartsGraphRenderer($rootScope) {
 
 
                         nodeName = [];
-                        nodeName = _.filter(_.map(data, _.get($scope.options, 'form.xAxisColumn', '')), function (o) { return o !== ''; });
-console.log(_.get($scope.options, 'form.xAxisColumn', ''));
+                        nodeName = _.uniq(
+                            _.filter(
+                                _.map(data, 
+                                    _.get($scope.options, 'form.xAxisColumn', '')),
+                                    function (o) { return o !== ''; }
+                                    )
+                                    ) ;
+// console.log(_.get($scope.options, 'form.xAxisColumn', ''));
+// console.log(nodeName);
                         _.set($scope.options, "node", nodeName);
-
+// console.log(_.get($scope.options,'node',''));
                         // 找到选中serise的下标        
                         _.set($scope.options, 'useNode_Index',
                             _.findIndex(
@@ -81,10 +88,12 @@ console.log(_.get($scope.options, 'form.xAxisColumn', ''));
                         nodeSource = _.map(data, _.get($scope.options, 'form.sAxisColumn', ''));
                         nodeTarget = [];
                         nodeTarget = _.map(data, _.get($scope.options, 'form.tAxisColumn', ''));
+// console.log(nameData);
 // console.log(nodeSource);
 // console.log(nodeTarget);
                         linkData = [];
                         for(let i=0;i<Math.max(nodeSource.length,nodeTarget.length);i+=1){
+                            // console.log(nodeSource[i]+"::"+nodeTarget[i]);
                             linkData.push({
                                 source: nodeSource[i],
                                 target:nodeTarget[i],
