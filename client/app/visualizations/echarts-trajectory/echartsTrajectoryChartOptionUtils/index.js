@@ -32,6 +32,7 @@ export function defaultTrajectoryChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

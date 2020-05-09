@@ -24,6 +24,7 @@ export function defaultTubeChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

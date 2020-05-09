@@ -21,6 +21,7 @@ export function defaultGanteChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

@@ -51,7 +51,35 @@
                 </ui-select-choices>
             </ui-select>
         </div>
+
+
+        <!-- <div class="form-group"  >
+            <label class="control-label">线宽数据</label>
+            <ui-select name="xAxisColumn" required ng-model="options.form.lineAxisColumn">
+                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
+                <ui-select-choices repeat="column in columnNames">
+                    <span ng-bind-html="column | highlight: $select.search"></span>
+                    <span> </span>
+                    <small class="text-muted" ng-bind="columns[column].type"></small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <div class="form-group"  >
+            <label class="control-label">节点数值</label>
+            <ui-select name="xAxisColumn" required ng-model="options.form.sizeAxisColumn">
+                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
+                <ui-select-choices repeat="column in columnNames">
+                    <span ng-bind-html="column | highlight: $select.search"></span>
+                    <span> </span>
+                    <small class="text-muted" ng-bind="columns[column].type"></small>
+                </ui-select-choices>
+            </ui-select>
+        </div> -->
+
     </div>
+
+    
 
     <div ng-if="currentTab == 'style'" class="m-t-10 m-b-10">
         <div class="form-group" ng-init="Show = 0">

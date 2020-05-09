@@ -49,7 +49,8 @@ export function defaultPolarChartOptions() {
         },
         toolbox: {
             show: false,
-            feature: {               
+            feature: {  
+                restore: {},             
                 saveAsImage: {}
             }
         },

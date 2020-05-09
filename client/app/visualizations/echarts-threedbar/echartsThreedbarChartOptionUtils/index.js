@@ -30,6 +30,7 @@ export function defaultThreedbarChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

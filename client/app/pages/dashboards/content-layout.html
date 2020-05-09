@@ -1,47 +1,19 @@
-<div
-  class="layout-content-wrapper-full-height corner-dark"
-  style="padding:0 !important;background-color: #25374C"
->
-  <dashboards-page-header
-    slug-id="slugId"
-    style="border-bottom: 1px solid #363e55 !important;"
-  ></dashboards-page-header>
-  <main
-    class="query-fullscreen dashboard-design"
-    style="background-color: #25374C"
-  >
-    <nav
-      resizable
-      r-directions="['right']"
-      r-flex="true"
-      resizable-toggle
-      style="max-width: 300px;"
-    >
+<div class="layout-content-wrapper-full-height corner-dark" style="padding:0 !important;background-color: #25374C">
+  <dashboards-page-header slug-id="slugId" style="border-bottom: 1px solid #363e55 !important;">
+  </dashboards-page-header>
+  <main class="query-fullscreen dashboard-design" style="background-color: #25374C">
+    <nav resizable r-directions="['right']" r-flex="true" resizable-toggle style="max-width: 300px;">
       <div class="editor__left__schema">
-        <div
-          class="d-flex flex-column p-absolute"
-          style="left: 0; top: 0; right: 0; bottom: 0;"
-        >
-          <div
-            class="scrollbox"
-            style="height: 100% !important;background-color: #20263B"
-          >
-            <dashboards-search
-              slug-id="slugId"
-              dashboard-search-cb="dashboardSearchCb"
-              update-dashboard-bg-img-cb="updateDashboardBgImgCb"
-            ></dashboards-search>
+        <div class="d-flex flex-column p-absolute" style="left: 0; top: 0; right: 0; bottom: 0;">
+          <div class="scrollbox" style="height: 100% !important;background-color: #20263B">
+            <dashboards-search slug-id="slugId" dashboard-search-cb="dashboardSearchCb"
+              update-dashboard-bg-img-cb="updateDashboardBgImgCb"></dashboards-search>
             <md-button aria-label="添加可视化组件" style="color: #fff">
-              <dashboard-add-widgets
-                add-widget-cb="addWidgetCb"
-                slug-id="slugId"
-              ></dashboard-add-widgets>
-            </md-button>            
+              <dashboard-add-widgets add-widget-cb="addWidgetCb" slug-id="slugId"></dashboard-add-widgets>
+            </md-button>
             <md-button aria-label="添加文本框" style="color: #fff">
-                <dashboard-add-textbox
-                  add-widget-cb="addWidgetCb"  
-                ></dashboard-add-textbox>
-              </md-button>
+              <dashboard-add-textbox add-widget-cb="addWidgetCb"></dashboard-add-textbox>
+            </md-button>
 
             <md-button aria-label="添加其他可视化仪表盘">
               添加可视化仪表盘
@@ -52,33 +24,21 @@
     </nav>
     <div class="content" style="background-color: #25374C">
       <div class="flex-fill p-relative">
-        <div
-          class="p-absolute d-flex flex-column"
-          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto"
-        >
-          <section
-            class="flex-fill p-relative t-body query-visualizations-wrapper"
-          >
-            <div
-              class="d-flex flex-column p-absolute static-position__mobile"
-              style="left: 0; top: 0; right: 0; bottom: 0;"
-            >
+        <div class="p-absolute d-flex flex-column" style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto">
+          <section class="flex-fill p-relative t-body query-visualizations-wrapper">
+            <div class="d-flex flex-column p-absolute static-position__mobile"
+              style="left: 0; top: 0; right: 0; bottom: 0;">
               <!-- Query Execution Status -->
 
               <!-- End of Query Execution Status -->
 
               <!-- tabs and data -->
               <div class="flex-fill p-relative">
-                <div
-                  class="d-flex flex-column p-absolute static-position__mobile"
-                  style="left: 0; top: 0; right: 0; bottom: 0;"
-                >
+                <div class="d-flex flex-column p-absolute static-position__mobile"
+                  style="left: 0; top: 0; right: 0; bottom: 0;">
                   <div class="query__vis scrollbox">
-                    <dashboards-tabs
-                      slug-id="slugId"
-                      widget-data="widgetData"
-                      dashboard-bg-img="dashboardBgImg"
-                    ></dashboards-tabs>
+                    <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg">
+                    </dashboards-tabs>
                   </div>
                   <!-- <div class="FAB">
                     <md-fab-toolbar md-open="false" md-direction="left">

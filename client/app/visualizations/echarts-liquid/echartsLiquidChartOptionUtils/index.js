@@ -27,6 +27,7 @@ export function defaultLiquidChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

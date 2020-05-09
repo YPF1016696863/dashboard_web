@@ -54,7 +54,8 @@ export function defaultPieChartOptions() {
         },
         toolbox: {
             show: false,
-            feature: {               
+            feature: {  
+                restore: {},             
                 saveAsImage: {}
             }
         },

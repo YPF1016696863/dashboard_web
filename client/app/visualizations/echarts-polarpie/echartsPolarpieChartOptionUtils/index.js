@@ -14,6 +14,7 @@ export function defaultPolarpieChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },
