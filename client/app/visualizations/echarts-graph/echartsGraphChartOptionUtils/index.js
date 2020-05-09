@@ -19,6 +19,8 @@ export function defaultGraphChartOptions() {
             xAxisColumn: "",
             sAxisColumn: "",
             tAxisColumn: "",
+            lineAxisColumn: "",
+            sizeAxisColumn: "",
             yAxisColumns: []
         },
         title: {
@@ -35,7 +37,8 @@ export function defaultGraphChartOptions() {
         },
         toolbox: {
             show: false,
-            feature: {               
+            feature: {    
+                restore: {},           
                 saveAsImage: {}
             }
         }, 

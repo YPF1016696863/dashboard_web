@@ -26,6 +26,7 @@ export function defaultScatterCoordinatesChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

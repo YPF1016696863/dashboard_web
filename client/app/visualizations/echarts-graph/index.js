@@ -29,26 +29,54 @@ function EchartsGraphRenderer($rootScope) {
             let nodeTarget = [];
             let linkData = [];
             let nodeName = [];
+            // let nodeLine = [];
+            // let nodeSize = [];
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         const data = $scope.queryResult.getData();
                         // console.log(data);
-                        nameData = [];
-
+                        nameData = []; 
 
                         nodeName = [];
                         nodeName = _.uniq(
                             _.filter(
-                                _.map(data, 
+                                _.map(data,
                                     _.get($scope.options, 'form.xAxisColumn', '')),
-                                    function (o) { return o !== ''; }
-                                    )
-                                    ) ;
-// console.log(_.get($scope.options, 'form.xAxisColumn', ''));
-// console.log(nodeName);
-                        _.set($scope.options, "node", nodeName);
-// console.log(_.get($scope.options,'node',''));
+                                function (o) { return o !== ''; }
+                            )
+                        );
+
+                        // nodeLine = [];
+                        // nodeSize = [];
+                        // nodeLine=_.filter(
+                        //     _.map(data,
+                        //         _.get($scope.options, 'form.lineAxisColumn', '')),
+                        //     function (o) { return o !== ''; }
+                        // );
+                        // nodeSize=_.filter(
+                        //     _.map(data,
+                        //         _.get($scope.options, 'form.sizeAxisColumn', '')),
+                        //     function (o) { return o !== ''; }
+                        // );
+
+                        // console.log(nodeLine);
+                        // console.log(nodeSize);
+                        // nodeNameS = _.filter(
+                        //     _.map(data,
+                        //         _.get($scope.options, 'form.sAxisColumn', '')),
+                        //     function (o) { return o !== ''; }
+                        // );
+                        // nodeNameT = _.filter(
+                        //     _.map(data,
+                        //         _.get($scope.options, 'form.tAxisColumn', '')),
+                        //     function (o) { return o !== ''; }
+                        // );
+                        // nodeName= _.uniq(_.concat(nodeNameS,nodeNameT));
+
+                        // console.log(nodeName);
+
+                        _.set($scope.options, "node", nodeName); 
                         // 找到选中serise的下标        
                         _.set($scope.options, 'useNode_Index',
                             _.findIndex(
@@ -88,19 +116,19 @@ function EchartsGraphRenderer($rootScope) {
                         nodeSource = _.map(data, _.get($scope.options, 'form.sAxisColumn', ''));
                         nodeTarget = [];
                         nodeTarget = _.map(data, _.get($scope.options, 'form.tAxisColumn', ''));
-// console.log(nameData);
-// console.log(nodeSource);
-// console.log(nodeTarget);
+                        // console.log(nameData);
+                        // console.log(nodeSource);
+                        // console.log(nodeTarget);
                         linkData = [];
-                        for(let i=0;i<Math.max(nodeSource.length,nodeTarget.length);i+=1){
+                        for (let i = 0; i < Math.max(nodeSource.length, nodeTarget.length); i += 1) {
                             // console.log(nodeSource[i]+"::"+nodeTarget[i]);
                             linkData.push({
                                 source: nodeSource[i],
-                                target:nodeTarget[i],
-    
+                                target: nodeTarget[i],
+
                                 lineStyle: {
-                                    color:"#ccc",
-                                    width:2, 
+                                    color: "#ccc",
+                                    width: 2,
                                     // color: _.get($scope.options, "linkColor", [])[useIndex] === undefined ?
                                     //     "#ccc" : _.get($scope.options, "linkColor", [])[useIndex],
                                     // type: _.get($scope.options, "linkStyle", [])[useIndex] === undefined ?
@@ -112,7 +140,7 @@ function EchartsGraphRenderer($rootScope) {
                                 }
                             });
                         }
-                        
+
                         // console.log(nameData);
                         // console.log(linkData);
                         // 切换主题颜色

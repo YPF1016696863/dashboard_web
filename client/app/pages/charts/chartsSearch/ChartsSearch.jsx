@@ -193,6 +193,7 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-TUBE': type = 'ECHARTS-TUBE'; break;// 试管温度计
                           case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
                           case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
+                          // case 'ECHARTS-TXT': type = 'ECHARTS-TXT'; break;// TXT
                           case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 3D地图
                           case 'ECHARTS-POLARPIE': type = 'ECHARTS-POLARPIE'; break;// 扇形
                           case 'ECHARTS-CONTRAST': type = 'ECHARTS-CONTRAST'; break;// 双数值对比图
@@ -692,6 +693,21 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>甘特图</p>
                               </Radio>
                             </Col>
+
+                            {/* <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-TXT" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-gante.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>文本图</p>
+                              </Radio>
+                            </Col> */}
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>

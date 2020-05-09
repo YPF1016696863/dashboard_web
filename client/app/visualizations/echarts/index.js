@@ -120,7 +120,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     function bubble(data) {
                                         return (data / maxData) * 100;
                                     } : setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
-                                barWidth: _.get($scope.options, 'series_BarWidth', 25) === '' ? 'auto' : _.get($scope.options, 'series_BarWidth', 25),
+                                barWidth: _.get($scope.options, 'series_BarWidth', 25) === ''||
+                                _.get($scope.options, 'series_BarWidth', 25) === undefined
+                                 ? 'auto' : _.get($scope.options, 'series_BarWidth', 25),
                                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                                     'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
                                 symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],

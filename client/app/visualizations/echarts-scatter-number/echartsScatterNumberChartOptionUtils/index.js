@@ -26,6 +26,7 @@ export function defaultScatterNumberChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

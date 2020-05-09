@@ -247,11 +247,11 @@ class ScheduleDialog extends React.Component {
         ) : null}
         {interval !== IntervalEnum.NEVER ? (
           <div className="schedule-component">
-            <h5>Ends</h5>
+            <h5>结束时间</h5>
             <div className="ends" data-testid="ends">
               <Radio.Group size="medium" value={!!until} onChange={this.setUntilToggle}>
                 <Radio value={false}>从不</Radio>
-                <Radio value>On</Radio>
+                <Radio value>启用</Radio>
               </Radio.Group>
               {until ? (
                 <DatePicker

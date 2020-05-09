@@ -125,29 +125,29 @@ class QueriesListNomodal extends React.Component {
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
     localStorage.setItem('lastSelectedDataSourceName', selectName);
-    // 修改url不跳转页面
-    let start = '';
-    let newURL = '';
-    const url = window.location.href; // http://localhost:8080/query/unset/charts/new
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < url.length; i++) {
-      if (
-        url.charAt(i) === 'q' &&
-        url.charAt(i + 1) === 'u' &&
-        url.charAt(i + 2) === 'e' &&
-        url.charAt(i + 3) === 'r' &&
-        url.charAt(i + 4) === 'y'
-      ) {
-        start = url.substring(0, i + 6);
-        newURL = start + this.state.selected + '/charts/new?type=ECHARTS'; // null导致刷新？
-      }
-    }
+    // // 修改url不跳转页面
+    // let start = '';
+    // let newURL = '';
+    // const url = window.location.href; // http://localhost:8080/query/unset/charts/new
+    // // eslint-disable-next-line no-plusplus
+    // for (let i = 0; i < url.length; i++) {
+    //   if (
+    //     url.charAt(i) === 'q' &&
+    //     url.charAt(i + 1) === 'u' &&
+    //     url.charAt(i + 2) === 'e' &&
+    //     url.charAt(i + 3) === 'r' &&
+    //     url.charAt(i + 4) === 'y'
+    //   ) {
+    //     start = url.substring(0, i + 6);
+    //     newURL = start + this.state.selected + '/charts/new?type=ECHARTS'; // null导致刷新？
+    //   }
+    // }
 
-    window.history.pushState({}, 0, url);
-    window.history.replaceState({}, 0, newURL);
+    // window.history.pushState({}, 0, url);
+    // window.history.replaceState({}, 0, newURL);
 
 
-    // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
+    navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
 
     this.setState({
       visible: false,

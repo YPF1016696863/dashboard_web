@@ -18,6 +18,7 @@ export function defaultChinaChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

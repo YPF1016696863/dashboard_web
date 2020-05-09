@@ -14,6 +14,7 @@ export function defaultZoneChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },

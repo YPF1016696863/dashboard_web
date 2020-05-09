@@ -41,7 +41,7 @@ export function defaultBasicChartOptions() {
             },
         },
         tooltip: {
-            show: true,
+            show: false,
             axisPointer: {
                 show: true,
                 type: 'cross',
@@ -63,6 +63,9 @@ export function defaultBasicChartOptions() {
         toolbox: {
             show: false,
             feature: {
+                // dataView:{
+                //     show:true
+                // },
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
