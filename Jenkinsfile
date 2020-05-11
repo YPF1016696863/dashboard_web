@@ -10,6 +10,8 @@ pipeline {
       }
       steps {
         sh '''
+pwd
+id
 
 
 
