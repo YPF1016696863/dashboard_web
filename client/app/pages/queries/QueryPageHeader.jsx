@@ -67,12 +67,12 @@ class QueryPageHeader extends React.Component {
               <span style={{ fontSize: '13px' }}>管理并配置数据查询</span>
             </>
           }
-          extra={[
-            <Button ghost type="primary" size="small">
-              <i className="fa fa-plus m-r-5" />
-              新建可视化组件
-            </Button>
-          ]}
+          // extra={[
+          //   <Button ghost type="primary" size="small">
+          //     <i className="fa fa-plus m-r-5" />
+          //     新建可视化组件
+          //   </Button>
+          // ]}
         >
           <Descriptions size="small" column={3}>
             <Descriptions.Item label="备注">
