@@ -25,118 +25,150 @@ function EchartsGraphRenderer($rootScope) {
             }
 
             let nameData = [];
-            let nodeSource = [];
-            let nodeTarget = [];
             let linkData = [];
             let nodeName = [];
-            // let nodeLine = [];
-            // let nodeSize = [];
+
+            let startID = [];// AxisColumn
+            let startName = [];
+            let startValue = [];
+            let startProperty = [];
+
+            let endID = [];
+            let endName = [];
+            let endValue = [];
+            let endProperty = [];
+
+            let relaValue = [];
+            let relaName = [];
+
+            let uniqID = [];
+            let iDName = [];// id 作为索引的数组 映射名称
+            let iDValue = [];// id -value
+            let iDProperty = [];
+            let maxNodeValue = [];
+            let maxrelaValue = [];
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         const data = $scope.queryResult.getData();
                         // console.log(data);
-                        nameData = []; 
-
+                        nameData = [];
                         nodeName = [];
-                        nodeName = _.uniq(
-                            _.filter(
-                                _.map(data,
-                                    _.get($scope.options, 'form.xAxisColumn', '')),
-                                function (o) { return o !== ''; }
-                            )
-                        );
 
-                        // nodeLine = [];
-                        // nodeSize = [];
-                        // nodeLine=_.filter(
-                        //     _.map(data,
-                        //         _.get($scope.options, 'form.lineAxisColumn', '')),
-                        //     function (o) { return o !== ''; }
-                        // );
-                        // nodeSize=_.filter(
-                        //     _.map(data,
-                        //         _.get($scope.options, 'form.sizeAxisColumn', '')),
-                        //     function (o) { return o !== ''; }
-                        // );
+                        startID = [];// AxisColumn
+                        startName = [];
+                        startValue = [];
+                        startProperty = [];
 
-                        // console.log(nodeLine);
-                        // console.log(nodeSize);
-                        // nodeNameS = _.filter(
-                        //     _.map(data,
-                        //         _.get($scope.options, 'form.sAxisColumn', '')),
-                        //     function (o) { return o !== ''; }
-                        // );
-                        // nodeNameT = _.filter(
-                        //     _.map(data,
-                        //         _.get($scope.options, 'form.tAxisColumn', '')),
-                        //     function (o) { return o !== ''; }
-                        // );
-                        // nodeName= _.uniq(_.concat(nodeNameS,nodeNameT));
+                        endID = [];
+                        endName = [];
+                        endValue = [];
+                        endProperty = [];
 
-                        // console.log(nodeName);
+                        relaValue = [];
+                        relaName = [];
 
-                        _.set($scope.options, "node", nodeName); 
-                        // 找到选中serise的下标        
-                        _.set($scope.options, 'useNode_Index',
-                            _.findIndex(
-                                _.get($scope.options, "node", []),
-                                function (o) { return o === _.get($scope.options, 'useNode', ''); }
-                            ));
-                        let useIndex = 0;
+                        uniqID = [];
+                        maxNodeValue = [];
+                        maxrelaValue = [];
 
-                        _.forEach(nodeName, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        startID = _.map(data, _.get($scope.options, 'form.startIDAxisColumn', ''));
+                        startName = _.map(data, _.get($scope.options, 'form.startNameAxisColumn', ''));
+                        startValue = _.map(data, _.get($scope.options, 'form.startValueAxisColumn', ''));
+                        startProperty = _.map(data, _.get($scope.options, 'form.startPropertyAxisColumn', ''));
+
+                        endID = _.map(data, _.get($scope.options, 'form.endIDAxisColumn', ''));
+                        endName = _.map(data, _.get($scope.options, 'form.endNameAxisColumn', ''));
+                        endValue = _.map(data, _.get($scope.options, 'form.endValueAxisColumn', ''));
+                        endProperty = _.map(data, _.get($scope.options, 'form.endPropertyAxisColumn', ''));
+
+                        relaValue = _.map(data, _.get($scope.options, 'form.relaValueAxisColumn', ''));
+                        relaName = _.map(data, _.get($scope.options, 'form.relaNameAxisColumn', ''));
+                        uniqID = _.uniq(_.concat(startID, endID));// ID总集合 
+                        maxNodeValue = _.max(_.concat(startValue, endValue));// node size 最大值
+                        maxrelaValue = _.max(relaValue);// rela size 最大值 
+
+
+                        _.set($scope.options, 'nodeId', uniqID);
+
+                        // id-name
+                        iDName = [];
+                        iDValue = [];
+                        iDProperty = [];
+                        for (let i = 0; i < startID.length; i += 1) {
+                            iDName[startID[i]] = startName[i] === '' ? '' : startName[i];
+                            iDValue[startID[i]] = startValue[i] === '' ? 10 : startValue[i];
+                            iDProperty[startID[i]] =startProperty[i]===''?'red':startProperty[i];
+                        };
+                        for (let i = 0; i < endID.length; i += 1) {
+                            iDName[endID[i]] = endName[i] === '' ? '' : endName[i];
+                            iDValue[endID[i]] = endValue[i] === '' ? 10 : endValue[i];
+                            iDProperty[startID[i]] =endProperty[i]===''?'red':endProperty[i];
+                        };
+
+                        _.set($scope.options, 'useNode_Index', _.get($scope.options, "useNode", 0));
+
+                        _.forEach(uniqID, function (value) {
+                            
                             // eslint-disable-next-line func-names  
                             nameData.push({
-                                name: value,
-                                x: _.get($scope.options, "nodeX", [])[useIndex] === undefined ?
-                                    0 : _.get($scope.options, "nodeX", [])[useIndex],
-                                y: _.get($scope.options, "nodeY", [])[useIndex] === undefined ?
-                                    0 : _.get($scope.options, "nodeY", [])[useIndex],
-                                symbolSize: _.get($scope.options, "nodeSize", [])[useIndex] === undefined ?
-                                    35 : _.get($scope.options, "nodeSize", [])[useIndex],
-                                symbol: _.get($scope.options, "nodeSymbol", [])[useIndex] === undefined ?
-                                    "circle" : _.get($scope.options, "nodeSymbol", [])[useIndex],
-                                itemStyle: {
-                                    color: _.get($scope.options, "nodeColor", [])[useIndex] === undefined ?
-                                        "#ed4d50" : _.get($scope.options, "nodeColor", [])[useIndex],
+                                name: iDName[value],
+                                id: value,
+                                // 列表中的名称改为id
+                                x: _.get($scope.options, "nodeX", [0])[value] === undefined ?
+                                    0 : _.get($scope.options, "nodeX", [])[value],
+                                y: _.get($scope.options, "nodeY", [0])[value] === undefined ?
+                                    0 : _.get($scope.options, "nodeY", [])[value],
+                                symbolSize:
+                                    _.get($scope.options, "nodeSize", [35])[value] === undefined ||
+                                        _.get($scope.options, "nodeSize", [35])[value] === '' ?
+                                        (iDValue[value] / maxNodeValue) * 100 : _.get($scope.options, "nodeSize", [35])[value],
+                                // 不填则是默认给定值， 注意 要改成相对大小
 
+                                symbol: _.get($scope.options, "nodeSymbol", [])[value] === undefined ?
+                                    "circle" : _.get($scope.options, "nodeSymbol", [])[value],
+                                itemStyle: {
+                                    color: 
+                                    _.get($scope.options, "nodeColor", [])[value] === undefined||
+                                    _.get($scope.options, "nodeColor", [])[value] === ''?
+                                    iDProperty[value] : _.get($scope.options, "nodeColor", [])[value], 
                                 },
                                 label: {
-                                    color: _.get($scope.options, "nodeLabColor", [])[useIndex] === undefined ?
-                                        "#fff" : _.get($scope.options, "nodeLabColor", [])[useIndex],
+                                    color: _.get($scope.options, "nodeLabColor", [])[value] === undefined ?
+                                        "#fff" : _.get($scope.options, "nodeLabColor", [])[value],
                                 }
                             });
-                            useIndex += 1;
                         });
-
-
-                        // 连接关系
-                        nodeSource = [];
-                        nodeSource = _.map(data, _.get($scope.options, 'form.sAxisColumn', ''));
-                        nodeTarget = [];
-                        nodeTarget = _.map(data, _.get($scope.options, 'form.tAxisColumn', ''));
                         // console.log(nameData);
-                        // console.log(nodeSource);
-                        // console.log(nodeTarget);
-                        linkData = [];
-                        for (let i = 0; i < Math.max(nodeSource.length, nodeTarget.length); i += 1) {
-                            // console.log(nodeSource[i]+"::"+nodeTarget[i]);
-                            linkData.push({
-                                source: nodeSource[i],
-                                target: nodeTarget[i],
 
+                        // 连接关系 
+                        linkData = [];
+                        for (let i = 0; i < Math.max(startID.length, endID.length); i += 1) {
+
+                            const widthValue = (
+                                (relaValue[i] === '' || relaValue[i] === null) ?
+                                    (maxNodeValue / 10) :
+                                    (parseFloat(relaValue[i]) / maxNodeValue)
+                            ) * 10;
+                            let jiantouWidth = widthValue;
+                            if (widthValue <= 5) {
+                                jiantouWidth = 5;
+                            }
+                            linkData.push({
+                                source: startID[i] + "",
+                                target: endID[i] + "",
+                                label: {
+                                    show: true,
+                                    formatter: relaName[i]
+                                },
+                                symbolSize: [jiantouWidth, jiantouWidth * 2],
                                 lineStyle: {
                                     color: "#ccc",
-                                    width: 2,
+                                    width: widthValue,
                                     // color: _.get($scope.options, "linkColor", [])[useIndex] === undefined ?
                                     //     "#ccc" : _.get($scope.options, "linkColor", [])[useIndex],
                                     // type: _.get($scope.options, "linkStyle", [])[useIndex] === undefined ?
                                     //     "solid" : _.get($scope.options, "linkStyle", [])[useIndex],
-                                    // width: _.get($scope.options, "linkSize", [])
-                                    // [useIndex] === undefined ||
-                                    //  _.get($scope.options, "linkSize", [])[useIndex] === '' ?
-                                    //     2 : _.get($scope.options, "linkSize", [])[useIndex],
                                 }
                             });
                         }

@@ -13,6 +13,7 @@ export function defaultGraphChartOptions() {
         nodeLabColor:[],
         linkSize:[],
         linkStyle:[],
+        nodeId:[],
         useNode: '',           // 选中的系列名称
         useNode_Index: 0,     // 选中的系列下标
         form: {
