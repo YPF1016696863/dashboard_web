@@ -13,7 +13,7 @@ pipeline {
         sh '''
 pwd
 id
-group
+groups
 ls -al
 
 
