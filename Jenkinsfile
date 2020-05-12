@@ -11,6 +11,7 @@ pipeline {
       steps {
         sh '''
 pwd
+su - node
 id
 groups
 cat /etc/passwd
