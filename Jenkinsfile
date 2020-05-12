@@ -13,7 +13,8 @@ pipeline {
         sh '''
 pwd
 id
-
+group
+ls -al
 
 
 npm install'''
