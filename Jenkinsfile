@@ -5,7 +5,7 @@ pipeline {
       agent {
         docker {
           image 'node:latest'
-          args '-u root:root'
+          args '-u node:node'
         }
 
       }
