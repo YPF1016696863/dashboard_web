@@ -5,7 +5,6 @@ pipeline {
       agent {
         docker {
           image 'node:latest'
-          args '-u node:node'
         }
 
       }
@@ -14,6 +13,7 @@ pipeline {
 pwd
 id
 groups
+cat /etc/passwd
 ls -al
 
 
