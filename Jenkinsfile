@@ -10,7 +10,8 @@ pipeline {
       }
       steps {
         sh '''
-
+pwd
+id
 
 
 npm install'''
