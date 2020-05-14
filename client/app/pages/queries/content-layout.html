@@ -57,8 +57,12 @@
       <div ng-if="!sourceMode" style="flex-grow: 1;">&nbsp;</div>
 
       <div class="query-metadata ">
-        <button type="button" class="btn btn-primary btn-sm btn-block">
+        <button type="button" class="btn btn-primary btn-sm btn-block"   ng-if="simpleQuery" ng-model="simpleQuery" ng-click="onSimpleQueryClick(simpleQuery)">
           <i class="fa fa-book"></i>&nbsp;&nbsp;切换为简单查询模式
+        </button>
+        <!-- ng-init="simpleQuery=false" -->
+        <button type="button" class="btn btn-primary btn-sm btn-block" ng-if="!simpleQuery" ng-model="simpleQuery" ng-click="onSimpleQueryClick(simpleQuery)">
+          <i class="fa fa-book"></i>&nbsp;&nbsp;切换为高级查询模式
         </button>
       </div>
       <div
@@ -149,6 +153,7 @@
               add-new-parameter="addNewParameter"
               data-data-source="dataSource"
               data-data-sources="dataSources"
+              is-simple="simpleQuery"
             ></query-editor>
           </div>
 
