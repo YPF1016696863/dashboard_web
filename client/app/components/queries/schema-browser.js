@@ -24,6 +24,7 @@ function SchemaBrowserCtrl($rootScope, $scope) {
 
   this.itemSelected = ($event, hierarchy) => {
     $rootScope.$broadcast('query-editor.command', 'paste', hierarchy.join('.'));
+    // console.log($rootScope);
     $event.preventDefault();
     $event.stopPropagation();
   };

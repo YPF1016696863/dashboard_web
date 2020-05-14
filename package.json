@@ -18,6 +18,7 @@
   "author": "zkhoneycomb",
   "homepage": "http://www.zkhoneycomb.com/",
   "dependencies": {
+    "@ant-design/icons": "^4.1.0",
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
