@@ -8,14 +8,14 @@ import notification from '@/services/notification';
 
 function deleteGroup(event, group, onGroupDeleted) {
   Modal.confirm({
-    title: 'Delete Group',
-    content: 'Are you sure you want to delete this group?',
-    okText: 'Yes',
+    title: '删除组',
+    content: '您确定要删除该组吗？',
+    okText: '是',
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: '否',
     onOk: () => {
       group.$delete(() => {
-        notification.success('Group deleted successfully.');
+        notification.success('组已成功删除.');
         onGroupDeleted();
       });
     },

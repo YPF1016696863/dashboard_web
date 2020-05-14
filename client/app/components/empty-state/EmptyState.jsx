@@ -138,7 +138,6 @@ export function EmptyState({
         />
       }
       title="DataVis BI数据可视化系统"
-      extra={<h4>连接到任何数据源，轻松可视化和共享您的数据</h4>}
     />
   );
 }

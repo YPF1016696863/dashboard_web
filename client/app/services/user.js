@@ -87,17 +87,13 @@ function regenerateApiKey(user) {
 
 function sendPasswordReset(user) {
   return $http
-    .post(appSettings.server.backendUrl + `/api/users/${user.id}/reset_password`)
+    .post(appSettings.server.backendUrl + `/api/users/${user.id}/reset_password`, {password:'Abcd1234'})
     .then(({ data }) => {
-      if (clientConfig.mailSettingsMissing) {
-        notification.warning('The mail server is not configured.');
-        return data.reset_link;
-      }
-      notification.success('Password reset email sent.');
+      notification.success('密码重置为初始密码.');
     })
     .catch((response = {}) => {
       const message = get(response, 'data.message', response.statusText);
-      notification.error('Failed to send password reset email', message);
+      notification.error('密码重置失败,请重试', message);
     });
 }
 

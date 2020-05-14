@@ -149,7 +149,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/groups',
-      title: 'Groups',
+      title: '组管理',
       key: 'groups',
     },
   ], {

@@ -79,7 +79,7 @@
   },
   "USERPROFILE": {
     "INVITE_EMAILS": "邀请邮件",
-    "ACCOUNT": "账户"
+    "ACCOUNT": "用户资料"
   },
   "DASHBOARD": {
     "SETTINGS": {
@@ -126,8 +126,8 @@
     "USERS_TABLE": {
       "NAME": "名称",
       "GROUPS": "所在组",
-      "JOINED": "加入于",
-      "LAST_ACTIVE_AT": "上次回收于"
+      "JOINED": "加入时间",
+      "LAST_ACTIVE_AT": "上次活跃时间"
     }
   },
   "DESTINATIONLIST": {

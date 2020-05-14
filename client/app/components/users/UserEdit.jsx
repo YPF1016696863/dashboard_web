@@ -129,7 +129,7 @@ export default class UserEdit extends React.Component {
       {
         name: 'email',
         title: '用户名',
-        type: 'email',
+        type: 'text',
         initialValue: user.email,
       },
       (!user.isDisabled && currentUser.id !== user.id) ? {
@@ -238,7 +238,7 @@ export default class UserEdit extends React.Component {
           onClick={this.sendPasswordReset}
           loading={sendingPasswordEmail}
         >
-          发送密码重置邮箱
+          重置密码[Abcd1234]
         </Button>
       </Fragment>
     );
@@ -263,12 +263,6 @@ export default class UserEdit extends React.Component {
 
     return (
       <div className="col-md-4 col-md-offset-4">
-        <img
-          alt="Profile"
-          src={user.profileImageUrl}
-          className="profile__image"
-          width="40"
-        />
         <h3 className="profile__h3">{user.name}</h3>
         <hr />
         {this.renderUserInfoForm()}

@@ -24,9 +24,6 @@
 
       <!-- Profile -->
       <ul class="nav navbar-nav navbar-right">
-        <li uib-dropdown ng-if="$ctrl.isAuthenticated">
-          <release-notes></release-notes>
-        </li>
         <!--<li ng-show="$ctrl.showSettingsMenu">-->
         <!--<a href="users" title="Settings"><i class="fa fa-cog"></i></a>-->
         <!--</li>-->
@@ -69,14 +66,6 @@
               ng-if="$ctrl.currentUser.hasPermission('super_admin')"
               class="divider"
             ></li>
-
-            <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="settings/system">{{
-                'HEADER.SYSTEM_SETTINGS' | translate
-              }}</a>
-            </li>
-
-            <li class="divider"></li>
 
             <li>
               <a ng-click="$ctrl.logout()">{{
