@@ -55,6 +55,12 @@ npm install'''
       }
     }
 
+    stage('cleanup') {
+      steps {
+        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, deleteDirs: true, cleanWhenSuccess: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true)
+      }
+    }
+
   }
   environment {
     registry = 'guwenqing/datavis-dashboard'
