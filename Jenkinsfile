@@ -57,7 +57,8 @@ npm install'''
 
     stage('cleanup') {
       steps {
-        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, deleteDirs: true, cleanWhenSuccess: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true)
+        sh '''rm -rf /var/jenkins_home/workspace/datavis-dashboard_29/*
+rm -rf /var/jenkins_home/workspace/datavis-dashboard_29/.*'''
       }
     }
 
