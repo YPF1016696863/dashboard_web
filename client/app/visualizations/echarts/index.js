@@ -38,13 +38,13 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 _.set($scope.options, 'useSerie_Index',
                     _.findIndex(
                         _.get($scope.options, "form.yAxisColumns", []),
-                        function (o) { return o === _.get($scope.options, 'useSerie', ''); }
+                        function(o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
 
 
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
-                        // const data = $scope.queryResult.getData();
+                        const data = $scope.queryResult.getData();
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
@@ -69,28 +69,13 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                         // 一旦选中了横向柱状图 x 为value y 为字符类型
                         _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-                            // 此处把选择的（新）列名转换成原列名格式
-
-                            const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-
-                            // 对x轴选择的列名进行处理，转化为原列名查找
-                            const newXData = _.get($scope.options, "form.xAxisColumn", []); // 前端页面选择的x轴新列名
-                            let oldXData = newXData;
-                            _.forEach(searchColumns, function (rowXValue, rowXKey) {
-                                const everyXColumn = rowXValue;
-                                if (newXData === everyXColumn.friendly_name) {
-                                    oldXData = everyXColumn.name;   // oldXData为原来的横轴X列名
-                                }
-                            });
-
                             if (_.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === 'bar2') { // 横向柱状图
                                 _.set($scope.options, "bar2Flag", true);
                                 _.set($scope.options, "xAxis.type", 'value');
                                 _.set($scope.options, "yAxis.type", 'category');
                                 _.set($scope.options, "yAxis.data",
                                     _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                        // return row[_.get($scope.options, "form.xAxisColumn", "-")];
-                                        return row[oldXData];
+                                        return row[_.get($scope.options, "form.xAxisColumn", "-")];
                                     }));
                                 _.set($scope.options, "xAxis.data", undefined);
                                 return false;
@@ -101,8 +86,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             _.set($scope.options, "yAxis.data", undefined);
                             _.set($scope.options, "xAxis.data",
                                 _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                    // return row[_.get($scope.options, "form.xAxisColumn", "-")];
-                                    return row[oldXData];
+                                    return row[_.get($scope.options, "form.xAxisColumn", "-")];
                                 }));
                         });
 
@@ -113,26 +97,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         // setChartType($scope.options, selected);
                         _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
 
-                            // 此处把选择的（新）列名转换成原列名格式 yAxisColumn转换成---oldYData
-
-                            const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-                            // 对y轴选择的列名进行处理，转化为原列名查找
-                            const newYData = yAxisColumn; // 前端页面选择的新列名
-                            let oldYData = newYData;
-
-                            _.forEach(searchColumns, function (rowYValue, rowYKey) {
-                                const everyYColumn = rowYValue;
-                                if (newYData === everyYColumn.friendly_name) {
-                                    oldYData = everyYColumn.name;   // oldData为原来的列名
-                                }
-                            });
-
-                            const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                return row[oldYData];
-                            })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
-
                             const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                return row[oldYData];
+                                return row[yAxisColumn];
                             }))
                             $scope.options.series.push({
                                 name: _.get($scope.options, "series_ReName", [])[seriesNameIndex] === undefined ?
@@ -143,7 +109,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 ), // 将每个系列的类型传进去判断和转换  _.get($scope.options, "defaultType") 
                                 // type这里加了默认值的话容易出现预览界面都为左侧选择的图表类型
                                 smooth: _.get($scope.options, "series_Smooth", false), //   series_Smooth 折线与曲线切换
-                                data: yData,
+                                data: _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                                    return row[yAxisColumn];
+                                }),
                                 // 下标传入配置数组找到相应的配置
                                 areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
 
@@ -152,9 +120,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     function bubble(data) {
                                         return (data / maxData) * 100;
                                     } : setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
-                                barWidth: _.get($scope.options, 'series_BarWidth', 25) === '' ||
-                                    _.get($scope.options, 'series_BarWidth', 25) === undefined
-                                    ? 'auto' : _.get($scope.options, 'series_BarWidth', 25),
+                                barWidth: _.get($scope.options, 'series_BarWidth', 25) === ''||
+                                _.get($scope.options, 'series_BarWidth', 25) === undefined
+                                 ? 'auto' : _.get($scope.options, 'series_BarWidth', 25),
                                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                                     'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
                                 symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
@@ -196,52 +164,52 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 // 数据标记点
                                 markPoint: {
                                     data: [{
-                                        name: '最大值',
-                                        type: _.get($scope.options, "series_MarkPoint_Data_MaxType", [])[seriesNameIndex] === true ?
-                                            'max' : undefined,
-                                        symbol: _.get($scope.options, "series_MarkPoint_Data_MaxSymbol", [])[seriesNameIndex],
-                                        symbolSize: _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex] ===
-                                            undefined ?
-                                            9 : _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex],
-                                        label: {
-                                            show: _.get($scope.options, "series_MarkPoint_Data_Label_MaxShow", [])[seriesNameIndex],
-                                            position: _.get($scope.options, "series_MarkPoint_Data_Label_MaxPosition", [])[seriesNameIndex],
-                                            color: _.get($scope.options, "series_MarkPoint_Data_Label_MaxColor", [])[seriesNameIndex],
-                                            fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontWeight", [])[seriesNameIndex],
-                                            fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontSize", [])[seriesNameIndex],
-                                            fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontFamily", [])[seriesNameIndex],
+                                            name: '最大值',
+                                            type: _.get($scope.options, "series_MarkPoint_Data_MaxType", [])[seriesNameIndex] === true ?
+                                                'max' : undefined,
+                                            symbol: _.get($scope.options, "series_MarkPoint_Data_MaxSymbol", [])[seriesNameIndex],
+                                            symbolSize: _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex] ===
+                                                undefined ?
+                                                9 : _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex],
+                                            label: {
+                                                show: _.get($scope.options, "series_MarkPoint_Data_Label_MaxShow", [])[seriesNameIndex],
+                                                position: _.get($scope.options, "series_MarkPoint_Data_Label_MaxPosition", [])[seriesNameIndex],
+                                                color: _.get($scope.options, "series_MarkPoint_Data_Label_MaxColor", [])[seriesNameIndex],
+                                                fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontWeight", [])[seriesNameIndex],
+                                                fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontSize", [])[seriesNameIndex],
+                                                fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontFamily", [])[seriesNameIndex],
+                                            },
                                         },
-                                    },
-                                    {
-                                        name: '最小值',
-                                        type: _.get($scope.options, "series_MarkPoint_Data_MinType", [])[seriesNameIndex] === true ?
-                                            'min' : undefined,
-                                        symbol: _.get($scope.options, "series_MarkPoint_Data_MinSymbol", [])[seriesNameIndex],
-                                        symbolSize: _.get($scope.options, "series_MarkPoint_Data_MinSymbolSize", [])[seriesNameIndex],
-                                        label: {
-                                            show: _.get($scope.options, "series_MarkPoint_Data_Label_MinShow", [])[seriesNameIndex],
-                                            position: _.get($scope.options, "series_MarkPoint_Data_Label_MinPosition", [])[seriesNameIndex],
-                                            color: _.get($scope.options, "series_MarkPoint_Data_Label_MinColor", [])[seriesNameIndex],
-                                            fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontWeight", [])[seriesNameIndex],
-                                            fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontSize", [])[seriesNameIndex],
-                                            fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontFamily", [])[seriesNameIndex],
+                                        {
+                                            name: '最小值',
+                                            type: _.get($scope.options, "series_MarkPoint_Data_MinType", [])[seriesNameIndex] === true ?
+                                                'min' : undefined,
+                                            symbol: _.get($scope.options, "series_MarkPoint_Data_MinSymbol", [])[seriesNameIndex],
+                                            symbolSize: _.get($scope.options, "series_MarkPoint_Data_MinSymbolSize", [])[seriesNameIndex],
+                                            label: {
+                                                show: _.get($scope.options, "series_MarkPoint_Data_Label_MinShow", [])[seriesNameIndex],
+                                                position: _.get($scope.options, "series_MarkPoint_Data_Label_MinPosition", [])[seriesNameIndex],
+                                                color: _.get($scope.options, "series_MarkPoint_Data_Label_MinColor", [])[seriesNameIndex],
+                                                fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontWeight", [])[seriesNameIndex],
+                                                fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontSize", [])[seriesNameIndex],
+                                                fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontFamily", [])[seriesNameIndex],
+                                            },
                                         },
-                                    },
-                                    {
-                                        name: '平均值',
-                                        type: _.get($scope.options, "series_MarkPoint_Data_AverageType", [])[seriesNameIndex] === true ?
-                                            'average' : undefined,
-                                        symbol: _.get($scope.options, "series_MarkPoint_Data_AverageSymbol", [])[seriesNameIndex],
-                                        symbolSize: _.get($scope.options, "series_MarkPoint_Data_AverageSymbolSize", [])[seriesNameIndex],
-                                        label: {
-                                            show: _.get($scope.options, "series_MarkPoint_Data_Label_AverageShow", [])[seriesNameIndex],
-                                            position: _.get($scope.options, "series_MarkPoint_Data_Label_AveragePosition", [])[seriesNameIndex],
-                                            color: _.get($scope.options, "series_MarkPoint_Data_Label_AverageColor", [])[seriesNameIndex],
-                                            fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontWeight", [])[seriesNameIndex],
-                                            fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontSize", [])[seriesNameIndex],
-                                            fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontFamily", [])[seriesNameIndex],
+                                        {
+                                            name: '平均值',
+                                            type: _.get($scope.options, "series_MarkPoint_Data_AverageType", [])[seriesNameIndex] === true ?
+                                                'average' : undefined,
+                                            symbol: _.get($scope.options, "series_MarkPoint_Data_AverageSymbol", [])[seriesNameIndex],
+                                            symbolSize: _.get($scope.options, "series_MarkPoint_Data_AverageSymbolSize", [])[seriesNameIndex],
+                                            label: {
+                                                show: _.get($scope.options, "series_MarkPoint_Data_Label_AverageShow", [])[seriesNameIndex],
+                                                position: _.get($scope.options, "series_MarkPoint_Data_Label_AveragePosition", [])[seriesNameIndex],
+                                                color: _.get($scope.options, "series_MarkPoint_Data_Label_AverageColor", [])[seriesNameIndex],
+                                                fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontWeight", [])[seriesNameIndex],
+                                                fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontSize", [])[seriesNameIndex],
+                                                fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontFamily", [])[seriesNameIndex],
+                                            },
                                         },
-                                    },
                                     ]
                                 },
 
@@ -281,8 +249,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             // let width = $element.parent().parent()["0"].clientWidth;
                             // let height = "100%";
                             // let width = $element.closest('.t-body').outerWidth();
-                            let height = '100%';
-                            let width = '100%';
+                            let height ='100%';
+                            let width ='100%';
 
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
@@ -309,7 +277,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             };
 
             $scope.handleResize = _.debounce(() => {
-                refreshData();
+                refreshData(); 
             }, 50);
 
             const refreshType = () => { // 单独对xy类型做刷新
@@ -413,8 +381,7 @@ function EchartsEditor() {
             };
             try {
                 $scope.columns = $scope.queryResult.getColumns();
-                // $scope.columnNames = _.map($scope.columns, i => i.name);
-                $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
+                $scope.columnNames = _.map($scope.columns, i => i.name);
             } catch (e) {
                 console.log("some error");
             }
@@ -530,7 +497,7 @@ function EchartsEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];
@@ -575,7 +542,7 @@ function EchartsEditor() {
                 { label: '居中', value: 'middle' }
             ];
 
-            $scope.$watch('options', () => { }, true);
+            $scope.$watch('options', () => {}, true);
         },
     };
 }

@@ -63,28 +63,13 @@ function EchartsContrastRenderer($rootScope) {
 
                         // 一旦选中了横向柱状图 x 为value y 为字符类型
                         _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-                           
-                            // 此处把选择的（新）列名转换成原列名格式
-
-                            const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-
-                            // 对x轴选择的列名进行处理，转化为原列名查找
-                            const newXData = _.get($scope.options, "form.xAxisColumn", []); // 前端页面选择的x轴新列名
-                            let oldXData = newXData;
-                            _.forEach(searchColumns, function (rowXValue, rowXKey) {
-                                const everyXColumn = rowXValue;
-                                if (newXData === everyXColumn.friendly_name) {
-                                    oldXData = everyXColumn.name;   // oldXData为原来的横轴X列名
-                                }
-                            });
-
                             if (_.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === 'bar2') { // 横向柱状图
                                 _.set($scope.options, "bar2Flag", true);
                                 _.set($scope.options, "xAxis.type", 'value');
                                 _.set($scope.options, "yAxis.type", 'category');
                                 _.set($scope.options, "yAxis.data",
                                     _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                        return row[oldXData];
+                                        return row[_.get($scope.options, "form.xAxisColumn", "-")];
                                     }));
                                 _.set($scope.options, "xAxis.data", undefined);
                                 return false;
@@ -95,7 +80,7 @@ function EchartsContrastRenderer($rootScope) {
                             _.set($scope.options, "yAxis.data", undefined);
                             _.set($scope.options, "xAxis.data",
                                 _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                    return row[oldXData];
+                                    return row[_.get($scope.options, "form.xAxisColumn", "-")];
                                 }));
                         });
 
@@ -104,22 +89,6 @@ function EchartsContrastRenderer($rootScope) {
                         let seriesNameIndex = 0;
                         // setChartType($scope.options, selected);
                         _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-
-                            const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-                            // 对y轴选择的列名进行处理，转化为原列名查找
-                            const newYData = yAxisColumn; // 前端页面选择的新列名
-                            let oldYData = newYData;
-
-                            _.forEach(searchColumns, function (rowYValue, rowYKey) {
-                                const everyYColumn = rowYValue;
-                                if (newYData === everyYColumn.friendly_name) {
-                                    oldYData = everyYColumn.name;   // oldData为原来的列名
-                                }
-                            });
-                            const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                return row[oldYData];
-                            })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
-
 
                             const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                                 return row[yAxisColumn];
@@ -133,7 +102,10 @@ function EchartsContrastRenderer($rootScope) {
                                 ),
                                 stack: _.get($scope.options, "series_Stack", false) ? '堆叠' : undefined,
                                 smooth: _.get($scope.options, "series_Smooth", false), //   series_Smooth 折线与曲线切换
-                                data: yData,
+                                data: _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                                    return row[yAxisColumn];
+                                }),
+
                                 barWidth: _.get($scope.options, 'series_BarWidth', 25),
                                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                                     'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
@@ -392,8 +364,7 @@ function EchartsContrastEditor() {
 
             try {
                 $scope.columns = $scope.queryResult.getColumns();
-                // $scope.columnNames = _.map($scope.columns, i => i.name);
-                $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
+                $scope.columnNames = _.map($scope.columns, i => i.name);
             } catch (e) {
                 console.log("some error");
             }

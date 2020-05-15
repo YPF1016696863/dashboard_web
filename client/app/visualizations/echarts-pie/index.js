@@ -49,51 +49,22 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             let xDataValue = [];
             const yData = _.get($scope.options, "form.yAxisColumns", ":::");
             // COMMISSION11 value 这一列  ["COMMISSION2", "COMMISSION11"]
-
+            const xData = _.get($scope.options, "form.xAxisColumn", "::");
             // name string 这一列  AGENT_NAME
             _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
               pieData = [];
               xDataValue = [];
-
-              // 此处把选择的（新）列名转换成原列名格式
-
-              const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-
-              // 对y轴选择的列名进行处理，转化为原列名查找
-              const newYData = yAxisColumn; // 前端页面选择的新列名y
-              let oldYData = newYData;
-
-              _.forEach(searchColumns, function (rowYValue, rowYKey) {
-                const everyYColumn = rowYValue;
-                if (newYData === everyYColumn.friendly_name) {
-                  oldYData = everyYColumn.name;   // oldXData为原来的横轴X列名
-                }
-              });
-
-
-              // 对x轴选择的列名进行处理，转化为原列名查找
-              const newXData = _.get($scope.options, "form.xAxisColumn", "::");  // 前端页面选择的新列名x              
-              let oldXData = newXData;
-
-              _.forEach(searchColumns, function (rowXValue, rowXKey) {
-                const everyXColumn = rowXValue;
-                if (newXData === everyXColumn.friendly_name) {
-                  oldXData = everyXColumn.name;   // oldXData为原来的横轴X列名
-                }
-              });
-
-
               _.forEach(data, function (value, key) {
                 // [{0},{1}...] 筛选出每一个{0} {1} ...
                 const onesValue = value;
                 _.forEach(onesValue, function (oneXvalue, oneXkey) {
                   // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                  if (oneXkey === oldXData) { // x
+                  if (oneXkey === xData) { // x
                     const xValue = oneXvalue;
                     xDataValue.push(xValue);
                     _.forEach(onesValue, function (oneYvalue, oneYkey) {
                       // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                      if (oneYkey === oldYData) { // 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
+                      if (oneYkey === yAxisColumn) { // 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
                         // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
                         pieData.push({
                           name: xValue,
@@ -205,8 +176,8 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = '100%';
-              let width = '100%';
+              let height ='100%';
+              let width ='100%';
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
                 width = $("#Preview")["0"].clientWidth;
@@ -305,8 +276,7 @@ function EchartsPieEditor() {
 
       try {
         $scope.columns = $scope.queryResult.getColumns();
-        // $scope.columnNames = _.map($scope.columns, i => i.name);
-        $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
+        $scope.columnNames = _.map($scope.columns, i => i.name);
       } catch (e) {
         console.log("some error");
       }

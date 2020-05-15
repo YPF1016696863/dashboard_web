@@ -25,7 +25,6 @@ function EchartsScatterNumberRenderer($rootScope) {
       let dataX = [];
       let dataY = [];
       let dataZ = [];
-
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
@@ -34,65 +33,28 @@ function EchartsScatterNumberRenderer($rootScope) {
             dataX = [];
             dataY = [];
             dataZ = [];
-            // 此处把选择的（新）列名转换成原列名格式
-
-            const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-
-            // 对y轴选择的列名进行处理，转化为原列名查找
-            const newYData = _.get($scope.options, "form.yAxisColumn", ''); // 前端页面选择的新列名y
-            let oldYData = newYData;
-
-            _.forEach(searchColumns, function (rowYValue, rowYKey) {
-              const everyYColumn = rowYValue;
-              if (newYData === everyYColumn.friendly_name) {
-                oldYData = everyYColumn.name;   // oldXData为原来的横轴X列名
-              }
-            });
-
-            // 对x轴选择的列名进行处理，转化为原列名查找
-            const newXData = _.get($scope.options, "form.xAxisColumn", '');  // 前端页面选择的新列名x              
-            let oldXData = newXData;
-
-            _.forEach(searchColumns, function (rowXValue, rowXKey) {
-              const everyXColumn = rowXValue;
-              if (newXData === everyXColumn.friendly_name) {
-                oldXData = everyXColumn.name;   // oldXData为原来的横轴X列名
-              }
-            });
-
-            // 对z轴选择的列名进行处理，转化为原列名查找
-            const newZData = _.get($scope.options, "form.valueColumn", '');  // 前端页面选择的新列名z            
-            let oldZData = newZData;
-
-            _.forEach(searchColumns, function (rowZValue, rowZKey) {
-              const everyZColumn = rowZValue;
-              if (newZData === everyZColumn.friendly_name) {
-                oldZData = everyZColumn.name;   // oldZData为原来的横轴X列名
-              }
-            });
-
-              _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
+            _.forEach(data, function (value) {// [{0},{1}...] 筛选出每一个{0} {1} ...
               // eslint-disable-next-line func-names
               _.forEach(value, function (valueChildren, keyChildren) {
-                if (keyChildren === oldXData) {
+                if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
                   dataX.push(valueChildren);
                 }
-                if (keyChildren === oldYData) {
+                if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
                   dataY.push(valueChildren);
                 }
-                if (keyChildren === oldZData) {
+                if (keyChildren === _.get($scope.options, "form.valueColumn", '')) {
                   dataZ.push(valueChildren);
                 }
 
               });
             });
-            
+
             for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
               echartsData.push([
                 dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
                 dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i],
                 dataZ[i] === null || dataZ[i] === undefined ? 0 : dataZ[i],
-
+              
               ],
               );
             }
@@ -119,7 +81,7 @@ function EchartsScatterNumberRenderer($rootScope) {
               symbolSize: _.get($scope.options, "visualMap.show", false) ?
                 // eslint-disable-next-line no-shadow
                 15 : setScatter(_.get($scope.options, 'pointSize', 15)),
-
+              
               itemStyle: {
                 color: _.get($scope.options, 'pointColor', '#ed4d50'),
               },
@@ -194,8 +156,7 @@ function EchartsScatterNumberEditor() {
     link($scope) {
       try {
         $scope.columns = $scope.queryResult.getColumns();
-        // $scope.columnNames = _.map($scope.columns, i => i.name);
-        $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
+        $scope.columnNames = _.map($scope.columns, i => i.name);
       } catch (e) {
         console.log("some error");
       }
