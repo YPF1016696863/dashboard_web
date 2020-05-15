@@ -52,11 +52,25 @@ function EchartsTubeRenderer($rootScope) {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         const data = $scope.queryResult.getData();
                         echartsData = [];
+
+                        // 此处把选择的（新）列名转换成原列名格式
+                        const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
+
+                        // 对x轴选择的列名进行处理，转化为原列名查找
+                        const newXData = _.get($scope.options, "form.xAxisColumn", '') // 前端页面选择的x轴新列名
+                        let oldXData = newXData;
+                        _.forEach(searchColumns, function (rowXValue, rowXKey) {
+                            const everyXColumn = rowXValue;
+                            if (newXData === everyXColumn.friendly_name) {
+                                oldXData = everyXColumn.name;   // oldXData为原来的横轴X列名
+                            }
+                        });
+
                         // eslint-disable-next-line func-names
-                        _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
-                            _.forEach(value, function(valueChildren, keyChildren) {
-                                if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
+                            _.forEach(value, function (valueChildren, keyChildren) {
+                                if (keyChildren === oldXData) {
                                     echartsData.push(valueChildren);
                                 }
 
@@ -278,7 +292,8 @@ function EchartsTubeEditor() {
         link($scope) {
             try {
                 $scope.columns = $scope.queryResult.getColumns();
-                $scope.columnNames = _.map($scope.columns, i => i.name);
+                // $scope.columnNames = _.map($scope.columns, i => i.name);
+                $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
             } catch (e) {
                 console.log("some error");
             }

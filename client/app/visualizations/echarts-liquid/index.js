@@ -32,11 +32,24 @@ function EchartsLiquidRenderer($rootScope) {
 
                         echartsData = [];
                         getTemp = 0;
-                        // eslint-disable-next-line func-names
-                        _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        // 此处把选择的（新）列名转换成原列名格式
+                        const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
+
+                        // 对x轴选择的列名进行处理，转化为原列名查找
+                        const newXData = _.get($scope.options, "form.xAxisColumn", '') // 前端页面选择的x轴新列名
+                        let oldXData = newXData;
+                        _.forEach(searchColumns, function (rowXValue, rowXKey) {
+                            const everyXColumn = rowXValue;
+                            if (newXData === everyXColumn.friendly_name) {
+                                oldXData = everyXColumn.name;   // oldXData为原来的横轴X列名
+                            }
+                        });
+                        
+                       // eslint-disable-next-line func-names
+                        _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
-                            _.forEach(value, function(valueChildren, keyChildren) {
-                                if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
+                            _.forEach(value, function (valueChildren, keyChildren) {
+                                if (keyChildren === oldXData) {
                                     getTemp = valueChildren;
                                 }
 
@@ -94,8 +107,8 @@ function EchartsLiquidRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height ='100%';
-                            let width ='100%';
+                            let height = '100%';
+                            let width = '100%';
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -119,7 +132,7 @@ function EchartsLiquidRenderer($rootScope) {
                 }
             };
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
 
             $scope.$watch('options', refreshData, true);
@@ -141,7 +154,8 @@ function EchartsLiquidEditor() {
         link($scope) {
             try {
                 $scope.columns = $scope.queryResult.getColumns();
-                $scope.columnNames = _.map($scope.columns, i => i.name);
+                // $scope.columnNames = _.map($scope.columns, i => i.name);
+                $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
             } catch (e) {
                 console.log("some error");
             }
@@ -236,7 +250,7 @@ function EchartsLiquidEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];
@@ -282,7 +296,7 @@ function EchartsLiquidEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }

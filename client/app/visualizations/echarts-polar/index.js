@@ -33,20 +33,49 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
 
                         const polarData = [];
                         const xDataValue = [];
+                        const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
+
                         const xData = _.get($scope.options, "form.xAxisColumn", "::"); 
-                        // name string 这一列  AGENT_NAME
-                        _.forEach(data, function(value, key) { 
+                        let xNewData = xData;
+                      
+                        _.forEach(searchColumns, function (rowXValue, rowXKey) {
+                            const everyXColumn = rowXValue; // everyColumn为一个对象，包含某列的新列名和元列名
+                            // console.log(everyXColumn);
+                            if (xData === everyXColumn.friendly_name) {
+                                // 前端选择的列匹配对象中的新列名，就可找到之前的列名                             
+                                xNewData = everyXColumn.name;  // xNewData返回原列名可进行查找 
+                            }
+                        });
+
+                        // 对y轴选择的列名进行处理，转化为原列名查找
+                        const yData = _.get($scope.options, "form.yAxisColumn", "::"); // 前端页面选择的新列名
+                        let yNewData = yData;
+                     
+                        _.forEach(searchColumns, function (rowYValue, rowYKey) {
+
+                            const everyYColumn = rowYValue;                       
+                            if (yData === everyYColumn.friendly_name) {
+                                yNewData = everyYColumn.name;
+                            }
+
+                        });
+
+                          // name string 这一列  AGENT_NAME
+                          _.forEach(data, function (value, key) {
                             // [{0},{1}...] 筛选出每一个{0} {1} ...
                             const onesValue = value;
-                            _.forEach(onesValue, function(oneXvalue, oneXkey) { 
+                           
+                            _.forEach(onesValue, function (oneXvalue, oneXkey) {
                                 // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                                if (oneXkey === xData) { // x
+                                if (oneXkey === xNewData) { // x
                                     const xValue = oneXvalue;
                                     xDataValue.push(xValue);
-                                    _.forEach(onesValue, function(oneYvalue, oneYkey) { 
+                                   
+                                    _.forEach(onesValue, function (oneYvalue, oneYkey) {
                                         // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
-                                        if (oneYkey === _.get($scope.options, "form.yAxisColumn", "")) {
+                                        if (oneYkey === yNewData) {
                                             // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+
                                             polarData.push(
                                                 [xValue, oneYvalue]
                                             );
@@ -175,7 +204,8 @@ function EchartsPolarEditor() {
         link($scope) {
             try {
                 $scope.columns = $scope.queryResult.getColumns();
-                $scope.columnNames = _.map($scope.columns, i => i.name);
+                // $scope.columnNames = _.map($scope.columns, i => i.name);
+                $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
             } catch (e) {
                 console.log("some error");
             }
