@@ -57,8 +57,7 @@ npm install'''
 
     stage('cleanup') {
       steps {
-        sh '''rm -rf /var/jenkins_home/workspace/datavis-dashboard_29/*
-rm -rf /var/jenkins_home/workspace/datavis-dashboard_29/.*'''
+        build 'cleanup_datavis'
       }
     }
 
