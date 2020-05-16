@@ -44,6 +44,7 @@ const conditionKV=[];
 const andorKV=[];
 const conditionZiduanKV=[];
 const fuhaoKV=[];
+let redisKey='';
 let count = 0;
 // By default Ace will try to load snippet files for the different modes and fail.
 // We don't need them, so we use these placeholders until we define our own.
@@ -116,6 +117,9 @@ class QueryEditor extends React.Component {
       fuhaoKVstate:[],              // 条件的符号数组
       conditionKVstate:[],           // 条件的内容
       
+
+      redisOrsqlState:true,
+      redisKeyState:'key..'
     };
  
     const schemaCompleter = {
@@ -266,34 +270,39 @@ class QueryEditor extends React.Component {
 
   // 表名 字段名 限制条数 条件字段 条件（1000，bab之类的内容） 条件符号 条件连接（与或）
   marge = (tableValue, keysValue, limitValue, conditionkey, conditionValue, fuhao, condition) => {
-    let keysTemp = "";
-    // eslint-disable-next-line func-names
-    _(keysValue).forEach(function (value) {
-      keysTemp = keysTemp + value + " , ";
-    });
-    keysTemp = keysTemp.slice(0, -2);// 去掉最后一个逗号
-    let queryText = "select " + keysTemp + " from " + tableValue; 
+    let queryText='';
+    if (this.state.redisOrsqlState) {
+      let keysTemp = "";
+      // eslint-disable-next-line func-names
+      _(keysValue).forEach(function (value) {
+        keysTemp = keysTemp + value + " , ";
+      });
+      keysTemp = keysTemp.slice(0, -2);// 去掉最后一个逗号
+      queryText = "select " + keysTemp + " from " + tableValue;
 
-    let conditionString = '';
-    for (let i = 0; i < conditionkey.length; i += 1) {
-      let temp = '';
-      if (conditionkey[i] !== null && conditionkey[i] !== undefined&&conditionkey[i] !== " ") {
-        temp =
-          (condition[i] === undefined ? " " : condition[i])
-            + " " + conditionkey[i] + " " + fuhao[i] + " '" + conditionValue[i]+"'";
-            conditionString = conditionString + " " + temp;
+      let conditionString = '';
+      for (let i = 0; i < conditionkey.length; i += 1) {
+        let temp = '';
+        if (conditionkey[i] !== null && conditionkey[i] !== undefined && conditionkey[i] !== " ") {
+          temp =
+            (condition[i] === undefined ? " " : condition[i])
+            + " " + conditionkey[i] + " " + fuhao[i] + " '" + conditionValue[i] + "'";
+          conditionString = conditionString + " " + temp;
+        }
       }
+
+      conditionString = conditionString.replace(/\s+/ig, "  ");// 多余空格替换为两个
+
+      if (conditionString !== null && conditionString.replace(/\s+/ig, "") !== '') {
+        queryText = queryText + " where " + conditionString;
+      }
+      if (boolLimit) {// 禁用关闭时写入sql 
+        queryText = queryText + " limit " + limitValue;
+      }
+    } else { // redis 模式
+      queryText=redisKey;
     }
-    
-    conditionString=conditionString.replace(/\s+/ig,"  ");// 多余空格替换为两个
-    
-    if(conditionString!==null&&conditionString.replace(/\s+/ig,"")!==''){
-      queryText=queryText+" where "+conditionString;
-    }
-    if (boolLimit) {// 禁用关闭时写入sql 
-      queryText = queryText + " limit " + limitValue;
-    }
-    // console.log(queryText);
+     
     this.updateQuery(queryText);
   }
 
@@ -375,6 +384,19 @@ class QueryEditor extends React.Component {
     this.setState({ andorKVstate: andorKV }); 
     this.marge(selectTableName, selectKeysArray, selectLimit,conditionZiduanKV,conditionKV,fuhaoKV,andorKV);
   };
+
+  // redis or sql
+  redisOrsql=()=>{
+    this.setState({ redisOrsqlState: !this.state.redisOrsqlState });  
+    // console.log(this.state.redisOrsqlState);
+  }
+
+  redisKey=(e)=>{
+    this.setState({ redisKeyState: e.target.value }); 
+    console.log(e.target.value);
+    redisKey=e.target.value;
+    this.marge(selectTableName, selectKeysArray, selectLimit,conditionZiduanKV,conditionKV,fuhaoKV,andorKV);  
+  }
 
 
   render() {
@@ -488,15 +510,22 @@ class QueryEditor extends React.Component {
           <div className="container p-15 m-b-10" style={{ height: '100%' }}>
             <div data-executing={this.props.queryExecuting} style={{ height: 'calc(100% - 40px)', marginBottom: '0px' }} className="editor__container">
 
-              从
-              <Select defaultValue="选择表名.." value={this.state.tValue===''?"表名称":this.state.tValue} style={{ width: 200 }} onChange={this.tableChange}>
-                {_.map(this.props.schema, 'name').map((item) => {
+              <Button onClick={this.redisOrsql} type="primary">
+                { this.state.redisOrsqlState? 'SQL语句模式':'Redis语句模式'}
+              </Button>
+              {
+              this.state.redisOrsqlState?
+              (
+                <div>
+                  从
+                  <Select defaultValue="选择表名.." value={this.state.tValue===''?"表名称":this.state.tValue} style={{ width: 200 }} onChange={this.tableChange}>
+                    {_.map(this.props.schema, 'name').map((item) => {
                     return <Option value={item}>{item}</Option>
                   })}
-              </Select>
-              表中,
-              选择字段
-              <TreeSelect
+                  </Select>
+                  表中,
+                  选择字段
+                  <TreeSelect
                 showSearch
                 style={{ width: '55%' }}
                 value={this.state.kValue}
@@ -506,9 +535,9 @@ class QueryEditor extends React.Component {
                 multiple
                 treeDefaultExpandAll
                 onChange={this.onTreeChange}
-              >
-                <TreeNode value=" * " title="所有字段" />
-                {
+                  >
+                    <TreeNode value=" * " title="所有字段" />
+                    {
                     _.flattenDeep(
                       // eslint-disable-next-line func-names
                       _.map(_.filter(this.props.schema, function (o) { return o.name === selectTableName; }), 'columns')
@@ -517,26 +546,26 @@ class QueryEditor extends React.Component {
                         return <TreeNode value={item} title={item} />
                       })
                   }
-              </TreeSelect>
-              <br />
-              限制查询条数
-              <InputNumber 
+                  </TreeSelect>
+                  <br />
+                  限制查询条数
+                  <InputNumber 
               min={1} 
               disabled={this.state.limitDisabled} 
               defaultValue={this.state.limitValue} 
-              onChange={this.limitChange} 
-              />
+              onChange={this.limitChange}
+                  />
 
-              <Button onClick={this.toggle} type="primary">
-                条目限制开关
-              </Button>
+                  <Button onClick={this.toggle} type="primary">
+                    条目限制开关
+                  </Button>
 
 
-              <br />
-              筛选条件
-              <PlusCircleOutlined onClick={this.addCondition}>增加</PlusCircleOutlined>
-              <br />
-              {
+                  <br />
+                  筛选条件
+                  <PlusCircleOutlined onClick={this.addCondition}>增加</PlusCircleOutlined>
+                  <br />
+                  {
                   this.props.schema ? (
                     this.state.whereNum.map((item) => {
                       return (
@@ -574,7 +603,13 @@ class QueryEditor extends React.Component {
 
                   ) : null
                 }
-
+                </div>
+              ):(
+                <div>
+                  <Input placeholder={this.state.redisKeyState} onChange={this.redisKey} />
+                </div>
+              )
+              }
               {/* 隐藏 */}
               <AceEditor
                 readOnly={this.props.fileUpload}
