@@ -147,7 +147,7 @@ export default class UserEdit extends React.Component {
         type: 'content',
         content: this.renderUserGroups(),
       },
-    ].map(field => ({ readOnly: user.isDisabled, required: true, ...field }));
+    ].map(field => ({ readOnly: user.isDisabled, required: false, ...field }));
 
     return (
       <DynamicForm
@@ -249,11 +249,11 @@ export default class UserEdit extends React.Component {
 
     return user.isDisabled ? (
       <Button className="w-100 m-t-10" type="primary" onClick={this.toggleUser} loading={togglingUser}>
-        有效用户
+        激活该用户
       </Button>
     ) : (
       <Button className="w-100 m-t-10" type="danger" onClick={this.toggleUser} loading={togglingUser}>
-        无效用户
+        禁用该用户
       </Button>
     );
   }

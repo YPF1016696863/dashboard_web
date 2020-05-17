@@ -29,6 +29,14 @@ export default class DefaultPolicy {
     return currentUser.hasPermission('create_dashboard');
   }
 
+  isCreateQueryEnabled() {
+    return currentUser.hasPermission('create_query');
+  }
+
+  isCreateWidgetEnabled() {
+    return currentUser.hasPermission('create_query');
+  }
+
   isCreateDashboardEnabled() {
     return currentUser.hasPermission('create_dashboard');
   }
