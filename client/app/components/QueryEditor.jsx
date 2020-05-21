@@ -44,8 +44,24 @@ const conditionKV=[];
 const andorKV=[];
 const conditionZiduanKV=[];
 const fuhaoKV=[];
-let redisKey='';
+// const redisKey='123';
 let count = 0;
+// redis
+let selectRedisName = ''; // redis下拉框选择的key值
+let selectRedisArray = []; // redis选择的字段数组
+
+let selectEditName = ''; // 需要修改的原列名
+let friendlyName = '';   // 新修改的列名
+
+let allRedisName = [];  // 获取所有的原列名
+
+const aliasTextJson ={}; // 存放初始化的列名和别名对象
+
+
+
+
+
+
 // By default Ace will try to load snippet files for the different modes and fail.
 // We don't need them, so we use these placeholders until we define our own.
 function defineDummySnippets(mode) {
@@ -64,7 +80,7 @@ class QueryEditor extends React.Component {
   static propTypes = {
     queryText: PropTypes.string.isRequired,
     schema: Schema, // eslint-disable-line react/no-unused-prop-types
-    addNewParameter: PropTypes.func.isRequired,
+    addNewParameter: PropTypes.func.isRequired, 
     dataSources: PropTypes.arrayOf(DataSource),
     dataSource: DataSource,
     fileUpload: PropTypes.bool.isRequired,
@@ -107,6 +123,7 @@ class QueryEditor extends React.Component {
       queryText: props.queryText,
       selectedQueryText: null,
 
+      // SQL简单查询规则设置
       kValue: [],                   // 字段选择
       tValue: '',                   // 表的选择
       limitValue: null,             // 限制查询条数
@@ -116,10 +133,16 @@ class QueryEditor extends React.Component {
       conditionZiduanKVstate:[],    // 字段的匹配数组
       fuhaoKVstate:[],              // 条件的符号数组
       conditionKVstate:[],           // 条件的内容
-      
 
+       // redis简单查询规则设置
+      keyValue: '',                   // redis的key
+      fieldValue: [],                 // redis选择查询的字段
+     
+      nameValue: '',                 // redis选择要修改的字段（列名），一次只能选择一个
+      friendlyNameValue: '',         // redis修改的列名，输入框的值
+    
       redisOrsqlState:true,
-      redisKeyState:'key..'
+      // redisKeyState:'请选择key'
     };
  
     const schemaCompleter = {
@@ -299,9 +322,7 @@ class QueryEditor extends React.Component {
       if (boolLimit) {// 禁用关闭时写入sql 
         queryText = queryText + " limit " + limitValue;
       }
-    } else { // redis 模式
-      queryText=redisKey;
-    }
+    } 
      
     this.updateQuery(queryText);
   }
@@ -384,18 +405,173 @@ class QueryEditor extends React.Component {
     this.setState({ andorKVstate: andorKV }); 
     this.marge(selectTableName, selectKeysArray, selectLimit,conditionZiduanKV,conditionKV,fuhaoKV,andorKV);
   };
+ 
+  // 第一次触发margeRedis就可获得aliasTextJson
+   friendlyNameInit =() =>{      
+    allRedisName =_.map(_.filter(this.props.schema, function (o) { return o.name === selectRedisName; }), 'columns');
+    console.log(allRedisName[0]);  // 获取一个数组包含所有列的原名
+    allRedisName[0].forEach(function(value,index,array){ 
+    // console.log(value);  //  遍历数组的数据 循环出原来列名，ID     
+    aliasTextJson[value]=value;   // 一个对象放置原列名和新别名(初始化时新列名等于原列名)
+    })   
+  }
 
   // redis or sql
   redisOrsql=()=>{
     this.setState({ redisOrsqlState: !this.state.redisOrsqlState });  
     // console.log(this.state.redisOrsqlState);
   }
+ 
+  // redis的查询key值下拉框选择后
+  redisChange = (e) => {    
+    selectRedisName = e;    // 全局变量，选择的key值
+    this.friendlyNameInit();   // 传入当前选择key值,初始化aliasTextJson对象的信息
+    this.margeRedis(selectRedisName, selectRedisArray,selectEditName,friendlyName);   
+    this.setState({
+      nameValue: '',
+      fieldValue: [],
+      keyValue: e
+    });// 清空
+  }
 
-  redisKey=(e)=>{
-    this.setState({ redisKeyState: e.target.value }); 
-    console.log(e.target.value);
-    redisKey=e.target.value;
-    this.marge(selectTableName, selectKeysArray, selectLimit,conditionZiduanKV,conditionKV,fuhaoKV,andorKV);  
+  // 字段选择
+  onReidsTreeChange = value => {
+    this.setState({ fieldValue: value });
+    selectRedisArray = value;
+    this.margeRedis(selectRedisName, selectRedisArray,selectEditName,friendlyName);
+  };
+
+   // 别名修改，获取要修改的别名列，每次选择要修改的列名时候，把上次对应的别名显示在此处
+  onReidsNameChange = value => {
+    this.setState({ nameValue: value });
+    selectEditName = value;  // 全局变量，要修改的原列名
+    console.log('选择的要修改的列名');
+    console.log(selectEditName);  
+    this.setState({ friendlyNameValue: ''});
+    
+    // console.log('显示当前的别名的对象信息');
+    // console.log(aliasTextJson);
+    Object.keys(aliasTextJson).forEach((i)=>{
+      if(i === selectEditName){
+        console.log('从对象中获取对应的上次修改的新别名');
+        console.log(aliasTextJson[i]); // 从对象中获取对应的上次修改的新别名
+       
+        this.setState({ friendlyNameValue: aliasTextJson[i] });  // 重新选择列名后，别名输入框清空或者默认为上次修改的新别名
+      }
+    })
+    // this.margeRedis(selectRedisName, selectRedisArray,selectEditName,friendlyName);
+  };
+
+   // 修改别名后，获取输入框的值,传递给margeRedis，并更新输入框的值
+   friendlyNameChange = (e) => { 
+    friendlyName = e.target.value; // 新修改的名字，全局变量，为输入框从键盘获取的值
+    this.setState({ friendlyNameValue: friendlyName });  // 输入框的值设置为当前输入的值，进行同步
+    console.log('修改后的别名');
+    console.log(friendlyName);
+    this.margeRedis(selectRedisName, selectRedisArray,selectEditName,friendlyName); 
+  };
+
+  // Redis 拼接查询语句
+  margeRedis = (selectKey, selectValue,selectName,newName) => {  
+    // 重新更新aliasTextJson对象里的信息
+    Object.keys(aliasTextJson).forEach((i)=>{
+      if(i === selectName){      
+        aliasTextJson[i]=newName;
+        console.log(aliasTextJson[i]); // 从对象中更新别名
+     }
+    }) 
+    let queryText ='';    // 最后放入高级查询框的字符串
+    let queryTextJson ='';  // 查询为对象类型
+    queryTextJson = {
+      "key": selectKey   // 固定选择的key名
+    };
+    if (!this.state.redisOrsqlState) {       
+      // 拼接要查询的列    
+      let keysTemp = "";    
+      _(selectValue).forEach(function (value) {
+        keysTemp = keysTemp + value + ",";
+      });
+      keysTemp = keysTemp.slice(0, -1); // 去掉最后一个逗号 选择的字段COUNTRY,PERSON
+      const arr = keysTemp.split(',');  //  按照逗号分隔 ["COUNTRY", "PERSON"] 数组对象 
+      const strify = JSON.stringify(arr); // ["COUNTRY "," CITY "," PERSON "] 字符串
+     
+      queryTextJson.select = arr;  // queryTextJson追加select字段 
+      queryTextJson.alias= aliasTextJson;   // queryTextJson追加alias字段。别名初始化为原来列名
+
+    
+      // console.log(queryTextJson);     
+      // {alias: undefined
+      // key: "line_data2"
+      // select: (2) ["COUNTRY", "PERSON"]
+      // }
+ 
+
+      queryText= JSON.stringify(queryTextJson,null, 2) ;  // JSON对象转字符串,放入查询框的语句
+      
+      
+      
+      // console.log("最后的格式"); 
+      // console.log(queryTextJson);  // 符合查询框的格式要求
+      // {
+      //   "key": "line_data2",
+      //   "select": [
+      //     "*"
+      //   ],
+      //   "alias": {
+      //     "ID": "ID0",
+      //     "COUNTRY": "COUNTRY1",
+      //     "CITY": "CITY2",
+      //     "PERSON": "PERSON3",
+      //     "KIDS": "KIDS4",
+      //     "STATE": "STATE5"
+      //   }
+      // }
+
+
+
+ 
+    }
+   
+    this.updateQuery(queryText);
+  }
+
+  
+  // 自动添加高级查询的模板
+  addNewHelp = ()=> {
+    // 先设置queryText 为对象类型，方便插入数据
+    let queryTextDemo ='';
+    queryTextDemo = {
+      // "key": "{{ keyID }}",  // 带参数的查询
+      // "select": [
+      //   "ID",
+      //   "STATE",
+      //   "KIDS",
+      //   "PERSON"
+      // ],
+      // "extra": [
+      //   {
+      //     "expr": "{{ tioajian }}",
+      //     "name": "123"
+      //   }],
+      // "alias": {
+      //   "ID": "new_ID111",
+      //   "KIDS": "new_KIDS111",
+      //   "PERSON": "new_PERSON111"
+      // }
+    };
+    // 以下为示例数据
+    queryTextDemo.key="line_data";
+    queryTextDemo.select=["*"];
+    queryTextDemo.extra=[
+    {
+      "expr":"ID",
+      "name":"123"   
+    }];
+    queryTextDemo.alias={
+      "ID":"new_ID",
+      "KIDS":"new_KIDS"
+    };
+    this.updateQuery(JSON.stringify(queryTextDemo,null, 2));  // JSON对象转字符串,缩进
   }
 
 
@@ -404,6 +580,10 @@ class QueryEditor extends React.Component {
     const isExecuteDisabled = this.props.queryExecuting || !this.props.canExecuteQuery();
 
     const queryText = this.props.fileUpload ? this.props.queryText : this.state.queryText;
+    console.log('querytext');
+    console.log(queryText);
+
+    const values =  [{'text':'123'},{'text':'456'},{'text':'123'}];
 
     return (
       // 简单 高级切换
@@ -437,7 +617,15 @@ class QueryEditor extends React.Component {
             </div>
 
             <div className="editor__control">
-              <div className="form-inline d-flex">
+              <div className="form-inline d-flex">               
+                <Tooltip
+                  placement="top"
+                  title={<span>添加redis高级查询模板</span>}
+                >
+                  <button type="button" className="btn btn-default m-r-5" onClick={this.addNewHelp}>
+                    添加模板
+                  </button>
+                </Tooltip>               
                 <Tooltip
                   placement="top"
                   title={<span>添加新参数 (<i>{modKey} + P</i>)</span>}
@@ -606,7 +794,64 @@ class QueryEditor extends React.Component {
                 </div>
               ):(
                 <div>
-                  <Input placeholder={this.state.redisKeyState} onChange={this.redisKey} />
+                  <b style={{ fontSize: '14px' }}>从下拉框选择key:</b>
+                  <br />
+                  <Select defaultValue="选择key.." value={this.state.keyValue===''?"表名称":this.state.keyValue} style={{ width: 200 }} onChange={this.redisChange}>
+                    {_.map(this.props.schema, 'name').map((item) => {
+                    return <Option value={item}>{item}</Option>
+                  })}
+                  </Select>
+                  选择字段
+                  <TreeSelect
+                showSearch
+                style={{ width: '55%' }}
+                value={this.state.fieldValue}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="选择字段..."
+                allowClear
+                multiple
+                treeDefaultExpandAll
+                onChange={this.onReidsTreeChange}
+                  >
+                    <TreeNode TreeNode value="*" title="所有字段" />
+                    {
+                    _.flattenDeep(
+                      // eslint-disable-next-line func-names
+                      _.map(_.filter(this.props.schema, function (o) { return o.name === selectRedisName; }), 'columns')
+                    )
+                      .map((item) => {
+                        return <TreeNode value={item} title={item} />
+                      })
+                  }
+                  </TreeSelect>
+                  <br />
+                  <b style={{ fontSize: '14px' }}>从下拉框选择要修改的别名:</b>
+                  <br />
+                  <TreeSelect
+                showSearch
+                style={{ width: '55%' }}
+                value={this.state.nameValue}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                placeholder="选择字段..."
+                allowClear
+                treeDefaultExpandAll
+                onChange={this.onReidsNameChange}
+                  >
+                    <TreeNode value="-" title="-" />
+                    {
+                    _.flattenDeep(
+                      // eslint-disable-next-line func-names
+                      _.map(_.filter(this.props.schema, function (o) { return o.name === selectRedisName; }), 'columns')
+                    )
+                      .map((item) => {
+                        return <TreeNode value={item} title={item} />
+                      })
+                  }
+                  </TreeSelect>
+                  <Input placeholder="输入修改的别名" value={this.state.friendlyNameValue} onChange={this.friendlyNameChange} style={{ width: '30%' }} />
+                
+                  
+               
                 </div>
               )
               }

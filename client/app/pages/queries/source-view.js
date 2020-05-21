@@ -88,7 +88,7 @@ function QuerySourceCtrl(
         $rootScope.$broadcast('query-editor.command', 'focus');
       });
   };
-
+  
   $scope.onParametersUpdated = () => {
     // save if query clean
     // https://discuss.redash.io/t/query-unsaved-changes-indication/3302/5

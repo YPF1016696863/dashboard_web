@@ -37,19 +37,21 @@ function getDefaultColumnsOptions(columns) {
     date: 'datetime',
     datetime: 'datetime',
   };
-
+  
   return _.map(columns, (col, index) => ({
-    name: col.name,
+    name: col.friendly_name,
     type: col.type,
     displayAs: displayAs[col.type] || 'string',
     visible: true,
     order: 100000 + index,
-    title: getColumnCleanName(col.name),
+    // title: getColumnCleanName(col.friendly_name),   // title为表格的标题
+    title: col.friendly_name,    
     allowSearch: false,
     alignContent: getColumnContentAlignment(col.type),
     // `string` cell options
     allowHTML: true,
     highlightLinks: false,
+    friendly_name:col.friendly_name,
   }));
 }
 
@@ -80,8 +82,10 @@ function getDefaultFormatOptions(column, clientConfig) {
 }
 
 function wereColumnsReordered(queryColumns, visualizationColumns) {
-  queryColumns = _.map(queryColumns, col => col.name);
-  visualizationColumns = _.map(visualizationColumns, col => col.name);
+  queryColumns = _.map(queryColumns, col => col.friendly_name);
+  visualizationColumns = _.map(visualizationColumns, col => col.friendly_name);
+
+ 
 
   // Some columns may be removed - so skip them (but keep original order)
   visualizationColumns = _.filter(visualizationColumns, col => _.includes(queryColumns, col));
@@ -106,26 +110,26 @@ function getColumnsOptions(columns, visualizationColumns) {
   if ((wereColumnsReordered(columns, visualizationColumns))) {
     visualizationColumns = _.fromPairs(_.map(
       visualizationColumns,
-      (col, index) => [col.name, _.extend({}, col, { order: index })],
+      (col, index) => [col.friendly_name, _.extend({}, col, { order: index })],
     ));
   } else {
     visualizationColumns = _.fromPairs(_.map(
       visualizationColumns,
-      col => [col.name, _.omit(col, 'order')],
+      col => [col.friendly_name, _.omit(col, 'order')],
     ));
   }
 
-  _.each(options, col => _.extend(col, visualizationColumns[col.name]));
+  _.each(options, col => _.extend(col, visualizationColumns[col.friendly_name]));
 
   return _.sortBy(options, 'order');
 }
 
 function getColumnsToDisplay(columns, options, clientConfig) {
-  columns = _.fromPairs(_.map(columns, col => [col.name, col]));
+  columns = _.fromPairs(_.map(columns, col => [col.friendly_name, col]));
   let result = _.map(options, col => _.extend(
     getDefaultFormatOptions(col, clientConfig),
     col,
-    columns[col.name],
+    columns[col.friendly_name],
   ));
 
   result = _.map(result, col => _.extend(col, {
@@ -158,8 +162,12 @@ function GridRenderer(clientConfig) {
           const columns = $scope.queryResult.getColumns();
           const columnsOptions = getColumnsOptions(columns, _.extend({}, $scope.options).columns);
           $scope.gridColumns = getColumnsToDisplay(columns, columnsOptions, clientConfig);
+      
+
         }
       }
+
+
 
       $scope.$watch('queryResult && queryResult.getData()', (queryResult) => {
         if (queryResult) {
@@ -203,6 +211,9 @@ function GridEditor(clientConfig) {
             getColumnsOptions(columns, $scope.visualization.options.columns),
             col => _.extend(getDefaultFormatOptions(col, clientConfig), col),
           );
+        
+          console.log(44444);
+          console.log($scope.visualization.options.columns);   
         }
       });
 

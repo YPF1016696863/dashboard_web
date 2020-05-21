@@ -62,7 +62,7 @@ const { TextArea } = Input;
 const ButtonGroup = Button.Group;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
-class QueriesListTabs extends React.Component {
+class QueriesListTabsNew extends React.Component {
   state = {};
 
   componentDidMount() {
@@ -70,10 +70,10 @@ class QueriesListTabs extends React.Component {
       isLoaded: true,
       canEdit: false,
       query: null,
-      queryResultRaw: null,
+      // queryResultRaw: null,
       queryResult: null,
       // tableData: null,
-      showDeleteModal: false,
+      // showDeleteModal: false,
       runTimeLoading: false
     });
 
@@ -104,7 +104,7 @@ class QueriesListTabs extends React.Component {
       this.setState({
         canEdit: false,
         query: null,
-        queryResultRaw: null,
+        // queryResultRaw: null,
         // tableData: null,
         queryResult: null,
         runTimeLoading: false
@@ -114,10 +114,11 @@ class QueriesListTabs extends React.Component {
 
   getTemporaryQueryResult() {
     this.setState({
-      queryResultRaw: null,
+      // queryResultRaw: null,
       queryResult: null,
       runTimeLoading: true
     });
+  
 
     this.state.query
       .getQueryResultByText(-1, this.state.query.query)
@@ -125,14 +126,15 @@ class QueriesListTabs extends React.Component {
       .then(queryRes => {
         this.setState({
           runTimeLoading: false,
-          queryResultRaw: queryRes,
+          // queryResultRaw: queryRes,
           queryResult: this.normalizedTableData(queryRes.query_result)
         });
+
       })
       .catch(err => {
         this.setState({
           runTimeLoading: false,
-          queryResultRaw: null,
+          // queryResultRaw: null,
           // tableData: null,
           queryResult: null
         });
@@ -145,7 +147,7 @@ class QueriesListTabs extends React.Component {
       runTimeLoading: true,
       canEdit: false,
       query: null,
-      queryResultRaw: null,
+      // queryResultRaw: null,
       // tableData: null,
       queryResult: null
     });
@@ -156,7 +158,7 @@ class QueriesListTabs extends React.Component {
         runTimeLoading: false,
         canEdit: false,
         query: null,
-        queryResultRaw: null,
+        // queryResultRaw: null,
         // tableData: null,
         queryResult: 'empty'
       });
@@ -179,7 +181,7 @@ class QueriesListTabs extends React.Component {
           .then(queryRes => {
             this.setState({
               runTimeLoading: false,
-              queryResultRaw: queryRes,
+              // queryResultRaw: queryRes,
               queryResult: this.normalizedTableData(queryRes.query_result)
             });
           })
@@ -188,7 +190,7 @@ class QueriesListTabs extends React.Component {
               isLoaded: true,
               runTimeLoading: false,
               canEdit: false,
-              queryResultRaw: null,
+              // queryResultRaw: null,
               // tableData: null,
               queryResult: null
             });
@@ -200,45 +202,14 @@ class QueriesListTabs extends React.Component {
           runTimeLoading: false,
           canEdit: false,
           query: null,
-          queryResultRaw: null,
+          // queryResultRaw: null,
           // tableData: null,
           queryResult: null
         });
       });
   }
 
-  deleteQuery = () => {
-    if (this.state.query && this.state.query.id) {
-      if (
-        this.state.query.visualizations &&
-        this.state.query.visualizations.length > 1
-      ) {
-        this.setState({ showDeleteModal: true });
-      } else {
-        this.setState({ isLoaded: false });
-        Query.delete(
-          { id: this.state.query.id },
-          () => {
-            message.success('数据集' + this.state.query.name + '已删除.');
-            this.props.queriesTabCb(null);
-            this.setState({
-              isLoaded: true,
-              query: null,
-              queryResultRaw: null,
-              // tableData: null,
-              queryResult: null
-            });
-          },
-          () => {
-            message.error('无法删除,请刷新页面后重试.');
-            this.setState({ isLoaded: true });
-          }
-        );
-      }
-    } else {
-      message.error('无法删除,请刷新页面后重试.');
-    }
-  };
+
 
   handleDeleteOk = () => {
     this.setState({ isLoaded: false });
@@ -250,22 +221,19 @@ class QueriesListTabs extends React.Component {
         this.setState({
           isLoaded: true,
           query: null,
-          queryResultRaw: null,
+          // queryResultRaw: null,
           // tableData: null,
           queryResult: null,
-          showDeleteModal: false
+          // showDeleteModal: false
         });
       },
       () => {
         message.error('无法删除,请刷新页面后重试.');
-        this.setState({ isLoaded: true, showDeleteModal: false });
+        this.setState({ isLoaded: true });
       }
     );
   };
 
-  handleDeleteCancel = () => {
-    this.setState({ showDeleteModal: false });
-  };
 
   normalizedTableData(data) {
     if (data === 'empty') {
@@ -280,26 +248,6 @@ class QueriesListTabs extends React.Component {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  updateFriendlyName() {
-    // TODO: 触发这个函数的时候，数据已经保存到this.state.queryResultRaw中，需要使用api将数据保存到服务端，具体用法需要研究api使用，
-    message.error('暂时无法将数据集别名保存至服务器，该功能正在开发当中...');
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  friendlyNameOnChange(id, record, event) {
-    _.find(
-      _.get(this.state.queryResultRaw, 'query_result.data.columns', []),
-      record
-    ).friendly_name = event.target.value;
-    this.setState({
-      isLoaded: true,
-      queryResultRaw: this.state.queryResultRaw,
-      queryResult: this.normalizedTableData(
-        this.state.queryResultRaw.query_result
-      )
-    });
-  }
 
   saveQuery(customOptions, data) {
     const { query } = this.state;
@@ -356,6 +304,7 @@ class QueriesListTabs extends React.Component {
   }
 
   render() {
+   
     return (
       <>
         {!this.state.isLoaded && <LoadingState />}
@@ -366,28 +315,7 @@ class QueriesListTabs extends React.Component {
           />
         )}
         {this.state.isLoaded && this.state.query != null && (
-          <>
-            <Modal
-              title="以下可视化组件正在使用该数据集显示数据"
-              visible={this.state.showDeleteModal}
-              onOk={this.handleDeleteOk}
-              onCancel={this.handleDeleteCancel}
-              okButtonProps={{ type: 'danger' }}
-              okText="确认删除"
-              cancelText="取消"
-            >
-              {_.map(this.state.query.visualizations, visualization =>
-                visualization.type === 'TABLE' ? null : (
-                  <p>{visualization.name}</p>
-                )
-              )}
-              <Alert
-                message="确认"
-                description="删除该数据集会同时删除基于该数据集建立的所有可视化组件."
-                type="warning"
-                showIcon
-              />
-            </Modal>
+          <>         
             <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
               <div style={{ width: '50%', float: 'right' }}>
                 <b style={{ fontSize: '14px' }}>数据集描述:</b>
@@ -621,6 +549,7 @@ class QueriesListTabs extends React.Component {
                           dataSource={this.state.queryResult.rows}
                           pagination={{ pageSize: 10 }}                        
                         /> 
+                                            
                       )}
                     </div>
                   </>
@@ -634,20 +563,20 @@ class QueriesListTabs extends React.Component {
   }
 }
 
-QueriesListTabs.propTypes = {
+QueriesListTabsNew.propTypes = {
   queryId: PropTypes.string,
   queriesTabCb: PropTypes.func
 };
 
-QueriesListTabs.defaultProps = {
+QueriesListTabsNew.defaultProps = {
   queryId: null,
   queriesTabCb: a => {}
 };
 
 export default function init(ngModule) {
   ngModule.component(
-    'queriesListTabs',
-    react2angular(QueriesListTabs, Object.keys(QueriesListTabs.propTypes), [
+    'queriesListTabsNew',
+    react2angular(QueriesListTabsNew, Object.keys(QueriesListTabsNew.propTypes), [
       '$scope',
       'appSettings'
     ])
