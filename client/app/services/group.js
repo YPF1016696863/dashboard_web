@@ -27,6 +27,22 @@ function GroupService($resource, appSettings) {
     updateDataSource: {
       method: 'POST', url: appSettings.server.backendUrl + '/api/groups/:id/data_sources/:dataSourceId',
     },
+
+    dashboards: {
+      method: 'GET', cache: false, isArray: true, url: appSettings.server.backendUrl + '/api/groups/:id/dashboards',
+    },
+    addDashboard: {
+      method: 'POST', url: appSettings.server.backendUrl + '/api/groups/:id/dashboards',
+    },
+    removeDashboard: {
+      method: 'DELETE', url: appSettings.server.backendUrl + '/api/groups/:id/dashboards/:dashboard_id',
+    },
+    updateDashboardpermission: {
+      method: 'POST', url: appSettings.server.backendUrl + '/api/groups/:id/dashboards/:dashboard_id',
+    },
+    groupsByDashboardId: {
+      method: 'GET', cache: false, isArray: true, url: appSettings.server.backendUrl + '/api/groups/:id/groups',
+    },
   };
   return $resource(appSettings.server.backendUrl + '/api/groups/:id', { id: '@id' }, actions);
 }

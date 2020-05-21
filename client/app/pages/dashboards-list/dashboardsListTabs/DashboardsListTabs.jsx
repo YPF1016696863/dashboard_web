@@ -11,6 +11,8 @@ import {
   Row,
   Col,
   Tree,
+  Table,
+  Tag,
   Input,
   Checkbox,
   notification,
@@ -43,12 +45,14 @@ import ItemsTable, {
 } from '@/components/items-list/components/ItemsTable';
 
 import { Dashboard } from '@/services/dashboard';
+import { Group } from '@/services/group';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
 
 import { DashboardsPreview } from '@/components/dashboards-preview/dashboards-preview';
+import UserGroupPermissionDialog from '@/components/groups/UserGroupPermissionDialog';
 import { durationHumanize } from '@/filters';
 import PromiseRejectionError from '@/lib/promise-rejection-error';
 import { navigateToWithSearch } from '@/services/navigateTo';
@@ -64,6 +68,7 @@ const emptyChartImg = '/static/images/emptyChart.png';
 const API_SHARE_URL =
   appSettingsConfig.server.backendUrl + '/api/dashboards/{id}/share';
 const DASHBOARD_SHARE_URL = window.location.origin + '/public/dashboards/';
+
 let DashboardsPreviewDOM;
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
@@ -83,6 +88,10 @@ class DashboardsListTabs extends React.Component {
           saving: false,
           disabled: true
         }
+      },
+      permissions: {
+        loading: false,
+        groups: null
       }
     });
 
@@ -142,6 +151,7 @@ class DashboardsListTabs extends React.Component {
         ) {
           message.warning('该可视化仪表盘由其他用户创建.');
         }
+        this.getGroupsWithPermission();
       },
       rejection => {
         this.setState({
@@ -307,6 +317,40 @@ class DashboardsListTabs extends React.Component {
     }
   };
 
+  getGroupsWithPermission = () => {
+    const { dashboard } = this.state;
+    this.setState({
+      permissions: {
+        loading: true,
+        groups: null
+      }
+    });
+
+    Group.groupsByDashboardId({ id: this.state.dashboard.id }, result => {
+      this.setState({
+        permissions: {
+          loading: false,
+          groups: _.map(result, group => {
+            return {
+              key: group.id,
+              group: group.name,
+              groupid: group.id,
+              viewonly: group.view_only
+            }
+          })
+        }
+      });
+    }, err => {
+      message.warning('无法获取该仪表板分组权限设置.');
+      this.setState({
+        permissions: {
+          loading: false,
+          groups: null
+        }
+      });
+    });
+  }
+
   render() {
     const { slugId } = this.props;
     return (
@@ -325,7 +369,7 @@ class DashboardsListTabs extends React.Component {
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
           <div style={{ paddingTop: '10px' }}>
-            <div style={{ width: '50%', float: 'left',paddingLeft: '10px'}}>
+            <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
               <Descriptions title="可视化仪表盘信息">
                 <Descriptions.Item label="更新时间">
                   {this.state.dashboard.updated_at}
@@ -349,6 +393,7 @@ class DashboardsListTabs extends React.Component {
               <b style={{ fontSize: '14px' }}>可视化面板共享设置:</b>
               <div style={{ paddingRight: '10px' }}>
                 <Form>
+                  <hr />
                   <Form.Item
                     label="可视化面板对其他人可见"
                     labelAlign="left"
@@ -384,6 +429,7 @@ class DashboardsListTabs extends React.Component {
                       }}
                     />
                   </Form.Item>
+                  <hr />
                   <Form.Item
                     label="共享可视化面板"
                     labelAlign="left"
@@ -408,12 +454,100 @@ class DashboardsListTabs extends React.Component {
                     <InputWithCopy value={this.state.runtime.share.public} />
                   </Form.Item>
                 </Form>
+                <hr />
               </div>
+              <p style={{ fontSize: '14px' }}>可视化仪表板权限设定:</p>
+              <p>
+                <Table
+                  locale={{ emptyText: "暂无数据" }}
+                  tableLayout="fixed"
+                  columns={[
+                    {
+                      title: '用户分组',
+                      dataIndex: 'group',
+                      key: 'group',
+                      render: text => text,
+                    },
+                    {
+                      title: '只读',
+                      dataIndex: 'viewonly',
+                      key: 'viewonly',
+                      render: viewonly => (
+                        <Tag color={viewonly ? 'blue' : 'green'}>
+                          {viewonly ? '只读' : '读写'}
+                        </Tag>
+                      )
+                    },
+                    {
+                      title: '操作',
+                      key: 'action',
+                      render: (text, record) => {
+                        return (
+                          <span>
+                            <Switch
+                              checkedChildren="读写"
+                              unCheckedChildren="只读"
+                              size="small"
+                              checked={!record.viewonly}
+                              onChange={
+                                (checked, event) => {
+                                  this.setState({
+                                    permissions: {
+                                      loading: true
+                                    }
+                                  });
+                                  Group.updateDashboardpermission({
+                                    id: record.groupid, dashboard_id: this.state.dashboard.id
+                                  },
+                                    { view_only: !checked }, () => {
+                                      this.getGroupsWithPermission();
+                                    }, err => {
+                                      message.error("修改读写权限失败.");
+                                    });
 
-
+                                }
+                              }
+                            />
+                            <Divider type="vertical" />
+                            <Button
+                              size="small"
+                              type="link"
+                              onClick={e => {
+                                this.setState({
+                                  permissions: {
+                                    loading: true
+                                  }
+                                });
+                                Group.removeDashboard({ id: record.groupid, dashboard_id: this.state.dashboard.id },
+                                  () => {
+                                    this.getGroupsWithPermission();
+                                    message.success("删除用户分组.");
+                                  }, err => {
+                                    message.error("删除用户分组权限失败.");
+                                  });
+                              }}
+                            >
+                              <Icon type="delete" />删除
+                            </Button>
+                          </span>
+                        )
+                      },
+                    }
+                  ]}
+                  dataSource={this.state.permissions.groups}
+                  loading={this.state.permissions.loading}
+                />
+              </p>
+              <div align="right">
+                <UserGroupPermissionDialog
+                  component={this.state.dashboard}
+                  callback={() => { this.getGroupsWithPermission();}}
+                />
+              </div>
+              <hr />
             </div>
 
-            <div style={{ width: '50%', float: 'right',paddingRight: '10px',}}>
+            <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
               <b style={{ fontSize: '14px' }}>可视化仪表板描述:</b>
               <TextArea
                 disabled={!this.state.dashboard.can_edit}
@@ -428,7 +562,8 @@ class DashboardsListTabs extends React.Component {
                   });
                 }}
               />
-              <div align="right">
+
+              <div align="right" style={{ paddingTop: '10px' }}>
                 <Button
                   disabled={!this.state.dashboard.can_edit}
                   type="primary"
@@ -451,7 +586,7 @@ class DashboardsListTabs extends React.Component {
               >
                 <Icon type="dashboard" />
                 预览可视化面板
-              </Button>       
+              </Button>
               <br />
               <br />
               <b style={{ fontSize: '14px' }}>其他设置:</b>
