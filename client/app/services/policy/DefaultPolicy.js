@@ -38,7 +38,7 @@ export default class DefaultPolicy {
   }
 
   isCreateDashboardEnabled() {
-    return currentUser.hasPermission('create_dashboard');
+    return true; // currentUser.hasPermission('create_dashboard');
   }
 
   canCreateAlert() {

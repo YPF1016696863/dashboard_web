@@ -141,10 +141,13 @@ class DashboardsListSearch extends React.Component {
       data,
       dashboard => {
         message.success('可视化面板信息更新成功');
+        this.setState({ loading: false });
         this.reload(true);
       },
       error => {
         message.error('可视化面板更新失败', '出现错误');
+        this.setState({ loading: false });
+        this.reload(true);
       }
     );
   };
@@ -353,15 +356,21 @@ class DashboardsListSearch extends React.Component {
                             >
                               {this.state.editMode &&
                               this.state.selected &&
-                              this.state.selected === item.slug ? (
+                              (this.state.selected === item.slug && !this.state.dashboard.readOnly()) ? (
                                 <Input
                                   autoFocus
                                   size="small"
                                   value={this.state.rename}
                                   onFocus={event => {
+                                    if(this.state.dashboard.readOnly()) {
+                                      return;
+                                    }
                                     this.setState({ rename: item.name });
                                   }}
                                   onChange={event => {
+                                    if(this.state.dashboard.readOnly()) {
+                                      return;
+                                    }
                                     this.setState(
                                       {
                                         rename: event.target.value
@@ -370,6 +379,9 @@ class DashboardsListSearch extends React.Component {
                                     );
                                   }}
                                   onBlur={() => {
+                                    if(this.state.dashboard.readOnly()) {
+                                      return;
+                                    }
                                     this.setState({ editMode: false });
                                     if (this.state.rename === item.name) {
                                       console.log('NO CHANGE');
@@ -381,6 +393,9 @@ class DashboardsListSearch extends React.Component {
                                     }
                                   }}
                                   onPressEnter={() => {
+                                    if(this.state.dashboard.readOnly()) {
+                                      return;
+                                    }
                                     this.setState({ editMode: false });
                                     if (this.state.rename === item.name) {
                                       console.log('NO CHANGE');

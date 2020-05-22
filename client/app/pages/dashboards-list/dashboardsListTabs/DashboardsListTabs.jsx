@@ -381,7 +381,7 @@ class DashboardsListTabs extends React.Component {
                   {this.state.dashboard.user.name}
                 </Descriptions.Item>
                 <Descriptions.Item label="可编辑">
-                  {this.state.dashboard.can_edit ? '是' : '否'}
+                  {!this.state.dashboard.readOnly() ? '是' : '否'}
                 </Descriptions.Item>
                 <Descriptions.Item label="面板引用ID">
                   {this.state.dashboard.slug}
@@ -401,7 +401,7 @@ class DashboardsListTabs extends React.Component {
                     wrapperCol={{ span: 4, offset: 10 }}
                   >
                     <Switch
-                      disabled={!this.state.dashboard.can_edit}
+                      disabled={this.state.dashboard.readOnly()}
                       checkedChildren="开"
                       unCheckedChildren="关"
                       defaultChecked={!this.state.dashboard.is_draft}
@@ -437,7 +437,7 @@ class DashboardsListTabs extends React.Component {
                     wrapperCol={{ span: 4, offset: 10 }}
                   >
                     <Switch
-                      disabled={this.state.runtime.share.disabled || !this.state.dashboard.can_edit}
+                      disabled={this.state.runtime.share.disabled || this.state.dashboard.readOnly()}
                       checkedChildren="开"
                       unCheckedChildren="关"
                       checked={this.state.dashboard.publicAccessEnabled}
@@ -456,101 +456,110 @@ class DashboardsListTabs extends React.Component {
                 </Form>
                 <hr />
               </div>
-              <p style={{ fontSize: '14px' }}>可视化仪表板权限设定:</p>
-              <p>
-                <Table
-                  locale={{ emptyText: "暂无数据" }}
-                  tableLayout="fixed"
-                  columns={[
-                    {
-                      title: '用户分组',
-                      dataIndex: 'group',
-                      key: 'group',
-                      render: text => text,
-                    },
-                    {
-                      title: '只读',
-                      dataIndex: 'viewonly',
-                      key: 'viewonly',
-                      render: viewonly => (
-                        <Tag color={viewonly ? 'blue' : 'green'}>
-                          {viewonly ? '只读' : '读写'}
-                        </Tag>
-                      )
-                    },
-                    {
-                      title: '操作',
-                      key: 'action',
-                      render: (text, record) => {
-                        return (
-                          <span>
-                            <Switch
-                              checkedChildren="读写"
-                              unCheckedChildren="只读"
-                              size="small"
-                              checked={!record.viewonly}
-                              onChange={
-                                (checked, event) => {
-                                  this.setState({
-                                    permissions: {
-                                      loading: true
-                                    }
-                                  });
-                                  Group.updateDashboardpermission({
-                                    id: record.groupid, dashboard_id: this.state.dashboard.id
-                                  },
-                                    { view_only: !checked }, () => {
-                                      this.getGroupsWithPermission();
-                                    }, err => {
-                                      message.error("修改读写权限失败.");
-                                    });
+              {
+                currentUser.isAdmin ? (
+                  <>
+                    <p style={{ fontSize: '14px' }}>可视化仪表板权限设定:</p>
+                    <p>
+                      <Table
+                        locale={{ emptyText: "暂无数据" }}
+                        tableLayout="fixed"
+                        columns={[
+                          {
+                            title: '用户分组',
+                            dataIndex: 'group',
+                            key: 'group',
+                            render: text => text,
+                          },
+                          {
+                            title: '只读',
+                            dataIndex: 'viewonly',
+                            key: 'viewonly',
+                            render: viewonly => (
+                              <Tag color={viewonly ? 'blue' : 'green'}>
+                                {viewonly ? '只读' : '读写'}
+                              </Tag>
+                            )
+                          },
+                          {
+                            title: '操作',
+                            key: 'action',
+                            render: (text, record) => {
+                              return (
+                                <span>
+                                  <Switch
+                                    checkedChildren="读写"
+                                    unCheckedChildren="只读"
+                                    size="small"
+                                    checked={!record.viewonly}
+                                    onChange={
+                                      (checked, event) => {
+                                        this.setState({
+                                          permissions: {
+                                            loading: true
+                                          }
+                                        });
+                                        Group.updateDashboardpermission({
+                                          id: record.groupid, dashboard_id: this.state.dashboard.id
+                                        },
+                                          { view_only: !checked }, () => {
+                                            this.getGroupsWithPermission();
+                                          }, err => {
+                                            message.error("修改读写权限失败.");
+                                          });
 
-                                }
-                              }
-                            />
-                            <Divider type="vertical" />
-                            <Button
-                              size="small"
-                              type="link"
-                              onClick={e => {
-                                this.setState({
-                                  permissions: {
-                                    loading: true
-                                  }
-                                });
-                                Group.removeDashboard({ id: record.groupid, dashboard_id: this.state.dashboard.id },
-                                  () => {
-                                    this.getGroupsWithPermission();
-                                    message.success("删除用户分组.");
-                                  }, err => {
-                                    message.error("删除用户分组权限失败.");
-                                  });
-                              }}
-                            >
-                              <Icon type="delete" />删除
-                            </Button>
-                          </span>
-                        )
-                      },
-                    }
-                  ]}
-                  dataSource={this.state.permissions.groups}
-                  loading={this.state.permissions.loading}
-                />
-              </p>
-              <div align="right">
-                <UserGroupPermissionDialog
-                  component={this.state.dashboard}
-                  callback={() => { this.getGroupsWithPermission();}}
-                />
-              </div>
-              <hr />
+                                      }
+                                    }
+                                  />
+                                  <Divider type="vertical" />
+                                  <Button
+                                    size="small"
+                                    type="link"
+                                    onClick={e => {
+                                      this.setState({
+                                        permissions: {
+                                          loading: true
+                                        }
+                                      });
+                                      Group.removeDashboard(
+                                        { 
+                                          id: record.groupid, dashboard_id: this.state.dashboard.id 
+                                        },
+                                        () => {
+                                          this.getGroupsWithPermission();
+                                          message.success("删除用户分组.");
+                                        }, err => {
+                                          message.error("删除用户分组权限失败.");
+                                        });
+                                    }}
+                                  >
+                                    <Icon type="delete" />删除
+                                  </Button>
+                                </span>
+                              )
+                            },
+                          }
+                        ]}
+                        dataSource={this.state.permissions.groups}
+                        loading={this.state.permissions.loading}
+                      />
+                    </p>
+                    <div align="right">
+                      <UserGroupPermissionDialog
+                        component={this.state.dashboard}
+                        callback={() => { this.getGroupsWithPermission(); }}
+                      />
+                    </div>
+                    <hr />
+                  </>
+                ) : null
+              }
             </div>
 
             <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
               <b style={{ fontSize: '14px' }}>可视化仪表板描述:</b>
               <TextArea
-                disabled={!this.state.dashboard.can_edit}
+                disabled={this.state.dashboard.readOnly()}
                 placeholder="可视化仪表板描述"
                 rows={6}
                 value={this.state.dashboard.description}
@@ -565,7 +574,7 @@ class DashboardsListTabs extends React.Component {
 
               <div align="right" style={{ paddingTop: '10px' }}>
                 <Button
-                  disabled={!this.state.dashboard.can_edit}
+                  disabled={this.state.dashboard.readOnly()}
                   type="primary"
                   onClick={e => {
                     this.updateDashboard({
@@ -589,31 +598,37 @@ class DashboardsListTabs extends React.Component {
               </Button>
               <br />
               <br />
-              <b style={{ fontSize: '14px' }}>其他设置:</b>
-              <br />
-              <Button
-                type="primary"
-                disabled={slugId == null || !this.state.dashboard.can_edit}
-                onClick={e => {
-                  navigateToWithSearch('dashboards/' + slugId);
-                }}
-              >
-                <i className="fa fa-edit m-r-5" />
-                编辑可视化面板
-              </Button>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <Popconfirm
-                placement="topLeft"
-                title="确认删除可视化仪表盘?"
-                onConfirm={this.deleteDashboard}
-                okText="确认"
-                cancelText="取消"
-              >
-                <Button type="danger" disabled={!this.state.dashboard.can_edit}>
-                  <Icon type="delete" />
-                  删除可视化面板
-                </Button>
-              </Popconfirm>
+              {
+                !this.state.dashboard.readOnly() ? (
+                  <>
+                    <b style={{ fontSize: '14px' }}>其他设置:</b>
+                    <br />
+                    <Button
+                      type="primary"
+                      disabled={slugId == null || this.state.dashboard.readOnly()}
+                      onClick={e => {
+                        navigateToWithSearch('dashboards/' + slugId);
+                      }}
+                    >
+                      <i className="fa fa-edit m-r-5" />
+                      编辑可视化面板
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Popconfirm
+                      placement="topLeft"
+                      title="确认删除可视化仪表盘?"
+                      onConfirm={this.deleteDashboard}
+                      okText="确认"
+                      cancelText="取消"
+                    >
+                      <Button type="danger" disabled={this.state.dashboard.readOnly()}>
+                        <Icon type="delete" />
+                        删除可视化面板
+                      </Button>
+                    </Popconfirm>
+                  </>
+                ) : null
+              }
             </div>
           </div>
         )}
