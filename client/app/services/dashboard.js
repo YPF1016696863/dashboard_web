@@ -124,18 +124,17 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
 
   resource.prototype.readOnly = function readOnly() {
 
-    if (currentUser.isAdmin) {
-      return false;
-    }
-
-    if (this.user_id === this.created_by) {
-      return false;
-    }
-
-    const user = this.user;
-    const userGroup = this.user.groups;
-
     try {
+      if (currentUser.isAdmin) {
+        return false;
+      }
+
+      if (this.user_id === this.created_by.id) {
+        return false;
+      }
+
+      const user = this.user;
+      const userGroup = this.user.groups;
       const userDashboardGroup = _.filter(this.groups, group => _.find(userGroup,o => o === group.group_id));
       return !_.some(userDashboardGroup,group => !group.view_only);
     } catch{

@@ -378,7 +378,7 @@ class DashboardsListTabs extends React.Component {
                   {this.state.dashboard.version}
                 </Descriptions.Item>
                 <Descriptions.Item label="创建者">
-                  {this.state.dashboard.user.name}
+                  {this.state.dashboard.created_by.name}
                 </Descriptions.Item>
                 <Descriptions.Item label="可编辑">
                   {!this.state.dashboard.readOnly() ? '是' : '否'}
