@@ -218,11 +218,12 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/groups/:groupId',
-      title: 'Group Members',
+      title: '组设置-组成员管理',
       key: 'users',
     },
   ], {
     reloadOnSearch: false,
+    layout: 'settings',
     template: '<settings-screen><page-group-members on-error="handleError"></page-group-members></settings-screen>',
     controller($scope, $exceptionHandler) {
       'ngInject';

@@ -15,7 +15,9 @@ import {
   Popover,
   Empty,
   BackTop,
-  Tabs
+  Tabs,
+  Modal,
+  Alert
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -45,8 +47,8 @@ import './queries-search.css';
 import { policy } from '@/services/policy';
 import notification from '@/services/notification';
 import { navigateToWithSearch } from '@/services/navigateTo';
-import {CreateNewFolder} from "@/components/create-new-folder/CreateNewFolder";
-import {MoveToFolder} from "@/components/move-to-folder/MoveToFolder";
+import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
+import { MoveToFolder } from '@/components/move-to-folder/MoveToFolder';
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -58,7 +60,8 @@ class QueriesListSearch extends React.Component {
     selected: null,
     all: null,
     filtered: null,
-    loading: true
+    loading: true,
+    visible: false
   };
 
   componentDidMount() {
@@ -83,6 +86,18 @@ class QueriesListSearch extends React.Component {
       this.reload();
     }
   }
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  hideModal = () => {
+    this.setState({
+      visible: false
+    });
+  };
 
   reload(holdTab) {
     let queryid = null;
@@ -199,6 +214,24 @@ class QueriesListSearch extends React.Component {
                       数据列表:
                     </div>
                   </Col>
+                  <Col span={11} align="right">
+                    <Modal
+                      destroyOnClose
+                      title="新建数据集"
+                      visible={this.state.visible}
+                      onOk={this.hideModal}
+                      onCancel={this.hideModal}
+                      okText="确认"
+                      cancelText="取消"
+                    >
+                      <Alert
+                        message="错误"
+                        description="无法创建数据集，原因：权限受限"
+                        type="warning"
+                        showIcon
+                      />
+                    </Modal>
+                  </Col>
                 </Row>
                 <Row>
                   <Col span={18}>
@@ -253,7 +286,11 @@ class QueriesListSearch extends React.Component {
                   type="link"
                   style={{ color: '#3d4d66' }}
                   onClick={e => {
-                    navigateToWithSearch('/queries/new');
+                    if (policy.isCreateQueryEnabled()) {
+                      navigateToWithSearch('/queries/new');
+                    } else {
+                      this.showModal();
+                    }
                   }}
                 >
                   <Icon type="plus-square" style={{ color: '#13cd66' }} />

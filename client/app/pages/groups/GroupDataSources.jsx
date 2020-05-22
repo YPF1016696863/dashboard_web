@@ -252,11 +252,12 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/groups/:groupId/data_sources',
-      title: 'Group Data Sources',
+      title: '组设置-数据源管理',
       key: 'datasources',
     },
   ], {
     reloadOnSearch: false,
+    layout: 'settings',
     template: '<settings-screen><page-group-data-sources on-error="handleError"></page-group-data-sources></settings-screen>',
     controller($scope, $exceptionHandler) {
       'ngInject';

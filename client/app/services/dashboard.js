@@ -122,6 +122,28 @@ function DashboardService($resource, $http, $location, currentUser, Widget, dash
     return currentUser.canEdit(this) || this.can_edit;
   };
 
+  resource.prototype.readOnly = function readOnly() {
+
+    if (currentUser.isAdmin) {
+      return false;
+    }
+
+    if (this.user_id === this.created_by) {
+      return false;
+    }
+
+    const user = this.user;
+    const userGroup = this.user.groups;
+
+    try {
+      const userDashboardGroup = _.filter(this.groups, group => _.find(userGroup,o => o === group.group_id));
+      return !_.some(userDashboardGroup,group => !group.view_only);
+    } catch{
+      return true;
+    }
+  
+  };
+
   resource.prototype.calculateNewWidgetPosition = function calculateNewWidgetPosition(widget) {
     const width = _.extend({ sizeX: dashboardGridOptions.defaultSizeX }, _.extend({}, widget.options).position).sizeX;
 
