@@ -140,6 +140,7 @@ function QueryViewCtrl(
   };
 
   $scope.executeQuery = () => {
+    // console.log("点击执行后进入");
     if (!$scope.canExecuteQuery()) {
       return;
     }

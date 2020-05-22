@@ -393,7 +393,7 @@ class QueryEditor extends React.Component {
 
   redisKey=(e)=>{
     this.setState({ redisKeyState: e.target.value }); 
-    console.log(e.target.value);
+    // console.log(e.target.value);
     redisKey=e.target.value;
     this.marge(selectTableName, selectKeysArray, selectLimit,conditionZiduanKV,conditionKV,fuhaoKV,andorKV);  
   }

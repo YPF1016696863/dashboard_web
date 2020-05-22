@@ -111,6 +111,8 @@ function EditParameterSettingsDialog(props) {
   }
 
   function onConfirm(e) {
+    // console.log(initialQuery);// 参数查询的信息 id
+    // console.log(param);// 参数查询的信息 id
     // update title to default
     if (!param.title) {
       // forced to do this cause param won't update in time for save
@@ -191,7 +193,7 @@ function EditParameterSettingsDialog(props) {
             />
           </Form.Item>
         )}
-        {param.type === 'query' && (
+        {param.type === 'query' && ( 
           <Form.Item label="Query" help="选择查询以从加载下拉框" {...formItemProps}>
             <QuerySelector
               selectedQuery={initialQuery}

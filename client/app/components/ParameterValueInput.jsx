@@ -1,16 +1,21 @@
 import React from 'react';
+import Loader from 'react-loader';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import Select from 'antd/lib/select';
 import Input from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
+import { Query } from '@/services/query';
 import { DateInput } from './DateInput';
 import { DateRangeInput } from './DateRangeInput';
 import { DateTimeInput } from './DateTimeInput';
 import { DateTimeRangeInput } from './DateTimeRangeInput';
 import { QueryBasedParameterInput } from './QueryBasedParameterInput';
 
+
 const { Option } = Select;
+let fatherParameter=[];
+let id=0;
 
 export class ParameterValueInput extends React.Component {
   static propTypes = {
@@ -33,6 +38,43 @@ export class ParameterValueInput extends React.Component {
     className: '',
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      fatherParameterState: [], 
+      loader:false
+    };
+  }
+
+  componentDidMount(){
+    id = this.props.parameter.queryId;
+    // console.log(id);
+
+   Query.query({ id })
+      .$promise.then(query => {
+        query
+          .getQueryResultPromise()
+          .then(queryRes => {
+            fatherParameter = queryRes.query_result.data.rows;// 后执行
+            if(fatherParameter!==[]&&fatherParameter!==undefined&&fatherParameter!==null){
+              this.setState({ 
+                fatherParameterState: fatherParameter ,
+                loader:true
+              });
+              // console.log(this.state.fatherParameterState);
+            }
+            
+          } 
+          ) 
+          .catch(err => {
+            console.log(err);
+          }); 
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+ 
   renderDateTimeWithSecondsInput() {
     const { value, onSelect } = this.props;
     return (
@@ -44,7 +86,7 @@ export class ParameterValueInput extends React.Component {
       />
     );
   }
-
+  
   renderDateTimeInput() {
     const { value, onSelect } = this.props;
     return (
@@ -118,17 +160,28 @@ export class ParameterValueInput extends React.Component {
     );
   }
 
+ 
+
   renderQueryBasedInput() {
     const { value, onSelect, queryId, parameter } = this.props;
-    return (
-      <QueryBasedParameterInput
-        className={this.props.className}
-        parameter={parameter}
-        value={value}
-        queryId={queryId}
-        onSelect={onSelect}
-      />
-    );
+    // console.log(this.props.parameter.queryId);// 单个值 传入的参数 这里卡住 没有值 读取不了东西
+    // id = this.props.parameter.queryId;// 查找父级的数据集 
+  // console.log(fatherParameter);
+    // 上下级id号 上级value数组
+    return  (
+      this.state.loader?(
+        <QueryBasedParameterInput
+          className={this.props.className}
+          parameter={parameter}
+          value={value}
+          queryId={queryId}
+          onSelect={onSelect}
+          fatherParameter={this.state.fatherParameterState}
+        />
+        ):(<div>加载中...</div>)
+      )
+      
+      
   }
 
   renderNumberInput() {
@@ -156,6 +209,11 @@ export class ParameterValueInput extends React.Component {
 
   render() {
     const { type } = this.props;
+
+
+    // this.q();
+
+
     switch (type) {
       case 'datetime-with-seconds': return this.renderDateTimeWithSecondsInput();
       case 'datetime-local': return this.renderDateTimeInput();

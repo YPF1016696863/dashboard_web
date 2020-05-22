@@ -13,6 +13,7 @@ export class QueryBasedParameterInput extends React.Component {
     queryId: PropTypes.number,
     onSelect: PropTypes.func,
     className: PropTypes.string,
+    fatherParameter:PropTypes.any,
   };
 
   static defaultProps = {
@@ -21,6 +22,7 @@ export class QueryBasedParameterInput extends React.Component {
     queryId: null,
     onSelect: () => {},
     className: '',
+    fatherParameter:[]
   };
 
   constructor(props) {
@@ -43,10 +45,14 @@ export class QueryBasedParameterInput extends React.Component {
   }
 
   async _loadOptions(queryId) {
+    console.log(this.props.fatherParameter);
+
     if (queryId && (queryId !== this.state.queryId)) {
       this.setState({ loading: true });
-      const options = await this.props.parameter.loadDropdownValues();
-
+      const options = await this.props.parameter.loadDropdownValues()
+      .catch(err => {
+        console.log(err);
+      }); ;
       // stale queryId check
       if (this.props.queryId === queryId) {
         this.setState({ options, loading: false });
@@ -62,18 +68,26 @@ export class QueryBasedParameterInput extends React.Component {
   render() {
     const { className, value, onSelect } = this.props;
     const { loading, options } = this.state;
+    
+    console.log(this.props.fatherParameter);
     return (
       <span>
         <Select
           className={className}
-          disabled={loading || (options.length === 0)}
+          disabled={loading}
+          // || (options.length === 0)
           loading={loading}
           defaultValue={'' + value}
           onChange={onSelect}
           dropdownMatchSelectWidth={false}
           dropdownClassName="ant-dropdown-in-bootstrap-modal"
         >
-          {options.map(option => (<Option value={option.value} key={option.value}>{option.name}</Option>))}
+          {/* {options.map(option => (<Option value={option.value} key={option.value}>{option.name}</Option>))} */}
+          {this.props.fatherParameter.map(
+            (item) => (<Option value={item.KEYID} key={item.KEYID}>{item.KEYID}</Option>
+            )
+          )}
+        
         </Select>
       </span>
     );

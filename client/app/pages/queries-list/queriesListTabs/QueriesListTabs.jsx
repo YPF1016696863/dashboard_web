@@ -162,7 +162,7 @@ class QueriesListTabs extends React.Component {
       });
       return;
     }
-
+    
     Query.query({ id })
       .$promise.then(query => {
         this.setState({
@@ -174,6 +174,7 @@ class QueriesListTabs extends React.Component {
             visualization => visualization.type === 'TABLE'
           )
         });
+        // console.log(query);
         query
           .getQueryResultPromise()
           .then(queryRes => {

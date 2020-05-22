@@ -149,6 +149,7 @@ export function QuerySelector(props) {
       >
         {searchResults && searchResults.map((q) => {
           const disabled = q.is_draft;
+          // console.log(q);查询的id信息
           return (
             <Option value={q.id} key={q.id} disabled={disabled}>
               {q.name}{' '}
