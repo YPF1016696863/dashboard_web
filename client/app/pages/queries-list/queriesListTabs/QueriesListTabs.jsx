@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Tree,
+  Tag,
   Table,
   Alert,
   Empty,
@@ -46,11 +47,12 @@ import ItemsTable, {
 } from '@/components/items-list/components/ItemsTable';
 
 import { Query } from '@/services/query';
+import { Group } from '@/services/group';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
-
+import UserGroupPermissionDialog from '@/components/groups/UserGroupPermissionDialog';
 import notification from '@/services/notification';
 import { navigateToWithSearch } from '@/services/navigateTo';
 import { TablePreview } from '@/components/table-preview/table-preview';
@@ -74,7 +76,11 @@ class QueriesListTabs extends React.Component {
       queryResult: null,
       tableData: null,
       showDeleteModal: false,
-      runTimeLoading: false
+      runTimeLoading: false,
+      permissions: {
+        loading: false,
+        groups: null
+      }
     });
 
     if (this.queryId !== null) {
@@ -147,7 +153,7 @@ class QueriesListTabs extends React.Component {
       query: null,
       queryResultRaw: null,
       tableData: null,
-      queryResult: null
+      queryResult: null,
     });
     if (!id) {
       this.setState({
@@ -157,78 +163,57 @@ class QueriesListTabs extends React.Component {
         query: null,
         queryResultRaw: null,
         tableData: null,
-        queryResult: 'empty'
+        queryResult: 'empty',
       });
       return;
     }
 
-    
-
     Query.query({ id })
-      .$promise.then(query => {
+      .$promise.then((query) => {
         this.setState({
           query,
           isLoaded: true,
           canEdit: currentUser.canEdit(query) || query.can_edit,
           tableData: _.find(
             query.visualizations,
-            visualization => visualization.type === 'TABLE'
-          )
+            (visualization) => visualization.type === 'TABLE'
+          ),
         });
-
-        
         query
-        .getQueryResultByText(-1, this.state.query.query)
-        .toPromise()
-        .then(queryRes => {
-          this.setState({
-            runTimeLoading: false,
-            queryResultRaw: queryRes,
-            queryResult: this.normalizedTableData(queryRes.query_result)
+          .getQueryResultPromise()
+          .then((queryRes) => {
+            this.setState({
+              runTimeLoading: false,
+              queryResultRaw: queryRes,
+              queryResult: this.normalizedTableData(queryRes.query_result),
+            });
+            this.getGroupsWithPermission();
+          })
+          .catch((err) => {
+            query
+              .getQueryResultByText(-1, this.state.query.query)
+              .toPromise()
+              .then((queryRes) => {
+                this.setState({
+                  runTimeLoading: false,
+                  queryResultRaw: queryRes,
+                  queryResult: this.normalizedTableData(queryRes.query_result),
+                });
+                this.getGroupsWithPermission();
+              })
+              .catch((ex) => {
+                this.setState({
+                  isLoaded: true,
+                  runTimeLoading: false,
+                  canEdit: false,
+                  queryResultRaw: null,
+                  // tableData: null,
+                  queryResult: null,
+                });
+              });
           });
-          // console.log(queryRes);
-          // console.log(queryRes.query_result.data);
-        })
-        .catch(err => {
-          // console.log(err);
-          this.setState({
-            isLoaded: true,
-            runTimeLoading: false,
-            canEdit: false,
-            queryResultRaw: null,
-            // tableData: null,
-            queryResult: null
-          });
-        });
-
-
-        // query
-        //   .getQueryResultPromise()
-        //   .then(queryRes => {
-        //     this.setState({
-        //       runTimeLoading: false,
-        //       queryResultRaw: queryRes,
-        //       queryResult: this.normalizedTableData(queryRes.query_result)
-        //     });
-            
-        //     console.log(queryRes);
-        //     console.log(queryRes.query_result);
-        //     console.log(this.normalizedTableData(queryRes.query_result));
-        //   })
-        //   .catch(err => {
-        //     console.log(err);
-        //     this.setState({
-        //       isLoaded: true,
-        //       runTimeLoading: false,
-        //       canEdit: false,
-        //       queryResultRaw: null,
-        //       // tableData: null,
-        //       queryResult: null
-        //     });
-        //   });
-
       })
-      .catch(err => {
+      .catch((exFinal) => {
         this.setState({
           isLoaded: true,
           runTimeLoading: false,
@@ -236,7 +221,7 @@ class QueriesListTabs extends React.Component {
           query: null,
           queryResultRaw: null,
           tableData: null,
-          queryResult: null
+          queryResult: null,
         });
       });
   }
@@ -300,6 +285,40 @@ class QueriesListTabs extends React.Component {
   handleDeleteCancel = () => {
     this.setState({ showDeleteModal: false });
   };
+
+  getGroupsWithPermission = () => {
+    const { query } = this.state;
+    this.setState({
+      permissions: {
+        loading: true,
+        groups: null
+      }
+    });
+
+    Group.groupsByQueryId({ id: this.state.query.id }, result => {
+      this.setState({
+        permissions: {
+          loading: false,
+          groups: _.map(result, group => {
+            return {
+              key: group.id,
+              group: group.name,
+              groupid: group.id,
+              viewonly: group.view_only
+            }
+          })
+        }
+      });
+    }, err => {
+      message.warning('无法获取该数据集分组权限设置.');
+      this.setState({
+        permissions: {
+          loading: false,
+          groups: null
+        }
+      });
+    });
+  }
 
   normalizedTableData(data) {
     // console.log(data);
@@ -423,10 +442,163 @@ class QueriesListTabs extends React.Component {
                 showIcon
               />
             </Modal>
-            <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
-              <div style={{ width: '50%', float: 'right' }}>
+            <div style={{ padding: '10px' }}>
+              <div style={{ width: '100%' }}>
+                <Descriptions title="数据集信息">
+                  <Descriptions.Item label="数据集创建时间">
+                    {this.state.query.created_at}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="ID">
+                    {this.state.query.id}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="创建者">
+                    {this.state.query.user.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="可编辑">
+                    {this.state.canEdit ? '是' : '否'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="最近更新自">
+                    {this.state.query.last_modified_by.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="数据集">
+                    {this.state.query.query}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="该数据集已应用于组件数量">
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {_.isArray(this.state.query.visualizations)
+                      ? this.state.query.visualizations.length >= 1
+                        ? this.state.query.visualizations.length - 1
+                        : '无法显示'
+                      : '无法显示'}
+                  </Descriptions.Item>
+                </Descriptions>
+                <b style={{ fontSize: '14px' }}>数据集共享设置:</b>
+                <div style={{ paddingRight: '10px' }}>
+                  <Form>
+                    <Form.Item
+                      label="数据集对其他人可见"
+                      labelAlign="left"
+                      labelCol={{ span: 10 }}
+                      wrapperCol={{ span: 4, offset: 10 }}
+                    >
+                      <Switch
+                        checkedChildren="开"
+                        unCheckedChildren="关"
+                        defaultChecked={!this.state.query.is_draft}
+                        onChange={checked => {
+                          this.saveQuery(null, {
+                            is_draft: !checked
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                  </Form>
+                  <hr />
+                </div>
+                {
+                currentUser.isAdmin ? (
+                  <>
+                    <p style={{ fontSize: '14px' }}>数据集权限设定:</p>
+                    <p>
+                      <Table
+                        locale={{ emptyText: "暂无数据" }}
+                        tableLayout="fixed"
+                        columns={[
+                          {
+                            title: '用户分组',
+                            dataIndex: 'group',
+                            key: 'group',
+                            render: text => text,
+                          },
+                          {
+                            title: '只读',
+                            dataIndex: 'viewonly',
+                            key: 'viewonly',
+                            render: viewonly => (
+                              <Tag color={viewonly ? 'blue' : 'green'}>
+                                {viewonly ? '只读' : '读写'}
+                              </Tag>
+                            )
+                          },
+                          {
+                            title: '操作',
+                            key: 'action',
+                            render: (text, record) => {
+                              return (
+                                <span>
+                                  <Switch
+                                    checkedChildren="读写"
+                                    unCheckedChildren="只读"
+                                    size="small"
+                                    checked={!record.viewonly}
+                                    onChange={
+                                      (checked, event) => {
+                                        this.setState({
+                                          permissions: {
+                                            loading: true
+                                          }
+                                        });
+                                        Group.updateQueryPermission({
+                                          id: record.groupid, query_id: this.state.query.id
+                                        },
+                                          { view_only: !checked }, () => {
+                                            this.getGroupsWithPermission();
+                                          }, err => {
+                                            message.error("修改读写权限失败.");
+                                          });
+
+                                      }
+                                    }
+                                  />
+                                  <Divider type="vertical" />
+                                  <Button
+                                    size="small"
+                                    type="link"
+                                    onClick={e => {
+                                      this.setState({
+                                        permissions: {
+                                          loading: true
+                                        }
+                                      });
+                                      Group.removeQuery(
+                                        { 
+                                          id: record.groupid, query_id: this.state.query.id 
+                                        },
+                                        () => {
+                                          this.getGroupsWithPermission();
+                                          message.success("删除用户分组.");
+                                        }, err => {
+                                          message.error("删除用户分组权限失败.");
+                                        });
+                                    }}
+                                  >
+                                    <Icon type="delete" />删除
+                                  </Button>
+                                </span>
+                              )
+                            },
+                          }
+                        ]}
+                        dataSource={this.state.permissions.groups}
+                        loading={this.state.permissions.loading}
+                      />
+                    </p>
+                    <div align="right">
+                      <UserGroupPermissionDialog
+                        component={this.state.query}
+                        componentType='query'
+                        callback={() => { this.getGroupsWithPermission(); }}
+                      />
+                    </div>
+                    <hr />
+                  </>
+                ) : null
+              }
+              </div>
+              <Divider />
+              <div style={{ width: '100%' }}>
                 <b style={{ fontSize: '14px' }}>数据集描述:</b>
-                <div align="left">
+                <div>
                   <TextArea
                     placeholder="数据集描述"
                     rows={4}
@@ -494,58 +666,6 @@ class QueriesListTabs extends React.Component {
                     删除数据集
                   </Button>
                 </Popconfirm>
-              </div>
-              <div style={{ width: '50%', float: 'left' }}>
-                <Descriptions title="数据集信息">
-                  <Descriptions.Item label="数据集创建时间">
-                    {this.state.query.created_at}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="ID">
-                    {this.state.query.id}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="创建者">
-                    {this.state.query.user.name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="可编辑">
-                    {this.state.canEdit ? '是' : '否'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="最近更新自">
-                    {this.state.query.last_modified_by.name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="数据集">
-                    {this.state.query.query}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="该数据集已应用于组件数量">
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {_.isArray(this.state.query.visualizations)
-                      ? this.state.query.visualizations.length >= 1
-                        ? this.state.query.visualizations.length - 1
-                        : '无法显示'
-                      : '无法显示'}
-                  </Descriptions.Item>
-                </Descriptions>
-                <b style={{ fontSize: '14px' }}>数据集共享设置:</b>
-                <div style={{ paddingRight: '10px' }}>
-                  <Form>
-                    <Form.Item
-                      label="数据集对其他人可见"
-                      labelAlign="left"
-                      labelCol={{ span: 10 }}
-                      wrapperCol={{ span: 4, offset: 10 }}
-                    >
-                      <Switch
-                        checkedChildren="开"
-                        unCheckedChildren="关"
-                        defaultChecked={!this.state.query.is_draft}
-                        onChange={checked => {
-                          this.saveQuery(null, {
-                            is_draft: !checked
-                          });
-                        }}
-                      />
-                    </Form.Item>
-                  </Form>
-                </div>
               </div>
               <Divider />
               <div style={{ width: '100%', float: 'left' }}>

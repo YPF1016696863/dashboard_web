@@ -499,7 +499,7 @@ class DashboardsListTabs extends React.Component {
                                             loading: true
                                           }
                                         });
-                                        Group.updateDashboardpermission({
+                                        Group.updateDashboardPermission({
                                           id: record.groupid, dashboard_id: this.state.dashboard.id
                                         },
                                           { view_only: !checked }, () => {
@@ -547,6 +547,7 @@ class DashboardsListTabs extends React.Component {
                     <div align="right">
                       <UserGroupPermissionDialog
                         component={this.state.dashboard}
+                        componentType='dashboard'
                         callback={() => { this.getGroupsWithPermission(); }}
                       />
                     </div>
