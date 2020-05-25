@@ -66,48 +66,48 @@
 
       <div ng-if="column.displayAs == 'number'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-number-format">
+          <label for="table-editor-{{ column.friendly_name }}-number-format">
             数字格式
             <span class="m-l-5"
               uib-popover-html="'Format <a href=&quot;https://redash.io/help/user-guide/visualizations/formatting-numbers&quot; target=&quot;_blank&quot;>specs.</a>'"
               popover-trigger="'click outsideClick'"><i class="fa fa-question-circle"></i></span>
           </label>
           <input class="form-control" ng-model="column.numberFormat" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-number-format">
+            id="table-editor-{{ column.friendly_name }}-number-format">
         </div>
       </div>
 
       <div ng-if="column.displayAs == 'datetime'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-datetime-format">
+          <label for="table-editor-{{ column.friendly_name }}-datetime-format">
             日期/时间 格式
             <span class="m-l-5"
               uib-popover-html="'Format <a href=&quot;https://momentjs.com/docs/#/displaying/format/&quot; target=&quot;_blank&quot;>specs.</a>'"
               popover-trigger="'click outsideClick'"><i class="fa fa-question-circle"></i></span>
           </label>
           <input class="form-control" ng-model="column.dateTimeFormat" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-datetime-format">
+            id="table-editor-{{ column.friendly_name }}-datetime-format">
         </div>
       </div>
 
       <div ng-if="column.displayAs == 'boolean'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-boolean-false">表示 <code>错误</code> 的值</label>
+          <label for="table-editor-{{ column.friendly_name }}-boolean-false">表示 <code>错误</code> 的值</label>
           <input class="form-control" ng-model="column.booleanValues[0]" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-boolean-false">
+            id="table-editor-{{ column.friendly_name }}-boolean-false">
         </div>
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-boolean-true">表示 <code>正确</code> 的值</label>
+          <label for="table-editor-{{ column.friendly_name }}-boolean-true">表示 <code>正确</code> 的值</label>
           <input class="form-control" ng-model="column.booleanValues[1]" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-boolean-true">
+            id="table-editor-{{ column.friendly_name }}-boolean-true">
         </div>
       </div>
 
       <div ng-if="column.displayAs == 'image'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-image-url-template">URL 例子</label>
+          <label for="table-editor-{{ column.friendly_name }}-image-url-template">URL 例子</label>
           <input class="form-control" ng-model="column.imageUrlTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-image-url-template">
+            id="table-editor-{{ column.friendly_name }}-image-url-template">
         </div>
 
         <div class="form-group">
@@ -127,9 +127,9 @@
         </div>
 
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-image-title-template">标题例子</label>
+          <label for="table-editor-{{ column.friendly_name }}-image-title-template">标题例子</label>
           <input class="form-control" ng-model="column.imageTitleTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-image-title-template">
+            id="table-editor-{{ column.friendly_name }}-image-title-template">
         </div>
 
         <div class="form-group">
@@ -143,21 +143,21 @@
 
       <div ng-if="column.displayAs == 'link'">
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-link-url-template">URL 例子</label>
+          <label for="table-editor-{{ column.friendly_name }}-link-url-template">URL 例子</label>
           <input class="form-control" ng-model="column.linkUrlTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-link-url-template">
+            id="table-editor-{{ column.friendly_name }}-link-url-template">
         </div>
 
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-link-text-template">文本例子</label>
+          <label for="table-editor-{{ column.friendly_name }}-link-text-template">文本例子</label>
           <input class="form-control" ng-model="column.linkTextTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-link-text-template">
+            id="table-editor-{{ column.friendly_name }}-link-text-template">
         </div>
 
         <div class="form-group">
-          <label for="table-editor-{{ column.name }}-link-title-template">标题例子</label>
+          <label for="table-editor-{{ column.friendly_name }}-link-title-template">标题例子</label>
           <input class="form-control" ng-model="column.linkTitleTemplate" ng-model-options="{ allowInvalid: true, debounce: 200 }"
-            id="table-editor-{{ column.name }}-link-title-template">
+            id="table-editor-{{ column.friendly_name }}-link-title-template">
         </div>
 
         <div class="form-group">

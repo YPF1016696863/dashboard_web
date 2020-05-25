@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import { Modal, Button, Icon, message, Table, Checkbox, Switch, Divider } from 'antd';
+import * as _ from 'lodash';
 import { appSettingsConfig } from '@/config/app-settings';
 import { Group } from '@/services/group';
 import { currentUser } from '@/services/auth';
-import * as _ from 'lodash';
+
 
 export default class UserGroupPermissionDialog extends React.Component {
 
