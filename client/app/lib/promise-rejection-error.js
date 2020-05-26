@@ -3,9 +3,9 @@ export default class PromiseRejectionError extends Error {
     let message;
     if (rejection.status !== undefined) {
       if (rejection.status === 404) {
-        message = "你要访问的页面不存在";
+        message = "要访问的页面不存在";
       } else if (rejection.status === 403 || rejection.status === 401) {
-        message = '你要访问的页面不存在';
+        message = '要访问的页面不存在';
       }
     }
 

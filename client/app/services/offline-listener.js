@@ -10,8 +10,8 @@ function addOnlineListener(notificationKey) {
 
 export default function init(ngModule) {
   ngModule.run(() => {
-    window.addEventListener('offline', () => {
-      notification.warning('Please check your Internet connection.', null, {
+    window.addEventListener('系统已离线', () => {
+      notification.warning('请检查网络连接状况.', null, {
         key: 'connectionNotification',
         duration: null,
       });

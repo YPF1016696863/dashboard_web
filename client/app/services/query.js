@@ -1,6 +1,8 @@
 import moment from 'moment';
 import debug from 'debug';
 import Mustache from 'mustache';
+import * as _ from 'lodash';
+
 import {
   zipObject, isEmpty, map, filter, includes, union, uniq, has,
   isNull, isUndefined, isArray, isObject, identity, extend, each,
@@ -437,6 +439,26 @@ function QueryResource(
       user: currentUser,
       options: {},
     });
+  };
+
+  QueryService.prototype.readOnly = function readOnly() {
+    try {
+      if (currentUser.isAdmin) {
+        return false;
+      }
+
+      if (this.user_id === this.created_by.id) {
+        return false;
+      }
+
+      const userGroup = this.user.groups;
+      const userQueryGroup = _.filter(this.groups, group => _.find(userGroup,o => o === group.group_id));
+
+      return !_.some(userQueryGroup,group => !group.view_only);
+    } catch{
+      return true;
+    }
+  
   };
 
   QueryService.format = function formatQuery(syntax, query) {

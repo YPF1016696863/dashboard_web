@@ -210,7 +210,7 @@
   "TEXTBOXDIALOG": {
     "ADD": "添加文本框",
     "EDIT": "编辑文本框",
-    "PLACEHOLDER": "在此输入你想输入的文本",
+    "PLACEHOLDER": "在此输入文本",
     "ADD_TO_DASHBOARD": "添加到可视化面板",
     "SAVE": "保存",
     "PREVIEW": "预览:"

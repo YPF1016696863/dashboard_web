@@ -2,8 +2,6 @@ import React from 'react';
 import {
   message,
   Button,
-  Descriptions,
-  Breadcrumb,
   Dropdown,
   Menu,
   Icon,
@@ -12,40 +10,20 @@ import {
   Col,
   Tree,
   Input,
-  Popover,
-  Empty,
-  BackTop,
-  Tabs,
   Modal,
   Alert
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import * as _ from 'lodash';
-import { QueryTagsControl } from '@/components/tags-control/TagsControl';
-import { SchedulePhrase } from '@/components/queries/SchedulePhrase';
-
-import {
-  wrap as itemsList,
-  ControllerType
-} from '@/components/items-list/ItemsList';
-import { ResourceItemsSource } from '@/components/items-list/classes/ItemsSource';
-import { UrlStateStorage } from '@/components/items-list/classes/StateStorage';
 
 import LoadingState from '@/components/items-list/components/LoadingState';
-import * as Sidebar from '@/components/items-list/components/Sidebar';
-import ItemsTable, {
-  Columns
-} from '@/components/items-list/components/ItemsTable';
 
 import { Query } from '@/services/query';
-import { currentUser } from '@/services/auth';
-import { routesToAngularRoutes } from '@/lib/utils';
 
 import './queries-search.css';
 
 import { policy } from '@/services/policy';
-import notification from '@/services/notification';
 import { navigateToWithSearch } from '@/services/navigateTo';
 import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
 import { MoveToFolder } from '@/components/move-to-folder/MoveToFolder';
@@ -199,7 +177,6 @@ class QueriesListSearch extends React.Component {
   }
 
   render() {
-    const { appSettings } = this.props;
 
     return (
       <>
@@ -245,7 +222,7 @@ class QueriesListSearch extends React.Component {
                   </Col>
                   <Col span={2} offset={1}>
                     <Dropdown
-                      overlay={
+                      overlay={(
                         <Menu>
                           <Menu.Item
                             key="1"
@@ -262,7 +239,7 @@ class QueriesListSearch extends React.Component {
                             按创建时间排序
                           </Menu.Item>
                         </Menu>
-                      }
+                      )}
                     >
                       <Button icon="menu-fold" size="small" />
                     </Dropdown>
@@ -285,7 +262,7 @@ class QueriesListSearch extends React.Component {
                   size="small"
                   type="link"
                   style={{ color: '#3d4d66' }}
-                  onClick={e => {
+                  onClick={() => {
                     if (policy.isCreateQueryEnabled()) {
                       navigateToWithSearch('/queries/new');
                     } else {
@@ -311,7 +288,7 @@ class QueriesListSearch extends React.Component {
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
                   defaultExpandAll
-                  onSelect={(value, node, extra) => {
+                  onSelect={(value) => {
                     const stillEdit = value[0] === this.state.selected;
                     this.setState({ selected: value[0], editMode: stillEdit });
                     this.props.querySearchCb(value);
@@ -325,26 +302,27 @@ class QueriesListSearch extends React.Component {
                     {_.map(this.state.filtered, item => {
                       return (
                         <TreeNode
-                          icon={
+                          icon={(
                             <Icon
                               type="file-search"
                               style={{ color: '#FAAA39' }}
                             />
-                          }
-                          title={
+                          )}
+                          title={(
                             <span
-                              onDoubleClick={event => {
+                              onDoubleClick={() => {
                                 this.setState({ editMode: true });
                               }}
                             >
                               {this.state.editMode &&
                               this.state.selected &&
-                              _.parseInt(this.state.selected) === item.id ? (
+                              _.parseInt(this.state.selected) === item.id &&
+                              !item.readOnly() ? (
                                 <Input
                                   autoFocus
                                   size="small"
                                   value={this.state.rename}
-                                  onFocus={event => {
+                                  onFocus={() => {
                                     this.setState({ rename: item.name });
                                   }}
                                   onChange={event => {
@@ -386,7 +364,7 @@ class QueriesListSearch extends React.Component {
                                 item.name
                               )}
                             </span>
-                          }
+                          )}
                           key={item.id}
                           isLeaf
                         />
