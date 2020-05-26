@@ -590,7 +590,6 @@ class QueriesListTabs extends React.Component {
                         callback={() => { this.getGroupsWithPermission(); }}
                       />
                     </div>
-                    <hr />
                   </>
                 ) : null
               }
