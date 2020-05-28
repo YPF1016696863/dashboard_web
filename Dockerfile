@@ -1,12 +1,14 @@
 FROM node:10 as frontend-builder
 
+ARG BUILD_ENV=dev
+
 WORKDIR /frontend
 COPY package.json /frontend/
 RUN npm install
 
 COPY . /frontend
-RUN npm run build --nomaps
-RUN rm -Rf /frontend/client/dist/*.map
+
+RUN if [ "$BUILD_ENV" = "dev" ] ; then npm run build-dev --nomaps ; else npm run build --nomaps && rm -Rf /frontend/client/dist/*.map ; fi
 
 FROM nginx
 COPY --from=frontend-builder /frontend/client/dist/*.html /usr/share/nginx/html/
