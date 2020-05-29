@@ -72,7 +72,7 @@ class QueriesListTabs extends React.Component {
       query: null,
       queryResultRaw: null,
       queryResult: null,
-      // tableData: null,
+      tableData: null,
       showDeleteModal: false,
       runTimeLoading: false
     });
@@ -105,7 +105,7 @@ class QueriesListTabs extends React.Component {
         canEdit: false,
         query: null,
         queryResultRaw: null,
-        // tableData: null,
+        tableData: null,
         queryResult: null,
         runTimeLoading: false
       });
@@ -133,7 +133,7 @@ class QueriesListTabs extends React.Component {
         this.setState({
           runTimeLoading: false,
           queryResultRaw: null,
-          // tableData: null,
+          tableData: null,
           queryResult: null
         });
       });
@@ -146,7 +146,7 @@ class QueriesListTabs extends React.Component {
       canEdit: false,
       query: null,
       queryResultRaw: null,
-      // tableData: null,
+      tableData: null,
       queryResult: null
     });
 
@@ -157,23 +157,24 @@ class QueriesListTabs extends React.Component {
         canEdit: false,
         query: null,
         queryResultRaw: null,
-        // tableData: null,
+        tableData: null,
         queryResult: 'empty'
       });
       return;
     }
-
+    
     Query.query({ id })
       .$promise.then(query => {
         this.setState({
           query,
           isLoaded: true,
           canEdit: currentUser.canEdit(query) || query.can_edit,
-          // tableData: _.find(
-          //   query.visualizations,
-          //   visualization => visualization.type === 'TABLE'
-          // )
+          tableData: _.find(
+            query.visualizations,
+            visualization => visualization.type === 'TABLE'
+          )
         });
+        // console.log(query);
         query
           .getQueryResultPromise()
           .then(queryRes => {
@@ -189,7 +190,7 @@ class QueriesListTabs extends React.Component {
               runTimeLoading: false,
               canEdit: false,
               queryResultRaw: null,
-              // tableData: null,
+              tableData: null,
               queryResult: null
             });
           });
@@ -201,7 +202,7 @@ class QueriesListTabs extends React.Component {
           canEdit: false,
           query: null,
           queryResultRaw: null,
-          // tableData: null,
+          tableData: null,
           queryResult: null
         });
       });
@@ -225,7 +226,7 @@ class QueriesListTabs extends React.Component {
               isLoaded: true,
               query: null,
               queryResultRaw: null,
-              // tableData: null,
+              tableData: null,
               queryResult: null
             });
           },
@@ -251,7 +252,7 @@ class QueriesListTabs extends React.Component {
           isLoaded: true,
           query: null,
           queryResultRaw: null,
-          // tableData: null,
+          tableData: null,
           queryResult: null,
           showDeleteModal: false
         });
@@ -614,13 +615,10 @@ class QueriesListTabs extends React.Component {
                       {this.state.runTimeLoading ? (
                         <LoadingState />
                       ) : (
-                        <Table 
-                          style={{backgroundColor:'#25374C'
-                          }}
-                          columns={this.state.queryResult.columns}
-                          dataSource={this.state.queryResult.rows}
-                          pagination={{ pageSize: 10 }}                        
-                        /> 
+                        <TablePreviewDOM
+                          visualization={this.state.tableData}
+                          queryResult={this.state.queryResultRaw}
+                        />
                       )}
                     </div>
                   </>
