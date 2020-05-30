@@ -41,7 +41,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         function (o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
 
-
+                    
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         // const data = $scope.queryResult.getData();

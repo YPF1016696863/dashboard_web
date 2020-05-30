@@ -107,6 +107,7 @@ export class DashboardsList extends React.Component {
         );
       })
       .catch(err => {
+        console.log(err);
         this.setState({
           selected: null,
           all: null,

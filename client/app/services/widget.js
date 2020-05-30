@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { each, pick, extend, isObject, truncate, keys, difference, filter, map } from 'lodash';
+// import { Query } from '@/services/query';
 
 export let Widget = null; // eslint-disable-line import/no-mutable-exports
 
@@ -136,20 +137,43 @@ function WidgetFactory($http, $location, Query, Visualization, dashboardGridOpti
         if (maxAge === undefined || force) {
           maxAge = force ? 0 : undefined;
         }
-        this.queryResult = this.getQuery().getQueryResult(maxAge);
 
-        this.queryResult.toPromise()
-          .then((result) => {
+
+        // getQuery 这个查询的所有信息
+        this.queryResult = this.getQuery().getQueryResult(maxAge);
+        // console.log(this.queryResult); 
+        this.getQuery()
+          .getQueryResultByText(maxAge, this.getQuery().query)
+          .toPromise()
+          .then(queryRes => {
             this.loading = false;
-            this.data = result;
+            this.data = queryRes;
           })
-          .catch((error) => {
+          .catch(err => {
+            console.log(err);
             this.loading = false;
-            this.data = error;
+            this.data = err;
           });
+  
+        // this.queryResult.toPromise()
+        //   .then((result) => {
+        //     this.loading = false;
+        //     this.data = result;
+        //     console.log(result);
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //     this.loading = false;
+        //     this.data = error;
+        //   });
       }
 
-      return this.queryResult.toPromise();
+      // return this.queryResult.toPromise(
+        return this.getQuery()
+        .getQueryResultByText(maxAge, this.getQuery().query)
+        .toPromise();
+   
+    
     }
 
     save() {

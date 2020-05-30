@@ -301,6 +301,7 @@ class QueriesListNomodal extends React.Component {
                       defaultExpandAll
                       onSelect={(value, node, extra) => {
                         this.setState({ selected: value[0] });
+                        // 传入id 
                         this.props.querySearchCb(value);
                       }}
                       selectedKeys={[this.state.selected]}

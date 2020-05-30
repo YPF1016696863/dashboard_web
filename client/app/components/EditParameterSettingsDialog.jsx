@@ -157,7 +157,8 @@ function EditParameterSettingsDialog(props) {
             <Option value="text" data-test="TextParameterTypeOption">文本</Option>
             <Option value="number" data-test="NumberParameterTypeOption">数字</Option>
             <Option value="enum">下拉框</Option>
-            <Option value="query">基于其他数据集的下拉框</Option>
+            {/* <Option value="query">基于其他数据集的下拉框</Option> */}
+            <Option value="query">基于级联数据集的下拉框</Option>
             <Option disabled key="dv1">
               <Divider className="select-option-divider" />
             </Option>
@@ -191,8 +192,17 @@ function EditParameterSettingsDialog(props) {
             />
           </Form.Item>
         )}
-        {param.type === 'query' && (
+        {/* {param.type === 'query' && (
           <Form.Item label="Query" help="选择查询以从加载下拉框" {...formItemProps}>
+            <QuerySelector
+              selectedQuery={initialQuery}
+              onChange={q => setParam({ ...param, queryId: q && q.id })}
+              type="select"
+            />
+          </Form.Item>
+        )} */}
+        {param.type === 'query' && ( 
+          <Form.Item label="查询" help="选择查询以从加载下拉框" {...formItemProps}>
             <QuerySelector
               selectedQuery={initialQuery}
               onChange={q => setParam({ ...param, queryId: q && q.id })}

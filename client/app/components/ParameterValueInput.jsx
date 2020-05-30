@@ -1,16 +1,21 @@
 import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import Select from 'antd/lib/select';
 import Input from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
+import { Query } from '@/services/query';
 import { DateInput } from './DateInput';
 import { DateRangeInput } from './DateRangeInput';
 import { DateTimeInput } from './DateTimeInput';
 import { DateTimeRangeInput } from './DateTimeRangeInput';
 import { QueryBasedParameterInput } from './QueryBasedParameterInput';
+import { QueryQueryParameterInput } from './QueryQueryParameterInput';
 
 const { Option } = Select;
+let fatherParameter=[];
+let id=0;
 
 export class ParameterValueInput extends React.Component {
   static propTypes = {
@@ -32,6 +37,93 @@ export class ParameterValueInput extends React.Component {
     onSelect: () => {},
     className: '',
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      fatherParameterState: [], 
+      loader:true
+    };
+  }
+
+  componentDidMount() {
+    // console.log(this.props.type);
+    if (this.props.type === 'query') {
+      id = this.props.parameter.queryId;
+      
+      Query.query({ id })
+        .$promise.then(query => {
+          query
+          .getQueryResultByText(-1, query.query)
+          .toPromise()
+          .then(queryRes => {
+            fatherParameter = queryRes.query_result.data.rows;// 后执行
+            // console.log(fatherParameter);
+              if (fatherParameter !== []&& fatherParameter !== undefined && fatherParameter !== null) {
+                this.setState({
+                  fatherParameterState: fatherParameter,
+                  loader: false
+                });
+              }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+
+          // query
+          //   .getQueryResultPromise()
+          //   .then(queryRes => {
+          //     fatherParameter = queryRes.query_result.data.rows;// 后执行
+          //     if (fatherParameter !== []&& fatherParameter !== undefined && fatherParameter !== null) {
+          //       this.setState({
+          //         fatherParameterState: fatherParameter,
+          //         loader: false
+          //       });
+          //     }
+          //   }
+          //   )
+          //   .catch(err => {
+          //     console.log(err);
+          //   });
+
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  }
+ 
+
+  upDataEnum=()=>{
+    if (this.props.type === 'query') {  
+      id= this.props.parameter.queryId;  
+      Query.query({ id })
+        .$promise.then(query => {
+          query
+          .getQueryResultByText(-1, query.query)
+          .toPromise()
+          .then(queryRes => {
+            fatherParameter = queryRes.query_result.data.rows;// 后执行
+            // console.log(fatherParameter);
+              if (fatherParameter !== []&& fatherParameter !== undefined && fatherParameter !== null) {
+                this.setState({
+                  fatherParameterState: fatherParameter,
+                  loader: false
+                });
+              }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  }
+
+   
 
   renderDateTimeWithSecondsInput() {
     const { value, onSelect } = this.props;
@@ -118,6 +210,42 @@ export class ParameterValueInput extends React.Component {
     );
   }
 
+  renderQueryQueryInput() {
+    const { value, onSelect, queryId, parameter  } = this.props;
+    const enumOptionsArray=[];
+    // eslint-disable-next-line func-names
+    _.forEach(this.state.fatherParameterState, function(v, key) {
+      enumOptionsArray.push(v.KEYID);
+    });
+    return (
+      this.state.loader ? (
+        <Select
+          className={this.props.className}
+          disabled={enumOptionsArray.length === 0}
+          defaultValue={value}
+          onChange={onSelect}
+          dropdownMatchSelectWidth={false}
+          dropdownClassName="ant-dropdown-in-bootstrap-modal"
+          onDropdownVisibleChange={this.upDataEnum}
+        ><Option key="null" value="null">null</Option>
+        </Select>
+    ) : (
+      <Select
+        className={this.props.className}
+        disabled={enumOptionsArray.length === 0}
+        defaultValue={enumOptionsArray[0]}
+        onChange={onSelect}
+        dropdownMatchSelectWidth={false}
+        dropdownClassName="ant-dropdown-in-bootstrap-modal"
+        onDropdownVisibleChange={this.upDataEnum}
+      >
+        {enumOptionsArray.map(option => (<Option key={option} value={option}>{option}</Option>))}
+      </Select>
+)
+    );
+  }
+
+
   renderQueryBasedInput() {
     const { value, onSelect, queryId, parameter } = this.props;
     return (
@@ -164,7 +292,8 @@ export class ParameterValueInput extends React.Component {
       case 'datetime-range': return this.renderDateTimeRangeInput();
       case 'date-range': return this.renderDateRangeInput();
       case 'enum': return this.renderEnumInput();
-      case 'query': return this.renderQueryBasedInput();
+      // case 'query': return this.renderQueryBasedInput();
+      case 'query': return this.renderQueryQueryInput();
       case 'number': return this.renderNumberInput();
       default: return this.renderTextInput();
     }

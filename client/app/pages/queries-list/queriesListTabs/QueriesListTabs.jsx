@@ -118,7 +118,6 @@ class QueriesListTabs extends React.Component {
       queryResult: null,
       runTimeLoading: true
     });
-
     this.state.query
       .getQueryResultByText(-1, this.state.query.query)
       .toPromise()
@@ -139,6 +138,7 @@ class QueriesListTabs extends React.Component {
       });
   }
 
+  // 点击数据集后触发
   getQuery(id) {
     this.setState({
       isLoaded: false,
@@ -149,7 +149,6 @@ class QueriesListTabs extends React.Component {
       tableData: null,
       queryResult: null
     });
-
     if (!id) {
       this.setState({
         isLoaded: true,
@@ -162,7 +161,9 @@ class QueriesListTabs extends React.Component {
       });
       return;
     }
+
     
+
     Query.query({ id })
       .$promise.then(query => {
         this.setState({
@@ -174,26 +175,58 @@ class QueriesListTabs extends React.Component {
             visualization => visualization.type === 'TABLE'
           )
         });
-        // console.log(query);
+
+        
         query
-          .getQueryResultPromise()
-          .then(queryRes => {
-            this.setState({
-              runTimeLoading: false,
-              queryResultRaw: queryRes,
-              queryResult: this.normalizedTableData(queryRes.query_result)
-            });
-          })
-          .catch(err => {
-            this.setState({
-              isLoaded: true,
-              runTimeLoading: false,
-              canEdit: false,
-              queryResultRaw: null,
-              tableData: null,
-              queryResult: null
-            });
+        .getQueryResultByText(-1, this.state.query.query)
+        .toPromise()
+        .then(queryRes => {
+          this.setState({
+            runTimeLoading: false,
+            queryResultRaw: queryRes,
+            queryResult: this.normalizedTableData(queryRes.query_result)
           });
+          // console.log(queryRes);
+          // console.log(queryRes.query_result.data);
+        })
+        .catch(err => {
+          // console.log(err);
+          this.setState({
+            isLoaded: true,
+            runTimeLoading: false,
+            canEdit: false,
+            queryResultRaw: null,
+            // tableData: null,
+            queryResult: null
+          });
+        });
+
+
+        // query
+        //   .getQueryResultPromise()
+        //   .then(queryRes => {
+        //     this.setState({
+        //       runTimeLoading: false,
+        //       queryResultRaw: queryRes,
+        //       queryResult: this.normalizedTableData(queryRes.query_result)
+        //     });
+            
+        //     console.log(queryRes);
+        //     console.log(queryRes.query_result);
+        //     console.log(this.normalizedTableData(queryRes.query_result));
+        //   })
+        //   .catch(err => {
+        //     console.log(err);
+        //     this.setState({
+        //       isLoaded: true,
+        //       runTimeLoading: false,
+        //       canEdit: false,
+        //       queryResultRaw: null,
+        //       // tableData: null,
+        //       queryResult: null
+        //     });
+        //   });
+
       })
       .catch(err => {
         this.setState({
@@ -269,6 +302,7 @@ class QueriesListTabs extends React.Component {
   };
 
   normalizedTableData(data) {
+    // console.log(data);
     if (data === 'empty') {
       return null;
     }
