@@ -1,6 +1,6 @@
 import { map, defer } from 'lodash';
-import template from './query.html';
 import EditParameterSettingsDialog from '@/components/EditParameterSettingsDialog';
+import template from './query.html';
 
 function QuerySourceCtrl(
   Events,

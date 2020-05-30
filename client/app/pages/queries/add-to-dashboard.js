@@ -1,5 +1,5 @@
-import template from './add-to-dashboard.html';
 import notification from '@/services/notification';
+import template from './add-to-dashboard.html';
 
 const AddToDashboardForm = {
   controller($sce, Dashboard, currentUser, Widget) {

@@ -1,3 +1,4 @@
+import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
 import React from 'react';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
@@ -6,7 +7,7 @@ import { isFunction } from 'lodash';
 import { User } from '@/services/user';
 import notification from '@/services/notification';
 import { UserProfile } from '../proptypes';
-import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
+
 
 class ChangePasswordDialog extends React.Component {
   static propTypes = {
