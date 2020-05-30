@@ -114,6 +114,7 @@ class RightClick extends React.Component {
       ]
     };
     // console.log(this.props.params);
+    // debugger
     const widgetsSourceName = _.map(this.props.params, 'query.name');
     const widgetsSourceId = _.map(this.props.params, 'data.query_result.data_source_id')
     const widgetsName = _.map(this.props.params, 'visualization.name')
@@ -125,7 +126,9 @@ class RightClick extends React.Component {
       isParams.push(JSON.stringify(value) !== "{}");
     });
     // 参数组件是否有值 有值才显示在列表上
-    const isDataTemp = _.map(this.props.params, 'queryResult.query_result.data.rows');
+    // const isDataTemp = _.map(this.props.params, 'queryResult.query_result.data.rows');// **
+    // [1].query.queryResult.query_result.data.rows
+    const isDataTemp = _.map(this.props.params, 'query.queryResult.query_result.data.rows');
     const isData = [];
     _.forEach(isDataTemp, function (value, key) {
       let flag = false;

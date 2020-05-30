@@ -26,6 +26,7 @@ export class ParameterDrawerC extends React.Component {
 
   onSubmit = () => {  
     this.props.onSubmit(this.props.params);
+    // 提交后要在执行查询刷新下拉框？
   };
 
   render() {

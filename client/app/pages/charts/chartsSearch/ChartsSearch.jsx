@@ -86,7 +86,7 @@ class ChartsSearch extends React.Component {
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
-
+    console.log("asd");
     this.setState({
       isLoaded: false,
       visualization: null
@@ -100,33 +100,69 @@ class ChartsSearch extends React.Component {
     } else {
       Query.query({ id: queryId })
         .$promise.then(query => {
-          query
-            .getQueryResultPromise()
-            .then(queryRes => {
-              if (visualizationId) {
-                this.setState({
-                  isLoaded: true,
-                  visualization: _.find(
-                    query.visualizations,
-                    // eslint-disable-next-line eqeqeq
-                    visualization => visualization.id == visualizationId
-                  )
-                });
-              } else {
-                this.setState({
-                  isLoaded: true,
-                  visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
-                });
-              }
-              this.props.chartSearchCb(this.state.visualization.type);
-
-            })
-            .catch(err => {
-              this.setState({
-                isLoaded: true,
-                visualization: { type: 'new' }
-              });
+          
+          // console.log(query.query);
+        query
+        .getQueryResultByText(-1, query.query)
+        .toPromise()
+        .then(queryRes => {
+          if (visualizationId) {
+            this.setState({
+              isLoaded: true,
+              visualization: _.find(
+                query.visualizations,
+                // eslint-disable-next-line eqeqeq
+                visualization => visualization.id == visualizationId
+              )
             });
+          } else {
+            this.setState({
+              isLoaded: true,
+              visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
+            });
+          }
+          this.props.chartSearchCb(this.state.visualization.type);
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({
+            isLoaded: true,
+            visualization: { type: 'new' }
+          });
+        });
+
+          
+          // query
+          //   .getQueryResultPromise()
+          //   .then(queryRes => {
+          //     if (visualizationId) {
+          //       this.setState({
+          //         isLoaded: true,
+          //         visualization: _.find(
+          //           query.visualizations,
+          //           // eslint-disable-next-line eqeqeq
+          //           visualization => visualization.id == visualizationId
+          //         )
+          //       });
+          //     } else {
+          //       this.setState({
+          //         isLoaded: true,
+          //         visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
+          //       });
+          //     }
+          //     this.props.chartSearchCb(this.state.visualization.type);
+
+          //   })
+          //   .catch(err => {
+          //     console.log(err);
+          //     this.setState({
+          //       isLoaded: true,
+          //       visualization: { type: 'new' }
+          //     });
+          //   });
+
+
+
         })
         .catch(err => {
           this.setState({

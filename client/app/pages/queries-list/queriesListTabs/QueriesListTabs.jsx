@@ -118,7 +118,6 @@ class QueriesListTabs extends React.Component {
       queryResult: null,
       runTimeLoading: true
     });
-    
     this.state.query
       .getQueryResultByText(-1, this.state.query.query)
       .toPromise()
@@ -150,7 +149,6 @@ class QueriesListTabs extends React.Component {
       tableData: null,
       queryResult: null
     });
-console.log(!id);
     if (!id) {
       this.setState({
         isLoaded: true,
@@ -163,7 +161,9 @@ console.log(!id);
       });
       return;
     }
+
     
+
     Query.query({ id })
       .$promise.then(query => {
         this.setState({
@@ -175,29 +175,58 @@ console.log(!id);
             visualization => visualization.type === 'TABLE'
           )
         });
-        // console.log(query);
+
+        
         query
-          .getQueryResultPromise()
-          .then(queryRes => {
-            this.setState({
-              runTimeLoading: false,
-              queryResultRaw: queryRes,
-              queryResult: this.normalizedTableData(queryRes.query_result)
-            });
-            // console.log(queryRes);
-            // console.log(this.state.queryResult);
-          })
-          .catch(err => {
-            console.log(err);
-            this.setState({
-              isLoaded: true,
-              runTimeLoading: false,
-              canEdit: false,
-              queryResultRaw: null,
-              tableData: null,
-              queryResult: null
-            });
+        .getQueryResultByText(-1, this.state.query.query)
+        .toPromise()
+        .then(queryRes => {
+          this.setState({
+            runTimeLoading: false,
+            queryResultRaw: queryRes,
+            queryResult: this.normalizedTableData(queryRes.query_result)
           });
+          // console.log(queryRes);
+          // console.log(queryRes.query_result.data);
+        })
+        .catch(err => {
+          // console.log(err);
+          this.setState({
+            isLoaded: true,
+            runTimeLoading: false,
+            canEdit: false,
+            queryResultRaw: null,
+            // tableData: null,
+            queryResult: null
+          });
+        });
+
+
+        // query
+        //   .getQueryResultPromise()
+        //   .then(queryRes => {
+        //     this.setState({
+        //       runTimeLoading: false,
+        //       queryResultRaw: queryRes,
+        //       queryResult: this.normalizedTableData(queryRes.query_result)
+        //     });
+            
+        //     console.log(queryRes);
+        //     console.log(queryRes.query_result);
+        //     console.log(this.normalizedTableData(queryRes.query_result));
+        //   })
+        //   .catch(err => {
+        //     console.log(err);
+        //     this.setState({
+        //       isLoaded: true,
+        //       runTimeLoading: false,
+        //       canEdit: false,
+        //       queryResultRaw: null,
+        //       // tableData: null,
+        //       queryResult: null
+        //     });
+        //   });
+
       })
       .catch(err => {
         this.setState({

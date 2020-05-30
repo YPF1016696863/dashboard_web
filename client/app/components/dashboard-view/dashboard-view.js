@@ -154,7 +154,8 @@ function ViewDashboardCtrl(
 
     this.extractGlobalParameters = () => {
         this.widgetList = this.dashboard.widgets;
-        // console.log(this.widgetList);
+        console.log(this.widgetList);//  出现查询出错
+        // console.log(this.widgetList[0].query.queryResult.query_result);
         this.globalParameters = this.dashboard.getParametersDefs();
         // 由参数设置url
         const params = _.extend({}, $location.search());
@@ -229,13 +230,14 @@ function ViewDashboardCtrl(
         // console.log( this.modifiedWidget);
 
         const queryResultPromises = _.compact(
-            this.dashboard.widgets.map(widget => { // this.dashboard.widgets
+            this.dashboard.widgets.map(widget => { // this.dashboard.widgets 出现查询出错
                 widget.getParametersDefs(); // Force widget to read parameters values from URL
                 return widget.load(forceRefresh);
             })
         );
 
         $q.all(queryResultPromises).then(queryResults => {
+            // console.log(queryResults); // 有数据
             const filters = {};
             queryResults.forEach(queryResult => {
                 const queryFilters = queryResult.getFilters();
@@ -272,7 +274,9 @@ function ViewDashboardCtrl(
                     originFilter.current = filter.current;
                 });
             };
-        });
+        }).catch(err => {
+            console.log(err);
+          });
     };
 
 

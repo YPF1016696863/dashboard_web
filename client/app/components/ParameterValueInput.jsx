@@ -50,63 +50,77 @@ export class ParameterValueInput extends React.Component {
     // console.log(this.props.type);
     if (this.props.type === 'query') {
       id = this.props.parameter.queryId;
-      // console.log(id);
+      
       Query.query({ id })
         .$promise.then(query => {
           query
-            .getQueryResultPromise()
-            .then(queryRes => {
-              fatherParameter = queryRes.query_result.data.rows;// 后执行
-              // console.log(fatherParameter);
+          .getQueryResultByText(-1, query.query)
+          .toPromise()
+          .then(queryRes => {
+            fatherParameter = queryRes.query_result.data.rows;// 后执行
+            // console.log(fatherParameter);
               if (fatherParameter !== []&& fatherParameter !== undefined && fatherParameter !== null) {
                 this.setState({
                   fatherParameterState: fatherParameter,
                   loader: false
                 });
-                // console.log(this.state.fatherParameterState);
               }
-            }
-            )
-            .catch(err => {
-              console.log(err);
-            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+
+          // query
+          //   .getQueryResultPromise()
+          //   .then(queryRes => {
+          //     fatherParameter = queryRes.query_result.data.rows;// 后执行
+          //     if (fatherParameter !== []&& fatherParameter !== undefined && fatherParameter !== null) {
+          //       this.setState({
+          //         fatherParameterState: fatherParameter,
+          //         loader: false
+          //       });
+          //     }
+          //   }
+          //   )
+          //   .catch(err => {
+          //     console.log(err);
+          //   });
+
         })
         .catch(err => {
           console.log(err);
         })
     }
   }
+ 
 
-  componentWillReceiveProps(nextProps) {
-    // console.log(this.props.type);
-    // if (nextProps.queryId !== this.props.queryId && this.props.type === 'query-query') {
-    //   console.log(nextProps.queryId);
-    //   this.setState({
-    //     loader: false
-    //   });
-    //   Query.query(nextProps.queryId)
-    //     .$promise.then(query => {
-    //       query
-    //         .getQueryResultPromise()
-    //         .then(queryRes => {
-    //           fatherParameter = queryRes.query_result.data.rows;// 后执行
-    //           if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
-    //             this.setState({
-    //               fatherParameterState: fatherParameter,
-    //               loader: true
-    //             });
-    //             console.log(this.state.fatherParameterState);
-    //           }
-    //         }
-    //         )
-    //         .catch(err => {
-    //           console.log(err);
-    //         });
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     })
-    // }
+  upDataEnum=()=>{
+    if (this.props.type === 'query') {  
+      id= this.props.parameter.queryId;  
+      Query.query({ id })
+        .$promise.then(query => {
+          query
+          .getQueryResultByText(-1, query.query)
+          .toPromise()
+          .then(queryRes => {
+            fatherParameter = queryRes.query_result.data.rows;// 后执行
+            // console.log(fatherParameter);
+              if (fatherParameter !== []&& fatherParameter !== undefined && fatherParameter !== null) {
+                this.setState({
+                  fatherParameterState: fatherParameter,
+                  loader: false
+                });
+              }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
   }
 
    
@@ -198,35 +212,11 @@ export class ParameterValueInput extends React.Component {
 
   renderQueryQueryInput() {
     const { value, onSelect, queryId, parameter  } = this.props;
-    // console.log(this.state.fatherParameterState);
     const enumOptionsArray=[];
     // eslint-disable-next-line func-names
     _.forEach(this.state.fatherParameterState, function(v, key) {
       enumOptionsArray.push(v.KEYID);
     });
-    // console.log(enumOptionsArray);
-    // return (
-    //   this.state.loader ? (
-    //     <Select
-    //       className={this.props.className}
-    //       disabled={enumOptionsArray.length === 0}
-    //       defaultValue={value}
-    //       onChange={onSelect}
-    //       dropdownMatchSelectWidth={false}
-    //       dropdownClassName="ant-dropdown-in-bootstrap-modal"
-    //     ><Option key="null" value="null">null</Option>
-    //     </Select>
-    //     ):(
-    //       <QueryQueryParameterInput
-    //         className={this.props.className}
-    //         parameter={parameter}
-    //         value={value}
-    //         queryId={queryId}
-    //         onSelect={onSelect}
-    //         enum={enumOptionsArray}
-    //       />
-    //     )
-    // );
     return (
       this.state.loader ? (
         <Select
@@ -236,6 +226,7 @@ export class ParameterValueInput extends React.Component {
           onChange={onSelect}
           dropdownMatchSelectWidth={false}
           dropdownClassName="ant-dropdown-in-bootstrap-modal"
+          onDropdownVisibleChange={this.upDataEnum}
         ><Option key="null" value="null">null</Option>
         </Select>
     ) : (
@@ -246,6 +237,7 @@ export class ParameterValueInput extends React.Component {
         onChange={onSelect}
         dropdownMatchSelectWidth={false}
         dropdownClassName="ant-dropdown-in-bootstrap-modal"
+        onDropdownVisibleChange={this.upDataEnum}
       >
         {enumOptionsArray.map(option => (<Option key={option} value={option}>{option}</Option>))}
       </Select>

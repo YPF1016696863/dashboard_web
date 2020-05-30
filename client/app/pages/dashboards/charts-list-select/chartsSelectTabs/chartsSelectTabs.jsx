@@ -168,7 +168,7 @@ class ChartsSelectTabs extends React.Component {
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
-
+    
     this.setState({
       isLoaded: false,
       runtimeLoaded:false,
@@ -198,57 +198,109 @@ class ChartsSelectTabs extends React.Component {
             param
           }))
         });
-
+        
         query
-          .getQueryResultPromise()
-          .then(queryRes => {
-            this.setState({
-              isLoaded: true,
-              runtimeLoaded:true,
-              visualization: null,
-              queryResult: queryRes,
-              visType: null
-            });
-            if (!visualizationId) {
-              const visOption = _.cloneDeep(
-                _.first(
-                  _.orderBy(
-                    query.visualizations,
-                    visualization => visualization.id
-                  )
-                )
-              );
-              if (_.has(visOption, 'options')) {
-                visOption.options.itemsPerPage = 20;
-              }
-              this.setState({
-                visualization: visOption,
-                visType: 'Q'
-              });
-            } else {
-              this.setState({
-                visualization: _.find(
-                  query.visualizations,
-                  // eslint-disable-next-line eqeqeq
-                  visualization => visualization.id == visualizationId
-                ),
-                visType: 'V'
-              });
-              this.props.getVisCb(
-                this.state.visualization,
-                this.state.parameterMappings
-              );
-            }
-          })
-          .catch(err => {
-            this.setState({
-              isLoaded: true,
-              runtimeLoaded:true,
-              visualization: null,
-              queryResult: 'empty',
-              visType: null
-            });
+        .getQueryResultByText(-1, this.state.query.query)
+        .toPromise()
+        .then(queryRes => {
+          this.setState({
+            isLoaded: true,
+            runtimeLoaded:true,
+            visualization: null,
+            queryResult: queryRes,
+            visType: null
           });
+          if (!visualizationId) {
+            const visOption = _.cloneDeep(
+              _.first(
+                _.orderBy(
+                  query.visualizations,
+                  visualization => visualization.id
+                )
+              )
+            );
+            if (_.has(visOption, 'options')) {
+              visOption.options.itemsPerPage = 20;
+            }
+            this.setState({
+              visualization: visOption,
+              visType: 'Q'
+            });
+          } else {
+            this.setState({
+              visualization: _.find(
+                query.visualizations,
+                // eslint-disable-next-line eqeqeq
+                visualization => visualization.id == visualizationId
+              ),
+              visType: 'V'
+            });
+            this.props.getVisCb(
+              this.state.visualization,
+              this.state.parameterMappings
+            );
+          }
+        })
+        .catch(err => {
+          this.setState({
+            isLoaded: true,
+            runtimeLoaded:true,
+            visualization: null,
+            queryResult: 'empty',
+            visType: null
+          });
+        });
+
+        // query
+        //   .getQueryResultPromise()
+        //   .then(queryRes => {
+        //     this.setState({
+        //       isLoaded: true,
+        //       runtimeLoaded:true,
+        //       visualization: null,
+        //       queryResult: queryRes,
+        //       visType: null
+        //     });
+        //     if (!visualizationId) {
+        //       const visOption = _.cloneDeep(
+        //         _.first(
+        //           _.orderBy(
+        //             query.visualizations,
+        //             visualization => visualization.id
+        //           )
+        //         )
+        //       );
+        //       if (_.has(visOption, 'options')) {
+        //         visOption.options.itemsPerPage = 20;
+        //       }
+        //       this.setState({
+        //         visualization: visOption,
+        //         visType: 'Q'
+        //       });
+        //     } else {
+        //       this.setState({
+        //         visualization: _.find(
+        //           query.visualizations,
+        //           // eslint-disable-next-line eqeqeq
+        //           visualization => visualization.id == visualizationId
+        //         ),
+        //         visType: 'V'
+        //       });
+        //       this.props.getVisCb(
+        //         this.state.visualization,
+        //         this.state.parameterMappings
+        //       );
+        //     }
+        //   })
+        //   .catch(err => {
+        //     this.setState({
+        //       isLoaded: true,
+        //       runtimeLoaded:true,
+        //       visualization: null,
+        //       queryResult: 'empty',
+        //       visType: null
+        //     });
+        //   });
       })
       .catch(err => {
         this.setState({

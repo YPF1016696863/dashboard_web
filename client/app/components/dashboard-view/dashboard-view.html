@@ -33,7 +33,7 @@
     <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit"
         params="$ctrl.globalParameters"></parameter-drawer>
 
-    <!--  widget in $ctrl.dashboard.widgets  -->
+    <!--  widget in $ctrl.dashboard.widgets  $ctrl.modifiedWidget -->
     <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged"
         is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"
         ng-class="{'preview-mode': true, 'editing-mode':false}">
