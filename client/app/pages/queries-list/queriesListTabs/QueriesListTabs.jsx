@@ -118,7 +118,7 @@ class QueriesListTabs extends React.Component {
       queryResult: null,
       runTimeLoading: true
     });
-
+    
     this.state.query
       .getQueryResultByText(-1, this.state.query.query)
       .toPromise()
@@ -139,6 +139,7 @@ class QueriesListTabs extends React.Component {
       });
   }
 
+  // 点击数据集后触发
   getQuery(id) {
     this.setState({
       isLoaded: false,
@@ -149,7 +150,7 @@ class QueriesListTabs extends React.Component {
       tableData: null,
       queryResult: null
     });
-
+console.log(!id);
     if (!id) {
       this.setState({
         isLoaded: true,
@@ -183,8 +184,11 @@ class QueriesListTabs extends React.Component {
               queryResultRaw: queryRes,
               queryResult: this.normalizedTableData(queryRes.query_result)
             });
+            // console.log(queryRes);
+            // console.log(this.state.queryResult);
           })
           .catch(err => {
+            console.log(err);
             this.setState({
               isLoaded: true,
               runTimeLoading: false,
@@ -269,6 +273,7 @@ class QueriesListTabs extends React.Component {
   };
 
   normalizedTableData(data) {
+    // console.log(data);
     if (data === 'empty') {
       return null;
     }

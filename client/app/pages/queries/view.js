@@ -52,14 +52,14 @@ function QueryViewCtrl(
     }
 
     $scope.showLog = false;
-    if ($scope.isDirty) {
+    // if ($scope.isDirty) { // 未保存时执行
       $scope.queryResult = $scope.query.getQueryResultByText(
         maxAge,
         selectedQueryText
       );
-    } else {
-      $scope.queryResult = $scope.query.getQueryResult(maxAge);
-    }
+    // } else {
+    //   $scope.queryResult = $scope.query.getQueryResult(maxAge);
+    // }
   }
 
   function getDataSourceId() {
@@ -242,6 +242,7 @@ function QueryViewCtrl(
     );
 
   $scope.saveQuery = (customOptions, data) => {
+    console.log("saveQuery");
     let request = data;
 
     if (request) {
