@@ -242,7 +242,7 @@ function QueryViewCtrl(
     );
 
   $scope.saveQuery = (customOptions, data) => {
-    console.log("saveQuery");
+    // console.log("saveQuery");
     let request = data;
 
     if (request) {
