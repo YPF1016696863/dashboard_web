@@ -147,7 +147,6 @@ class QueriesListTabs extends React.Component {
     this.setState({
       isLoaded: false,
       runTimeLoading: true,
-      canEdit: false,
       query: null,
       queryResultRaw: null,
       tableData: null,
@@ -157,7 +156,6 @@ class QueriesListTabs extends React.Component {
       this.setState({
         isLoaded: true,
         runTimeLoading: false,
-        canEdit: false,
         query: null,
         queryResultRaw: null,
         tableData: null,
@@ -171,7 +169,6 @@ class QueriesListTabs extends React.Component {
         this.setState({
           query,
           isLoaded: true,
-          canEdit: currentUser.canEdit(query) || query.can_edit,
           tableData: _.find(
             query.visualizations,
             (visualization) => visualization.type === 'TABLE'
@@ -203,7 +200,6 @@ class QueriesListTabs extends React.Component {
                 this.setState({
                   isLoaded: true,
                   runTimeLoading: false,
-                  canEdit: false,
                   queryResultRaw: null,
                   // tableData: null,
                   queryResult: null,
@@ -215,7 +211,6 @@ class QueriesListTabs extends React.Component {
         this.setState({
           isLoaded: true,
           runTimeLoading: false,
-          canEdit: false,
           query: null,
           queryResultRaw: null,
           tableData: null,
