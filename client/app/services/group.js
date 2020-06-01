@@ -37,11 +37,27 @@ function GroupService($resource, appSettings) {
     removeDashboard: {
       method: 'DELETE', url: appSettings.server.backendUrl + '/api/groups/:id/dashboards/:dashboard_id',
     },
-    updateDashboardpermission: {
+    updateDashboardPermission: {
       method: 'POST', url: appSettings.server.backendUrl + '/api/groups/:id/dashboards/:dashboard_id',
     },
     groupsByDashboardId: {
-      method: 'GET', cache: false, isArray: true, url: appSettings.server.backendUrl + '/api/groups/:id/groups',
+      method: 'GET', cache: false, isArray: true, url: appSettings.server.backendUrl + '/api/groups/:id/dashboard_groups',
+    },
+
+    queries: {
+      method: 'GET', cache: false, isArray: true, url: appSettings.server.backendUrl + '/api/groups/:id/queries',
+    },
+    addQuery: {
+      method: 'POST', url: appSettings.server.backendUrl + '/api/groups/:id/queries',
+    },
+    removeQuery: {
+      method: 'DELETE', url: appSettings.server.backendUrl + '/api/groups/:id/queries/:query_id',
+    },
+    updateQueryPermission: {
+      method: 'POST', url: appSettings.server.backendUrl + '/api/groups/:id/queries/:query_id',
+    },
+    groupsByQueryId: {
+      method: 'GET', cache: false, isArray: true, url: appSettings.server.backendUrl + '/api/groups/:id/query_groups',
     },
   };
   return $resource(appSettings.server.backendUrl + '/api/groups/:id', { id: '@id' }, actions);

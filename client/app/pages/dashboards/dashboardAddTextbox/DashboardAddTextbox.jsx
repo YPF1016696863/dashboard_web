@@ -115,7 +115,7 @@ class DashboardAddTextbox extends React.Component {
               value={this.state.text}
               onChange={this.onTextChanged}
               autoFocus
-              placeholder="在此输入你想输入的文本"
+              placeholder="在此输入文本"
             />
             {/* <small>
               Supports basic{' '}

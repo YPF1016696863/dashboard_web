@@ -34,14 +34,14 @@ function disableUser(user) {
   return $http
     .post(disableResource(user))
     .then((data) => {
-      notification.warning(`User ${userName} is now disabled.`);
+      notification.warning(`用户 ${userName} 已被禁用.`);
       user.is_disabled = true;
       user.profile_image_url = data.data.profile_image_url;
       return data;
     })
     .catch((response = {}) => {
       const message = get(response, 'data.message', response.statusText);
-      notification.error('Cannot disable user', message);
+      notification.error('无法禁用用户', message);
     });
 }
 

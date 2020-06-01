@@ -50,7 +50,7 @@ class GroupsList extends React.Component {
       (text, group) => (
         <Button.Group>
           <Button href={`groups/${group.id}`}>成员</Button>
-          {(!group.permissions.includes('super_admin') && group.permissions.includes('admin')) && (
+          {(!group.permissions.includes('super_admin')) && (
             <Button href={`groups/${group.id}/data_sources`}>数据源</Button>
           )}
         </Button.Group>

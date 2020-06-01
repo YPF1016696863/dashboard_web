@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   Tree,
+  Tag,
   Table,
   Alert,
   Empty,
@@ -46,11 +47,12 @@ import ItemsTable, {
 } from '@/components/items-list/components/ItemsTable';
 
 import { Query } from '@/services/query';
+import { Group } from '@/services/group';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
-
+import UserGroupPermissionDialog from '@/components/groups/UserGroupPermissionDialog';
 import notification from '@/services/notification';
 import { navigateToWithSearch } from '@/services/navigateTo';
 import { TablePreview } from '@/components/table-preview/table-preview';
@@ -68,13 +70,16 @@ class QueriesListTabs extends React.Component {
   componentDidMount() {
     this.setState({
       isLoaded: true,
-      canEdit: false,
       query: null,
       queryResultRaw: null,
       queryResult: null,
       tableData: null,
       showDeleteModal: false,
-      runTimeLoading: false
+      runTimeLoading: false,
+      permissions: {
+        loading: false,
+        groups: null
+      }
     });
 
     if (this.queryId !== null) {
@@ -102,7 +107,6 @@ class QueriesListTabs extends React.Component {
     ) {
       // eslint-disable-next-line
       this.setState({
-        canEdit: false,
         query: null,
         queryResultRaw: null,
         tableData: null,
@@ -147,7 +151,7 @@ class QueriesListTabs extends React.Component {
       query: null,
       queryResultRaw: null,
       tableData: null,
-      queryResult: null
+      queryResult: null,
     });
     if (!id) {
       this.setState({
@@ -157,78 +161,57 @@ class QueriesListTabs extends React.Component {
         query: null,
         queryResultRaw: null,
         tableData: null,
-        queryResult: 'empty'
+        queryResult: 'empty',
       });
       return;
     }
 
-    
-
     Query.query({ id })
-      .$promise.then(query => {
+      .$promise.then((query) => {
         this.setState({
           query,
           isLoaded: true,
           canEdit: currentUser.canEdit(query) || query.can_edit,
           tableData: _.find(
             query.visualizations,
-            visualization => visualization.type === 'TABLE'
-          )
+            (visualization) => visualization.type === 'TABLE'
+          ),
         });
-
-        
         query
-        .getQueryResultByText(-1, this.state.query.query)
-        .toPromise()
-        .then(queryRes => {
-          this.setState({
-            runTimeLoading: false,
-            queryResultRaw: queryRes,
-            queryResult: this.normalizedTableData(queryRes.query_result)
+          .getQueryResultPromise()
+          .then((queryRes) => {
+            this.setState({
+              runTimeLoading: false,
+              queryResultRaw: queryRes,
+              queryResult: this.normalizedTableData(queryRes.query_result),
+            });
+            this.getGroupsWithPermission();
+          })
+          .catch((err) => {
+            query
+              .getQueryResultByText(-1, this.state.query.query)
+              .toPromise()
+              .then((queryRes) => {
+                this.setState({
+                  runTimeLoading: false,
+                  queryResultRaw: queryRes,
+                  queryResult: this.normalizedTableData(queryRes.query_result),
+                });
+                this.getGroupsWithPermission();
+              })
+              .catch((ex) => {
+                this.setState({
+                  isLoaded: true,
+                  runTimeLoading: false,
+                  canEdit: false,
+                  queryResultRaw: null,
+                  // tableData: null,
+                  queryResult: null,
+                });
+              });
           });
-          // console.log(queryRes);
-          // console.log(queryRes.query_result.data);
-        })
-        .catch(err => {
-          // console.log(err);
-          this.setState({
-            isLoaded: true,
-            runTimeLoading: false,
-            canEdit: false,
-            queryResultRaw: null,
-            // tableData: null,
-            queryResult: null
-          });
-        });
-
-
-        // query
-        //   .getQueryResultPromise()
-        //   .then(queryRes => {
-        //     this.setState({
-        //       runTimeLoading: false,
-        //       queryResultRaw: queryRes,
-        //       queryResult: this.normalizedTableData(queryRes.query_result)
-        //     });
-            
-        //     console.log(queryRes);
-        //     console.log(queryRes.query_result);
-        //     console.log(this.normalizedTableData(queryRes.query_result));
-        //   })
-        //   .catch(err => {
-        //     console.log(err);
-        //     this.setState({
-        //       isLoaded: true,
-        //       runTimeLoading: false,
-        //       canEdit: false,
-        //       queryResultRaw: null,
-        //       // tableData: null,
-        //       queryResult: null
-        //     });
-        //   });
-
       })
-      .catch(err => {
+      .catch((exFinal) => {
         this.setState({
           isLoaded: true,
           runTimeLoading: false,
@@ -236,7 +219,7 @@ class QueriesListTabs extends React.Component {
           query: null,
           queryResultRaw: null,
           tableData: null,
-          queryResult: null
+          queryResult: null,
         });
       });
   }
@@ -300,6 +283,40 @@ class QueriesListTabs extends React.Component {
   handleDeleteCancel = () => {
     this.setState({ showDeleteModal: false });
   };
+
+  getGroupsWithPermission = () => {
+    const { query } = this.state;
+    this.setState({
+      permissions: {
+        loading: true,
+        groups: null
+      }
+    });
+
+    Group.groupsByQueryId({ id: this.state.query.id }, result => {
+      this.setState({
+        permissions: {
+          loading: false,
+          groups: _.map(result, group => {
+            return {
+              key: group.id,
+              group: group.name,
+              groupid: group.id,
+              viewonly: group.view_only
+            }
+          })
+        }
+      });
+    }, err => {
+      message.warning('无法获取该数据集分组权限设置.');
+      this.setState({
+        permissions: {
+          loading: false,
+          groups: null
+        }
+      });
+    });
+  }
 
   normalizedTableData(data) {
     // console.log(data);
@@ -423,79 +440,8 @@ class QueriesListTabs extends React.Component {
                 showIcon
               />
             </Modal>
-            <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
-              <div style={{ width: '50%', float: 'right' }}>
-                <b style={{ fontSize: '14px' }}>数据集描述:</b>
-                <div align="left">
-                  <TextArea
-                    placeholder="数据集描述"
-                    rows={4}
-                    value={this.state.query.description}
-                    onChange={e => {
-                      this.setState({
-                        query: _.extend(this.state.query, {
-                          description: e.target.value
-                        })
-                      });
-                    }}
-                  />
-                </div>
-                <div align="right" style={{ paddingTop: '10px' }}>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      this.saveQuery(null, {
-                        description: this.state.query.description
-                      });
-                    }}
-                  >
-                    <Icon type="save" />
-                    保存
-                  </Button>
-                </div>
-                <b style={{ fontSize: '14px' }}>新建可视化组件:</b>
-                <br />
-                <Button
-                  type="primary"
-                  onClick={e => {
-                    navigateToWithSearch(
-                      '/query/' + this.state.query.id + '/charts/new'
-                    );
-                  }}
-                >
-                  <Icon type="pie-chart" />
-                  新建可视化组件
-                </Button>
-                <br />
-                <br />
-                <b style={{ fontSize: '14px' }}>其他设置:</b>
-                <br />
-                <Button
-                  type="primary"
-                  onClick={e => {
-                    navigateToWithSearch(
-                      '/queries/' + this.props.queryId + '/source'
-                    );
-                  }}
-                >
-                  <i className="fa fa-edit m-r-5" />
-                  编辑数据集
-                </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <Popconfirm
-                  placement="topLeft"
-                  title="确认删除数据集?"
-                  onConfirm={this.deleteQuery}
-                  okText="确认"
-                  cancelText="取消"
-                >
-                  <Button type="danger">
-                    <Icon type="delete" />
-                    删除数据集
-                  </Button>
-                </Popconfirm>
-              </div>
-              <div style={{ width: '50%', float: 'left' }}>
+            <div style={{ padding: '10px' }}>
+              <div style={{ width: '100%' }}>
                 <Descriptions title="数据集信息">
                   <Descriptions.Item label="数据集创建时间">
                     {this.state.query.created_at}
@@ -507,7 +453,7 @@ class QueriesListTabs extends React.Component {
                     {this.state.query.user.name}
                   </Descriptions.Item>
                   <Descriptions.Item label="可编辑">
-                    {this.state.canEdit ? '是' : '否'}
+                    {!this.state.query.readOnly() ? '是' : '否'}
                   </Descriptions.Item>
                   <Descriptions.Item label="最近更新自">
                     {this.state.query.last_modified_by.name}
@@ -534,6 +480,7 @@ class QueriesListTabs extends React.Component {
                       wrapperCol={{ span: 4, offset: 10 }}
                     >
                       <Switch
+                        disabled={this.state.query.readOnly()}
                         checkedChildren="开"
                         unCheckedChildren="关"
                         defaultChecked={!this.state.query.is_draft}
@@ -546,6 +493,185 @@ class QueriesListTabs extends React.Component {
                     </Form.Item>
                   </Form>
                 </div>
+                {
+                  currentUser.isAdmin ? (
+                    <>
+                      <Divider />
+                      <p style={{ fontSize: '14px' }}>数据集权限设定:</p>
+                      <p>
+                        <Table
+                          locale={{ emptyText: "暂无数据" }}
+                          tableLayout="fixed"
+                          columns={[
+                            {
+                              title: '用户分组',
+                              dataIndex: 'group',
+                              key: 'group',
+                              render: text => text,
+                            },
+                            {
+                              title: '只读',
+                              dataIndex: 'viewonly',
+                              key: 'viewonly',
+                              render: viewonly => (
+                                <Tag color={viewonly ? 'blue' : 'green'}>
+                                  {viewonly ? '只读' : '读写'}
+                                </Tag>
+                              )
+                            },
+                            {
+                              title: '操作',
+                              key: 'action',
+                              render: (text, record) => {
+                                return (
+                                  <span>
+                                    <Switch
+                                      checkedChildren="读写"
+                                      unCheckedChildren="只读"
+                                      size="small"
+                                      checked={!record.viewonly}
+                                      onChange={
+                                        (checked, event) => {
+                                          this.setState({
+                                            permissions: {
+                                              loading: true
+                                            }
+                                          });
+                                          Group.updateQueryPermission({
+                                            id: record.groupid, query_id: this.state.query.id
+                                          },
+                                            { view_only: !checked }, () => {
+                                              this.getGroupsWithPermission();
+                                            }, err => {
+                                              message.error("修改读写权限失败.");
+                                            });
+
+                                        }
+                                      }
+                                    />
+                                    <Divider type="vertical" />
+                                    <Button
+                                      size="small"
+                                      type="link"
+                                      onClick={e => {
+                                        this.setState({
+                                          permissions: {
+                                            loading: true
+                                          }
+                                        });
+                                        Group.removeQuery(
+                                          {
+                                            id: record.groupid, query_id: this.state.query.id
+                                          },
+                                          () => {
+                                            this.getGroupsWithPermission();
+                                            message.success("删除用户分组.");
+                                          }, err => {
+                                            message.error("删除用户分组权限失败.");
+                                          });
+                                      }}
+                                    >
+                                      <Icon type="delete" />删除
+                                    </Button>
+                                  </span>
+                                )
+                              },
+                            }
+                          ]}
+                          dataSource={this.state.permissions.groups}
+                          loading={this.state.permissions.loading}
+                        />
+                      </p>
+                      <div align="right">
+                        <UserGroupPermissionDialog
+                          component={this.state.query}
+                          componentType='query'
+                          callback={() => { this.getGroupsWithPermission(); }}
+                        />
+                      </div>
+                    </>
+                  ) : null
+                }
+              </div>
+              <Divider />
+              <div style={{ width: '100%' }}>
+                <b style={{ fontSize: '14px' }}>数据集描述:</b>
+                <div>
+                  <TextArea
+                    disabled={this.state.query.readOnly()}
+                    placeholder="数据集描述"
+                    rows={4}
+                    value={this.state.query.description}
+                    onChange={e => {
+                      this.setState({
+                        query: _.extend(this.state.query, {
+                          description: e.target.value
+                        })
+                      });
+                    }}
+                  />
+                </div>
+                <div align="right" style={{ paddingTop: '10px' }}>
+                  <Button
+                    type="primary"
+                    disabled={this.state.query.readOnly()}
+                    onClick={() => {
+                      this.saveQuery(null, {
+                        description: this.state.query.description
+                      });
+                    }}
+                  >
+                    <Icon type="save" />
+                    保存
+                  </Button>
+                </div>
+                <b style={{ fontSize: '14px' }}>新建可视化组件:</b>
+                <div align="right" style={{ paddingTop: '10px' }}>
+                  <Button
+                    type="primary"
+                    onClick={e => {
+                      navigateToWithSearch(
+                        '/query/' + this.state.query.id + '/charts/new'
+                      );
+                    }}
+                  >
+                    <Icon type="pie-chart" />
+                    新建可视化组件
+                  </Button>
+                </div>
+                <hr />
+                <b style={{ fontSize: '14px' }}>其他设置:</b>
+                <br />
+                {
+                  !this.state.query.readOnly() ? (
+                    <>
+                      <Button
+                        type="primary"
+                        onClick={e => {
+                          navigateToWithSearch(
+                            '/queries/' + this.props.queryId + '/source'
+                          );
+                        }}
+                      >
+                        <i className="fa fa-edit m-r-5" />
+                        编辑数据集
+                      </Button>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <Popconfirm
+                        placement="topLeft"
+                        title="确认删除数据集?"
+                        onConfirm={this.deleteQuery}
+                        okText="确认"
+                        cancelText="取消"
+                      >
+                        <Button type="danger">
+                          <Icon type="delete" />
+                          删除数据集
+                        </Button>
+                      </Popconfirm>
+                    </>
+                  ) : null
+                }
               </div>
               <Divider />
               <div style={{ width: '100%', float: 'left' }}>
@@ -556,21 +682,31 @@ class QueriesListTabs extends React.Component {
                       <p>该数据集没有设置参数</p>
                       <div align="right">
                         <ButtonGroup>
-                          <Button type="primary" disabled>
-                            <Icon type="sync" />
-                            刷新预览
-                          </Button>
                           <Button
                             type="primary"
                             onClick={e => {
-                              navigateToWithSearch(
-                                '/queries/' + this.props.queryId + '/source'
-                              );
+                              this.getTemporaryQueryResult();
+                              message.success("数据刷新完成.");
                             }}
                           >
-                            <Icon type="setting" />
-                            设置参数
+                            <Icon type="sync" />
+                            刷新预览
                           </Button>
+                          {
+                            !this.state.query.readOnly() ? (
+                              <Button
+                                type="primary"
+                                onClick={e => {
+                                  navigateToWithSearch(
+                                    '/queries/' + this.props.queryId + '/source'
+                                  );
+                                }}
+                              >
+                                <Icon type="setting" />
+                                设置参数
+                              </Button>
+                            ) : null
+                          }
                         </ButtonGroup>
                       </div>
                     </Col>
@@ -585,8 +721,8 @@ class QueriesListTabs extends React.Component {
                             wrapperCol={{ span: 18 }}
                             label={parameter.title}
                             help={
-                              'ID:' + parameter.name + ',类型:' + parameter.type
-                            }
+                                'ID:' + parameter.name + ',类型:' + parameter.type
+                              }
                           >
                             <ParameterValueInput
                               type={parameter.type}
@@ -595,22 +731,22 @@ class QueriesListTabs extends React.Component {
                               enumOptions={parameter.enumOptions}
                               queryId={parameter.queryId}
                               onSelect={value => {
-                                parameter.setValue(value);
-                              }}
+                                  parameter.setValue(value);
+                                }}
                             />
                           </Form.Item>
                         </Form>
                       </Col>
-                    ))}
+                      ))}
                     <Col span={24}>
                       <div align="right">
                         <ButtonGroup>
                           <Button
                             type="primary"
                             onClick={e => {
-                              message.info("注: 预览数据不会改变数据集原始数据,改变参数设置请点击'设置参数'按钮.");
-                              this.getTemporaryQueryResult();
-                            }}
+                                message.info("注: 预览数据不会改变数据集原始数据,改变参数设置请点击'设置参数'按钮.");
+                                this.getTemporaryQueryResult();
+                              }}
                           >
                             <Icon type="sync" />
                             刷新预览
@@ -618,10 +754,10 @@ class QueriesListTabs extends React.Component {
                           <Button
                             type="primary"
                             onClick={e => {
-                              navigateToWithSearch(
-                                '/queries/' + this.props.queryId + '/source'
-                              );
-                            }}
+                                navigateToWithSearch(
+                                  '/queries/' + this.props.queryId + '/source'
+                                );
+                              }}
                           >
                             <Icon type="setting" />
                             设置参数
@@ -630,7 +766,7 @@ class QueriesListTabs extends React.Component {
                       </div>
                     </Col>
                   </Row>
-                )}
+                  )}
               </div>
               <div style={{ width: '100%', float: 'left' }}>
                 <b style={{ fontSize: '14px' }}>数据集数据预览:</b>
@@ -640,10 +776,10 @@ class QueriesListTabs extends React.Component {
                   <>
                     <div
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: '#25374C'
-                      }}
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: '#25374C'
+                        }}
                       id="Preview"
                     >
                       {this.state.runTimeLoading ? (
@@ -656,7 +792,7 @@ class QueriesListTabs extends React.Component {
                       )}
                     </div>
                   </>
-                )}
+                  )}
               </div>
             </div>
           </>
@@ -673,7 +809,7 @@ QueriesListTabs.propTypes = {
 
 QueriesListTabs.defaultProps = {
   queryId: null,
-  queriesTabCb: a => {}
+  queriesTabCb: a => { }
 };
 
 export default function init(ngModule) {

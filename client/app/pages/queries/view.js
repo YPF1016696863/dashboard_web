@@ -14,6 +14,7 @@ import {
   SCHEMA_NOT_SUPPORTED,
   SCHEMA_LOAD_ERROR
 } from '@/services/data-source';
+import {navigateTo} from '@/services/navigateTo';
 import getTags from '@/services/getTags';
 import { policy } from '@/services/policy';
 import Notifications from '@/services/notifications';
@@ -166,6 +167,11 @@ function QueryViewCtrl(
     'alt+enter': $scope.executeQuery
   };
 
+  if($scope.query.readOnly()) {
+    notification.warning('只读权限的用户无法修改更新数据.');
+    navigateTo("/queries?queryid="+$scope.query.id);
+  }
+
   KeyboardShortcuts.bind(shortcuts);
 
   $scope.$on('$destroy', () => {
@@ -190,10 +196,9 @@ function QueryViewCtrl(
 
   $scope.getQueryType = () => $scope.dataSource && $scope.dataSource.type;
 
-  $scope.canForkQuery = () =>
-    currentUser.hasPermission('edit_query') && !$scope.dataSource.view_only;
+  $scope.canForkQuery = () => !$scope.dataSource.view_only;
 
-  $scope.canScheduleQuery = currentUser.hasPermission('schedule_query');
+  $scope.canScheduleQuery = true; // currentUser.hasPermission('schedule_query');
 
   if ($route.current.locals.dataSources) {
     $scope.dataSources = $route.current.locals.dataSources;
@@ -270,8 +275,8 @@ function QueryViewCtrl(
     const options = Object.assign(
       {},
       {
-        successMessage: 'Query saved',
-        errorMessage: 'Query could not be saved'
+        successMessage: '查询已保存',
+        errorMessage: '无法保存查询'
       },
       customOptions
     );
@@ -294,21 +299,21 @@ function QueryViewCtrl(
       error => {
         if (error.status === 409) {
           const errorMessage =
-            'It seems like the query has been modified by another user.';
+            '该查询已经被其他用户修改.';
 
           if ($scope.isQueryOwner) {
             const title = 'Overwrite Query';
             const message =
               errorMessage +
-              '<br>Are you sure you want to overwrite the query with your version?';
+              '<br>请确认是否使用您的版本进行覆盖?';
             const confirm = { class: 'btn-warning', title: 'Overwrite' };
 
             AlertDialog.open(title, message, confirm).then(overwrite);
           } else {
             notification.error(
-              'Changes not saved',
+              '修改未保存',
               errorMessage +
-              ' Please copy/backup your changes and reload this page.',
+              ' 请复制/备份您的修改并刷新页面.',
               { duration: null }
             );
           }
@@ -364,9 +369,9 @@ function QueryViewCtrl(
       );
     }
 
-    const title = '收回查询';
+    const title = '删除查询';
     const message =
-      '你确定想要收回这个查询吗？<br/> 所有的用到这个可视化部件的警报与可视化面板都会被删除';
+      '确定想要删除这个查询吗？<br/> 所有的用到这个可视化部件的警报与可视化面板都会被删除';
     const confirm = { class: 'btn-warning', title: 'Archive' };
 
     AlertDialog.open(title, message, confirm).then(archive);

@@ -412,9 +412,9 @@ function DashboardPreviewCtrl(
       this.dashboard.$delete();
     };
 
-    const title = '收回可视化面板';
-    const message = `你确定你想要回收这个可视化面板 "${this.dashboard.name}" ?`;
-    const confirm = { class: 'btn-warning', title: '收回' };
+    const title = '删除可视化面板';
+    const message = `确定删除这个可视化面板?"${this.dashboard.name}" ?`;
+    const confirm = { class: 'btn-warning', title: '删除' };
 
     AlertDialog.open(title, message, confirm).then(archive);
   };

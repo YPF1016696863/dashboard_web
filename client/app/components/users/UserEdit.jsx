@@ -268,7 +268,6 @@ export default class UserEdit extends React.Component {
         {this.renderUserInfoForm()}
         {!user.isDisabled && (
           <Fragment>
-            {this.renderApiKey()}
             <hr />
             <h5>密码</h5>
             {user.id === currentUser.id && (

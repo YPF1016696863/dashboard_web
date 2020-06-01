@@ -53,7 +53,7 @@ class GroupDataSources extends React.Component {
 
   listColumns = [
     Columns.custom((text, datasource) => (
-      <DataSourcePreviewCard dataSource={datasource} withLink />
+      <DataSourcePreviewCard dataSource={datasource} />
     ), {
       title: 'Name',
       field: 'name',
@@ -65,14 +65,18 @@ class GroupDataSources extends React.Component {
           selectedKeys={[datasource.view_only ? 'viewonly' : 'full']}
           onClick={item => this.setDataSourcePermissions(datasource, item.key)}
         >
-          <Menu.Item key="full">Full Access</Menu.Item>
-          <Menu.Item key="viewonly">View Only</Menu.Item>
+          <Menu.Item key="full">读写权限</Menu.Item>
+          <Menu.Item key="viewonly">只读权限</Menu.Item>
         </Menu>
       );
+      
+      if (this.group && this.group.permissions && this.group.permissions.includes('user')) {
+        return null;
+      }
 
       return (
         <Dropdown trigger={['click']} overlay={menu}>
-          <Button className="w-100">{datasource.view_only ? 'View Only' : 'Full Access'}<Icon type="down" /></Button>
+          <Button className="w-100">{datasource.view_only ? '只读权限' : '读写权限'}<Icon type="down" /></Button>
         </Dropdown>
       );
     }, {
@@ -81,7 +85,7 @@ class GroupDataSources extends React.Component {
       isAvailable: () => currentUser.isAdmin,
     }),
     Columns.custom((text, datasource) => (
-      <Button className="w-100" type="danger" onClick={() => this.removeGroupDataSource(datasource)}>Remove</Button>
+      <Button className="w-100" type="danger" onClick={() => this.removeGroupDataSource(datasource)}>移除</Button>
     ), {
       width: '1%',
       isAvailable: () => currentUser.isAdmin,

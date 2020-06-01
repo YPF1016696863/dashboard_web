@@ -216,12 +216,12 @@ class DashboardsListSearch extends React.Component {
                         <Form onSubmit={this.handleSubmit}>
                           <Form.Item label="仪表盘名称">
                             <Input
-                              prefix={
+                              prefix={(
                                 <Icon
                                   type="dashboard"
                                   style={{ color: 'rgba(0,0,0,.25)' }}
                                 />
-                              }
+                              )}
                               placeholder="新仪表盘"
                               onChange={this.newName}
                             />
@@ -245,7 +245,7 @@ class DashboardsListSearch extends React.Component {
                           showIcon
                         />
                       </Modal>
-                    )}
+                      )}
                   </Col>
                 </Row>
                 <Row>
@@ -260,7 +260,7 @@ class DashboardsListSearch extends React.Component {
                   </Col>
                   <Col span={2} offset={1}>
                     <Dropdown
-                      overlay={
+                      overlay={(
                         <Menu>
                           <Menu.Item
                             key="1"
@@ -277,7 +277,7 @@ class DashboardsListSearch extends React.Component {
                             按创建时间排序
                           </Menu.Item>
                         </Menu>
-                      }
+                      )}
                     >
                       <Button icon="menu-fold" size="small" />
                     </Dropdown>
@@ -342,76 +342,76 @@ class DashboardsListSearch extends React.Component {
                     {_.map(this.state.filtered, item => {
                       return (
                         <TreeNode
-                          icon={
+                          icon={(
                             <Icon
                               type="dashboard"
                               style={{ color: '#801336' }}
                             />
-                          }
-                          title={
+                          )}
+                          title={(
                             <span
                               onDoubleClick={event => {
                                 this.setState({ editMode: true });
                               }}
                             >
                               {this.state.editMode &&
-                              this.state.selected &&
-                              (this.state.selected === item.slug && !this.state.dashboard.readOnly()) ? (
-                                <Input
-                                  autoFocus
-                                  size="small"
-                                  value={this.state.rename}
-                                  onFocus={event => {
-                                    if(this.state.dashboard.readOnly()) {
-                                      return;
-                                    }
-                                    this.setState({ rename: item.name });
-                                  }}
-                                  onChange={event => {
-                                    if(this.state.dashboard.readOnly()) {
-                                      return;
-                                    }
-                                    this.setState(
-                                      {
-                                        rename: event.target.value
-                                      },
-                                      () => {}
-                                    );
-                                  }}
-                                  onBlur={() => {
-                                    if(this.state.dashboard.readOnly()) {
-                                      return;
-                                    }
-                                    this.setState({ editMode: false });
-                                    if (this.state.rename === item.name) {
-                                      console.log('NO CHANGE');
-                                    } else {
-                                      this.setState({ loading: true });
-                                      this.updateDashboard({
-                                        name: this.state.rename
-                                      });
-                                    }
-                                  }}
-                                  onPressEnter={() => {
-                                    if(this.state.dashboard.readOnly()) {
-                                      return;
-                                    }
-                                    this.setState({ editMode: false });
-                                    if (this.state.rename === item.name) {
-                                      console.log('NO CHANGE');
-                                    } else {
-                                      this.setState({ loading: true });
-                                      this.updateDashboard({
-                                        name: this.state.rename
-                                      });
-                                    }
-                                  }}
-                                />
-                              ) : (
-                                item.name
-                              )}
+                                this.state.selected &&
+                                (this.state.selected === item.slug && !this.state.dashboard.readOnly()) ? (
+                                  <Input
+                                    autoFocus
+                                    size="small"
+                                    value={this.state.rename}
+                                    onFocus={event => {
+                                      if (this.state.dashboard.readOnly()) {
+                                        return;
+                                      }
+                                      this.setState({ rename: item.name });
+                                    }}
+                                    onChange={event => {
+                                      if (this.state.dashboard.readOnly()) {
+                                        return;
+                                      }
+                                      this.setState(
+                                        {
+                                          rename: event.target.value
+                                        },
+                                        () => { }
+                                      );
+                                    }}
+                                    onBlur={() => {
+                                      if (this.state.dashboard.readOnly()) {
+                                        return;
+                                      }
+                                      this.setState({ editMode: false });
+                                      if (this.state.rename === item.name) {
+                                        console.log('NO CHANGE');
+                                      } else {
+                                        this.setState({ loading: true });
+                                        this.updateDashboard({
+                                          name: this.state.rename
+                                        });
+                                      }
+                                    }}
+                                    onPressEnter={() => {
+                                      if (this.state.dashboard.readOnly()) {
+                                        return;
+                                      }
+                                      this.setState({ editMode: false });
+                                      if (this.state.rename === item.name) {
+                                        console.log('NO CHANGE');
+                                      } else {
+                                        this.setState({ loading: true });
+                                        this.updateDashboard({
+                                          name: this.state.rename
+                                        });
+                                      }
+                                    }}
+                                  />
+                                ) : (
+                                  item.name
+                                )}
                             </span>
-                          }
+                          )}
                           key={item.slug}
                           isLeaf
                         />
