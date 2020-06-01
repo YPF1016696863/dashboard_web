@@ -142,38 +142,36 @@ function WidgetFactory($http, $location, Query, Visualization, dashboardGridOpti
         // getQuery 这个查询的所有信息
         this.queryResult = this.getQuery().getQueryResult(maxAge);
         // console.log(this.queryResult); 
-        this.getQuery()
-          .getQueryResultByText(maxAge, this.getQuery().query)
-          .toPromise()
-          .then(queryRes => {
+
+
+        this.queryResult.toPromise()
+          .then((result) => {
             this.loading = false;
-            this.data = queryRes;
+            this.data = result;
+            console.log(result);
           })
-          .catch(err => {
-            console.log(err);
-            this.loading = false;
-            this.data = err;
+          .catch((error) => {
+            this.getQuery()
+              .getQueryResultByText(maxAge, this.getQuery().query)
+              .toPromise()
+              .then(queryRes => {
+                this.loading = false;
+                this.data = queryRes;
+              })
+              .catch(err => {
+                console.log(err);
+                this.loading = false;
+                this.data = err;
+              });
           });
-  
-        // this.queryResult.toPromise()
-        //   .then((result) => {
-        //     this.loading = false;
-        //     this.data = result;
-        //     console.log(result);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //     this.loading = false;
-        //     this.data = error;
-        //   });
       }
 
       // return this.queryResult.toPromise(
-        return this.getQuery()
+      return this.getQuery()
         .getQueryResultByText(maxAge, this.getQuery().query)
         .toPromise();
-   
-    
+
+
     }
 
     save() {

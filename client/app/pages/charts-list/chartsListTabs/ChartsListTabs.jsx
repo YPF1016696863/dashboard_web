@@ -240,140 +240,133 @@ class ChartsListTabs extends React.Component {
       visType: null,
       canEdit: false
     });
-    
+
     return Query.query({ id: queryId })
       .$promise.then(query => {
         this.setState({ query });
 
+
+
         query
-        .getQueryResultByText(-1, this.state.query.query)
-        .toPromise()
-        .then(queryRes => {
-          this.setState({
-            isLoaded: true,
-            visualization: null,
-            queryResult: queryRes,
-            visType: null,
-            canEdit: currentUser.canEdit(query) || query.can_edit
-          });
-          if (!visualizationId) {
-            const visOption = _.cloneDeep(
-              _.first(
-                _.orderBy(
-                  query.visualizations,
-                  visualization => visualization.id
+          .getQueryResultPromise()
+          .then(queryRes => {
+            this.setState({
+              isLoaded: true,
+              visualization: null,
+              queryResult: queryRes,
+              visType: null,
+              canEdit: currentUser.canEdit(query) || query.can_edit
+            });
+            if (!visualizationId) {
+              const visOption = _.cloneDeep(
+                _.first(
+                  _.orderBy(
+                    query.visualizations,
+                    visualization => visualization.id
+                  )
                 )
-              )
-            );
-            if (_.has(visOption, 'options')) {
-              visOption.options.itemsPerPage = 20;
-            }
-            this.setState({
-              visualization: visOption,
-              visType: 'Q'
-            });
-          } else {
-            const visualization = _.find(
-              query.visualizations,
-              // eslint-disable-next-line eqeqeq
-              vis => vis.id == visualizationId
-            );
-            visualization.publicAccessEnabled = !!_.get(
-              visualization,
-              'api_key',
-              null
-            );
-
-            this.setState({
-              visualization,
-              visType: 'V',
-              runtime: {
-                share: {
-                  public: visualization.publicAccessEnabled
-                    ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
-                    : '打开可视化面板共享按钮以获取url链接',
-                  api: _.replace(API_SHARE_URL, '{id}', visualization.id),
-                  saving: false
-                }
+              );
+              if (_.has(visOption, 'options')) {
+                visOption.options.itemsPerPage = 20;
               }
-            });
-          }
-        })
-        .catch(err => {
-          this.setState({
-            query: null,
-            isLoaded: true,
-            visualization: 'empty',
-            queryResult: 'empty',
-            visType: null,
-            canEdit: false
+              this.setState({
+                visualization: visOption,
+                visType: 'Q'
+              });
+            } else {
+              const visualization = _.find(
+                query.visualizations,
+                // eslint-disable-next-line eqeqeq
+                vis => vis.id == visualizationId
+              );
+              visualization.publicAccessEnabled = !!_.get(
+                visualization,
+                'api_key',
+                null
+              );
+
+              this.setState({
+                visualization,
+                visType: 'V',
+                runtime: {
+                  share: {
+                    public: visualization.publicAccessEnabled
+                      ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
+                      : '打开可视化面板共享按钮以获取url链接',
+                    api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                    saving: false
+                  }
+                }
+              });
+            }
+          })
+          .catch(err => {
+            query
+              .getQueryResultByText(-1, this.state.query.query)
+              .toPromise()
+              .then(queryRes => {
+                this.setState({
+                  isLoaded: true,
+                  visualization: null,
+                  queryResult: queryRes,
+                  visType: null,
+                  canEdit: currentUser.canEdit(query) || query.can_edit
+                });
+                if (!visualizationId) {
+                  const visOption = _.cloneDeep(
+                    _.first(
+                      _.orderBy(
+                        query.visualizations,
+                        visualization => visualization.id
+                      )
+                    )
+                  );
+                  if (_.has(visOption, 'options')) {
+                    visOption.options.itemsPerPage = 20;
+                  }
+                  this.setState({
+                    visualization: visOption,
+                    visType: 'Q'
+                  });
+                } else {
+                  const visualization = _.find(
+                    query.visualizations,
+                    // eslint-disable-next-line eqeqeq
+                    vis => vis.id == visualizationId
+                  );
+                  visualization.publicAccessEnabled = !!_.get(
+                    visualization,
+                    'api_key',
+                    null
+                  );
+
+                  this.setState({
+                    visualization,
+                    visType: 'V',
+                    runtime: {
+                      share: {
+                        public: visualization.publicAccessEnabled
+                          ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
+                          : '打开可视化面板共享按钮以获取url链接',
+                        api: _.replace(API_SHARE_URL, '{id}', visualization.id),
+                        saving: false
+                      }
+                    }
+                  });
+                }
+              })
+              .catch(ex => {
+                this.setState({
+                  query: null,
+                  isLoaded: true,
+                  visualization: 'empty',
+                  queryResult: 'empty',
+                  visType: null,
+                  canEdit: false
+                });
+
+              });
           });
-          
-        });
-
-        // query
-        //   .getQueryResultPromise()
-        //   .then(queryRes => {
-        //     this.setState({
-        //       isLoaded: true,
-        //       visualization: null,
-        //       queryResult: queryRes,
-        //       visType: null,
-        //       canEdit: currentUser.canEdit(query) || query.can_edit
-        //     });
-        //     if (!visualizationId) {
-        //       const visOption = _.cloneDeep(
-        //         _.first(
-        //           _.orderBy(
-        //             query.visualizations,
-        //             visualization => visualization.id
-        //           )
-        //         )
-        //       );
-        //       if (_.has(visOption, 'options')) {
-        //         visOption.options.itemsPerPage = 20;
-        //       }
-        //       this.setState({
-        //         visualization: visOption,
-        //         visType: 'Q'
-        //       });
-        //     } else {
-        //       const visualization = _.find(
-        //         query.visualizations,
-        //         // eslint-disable-next-line eqeqeq
-        //         vis => vis.id == visualizationId
-        //       );
-        //       visualization.publicAccessEnabled = !!_.get(
-        //         visualization,
-        //         'api_key',
-        //         null
-        //       );
-
-        //       this.setState({
-        //         visualization,
-        //         visType: 'V',
-        //         runtime: {
-        //           share: {
-        //             public: visualization.publicAccessEnabled
-        //               ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
-        //               : '打开可视化面板共享按钮以获取url链接',
-        //             api: _.replace(API_SHARE_URL, '{id}', visualization.id),
-        //             saving: false
-        //           }
-        //         }
-        //       });
-        //     }
-        //   })
-        //   .catch(err => {
-        //     this.setState({
-        //       query: null,
-        //       isLoaded: true,
-        //       visualization: 'empty',
-        //       queryResult: 'empty',
-        //       visType: null,
-        //       canEdit: false
-        //     });
-        //   });
       })
       .catch(err => {
         this.setState({
@@ -551,7 +544,7 @@ class ChartsListTabs extends React.Component {
   };
 
   generateIframeCode = (url) => {
-    return '<iframe src="'+url+'" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
+    return '<iframe src="' + url + '" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
   };
 
   render() {
@@ -614,7 +607,7 @@ class ChartsListTabs extends React.Component {
                 'V' ? (
                   // eslint-disable-next-line react/jsx-indent
                   <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
-                    <div style={{ width: '50%', float: 'left'}}>
+                    <div style={{ width: '50%', float: 'left' }}>
                       <Descriptions title="可视化组件信息" style={{ paddingRight: '10px' }}>
                         <Descriptions.Item label="更新时间">
                           {this.state.visualization.updated_at}
@@ -750,7 +743,7 @@ class ChartsListTabs extends React.Component {
                           this.getDashboardOverview(this.props.displayId);
                         }}
                       />
-                    </div> 
+                    </div>
                   </div>
                 ) : null}
             </>
