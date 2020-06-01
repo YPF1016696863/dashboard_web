@@ -100,66 +100,62 @@ class ChartsSearch extends React.Component {
     } else {
       Query.query({ id: queryId })
         .$promise.then(query => {
-          
+
           // console.log(query.query);
-        query
-        .getQueryResultByText(-1, query.query)
-        .toPromise()
-        .then(queryRes => {
-          if (visualizationId) {
-            this.setState({
-              isLoaded: true,
-              visualization: _.find(
-                query.visualizations,
-                // eslint-disable-next-line eqeqeq
-                visualization => visualization.id == visualizationId
-              )
-            });
-          } else {
-            this.setState({
-              isLoaded: true,
-              visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
-            });
-          }
-          this.props.chartSearchCb(this.state.visualization.type);
-        })
-        .catch(err => {
-          console.log(err);
-          this.setState({
-            isLoaded: true,
-            visualization: { type: 'new' }
-          });
-        });
 
-          
-          // query
-          //   .getQueryResultPromise()
-          //   .then(queryRes => {
-          //     if (visualizationId) {
-          //       this.setState({
-          //         isLoaded: true,
-          //         visualization: _.find(
-          //           query.visualizations,
-          //           // eslint-disable-next-line eqeqeq
-          //           visualization => visualization.id == visualizationId
-          //         )
-          //       });
-          //     } else {
-          //       this.setState({
-          //         isLoaded: true,
-          //         visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
-          //       });
-          //     }
-          //     this.props.chartSearchCb(this.state.visualization.type);
 
-          //   })
-          //   .catch(err => {
-          //     console.log(err);
-          //     this.setState({
-          //       isLoaded: true,
-          //       visualization: { type: 'new' }
-          //     });
-          //   });
+
+          query
+            .getQueryResultPromise()
+            .then(queryRes => {
+              if (visualizationId) {
+                this.setState({
+                  isLoaded: true,
+                  visualization: _.find(
+                    query.visualizations,
+                    // eslint-disable-next-line eqeqeq
+                    visualization => visualization.id == visualizationId
+                  )
+                });
+              } else {
+                this.setState({
+                  isLoaded: true,
+                  visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
+                });
+              }
+              this.props.chartSearchCb(this.state.visualization.type);
+
+            })
+            .catch(err => {
+              query
+                .getQueryResultByText(-1, query.query)
+                .toPromise()
+                .then(queryRes => {
+                  if (visualizationId) {
+                    this.setState({
+                      isLoaded: true,
+                      visualization: _.find(
+                        query.visualizations,
+                        // eslint-disable-next-line eqeqeq
+                        visualization => visualization.id == visualizationId
+                      )
+                    });
+                  } else {
+                    this.setState({
+                      isLoaded: true,
+                      visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
+                    });
+                  }
+                  this.props.chartSearchCb(this.state.visualization.type);
+                })
+                .catch(ex => {
+                  console.log(ex);
+                  this.setState({
+                    isLoaded: true,
+                    visualization: { type: 'new' }
+                  });
+                });
+            }); 
 
 
 
