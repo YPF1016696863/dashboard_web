@@ -30,11 +30,11 @@ export default class DefaultPolicy {
   }
 
   isCreateQueryEnabled() {
-    return currentUser.hasPermission('create_query');
+    return true; // currentUser.hasPermission('create_query');
   }
 
   isCreateWidgetEnabled() {
-    return currentUser.hasPermission('create_query');
+    return true; // currentUser.hasPermission('create_query');
   }
 
   isCreateDashboardEnabled() {

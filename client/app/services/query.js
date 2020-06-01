@@ -447,6 +447,10 @@ function QueryResource(
         return false;
       }
 
+      if (this.user.id === currentUser.id) {
+        return false;
+      }
+
       if (this.user_id === this.created_by.id) {
         return false;
       }

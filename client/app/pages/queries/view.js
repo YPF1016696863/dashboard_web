@@ -196,10 +196,9 @@ function QueryViewCtrl(
 
   $scope.getQueryType = () => $scope.dataSource && $scope.dataSource.type;
 
-  $scope.canForkQuery = () =>
-    currentUser.hasPermission('edit_query') && !$scope.dataSource.view_only;
+  $scope.canForkQuery = () => !$scope.dataSource.view_only;
 
-  $scope.canScheduleQuery = currentUser.hasPermission('schedule_query');
+  $scope.canScheduleQuery = true; // currentUser.hasPermission('schedule_query');
 
   if ($route.current.locals.dataSources) {
     $scope.dataSources = $route.current.locals.dataSources;
@@ -276,8 +275,8 @@ function QueryViewCtrl(
     const options = Object.assign(
       {},
       {
-        successMessage: 'Query saved',
-        errorMessage: 'Query could not be saved'
+        successMessage: '查询已保存',
+        errorMessage: '无法保存查询'
       },
       customOptions
     );

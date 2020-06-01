@@ -66,7 +66,10 @@ class GroupMembers extends React.Component {
       if ((this.group.type === 'builtin') && (currentUser.id === user.id)) {
         return null;
       }
-      return <Button className="w-100" type="danger" onClick={event => this.removeGroupMember(event, user)}>Remove</Button>;
+      if (user.is_super) {
+        return null;
+      }
+      return <Button className="w-100" type="danger" onClick={event => this.removeGroupMember(event, user)}>移除用户</Button>;
     }, {
       width: '1%',
       isAvailable: () => currentUser.isAdmin,
