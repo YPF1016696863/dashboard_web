@@ -1,10 +1,9 @@
 import moment from 'moment';
 import debug from 'debug';
 import Mustache from 'mustache';
-import * as _ from 'lodash';
 
 import {
-  zipObject, isEmpty, map, filter, includes, union, uniq, has,
+  zipObject, isEmpty, map, filter, includes, union, uniq, has, find, some,
   isNull, isUndefined, isArray, isObject, identity, extend, each,
 } from 'lodash';
 
@@ -456,9 +455,9 @@ function QueryResource(
       }
 
       const userGroup = this.user.groups;
-      const userQueryGroup = _.filter(this.groups, group => _.find(userGroup,o => o === group.group_id));
+      const userQueryGroup = filter(this.groups, group => find(userGroup,o => o === group.group_id));
 
-      return !_.some(userQueryGroup,group => !group.view_only);
+      return !some(userQueryGroup,group => !group.view_only);
     } catch{
       return true;
     }
