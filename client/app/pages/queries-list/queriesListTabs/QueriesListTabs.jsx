@@ -288,7 +288,11 @@ class QueriesListTabs extends React.Component {
       }
     });
 
-    Group.groupsByQueryId({ id: this.state.query.id }, result => {
+    if (!query) {
+      message.warning('无法获取该数据集分组权限设置,请刷新页面');
+    }
+
+    Group.groupsByQueryId({ id: query.id }, result => {
       this.setState({
         permissions: {
           loading: false,

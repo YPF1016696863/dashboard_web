@@ -326,7 +326,11 @@ class DashboardsListTabs extends React.Component {
       }
     });
 
-    Group.groupsByDashboardId({ id: this.state.dashboard.id }, result => {
+    if (!dashboard) {
+      message.warning('无法获取该仪表板分组权限设置,请刷新页面');
+    }
+
+    Group.groupsByDashboardId({ id: dashboard.id }, result => {
       this.setState({
         permissions: {
           loading: false,
