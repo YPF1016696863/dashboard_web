@@ -1,6 +1,7 @@
 import { filter } from 'lodash';
 import TextboxDialog from '@/components/dashboards/TextboxDialog';
 import EditParameterMappingsDialog from '@/components/dashboards/EditParameterMappingsDialog';
+import {navigateTo} from '@/services/navigateTo';
 
 import template from './widget.html';
 import widgetDialogTemplate from './widget-dialog.html';
@@ -83,6 +84,11 @@ function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, 
     });
   };
 
+  this.editWidget = () => {// 跳转编辑组件页面
+    navigateTo("query/"+this.widget.query.id+"/charts/"+this.widget.visualization.id);
+  };
+
+
   this.load = (refresh = false) => {
     const maxAge = $location.search().maxAge;
     this.widget.load(refresh, maxAge);
@@ -112,7 +118,7 @@ export default function init(ngModule) {
       widget: '<',
       public: '<',
       dashboard: '<',
-      deleted: '&onDelete',
+      deleted: '&onDelete'
     },
   });
 }

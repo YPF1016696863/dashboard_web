@@ -35,12 +35,12 @@
 
     <!--  widget in $ctrl.dashboard.widgets  $ctrl.modifiedWidget -->
     <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged"
-        is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"
-        ng-class="{'preview-mode': true, 'editing-mode':false}">
-        <div class="dashboard-widget-wrapper" ng-repeat="widget in $ctrl.modifiedWidget track by widget.id"
+        is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"  
+        ng-class="{'preview-mode': true, 'editing-mode':false}" >
+        <div class="dashboard-widget-wrapper"  ng-repeat="widget in $ctrl.modifiedWidget track by widget.id"
             gridstack-item="widget.options.position" gridstack-item-id="{{ widget.id }}"
             data-test="WidgetId{{ widget.id }}">
-            <div class="grid-stack-item-content">
+            <div class="grid-stack-item-content"  >
                 <dashboard-widget widget="widget" dashboard="$ctrl.dashboard" on-delete="$ctrl.removeWidget(widget.id)">
                 </dashboard-widget>
             </div>

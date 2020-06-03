@@ -170,7 +170,6 @@ function DashboardPreviewCtrl(
     }
 
     this.isLayoutDirty = true;
-
     // calc diff, bail if none
     const changedWidgets = getWidgetsWithChangedPositions(
       this.dashboard.widgets

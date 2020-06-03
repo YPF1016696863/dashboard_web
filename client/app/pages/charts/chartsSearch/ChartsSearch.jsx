@@ -86,7 +86,6 @@ class ChartsSearch extends React.Component {
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
-    console.log("asd");
     this.setState({
       isLoaded: false,
       visualization: null
