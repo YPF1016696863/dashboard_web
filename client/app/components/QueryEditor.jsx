@@ -672,7 +672,17 @@ class QueryEditor extends React.Component {
               (
                 <div>
                   从
-                  <Select defaultValue="选择表名.." value={this.state.tValue===''?"表名称":this.state.tValue} style={{ width: 200 }} onChange={this.tableChange}>
+                  <Select 
+                  showSearch
+                  placeholder="选择表名.." 
+                  value={this.state.tValue===''?"表名称":this.state.tValue} 
+                  style={{ width: '20%' }} 
+                  onChange={this.tableChange}
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onSearch={this.onSearch}
+                  >
                     {_.map(this.props.schema, 'name').map((item) => {
                     return <Option value={item}>{item}</Option>
                   })}

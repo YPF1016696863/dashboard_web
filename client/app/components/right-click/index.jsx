@@ -7,13 +7,19 @@ import {
   Form,
   Select,
   TreeNode,
+  Checkbox,
+  Input,
   Tree,
+  Button,
+  Layout,
+  Drawer,
   Modal
 } from 'antd';
 // import { appSettingsConfig } from '@/config/app-settings';
 import './index.less';
 
-// const { Option } = Select;
+
+const { Header, Footer, Sider, Content } = Layout;
 
 class RightClick extends React.Component {
   state = {
@@ -99,7 +105,7 @@ class RightClick extends React.Component {
     // debugger
     // data query_result data_source_id 数据源id
     const dataHead = {
-      title: '组件列表',
+      title: '列表',
       key: 'root',
       children: [
         {
@@ -203,7 +209,7 @@ class RightClick extends React.Component {
     for (let i = 0; i < widgetsNormalSourceId.length; i += 1) {
       normalChild.push(
         {
-          title: "数据来源:" + widgetsNormalSourceName[i],
+          title: "数据来源:" + (widgetsNormalSourceName[i]===undefined?"文本":widgetsNormalSourceName[i]),
           key: "ID" + widgetsNormalSourceId[i],// 前面加个id 到时候筛选出来不要
           children: []
         }
@@ -266,8 +272,33 @@ class RightClick extends React.Component {
 
     return (
       <div>
-        <Modal
-          title="组件列表"
+        <Drawer
+          title=""
+          // eslint-disable-next-line react/jsx-boolean-value
+          closable={true}
+          onClose={this.onClose}
+          visible={this.state.visible}
+          placement="left"
+          width="25%"
+        >
+          <Tree
+            // eslint-disable-next-line react/jsx-boolean-value
+            checkable={true}
+            autoExpandParent={false}
+            defaultExpandAll={false}
+            // eslint-disable-next-line react/jsx-no-duplicate-props
+            autoExpandParent={false}
+            onExpand={this.onExpand}
+            onCheck={this.onCheck}
+            loadData={this.onLoadData}
+            treeData={this.state.treeData}
+          />
+          <Button type="primary" onClick={this.onSubmit} style={{ position:'absolute', bottom: '4%',left: '60%'}}>
+            确认
+          </Button>
+        </Drawer>
+        {/* <Modal
+          title=""
           visible={this.state.visible}
           onOk={this.onSubmit}
           onCancel={this.onClose}
@@ -286,9 +317,7 @@ class RightClick extends React.Component {
             loadData={this.onLoadData}
             treeData={this.state.treeData}
           />
-
-
-        </Modal>
+        </Modal> */}
       </div>
     );
   }

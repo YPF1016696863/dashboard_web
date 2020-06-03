@@ -154,7 +154,7 @@ function ViewDashboardCtrl(
 
     this.extractGlobalParameters = () => {
         this.widgetList = this.dashboard.widgets;
-        console.log(this.widgetList);//  出现查询出错
+        // console.log(this.widgetList);//  出现查询出错
         // console.log(this.widgetList[0].query.queryResult.query_result);
         this.globalParameters = this.dashboard.getParametersDefs();
         // 由参数设置url
