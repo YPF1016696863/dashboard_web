@@ -211,9 +211,11 @@ export class ParameterValueInput extends React.Component {
     const { value, onSelect, queryId, parameter } = this.props;
     const enumOptionsArray = [];
     // eslint-disable-next-line func-names
-    _.forEach(this.state.fatherParameterState, function (v, key) {
-      enumOptionsArray.push(v.KEYID);
-    });
+    _.forEach(this.state.fatherParameterState, function (v, k) {
+      _.forEach(v, function (vv, key) {
+        enumOptionsArray.push(vv);
+      });
+    });    
     return (
       this.state.loader ? (
         <Select

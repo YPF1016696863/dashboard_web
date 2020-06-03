@@ -148,7 +148,7 @@ function WidgetFactory($http, $location, Query, Visualization, dashboardGridOpti
           .then((result) => {
             this.loading = false;
             this.data = result;
-            console.log(result);
+            // console.log(result);
           })
           .catch((error) => {
             this.getQuery()
