@@ -869,6 +869,10 @@
         <div class="form-group" ng-if="options.form.isCodeEnabled">
             <textarea rows="15" style="width:100%;resize: none;" ng-model="options.form.code"></textarea>
         </div>
+        <label class="control-label">RESTFul接口配置</label>
+        <input name="name" type="text" class="form-control"
+            ng-model="options.restfulURL"
+            placeholder="http://localhost:8081/doBase64" />
     </div>
 
 </div>

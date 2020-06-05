@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
@@ -11,7 +12,8 @@ import {
     setxAxis,
     setyAxis,
     setScatter,
-    setThemeColor
+    getFullCanvasDataURL,
+    setThemeColor,
 } from './echartsBasicChartOptionUtils';
 
 
@@ -41,7 +43,30 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         function (o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
 
-                    
+                // restful发送按钮
+                _.set($scope.options, 'toolbox.feature.myTool1.onclick', function () {
+                    const imageBase64 =getFullCanvasDataURL($scope.options.id);
+                   
+                    $.ajax({
+                        async : false,    // 表示请求是否异步处理 
+                        type : "POST",    // 请求类型
+                        url : _.get($scope.options, "restfulURL", "http://localhost:8081/doBase64"),
+                        dataType : "text",// 返回的数据类型
+                        data:{
+                            image:imageBase64 
+                        },
+                        contentType : "application/x-www-form-urlencoded", // post的方式请求必须配置这个
+                        success (data) {
+                            alert('RESTFul已发送');
+                        },
+                        error (data) {
+                            alert('RESTFul发送失败');
+                        }
+                    });
+                });
+                // console.log();
+
+
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         // const data = $scope.queryResult.getData();

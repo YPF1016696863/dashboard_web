@@ -27,8 +27,10 @@ export class SchedulePhrase extends React.Component {
     const humanized = durationHumanize(seconds, {
       omitSingleValueNumber: true,
     });
-    const short = `Every ${humanized}`;
-    let full = `Refreshes every ${humanized}`;
+    // const short = `Every ${humanized}`;
+    const short = `每 ${humanized}`;
+    // let full = `Refreshes every ${humanized}`;
+    let full = `每 ${humanized} 刷新`;
 
     const { time, day_of_week: dayOfWeek } = this.props.schedule;
     if (time) {
