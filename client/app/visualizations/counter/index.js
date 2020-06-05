@@ -43,7 +43,8 @@ function CounterRenderer($timeout,$rootScope) {
           if (counterLabel) {
             $scope.counterLabel = counterLabel;
           } else {
-            $scope.counterLabel = $scope.visualization.name;
+            // $scope.counterLabel = $scope.visualization.name;
+            $scope.counterLabel = "";
           }
 
           if ($scope.visualization.options.countRow) {
