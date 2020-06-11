@@ -209,13 +209,15 @@ export class ParameterValueInput extends React.Component {
 
   renderQueryQueryInput() {
     const { value, onSelect, queryId, parameter } = this.props;
-    const enumOptionsArray = [];
+    let enumOptionsArray = [];
     // eslint-disable-next-line func-names
     _.forEach(this.state.fatherParameterState, function (v, k) {
       _.forEach(v, function (vv, key) {
         enumOptionsArray.push(vv);
       });
-    });    
+    }); 
+     // 下拉选择去重
+     enumOptionsArray = _.without(_.uniq(enumOptionsArray),undefined,null);   
     return (
       this.state.loader ? (
         <Select

@@ -1,7 +1,7 @@
 <div class="widget-wrapper" ng-class="$root.theme.widgetBackgroundColor">
   <div id="dapingEditor" class="tile body-container widget-visualization" ng-if="$ctrl.type=='visualization'" ng-class="[$ctrl.type,$root.theme.widgetBackgroundColor]"
     ng-switch="$ctrl.widget.getQueryResult().getStatus()">
-    <div class="body-row" style="height: 1%;">
+    <div class="body-row">
       <div class="t-header widget clearfix" style="padding: 0px !important;">
         <div class="dropdown pull-right widget-menu-remove"  ng-if="!$ctrl.public && $ctrl.dashboard.canEdit()">
            <a style="position: absolute;
