@@ -30,22 +30,25 @@
                                         </div>
                                     </div> -->
                                     <!-- 屏幕左侧 右键唤出组件列表 -->
-                                    <div ng-right-click="$ctrl.meau()">
+                                    <!-- <div ng-right-click="$ctrl.meau()">
                                         <i class="fa fa-square"
                                             style="color: rgba(255, 255, 255, 0);position: absolute;top: 0%;left: 0%;width: 5%;height: 100%;z-index: 99; ">
                                             <md-tooltip md-direction="left"> > </md-tooltip>
                                         </i>
-                                    </div>
+                                    </div> -->
                                     <!-- 组件列表 $ctrl.openRight-->
-                                    <right-click open="$ctrl.openRight" on-close="$ctrl.onRightClose"
-                                        on-submit="$ctrl.onRightSubmit" params="$ctrl.widgetList"></right-click>
+                                    <!-- <right-click open="$ctrl.openRight" on-close="$ctrl.onRightClose"
+                                        on-submit="$ctrl.onRightSubmit" params="$ctrl.widgetList"></right-click> -->
 
                                     <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose"
                                         on-submit="$ctrl.onSubmit" params="$ctrl.globalParameters"></parameter-drawer>
 
-                                    <div gridstack editing="false" class="dashboard-wrapper preview-mode">
+                                        <!-- /false -->
+                                        <!--  widget in $ctrl.dashboard.widgets  $ctrl.modifiedWidget -->
+                                    <div gridstack editing="true" class="dashboard-wrapper preview-mode">
                                         <div class="dashboard-widget-wrapper"
-                                            ng-repeat="widget in $ctrl.modifiedWidget track by widget.id"
+                                            ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
+                                            ng-show='widget.query.queryResult!=undefined'
                                             gridstack-item="widget.options.position"
                                             gridstack-item-id="{{ widget.id }}">
                                             <div class="grid-stack-item-content">
@@ -53,8 +56,10 @@
                                                     public="true"></dashboard-widget>
                                             </div>
                                         </div>
-                                        <div class="dashboard-widget-wrapper"
-                                            ng-if="$ctrl.globalParameters.length > 0  "
+                                          <!-- 下拉框集合 -->
+                                        <!-- ng-if="$ctrl.globalParameters.length > 0  " -->
+                                        <!-- <div class="dashboard-widget-wrapper"
+                                            ng-if="false"
                                             ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 "
                                             gridstack-item="widget.options.position" gridstack-item-id="a99"
                                             data-test="WidgetIda99" id="switch">
@@ -63,7 +68,7 @@
                                                     ng-if="$ctrl.globalParameters.length > 0" on-submit="$ctrl.onSubmit"
                                                     params="$ctrl.globalParameters"></parameter-drawer-c>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
 

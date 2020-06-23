@@ -168,7 +168,7 @@ class ChartsSelectTabs extends React.Component {
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
-
+    console.log("chartselecttabs");
     this.setState({
       isLoaded: false,
       runtimeLoaded: false,

@@ -21,6 +21,8 @@ import './index.less';
 
 const { Header, Footer, Sider, Content } = Layout;
 
+let checked =[];
+
 class RightClick extends React.Component {
   state = {
     visible: this.props.open,
@@ -41,6 +43,11 @@ class RightClick extends React.Component {
   };
 
   componentDidMount() {
+    // console.log('da');
+    
+    // // this.onExpand();
+    // this.onSubmit();
+
     this.setState({
       visible: this.props.open
     });
@@ -83,16 +90,16 @@ class RightClick extends React.Component {
     this.setState({
       visible: false
     });
-    // console.log("onSubmit");
+    console.log(this.state.checkWidget);
     this.props.onClose();
-    this.props.onSubmit(this.state.checkWidget);
+    this.props.onSubmit(this.state.checkWidget,true);// true表示不为第一次进入刷新 第一次默认显示全部
   };
 
   onCheck = (checkedKeys, info) => {// 得到选中的组件id数组
     // console.log('onCheck', checkedKeys);
     const a = /[a-z]/i;// true,说明有英文字母 
     // eslint-disable-next-line func-names
-    const checked = _.filter(checkedKeys, function (item) {
+     checked = _.filter(checkedKeys, function (item) {
       return !a.test(item);
     });
     // console.log(checked);
@@ -160,7 +167,7 @@ class RightClick extends React.Component {
     let paramsWidgetsId = [];
     let paramsWidgetsName = [];
     for (let i = 0; i < isParams.length; i += 1) {
-      if (!isParams[i]) {// 普通组件 
+      if (!isParams[i]) {// 普通组件  
         // 数据源
         widgetsNormalSourceId[i] = widgetsSourceId[i];
         widgetsNormalSourceName[i] = widgetsSourceName[i];
@@ -268,6 +275,11 @@ class RightClick extends React.Component {
     });
   }
 
+  // onLoadData=()=>{
+  //   console.log("asdasd");
+  //   this.onExpand();
+  // }
+
   render() {
 
     return (
@@ -284,10 +296,13 @@ class RightClick extends React.Component {
           <Tree
             // eslint-disable-next-line react/jsx-boolean-value
             checkable={true}
-            autoExpandParent={false}
+            // autoExpandParent={false}
+            // eslint-disable-next-line react/jsx-boolean-value
             defaultExpandAll={false}
             // eslint-disable-next-line react/jsx-no-duplicate-props
             autoExpandParent={false}
+            // defaultCheckedKeys={['root']}
+            // defaultSelectedKeys={['root']}
             onExpand={this.onExpand}
             onCheck={this.onCheck}
             loadData={this.onLoadData}

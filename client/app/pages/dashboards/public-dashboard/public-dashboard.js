@@ -50,16 +50,21 @@ const PublicDashboardPage = {
 
             const originalWidget = this.dashboard.widgets;
             // console.log(originalWidget);
-
-            this.modifiedWidget = [];
-            for (let i = 0; i < originalWidget.length; i += 1) {
-                for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
-                    // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
-                    if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
-                        this.modifiedWidget.push(originalWidget[i]);
+           
+            if (this.noDefault) {  
+                this.modifiedWidget = [];             
+                for (let i = 0; i < originalWidget.length; i += 1) {
+                    for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
+                        // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
+                        if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
+                            this.modifiedWidget.push(originalWidget[i]);
+                        }
                     }
                 }
+            }else{// 第一次进入全显示
+                this.modifiedWidget=originalWidget;
             }
+            // console.log(this.modifiedWidget);
 
 
             const queryResultPromises = _.compact(
@@ -115,8 +120,10 @@ const PublicDashboardPage = {
         }
 
         this.checkedWidgetIndashboard = [];
-        this.onRightSubmit = (checkedWidget) => {
+        this.noDefault=false;
+        this.onRightSubmit = (checkedWidget,flag) => {
             this.openRight = false;
+            this.noDefault=flag;
             // console.log(checkedWidget);
             this.checkedWidgetIndashboard = [];
             this.checkedWidgetIndashboard = checkedWidget;

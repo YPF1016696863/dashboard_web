@@ -42,6 +42,11 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.get($scope.options, "form.yAxisColumns", []),
                         function (o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
+                    
+                    
+                    // 文字单独的自适应调整*($element.parent()[0].clientHeight/789)
+                    const fontSize = _.get($scope.options, 'title.textStyle.fontSizeT', 12) * ($element.parent()[0].clientWidth / 1115);
+                    _.set($scope.options, 'title.textStyle.fontSize', fontSize);
 
                 // restful发送按钮
                 _.set($scope.options, 'toolbox.feature.myTool1.onclick', function () {
@@ -304,11 +309,16 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         if (_.get($scope.options, "size.responsive", false)) {
                             // let height = $element.parent().parent()["0"].clientHeight; // + 50
                             // let width = $element.parent().parent()["0"].clientWidth;
-                            // let height = "100%";
-                            // let width = $element.closest('.t-body').outerWidth();
-                            let height = '100%';
-                            let width = '100%';
 
+                            let height = "100%";
+                            let width = "100%";
+                            
+                            if ($("#preview").length !== 0) {
+                                height = $element.parent().parent()["0"].clientHeight;
+                                width = $element.parent().parent()["0"].clientWidth;
+                            }
+                            
+                           
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -334,6 +344,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             };
 
             $scope.handleResize = _.debounce(() => {
+                // console.log($scope.options.size.width);
+                // console.log($scope.options.size.height);
                 refreshData();
             }, 50);
 
