@@ -160,7 +160,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                                 return row[oldYData];
                             })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
-
                             const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                                 return row[oldYData];
                             }))
@@ -182,8 +181,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     function bubble(data) {
                                         return (data / maxData) * 100;
                                     } : setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
-                                barWidth: _.get($scope.options, 'series_BarWidth', 25) === '' ||
-                                    _.get($scope.options, 'series_BarWidth', 25) === undefined
+                                barWidth: 
+                                _.get($scope.options, 'series_BarWidth', 'auto') === '' ||
+                                    _.get($scope.options, 'series_BarWidth', 'auto') === undefined
                                     ? 'auto' : _.get($scope.options, 'series_BarWidth', 25),
                                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                                     'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],

@@ -57,7 +57,7 @@ function DashboardPreviewCtrl(
   this.saveInProgress = false;
   this.saveDelay = false;
   const vm = this;
-  const updateDashboard = (data,isForced) => {
+  const updateDashboard = (data, isForced) => {
 
     if (!this.dashboard) {
       return;
@@ -68,90 +68,117 @@ function DashboardPreviewCtrl(
       slug: this.dashboard.id
     });
 
-    if(!isForced) {
+
+    if (!isForced) {
       data = _.extend({}, data, {
         version: this.dashboard.version
       });
     }
 
     Dashboard.save(
-        data,
-        dashboard => {
-          _.extend(this.dashboard, _.pick(dashboard, _.keys(data)));
-        },
-        error => {
-          if (error.status === 403) {
-            notification.error('可视化面板更新失败', '许可拒绝。');
-          } else if (error.status === 409) {
-            notification.error(
-                '此可视化面板似乎已经被另一个用户修改了。',
-                '请复制/备份您的更改并重新加载此页。 ',
-                { duration: null }
-            );
-          }
+      data,
+      dashboard => {
+        _.extend(this.dashboard, _.pick(dashboard, _.keys(data)));
+      },
+      error => {
+        if (error.status === 403) {
+          notification.error('可视化面板更新失败', '许可拒绝。');
+        } else if (error.status === 409) {
+          notification.error(
+            '此可视化面板似乎已经被另一个用户修改了。',
+            '请复制/备份您的更改并重新加载此页。 ',
+            { duration: null }
+          );
         }
+      }
     );
   };
 
   $scope.$watch(
-    function() {
+    function () {
       return vm.slugId;
     },
-    function(data) {
+    function (data) {
       vm.loadDashboard();
     }
   );
 
+
   $scope.$watch(
-    function() {
+    function () {
       return vm.widgetData;
     },
-    function(data) {
+    function (data) {
       if (vm.widgetData && vm.widgetData.widget) {
-        if(vm.widgetData.widget.text){
+        if (vm.widgetData.widget.text) {
           vm.addTextbox(vm.widgetData.widget.text);
         }
-        else{
+        else {
           vm.addWidget(
             vm.widgetData.widget,
             vm.widgetData.paramMapping ? vm.widgetData.paramMapping : {}
           );
         }
-      }      
+      }
+    }
+  );
+
+  const imageAndrefreshRate = [];
+  
+  $scope.$watch(
+    function () {
+      return vm.listSwitch;
+    },
+    function (data) {
+      console.log(vm.listSwitch);
+      imageAndrefreshRate[2] = vm.listSwitch+"";
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
 
   $scope.$watch(
-      function() {
-        return vm.dashboardBgImg;
-      },
-      function(data) {
-        if(_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
-          vm.dashboardStyle = {
-          };
-          updateDashboard({ background_image:"" }, true);
-          return;
-        }
+    function () {
+      return vm.rateData;
+    },
+    function (data) {
+      imageAndrefreshRate[1] = vm.rateData;
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+
+    }
+  );
+
+  $scope.$watch(
+    function () {
+      return vm.dashboardBgImg;
+    },
+    function (data) {
+      if (_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
         vm.dashboardStyle = {
-          'background-image': 'url("'+vm.dashboardBgImg+'")',
-          'background-position': 'center',
-          'background-repeat': 'no-repeat',
-          'background-size': 'cover'
         };
-
-        updateDashboard({ background_image:vm.dashboardBgImg },true);
-
+        imageAndrefreshRate[0] = "";
+        updateDashboard({ background_image: imageAndrefreshRate }, true);
+        return;
       }
+      vm.dashboardStyle = {
+        'background-image': 'url("' + vm.dashboardBgImg + '")',
+        'background-position': 'center',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover'
+      };
+      imageAndrefreshRate[0] = vm.dashboardBgImg;
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+      // updateDashboard({ background_image:vm.dashboardBgImg},true);
+    }
   );
 
   this.openParamDraw = false;
-  this.openParameterDialog = ()=>{
+  this.openParameterDialog = () => {
     this.openParamDraw = true;
   }
-  this.onPramClose = ()=>{
+  this.onPramClose = () => {
     this.openParamDraw = false;
   }
-  this.onSubmit = (updatedParameters)=>{
+  this.onSubmit = (updatedParameters) => {
     // Read parameter and reset url
     // 由参数设置url
     const params = _.extend({}, $location.search());
@@ -345,9 +372,17 @@ function DashboardPreviewCtrl(
       dashboard => {
         this.dashboard = dashboard;
 
+        console.log(dashboard);
+        const arr = dashboard.background_image.slice(1, -1).split(",");
+        const image = arr[0];
+        const rate = arr[1];
+        const LSwitch = arr[2];
+        imageAndrefreshRate[0] = image;
+        imageAndrefreshRate[1] = rate;
+        imageAndrefreshRate[2] = LSwitch;
         // Get dashboard style
         this.dashboardStyle = {
-          'background-image': 'url("'+dashboard.background_image+'")',
+          'background-image': 'url("' + image + '")',
           'background-position': 'center',
           'background-repeat': 'no-repeat',
           'background-size': 'cover'
@@ -363,22 +398,20 @@ function DashboardPreviewCtrl(
           this.editLayout(true);
         }
         this.editLayout(true);
-        if ($location.search().refresh !== undefined) {
-          if (this.refreshRate === null) {
-            const refreshRate = Math.max(
-              30,
-              parseFloat($location.search().refresh)
-            );
 
-            this.setRefreshRate(
-              {
-                name: durationHumanize(refreshRate),
-                rate: refreshRate
-              },
-              false
-            );
-          }
-        }
+        const refreshRate = Math.max(
+          1,
+          30
+        );
+
+        this.setRefreshRate(
+          {
+            name: durationHumanize(refreshRate),
+            rate: refreshRate
+          },
+          false
+        );
+
       },
       rejection => {
         const statusGroup = Math.floor(rejection.status / 100);
@@ -394,13 +427,14 @@ function DashboardPreviewCtrl(
     );
   }, 1000);
 
-  // this.loadDashboard();
-
   this.refreshDashboard = () => {
     renderDashboard(this.dashboard, true);
   };
 
   this.autoRefresh = () => {
+
+    // console.log(vm);
+
     $timeout(() => {
       this.refreshDashboard();
     }, this.refreshRate.rate * 1000).then(() => this.autoRefresh());
@@ -464,7 +498,8 @@ function DashboardPreviewCtrl(
       {
         slug: this.dashboard.id,
         version: this.dashboard.version,
-        dashboard_filters_enabled: this.dashboard.dashboard_filters_enabled
+        dashboard_filters_enabled: this.dashboard.dashboard_filters_enabled,
+        rateDash: vm.rateData
       },
       dashboard => {
         this.dashboard = dashboard;
@@ -502,7 +537,7 @@ function DashboardPreviewCtrl(
       visualization: null,
       visualization_id: null
     });
-    
+
     const position = this.dashboard.calculateNewWidgetPosition(widget);
     widget.options.position.col = position.col;
     widget.options.position.row = position.row;
@@ -597,7 +632,8 @@ function DashboardPreviewCtrl(
       {
         slug: this.dashboard.id,
         name: this.dashboard.name,
-        is_draft: this.dashboard.is_draft
+        is_draft: this.dashboard.is_draft,
+        rateDash: vm.rateData
       },
       dashboard => {
         this.saveInProgress = false;
@@ -626,7 +662,9 @@ export const DashboardsPreview = {
     slugId: '<',
     widgetData: '<',
     dashboardBgImg: '<',
-    editing:'<'
+    editing: '<',
+    rateData: '<',
+    listSwitch: '<'
   },
   controller: DashboardPreviewCtrl
 };

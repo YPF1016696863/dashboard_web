@@ -503,7 +503,7 @@ console.log("QueriesListTabs");
                 <div style={{ paddingRight: '10px' }}>
                   <Form>
                     <Form.Item
-                      label="数据集对其他人可见"
+                      label="作为参数数据集开放"
                       labelAlign="left"
                       labelCol={{ span: 10 }}
                       wrapperCol={{ span: 4, offset: 10 }}

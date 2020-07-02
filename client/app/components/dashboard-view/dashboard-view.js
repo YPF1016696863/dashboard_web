@@ -39,6 +39,8 @@ function ViewDashboardCtrl(
         }
     );
 
+
+
     //    $scope. $watch(watchFn,watchAction,deepWatch);
 
     $scope.$watch(
@@ -75,6 +77,16 @@ function ViewDashboardCtrl(
         }
     );
 
+    $scope.$watch(
+        function() {
+          return vm.rateData;
+        },
+        function(data) {   
+          console.log(vm.rateData);
+    
+        }
+    ); 
+
     // $scope.$watch(
     //     function() {
     //         return vm.modifiedWidget;
@@ -85,6 +97,7 @@ function ViewDashboardCtrl(
     //     }
     // );
 
+    this.modeList = false;
     this.saveDelay = false;
     this.editBtnClickedWhileSaving = false;
     this.layoutEditing = true;// false
@@ -301,10 +314,14 @@ function ViewDashboardCtrl(
         Dashboard.get({ slug: this.slugId },
             dashboard => {
                 this.dashboard = dashboard;
-
+               
+                const image=dashboard.background_image.slice(1,-1).split(",")[0];
+                const rate=dashboard.background_image.slice(1,-1).split(",")[1];
+                this.modeList=dashboard.background_image.slice(1,-1).split(",")[2];
+                console.log(this.modeList);
                 // Get dashboard style
                 this.dashboardStyle = {
-                    'background-image': 'url("' + dashboard.background_image + '")',
+                    'background-image': 'url("' + image + '")',
                     'background-position': 'center',
                     'background-repeat': 'no-repeat',
                     'background-size': 'cover'
@@ -316,25 +333,18 @@ function ViewDashboardCtrl(
                 renderDashboard(dashboard, force);
                 // 大屏刷新频率设置
                 // if ($location.search().refresh !== undefined) {
-                    if (this.refreshRate === null) {
-                        console.log(this.refreshRate);
-                        // const refreshRate = Math.max(
-                        //     30,
-                        //     $location.search().refresh===undefined?2: parseFloat($location.search().refresh)
-                        // );
-                        const refreshRate = Math.max(
-                            4,
-                            $location.search().refresh===undefined?2: parseFloat($location.search().refresh)
-                        );
+                const refreshRate = Math.max(
+                    1,
+                    rate === undefined ? 1 : rate
+                );
 
-                        this.setRefreshRate({
-                            name: durationHumanize(refreshRate),
-                            rate: refreshRate
-                        },
-                            false
-                        );
-                    }
-                // }
+                this.setRefreshRate({
+                    name: durationHumanize(refreshRate),
+                    rate: refreshRate
+                },
+                    false
+                );
+
             },
             rejection => {
                 const statusGroup = Math.floor(rejection.status / 100);
@@ -357,7 +367,7 @@ function ViewDashboardCtrl(
     };
 
     this.autoRefresh = () => {
-        console.log("autoRefresh");
+
         $timeout(() => {
             this.refreshDashboard();
         }, this.refreshRate.rate * 1000).then(() => this.autoRefresh());
@@ -372,7 +382,8 @@ export const ViewDashboard = {
         slugId: '<',
         widgetData: '<',
         dashboardBgImg: '<',
-        editing: '<'
+        editing: '<',
+        rateData:'<'
     },
     controller: ViewDashboardCtrl
 };

@@ -86,15 +86,19 @@ const PublicDashboardPage = {
               this.dashboard.widgets
             );
         */
-
+       let rate=2;
         Dashboard.public({ token: $route.current.params.token }, dashboard => {
+
+            
 
             this.dashboard = dashboard;
 
             Title.set(this.dashboard.name);
-
+            // console.log(dashboard);
+            const image=dashboard.background_image.slice(1,-1).split(",")[0];
+            rate=dashboard.background_image.slice(1,-1).split(",")[1];
             this.dashboardStyle = {
-                'background-image': 'url("' + this.dashboard.background_image + '")',
+                'background-image': 'url("' + image + '")',
                 'background-position': 'center',
                 'background-repeat': 'no-repeat',
                 'background-size': 'cover'
@@ -102,7 +106,15 @@ const PublicDashboardPage = {
 
             renderDashboard(dashboard, true);
 
+            this.autoRefresh();
         });
+
+        this.autoRefresh = () => {
+            // console.log("autoRefresh");
+            $timeout(() => {
+                this.refreshDashboard();
+            }, rate * 1000).then(() => this.autoRefresh());
+        };
 
         $scope.$on('dashboard.update-parameters', () => {
             this.extractGlobalParameters();
@@ -152,13 +164,15 @@ const PublicDashboardPage = {
             this.openParamDraw = false;
         }
 
-        const refreshRate = Math.max(30, parseFloat($location.search().refresh));
-
+        // const refreshRate = Math.max(30, parseFloat($location.search().refresh));
+        const refreshRate = 2;
         if (refreshRate) {
             const refresh = () => {};
 
             $timeout(refresh, refreshRate * 1000.0);
         }
+
+        
 
         this.refreshDashboard = () => {
             renderDashboard(this.dashboard, true);

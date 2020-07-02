@@ -6,7 +6,7 @@ import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
 import './DashboardsPageHeader.less';
-import './rate';
+
 
 const { SubMenu } = Menu;
 
@@ -32,13 +32,7 @@ class DashboardsPageHeader extends React.Component {
             <Icon type="save" />
             自动保存
           </Menu.Item>
-          <Menu.Item>
-            刷新率：
-            <Input
-              size="small"
-              onChange={event => {console.log(event.target.value) }}
-            />
-          </Menu.Item>
+          
           <Menu.Item key="preview" style={{ float: 'right' }}>
             <a href={"/view/"+this.props.slugId} target="_blank" rel="noopener noreferrer">
               <Icon type="play-square" />

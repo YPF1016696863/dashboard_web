@@ -40,6 +40,7 @@ function DashboardViewCtrl(
 ) {
   $scope.widgetData = null;
   $scope.dashboardBgImg="";
+  $scope.rateData=30;
   $scope.currentUser = currentUser;
   $scope.slugId = $route.current.params.slugId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;

@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import {
   pick,
   some,
@@ -12,6 +13,7 @@ import {
   SCHEMA_NOT_SUPPORTED,
   SCHEMA_LOAD_ERROR
 } from '@/services/data-source';
+import * as _ from 'lodash';
 import getTags from '@/services/getTags';
 import { policy } from '@/services/policy';
 import Notifications from '@/services/notifications';
@@ -20,8 +22,10 @@ import notification from '@/services/notification';
 
 import template from './content-layout.html';
 
+
 function DashboardsViewCtrl(
   $scope,
+  $rootScope,
   Events,
   $route,
   $routeParams,
@@ -39,17 +43,19 @@ function DashboardsViewCtrl(
   appSettings
 ) {
   $scope.widgetData = null;
-  $scope.dashboardBgImg="";
+  $scope.dashboardBgImg = "";
   $scope.currentUser = currentUser;
   $scope.slugId = $route.current.params.slugId;
   $scope.showPermissionsControl = clientConfig.showPermissionsControl;
+  $scope.rateData = 5;
+  $scope.listSwitch=false;
 
   $scope.dashboardSearchCb = (slug) => {
     // $scope.$apply();
   };
 
   $scope.updateDashboardBgImgCb = (dashboardBgImg) => {
-    $scope.dashboardBgImg= dashboardBgImg;
+    $scope.dashboardBgImg = dashboardBgImg;
     $scope.$applyAsync();
   };
 
@@ -59,9 +65,18 @@ function DashboardsViewCtrl(
     $scope.$applyAsync();
   };
 
-  // currentUser.hasPermission('admin');
+  $scope.getRateCb = (ratedata) => {
+    $scope.rateData= ratedata;
+    $scope.$applyAsync();
+  };
 
+  $scope.getListSwitchCb = (listswitch) => {
+    $scope.listSwitch= listswitch;
+    $scope.$applyAsync();
+  };
+  // currentUser.hasPermission('admin');
 }
+
 
 export default function init(ngModule) {
   ngModule.controller('DashboardsViewCtrl', DashboardsViewCtrl);
