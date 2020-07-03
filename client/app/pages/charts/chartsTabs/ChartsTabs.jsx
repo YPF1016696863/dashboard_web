@@ -91,7 +91,7 @@ class ChartsTabs extends React.Component {
   getQuery(id) {
     const queryId = _.split(id, ':')[0];
     const visualizationId = _.split(id, ':')[1];
-
+    console.log("chartstabs");
     this.setState({
       isLoaded: false,
       chartType: this.props.chartType ? this.props.chartType : 'new',

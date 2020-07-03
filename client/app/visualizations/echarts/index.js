@@ -42,11 +42,15 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.get($scope.options, "form.yAxisColumns", []),
                         function (o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
+                    
+                    
+                    // 文字单独的自适应调整*($element.parent()[0].clientHeight/789)
+                    const fontSize = _.get($scope.options, 'title.textStyle.fontSizeT', 12) * ($element.parent()[0].clientWidth / 1115);
+                    _.set($scope.options, 'title.textStyle.fontSize', fontSize);
 
-                // restful发送按钮
+                // restful发送按钮(工具栏方式 不用)
                 _.set($scope.options, 'toolbox.feature.myTool1.onclick', function () {
-                    const imageBase64 =getFullCanvasDataURL($scope.options.id);
-                   
+                    const imageBase64 =getFullCanvasDataURL($scope.options.id);                   
                     $.ajax({
                         async : false,    // 表示请求是否异步处理 
                         type : "POST",    // 请求类型
@@ -64,7 +68,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         }
                     });
                 });
-                // console.log();
+                
 
 
                 try {
@@ -155,7 +159,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                                 return row[oldYData];
                             })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
-
                             const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                                 return row[oldYData];
                             }))
@@ -177,8 +180,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     function bubble(data) {
                                         return (data / maxData) * 100;
                                     } : setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
-                                barWidth: _.get($scope.options, 'series_BarWidth', 25) === '' ||
-                                    _.get($scope.options, 'series_BarWidth', 25) === undefined
+                                barWidth: 
+                                _.get($scope.options, 'series_BarWidth', 'auto') === '' ||
+                                    _.get($scope.options, 'series_BarWidth', 'auto') === undefined
                                     ? 'auto' : _.get($scope.options, 'series_BarWidth', 25),
                                 symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
                                     'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
@@ -304,11 +308,16 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         if (_.get($scope.options, "size.responsive", false)) {
                             // let height = $element.parent().parent()["0"].clientHeight; // + 50
                             // let width = $element.parent().parent()["0"].clientWidth;
-                            // let height = "100%";
-                            // let width = $element.closest('.t-body').outerWidth();
-                            let height = '100%';
-                            let width = '100%';
 
+                            let height = "100%";
+                            let width = "100%";
+                            
+                            if ($("#preview").length !== 0) {
+                                height = $element.parent().parent()["0"].clientHeight;
+                                width = $element.parent().parent()["0"].clientWidth;
+                            }
+                            
+                           
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -415,6 +424,31 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);
+
+            // restful发送图片
+            $scope.imgSave = function(){                
+                const imageBase64 =getFullCanvasDataURL($scope.options.id);
+                // console.log(imageBase64);
+                    $.ajax({
+                        async : false,    // 表示请求是否异步处理 
+                        type : "POST",    // 请求类型
+                        url : _.get($scope.options, "restfulURL", "http://localhost:8081/doBase64"),
+                        dataType : "text",// 返回的数据类型
+                        data:{
+                            image:imageBase64 
+                        },
+                        contentType : "application/x-www-form-urlencoded", // post的方式请求必须配置这个
+                        success (data) {
+                            alert('RESTFul已发送');
+                        },
+                        error (data) {
+                            alert('RESTFul发送失败');
+                        }
+                    });
+            }
+
+
+
         },
     };
 }

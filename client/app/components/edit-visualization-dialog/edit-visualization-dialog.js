@@ -1,7 +1,7 @@
-import { map, find,set,get } from 'lodash';
+import { map, find, set, get } from 'lodash';
 import { copy } from 'angular';
-import notification from '@/services/notification'; 
-import {navigateTo} from '@/services/navigateTo';
+import notification from '@/services/notification';
+import { navigateTo } from '@/services/navigateTo';
 import { Query } from '@/services/query';
 import template from './edit-visualization-dialog.html';
 
@@ -14,7 +14,7 @@ export const EditVisualizationDialog = {
     close: '&',
     dismiss: '&'
   },
-  controller($scope,$rootScope, $window, currentUser, Events, Visualization) {
+  controller($scope, $rootScope, $window, currentUser, Events, Visualization) {
     'ngInject';
 
     const vm = this;
@@ -103,7 +103,7 @@ export const EditVisualizationDialog = {
       Visualization.save(
         this.visualization,
         result => {
-          notification.success('保存成功');          
+          notification.success('保存成功');
           set($rootScope, 'selectChartType', undefined);
           // console.log("初始化selectChartType=undefined");
           const visIds = map(this.query.visualizations, i => i.id);
@@ -117,7 +117,22 @@ export const EditVisualizationDialog = {
               this.onNewSuccess(result);
             }
           }
-          navigateTo("/charts");
+          const urlStr = window.location.href
+          const indexStart = urlStr.indexOf("index") + 6;
+          if (indexStart < 6) {// 不是跳转过来的
+            navigateTo("/charts");
+          } else {
+            const dashboardUrl = urlStr.substring(indexStart);
+            let dashUrlChange = dashboardUrl.replace(/%2F/g, "/").replace(/%3F/g, "?").replace(/%3D/g, "=") + "";
+
+            const indexTail = dashUrlChange.indexOf("dashboards");
+            dashUrlChange = dashUrlChange.substring(indexTail);
+            navigateTo(dashUrlChange);
+          }
+
+
+
+
         },
         () => {
           notification.error('无法保存');

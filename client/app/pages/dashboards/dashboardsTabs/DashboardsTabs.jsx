@@ -126,7 +126,11 @@ class DashboardsTabs extends React.Component {
   };
 
   render() {
-    const { slugId,widgetData,dashboardBgImg } = this.props;
+    const { slugId,widgetData,
+      dashboardBgImg,rateData,
+      listSwitch ,gridData} = this.props;
+ 
+    // console.log(gridData);
     // eslint-disable-next-line no-unused-vars
     const {isDashboardOwner} = this.state;
 
@@ -145,7 +149,15 @@ class DashboardsTabs extends React.Component {
           </div>
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
-          <DashboardsPreviewDOM slugId={slugId} widgetData={widgetData} dashboardBgImg={dashboardBgImg} editing />
+          <DashboardsPreviewDOM 
+            slugId={slugId} 
+            widgetData={widgetData} 
+            dashboardBgImg={dashboardBgImg} 
+            rateData={rateData} 
+            listSwitch={listSwitch} 
+            gridData={gridData}
+            editing 
+          />
         )}
       </>
     );
@@ -156,12 +168,18 @@ DashboardsTabs.propTypes = {
   slugId: PropTypes.string,
   widgetData: PropTypes.object,
   dashboardBgImg: PropTypes.string,
+  rateData: PropTypes.number,
+  gridData: PropTypes.number,
+  listSwitch:PropTypes.string
 };
 
 DashboardsTabs.defaultProps = {
   slugId: null,
   widgetData: null,
-  dashboardBgImg:null
+  dashboardBgImg:null,
+  rateData:null,
+  gridData: null,
+  listSwitch:null
 };
 
 export default function init(ngModule) {

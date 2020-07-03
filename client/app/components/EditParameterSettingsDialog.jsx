@@ -3,15 +3,22 @@ import { includes, startsWith, words, capitalize, clone, isNull } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'antd/lib/modal';
+import { Switch } from 'antd';
 import Form from 'antd/lib/form';
 import Checkbox from 'antd/lib/checkbox';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
 import Input from 'antd/lib/input';
 import Divider from 'antd/lib/divider';
+import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
 import { QuerySelector } from '@/components/QuerySelector';
+import { AddCondition } from '@/components/add-condition';
 import { Query } from '@/services/query';
+
+let where = 0;
+let wherevalue = 0;
+let switchlist=0;
 
 const { Option } = Select;
 const formItemProps = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
@@ -71,13 +78,22 @@ NameInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   existingNames: PropTypes.arrayOf(PropTypes.string).isRequired,
   setValidation: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,  
 };
 
 function EditParameterSettingsDialog(props) {
+  
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     conditionNumState:[]
+  //   };
+  // }
   const [param, setParam] = useState(clone(props.parameter));
   const [isNameValid, setIsNameValid] = useState(true);
   const [initialQuery, setInitialQuery] = useState();
+
+ 
 
   const isNew = !props.parameter.name;
 
@@ -110,6 +126,7 @@ function EditParameterSettingsDialog(props) {
     return true;
   }
 
+
   function onConfirm(e) {
     // update title to default
     if (!param.title) {
@@ -117,11 +134,36 @@ function EditParameterSettingsDialog(props) {
       param.title = getDefaultTitle(param.name);
       setParam(param);
     }
-
+    
     props.dialog.close(param);
 
     e.preventDefault(); // stops form redirect
   }
+
+
+  function wherechange(e) {
+    where = e;
+  }
+
+ 
+  function valuechange(e) {
+    wherevalue = e;
+  }
+
+  let temp=[];
+
+  function keychange(e){
+    param.enumOptions=e;
+  }
+  function swicthchange(e){
+    switchlist=e
+  }
+
+  let rValue="";
+  let kValue="";
+  let xialaValue="";
+  let numValue="";
+  let defValue="";
 
   return (
     <Modal
@@ -207,10 +249,69 @@ function EditParameterSettingsDialog(props) {
               selectedQuery={initialQuery}
               onChange={q => setParam({ ...param, queryId: q && q.id })}
               type="select"
-            />
+            /> 
           </Form.Item>
         )}
       </Form>
+      {param.type === 'query' && ( 
+        <div>          
+          {/* 输入值/下拉框/不填选第一个 */}
+          <AddCondition 
+            selectedcondiRes={param}
+            
+            condiRes={r => { 
+              rValue = r; 
+              temp=[];
+              temp.push([rValue]);
+              temp.push([kValue]);
+              temp.push([xialaValue]); 
+              temp.push([numValue]);
+              temp.push([defValue]);
+              setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue ,global:temp}); 
+            }}
+            keyRes={k => { 
+              kValue = k; 
+              temp=[];
+              temp.push([rValue]);
+              temp.push([kValue]);
+              temp.push([xialaValue]);
+              temp.push([numValue]);
+              temp.push([defValue]);
+              setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue ,global:temp});  
+            }}
+            xialaRes={n => { 
+              xialaValue = n;  
+              temp=[];
+              temp.push([rValue]);
+              temp.push([kValue]);
+              temp.push([xialaValue]);
+              temp.push([numValue]);
+              temp.push([defValue]);
+              setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue,global:temp }); 
+            }}  
+            condiNum={num => { 
+              numValue = num;  
+              temp=[];
+              temp.push([rValue]);
+              temp.push([kValue]);
+              temp.push([xialaValue]);
+              temp.push([numValue]);
+              temp.push([defValue]);
+              setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue,global:temp }); }}  
+            defaultValueForInput={val => {
+              defValue = val;console.log(val);// 上一次的配置
+              temp = []; 
+              temp.push([rValue]); 
+              temp.push([kValue]); 
+              temp.push([xialaValue]); 
+              temp.push([numValue]);
+              temp.push([defValue]);
+              setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue, global: temp });
+            }}  
+          />
+          
+        </div>       
+        )}
     </Modal>
   );
 }

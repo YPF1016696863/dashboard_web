@@ -39,6 +39,8 @@ function ViewDashboardCtrl(
         }
     );
 
+
+
     //    $scope. $watch(watchFn,watchAction,deepWatch);
 
     $scope.$watch(
@@ -75,22 +77,16 @@ function ViewDashboardCtrl(
         }
     );
 
-    // $scope.$watch(
-    //     function() {
-    //         return vm.modifiedWidget;
-    //     },
-    //     function(data) {
-    //         console.log('asd');
-    //         vm.refreshDashboard();
-    //     }
-    // );
-
+   
+    
+    this.gridNum=3;
+    this.modeList = false;
     this.saveDelay = false;
     this.editBtnClickedWhileSaving = false;
-    this.layoutEditing = false;
+    this.layoutEditing = true;// false
     this.isFullscreen = false;
-    this.refreshRate = null;
-    this.isGridDisabled = false;
+    this.refreshRate = null;// null
+    this.isGridDisabled = false;// false
     this.updateGridItems = null;
     this.showPermissionsControl = clientConfig.showPermissionsControl;
     this.globalParameters = [];
@@ -179,9 +175,11 @@ function ViewDashboardCtrl(
         this.openRight = false;
     }
 
+    this.noDefault=false;
     this.checkedWidgetIndashboard = [];
-    this.onRightSubmit = (checkedWidget) => {
+    this.onRightSubmit = (checkedWidget,flag) => {
         this.openRight = false;
+        this.noDefault=flag;
         // console.log(checkedWidget);
         this.checkedWidgetIndashboard = [];
         this.checkedWidgetIndashboard = checkedWidget;
@@ -197,14 +195,14 @@ function ViewDashboardCtrl(
     this.onPramClose = () => {
         this.openParamDraw = false;
     }
-
+    
     this.onSubmit = (updatedParameters) => {
         // Read parameter and reset url
         // 由参数设置url
         const params = _.extend({}, $location.search());
         updatedParameters.forEach((param) => {
             _.extend(params, param.toUrlParams());
-        });
+        });       
         $location.search(params);
         vm.refreshDashboard();
         $scope.$applyAsync();
@@ -216,16 +214,46 @@ function ViewDashboardCtrl(
     const collectFilters = (dashboard, forceRefresh) => { // ... ,true
         const originalWidget = this.dashboard.widgets;
         // console.log(originalWidget);
-
-        this.modifiedWidget = [];
-        for (let i = 0; i < originalWidget.length; i += 1) {
-            for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
-                // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
-                if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
-                    this.modifiedWidget.push(originalWidget[i]);
+        // console.log(this.noDefault);
+       
+        if (this.modeList) {  // 打开列表模式 清空组件 显示列表
+            this.modifiedWidget = [];          
+            for (let i = 0; i < originalWidget.length; i += 1) {
+                for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
+                    // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
+                    if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
+                        this.modifiedWidget.push(originalWidget[i]);
+                    }
                 }
-            }
+            } 
+            // console.log(this.modifiedWidget);
+        }else{ 
+            const step=6/this.gridNum;
+            const colArr=[];
+            for(let i=0,j=0;i<6;){
+                colArr[j]=step*(j);
+                j+=1;
+                i+=step;
+            } 
+            // // const colArr=[0,2,4];
+            for(let i=0;i<originalWidget.length;i+=1){
+                const newPosition={
+                    autoHeight: false,
+                    col: colArr[i%this.gridNum],
+                    maxSizeX: 6,
+                    maxSizeY: 1000,
+                    minSizeX: 1,
+                    minSizeY: 1,
+                    // row: i!==0&&i%3===0?8:0,// c此处写成一个即可？or动态累加
+                    row:0,
+                    sizeX: step,
+                    sizeY: 8
+                }
+                originalWidget[i].options.position=newPosition;   
+            } 
+            this.modifiedWidget=originalWidget; 
         }
+        
 
         // console.log( this.modifiedWidget);
 
@@ -290,10 +318,15 @@ function ViewDashboardCtrl(
         Dashboard.get({ slug: this.slugId },
             dashboard => {
                 this.dashboard = dashboard;
-
+               
+                const image=dashboard.background_image.slice(1,-1).split(",")[0];
+                const rate=dashboard.background_image.slice(1,-1).split(",")[1];
+                this.modeList=dashboard.background_image.slice(1,-1).split(",")[2]==="true";
+                this.gridNum=dashboard.background_image.slice(1,-1).split(",")[3];
+                // console.log(dashboard.background_image);
                 // Get dashboard style
                 this.dashboardStyle = {
-                    'background-image': 'url("' + dashboard.background_image + '")',
+                    'background-image': 'url("' + image + '")',
                     'background-position': 'center',
                     'background-repeat': 'no-repeat',
                     'background-size': 'cover'
@@ -303,22 +336,20 @@ function ViewDashboardCtrl(
                     currentUser.id === dashboard.user.id ||
                     currentUser.hasPermission('admin');
                 renderDashboard(dashboard, force);
+                // 大屏刷新频率设置
+                // if ($location.search().refresh !== undefined) {
+                const refreshRate = Math.max(
+                    1,
+                    rate === undefined ? 1 : rate
+                );
 
-                if ($location.search().refresh !== undefined) {
-                    if (this.refreshRate === null) {
-                        const refreshRate = Math.max(
-                            30,
-                            parseFloat($location.search().refresh)
-                        );
+                this.setRefreshRate({
+                    name: durationHumanize(refreshRate),
+                    rate: refreshRate
+                },
+                    false
+                );
 
-                        this.setRefreshRate({
-                            name: durationHumanize(refreshRate),
-                            rate: refreshRate
-                        },
-                            false
-                        );
-                    }
-                }
             },
             rejection => {
                 const statusGroup = Math.floor(rejection.status / 100);
@@ -341,6 +372,7 @@ function ViewDashboardCtrl(
     };
 
     this.autoRefresh = () => {
+
         $timeout(() => {
             this.refreshDashboard();
         }, this.refreshRate.rate * 1000).then(() => this.autoRefresh());
@@ -355,7 +387,8 @@ export const ViewDashboard = {
         slugId: '<',
         widgetData: '<',
         dashboardBgImg: '<',
-        editing: '<'
+        editing: '<',
+        rateData:'<'
     },
     controller: ViewDashboardCtrl
 };

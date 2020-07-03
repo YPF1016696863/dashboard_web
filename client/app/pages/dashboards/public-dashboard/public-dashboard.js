@@ -31,7 +31,7 @@ const PublicDashboardPage = {
         this.dashboard = null;
         this.widgetList = [];
         this.modifiedWidget = [];
-
+        this.gridNum=3;
 
         const vm = this;
 
@@ -51,15 +51,43 @@ const PublicDashboardPage = {
             const originalWidget = this.dashboard.widgets;
             // console.log(originalWidget);
 
-            this.modifiedWidget = [];
-            for (let i = 0; i < originalWidget.length; i += 1) {
-                for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
-                    // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
-                    if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
-                        this.modifiedWidget.push(originalWidget[i]);
+            if (this.modeList) {
+                this.modifiedWidget = [];
+                for (let i = 0; i < originalWidget.length; i += 1) {
+                    for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
+                        // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
+                        if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
+                            this.modifiedWidget.push(originalWidget[i]);
+                        }
                     }
                 }
+            } else {// 第一次进入全显示
+                const step=6/this.gridNum;
+                const colArr=[];
+                for(let i=0,j=0;i<6;){
+                    colArr[j]=step*(j);
+                    j+=1;
+                    i+=step;
+                } 
+                // // const colArr=[0,2,4];
+                for(let i=0;i<originalWidget.length;i+=1){
+                    const newPosition={
+                        autoHeight: false,
+                        col: colArr[i%this.gridNum],
+                        maxSizeX: 6,
+                        maxSizeY: 1000,
+                        minSizeX: 1,
+                        minSizeY: 1,
+                        // row: i!==0&&i%3===0?8:0,// c此处写成一个即可？or动态累加
+                        row:0,
+                        sizeX: step,
+                        sizeY: 8
+                    }
+                    originalWidget[i].options.position=newPosition;   
+                } 
+                this.modifiedWidget=originalWidget; 
             }
+            // console.log(this.modifiedWidget);
 
 
             const queryResultPromises = _.compact(
@@ -81,15 +109,22 @@ const PublicDashboardPage = {
               this.dashboard.widgets
             );
         */
-
+        let rate = 2;
+        this.modeList = false;
         Dashboard.public({ token: $route.current.params.token }, dashboard => {
+
+
 
             this.dashboard = dashboard;
 
             Title.set(this.dashboard.name);
-
+            // console.log(dashboard);
+            const image = dashboard.background_image.slice(1, -1).split(",")[0];
+            rate = dashboard.background_image.slice(1, -1).split(",")[1];
+            this.modeList = dashboard.background_image.slice(1, -1).split(",")[2] === "true";
+            this.gridNum=dashboard.background_image.slice(1,-1).split(",")[3];
             this.dashboardStyle = {
-                'background-image': 'url("' + this.dashboard.background_image + '")',
+                'background-image': 'url("' + image + '")',
                 'background-position': 'center',
                 'background-repeat': 'no-repeat',
                 'background-size': 'cover'
@@ -97,7 +132,15 @@ const PublicDashboardPage = {
 
             renderDashboard(dashboard, true);
 
+            this.autoRefresh();
         });
+
+        this.autoRefresh = () => {
+            // console.log("autoRefresh");
+            $timeout(() => {
+                this.refreshDashboard();
+            }, rate * 1000).then(() => this.autoRefresh());
+        };
 
         $scope.$on('dashboard.update-parameters', () => {
             this.extractGlobalParameters();
@@ -115,8 +158,10 @@ const PublicDashboardPage = {
         }
 
         this.checkedWidgetIndashboard = [];
-        this.onRightSubmit = (checkedWidget) => {
+        this.noDefault = false;
+        this.onRightSubmit = (checkedWidget, flag) => {
             this.openRight = false;
+            this.noDefault = flag;
             // console.log(checkedWidget);
             this.checkedWidgetIndashboard = [];
             this.checkedWidgetIndashboard = checkedWidget;
@@ -145,13 +190,15 @@ const PublicDashboardPage = {
             this.openParamDraw = false;
         }
 
-        const refreshRate = Math.max(30, parseFloat($location.search().refresh));
-
+        // const refreshRate = Math.max(30, parseFloat($location.search().refresh));
+        const refreshRate = 2;
         if (refreshRate) {
-            const refresh = () => {};
+            const refresh = () => { };
 
             $timeout(refresh, refreshRate * 1000.0);
         }
+
+
 
         this.refreshDashboard = () => {
             renderDashboard(this.dashboard, true);

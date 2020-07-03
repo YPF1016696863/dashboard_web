@@ -285,8 +285,17 @@ function EchartsScatterRenderer($timeout, $rootScope, $window) {
                         }
 
                         if (_.get($scope.options, "size.responsive", false)) {
-                            let height ='100%';
-                            let width ='100%';
+                            // let height ='100%';
+                            // let width ='100%';
+                            let height = "100%";
+                            let width = "100%";
+              
+                            if ($("#preview").length !== 0) {
+                              height = $element.parent().parent()["0"].clientHeight;
+                              width = $element.parent().parent()["0"].clientWidth;
+                            }
+                            
+                            
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;

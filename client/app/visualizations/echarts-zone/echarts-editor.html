@@ -1,4 +1,4 @@
-<div >
+<div>
     <ul class="tab-nav">
         <li ng-class="{active: currentTab == 'general'}">
             <a ng-click="changeTab('general')">数据设置</a>
@@ -178,8 +178,8 @@
                 <input style="width:100%" ng-model="options.grid.left" type="text" class="form-control" placeholder="0">
                 <label class="control-label">组件离容器上侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.top" type="text" class="form-control" placeholder="0">
-            
-                <label class="control-label">区间颜色</label>
+
+                <label class="control-label">上区间颜色</label>
                 <ui-select ng-model="options.colorBar">
                     <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
                     <ui-select-choices repeat="Color.value as Color in Colors">
@@ -202,7 +202,14 @@
                 <label class="control-label">组件离容器下侧的距离(单位:百分比，如50%)</label>
                 <input style="width:100%" ng-model="options.grid.bottom" type="text" class="form-control"
                     placeholder="0">
-                
+                <label class="control-label">下区间颜色</label>
+                <ui-select ng-model="options.colorMinBar">
+                    <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="Color.value as Color in Colors">
+                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+
             </div>
             <div class="form-group">
                 <label>

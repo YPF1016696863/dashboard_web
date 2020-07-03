@@ -262,7 +262,7 @@ class DashboardsSearch extends React.Component {
     // console.log(this.state.backgroundImages);
     // console.log(this.state.backgroundImages[len-1].id);
 
-    console.log(fileList); 
+    // console.log(fileList); 
     // debugger
     const tmp = this.state.backgroundImages;
     // 查找背景列表的id有没有包含现在上传的 有就不添加 找不到返回undefine 添加
@@ -284,7 +284,7 @@ class DashboardsSearch extends React.Component {
       return null;
     }) 
   
-    console.log(tmp);
+    // console.log(tmp);
     this.setState({
       fileList,
       backgroundImages:tmp

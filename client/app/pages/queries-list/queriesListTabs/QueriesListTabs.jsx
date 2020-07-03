@@ -163,9 +163,15 @@ class QueriesListTabs extends React.Component {
       });
       return;
     }
-
+console.log("QueriesListTabs");
+// 冗余一点 这里也做查询刷新下拉框 查上一个数据源的数据 形成一个下拉列表 选第一个 
+// id = this.props.parameter.queryId; 没有这个？
+// console.log(this.props.parameter.queryId);
     Query.query({ id })
       .$promise.then((query) => {
+
+        // console.log(query);
+
         this.setState({
           query,
           isLoaded: true,
@@ -175,8 +181,13 @@ class QueriesListTabs extends React.Component {
           ),
         });
         query
-          .getQueryResultPromise()
+          .getQueryResultByText(-1, this.state.query.query)
+          .toPromise()
           .then((queryRes) => {
+
+            // console.log(queryRes);
+
+
             this.setState({
               runTimeLoading: false,
               queryResultRaw: queryRes,
@@ -184,28 +195,47 @@ class QueriesListTabs extends React.Component {
             });
             this.getGroupsWithPermission();
           })
-          .catch((err) => {
-            query
-              .getQueryResultByText(-1, this.state.query.query)
-              .toPromise()
-              .then((queryRes) => {
-                this.setState({
-                  runTimeLoading: false,
-                  queryResultRaw: queryRes,
-                  queryResult: this.normalizedTableData(queryRes.query_result),
-                });
-                this.getGroupsWithPermission();
-              })
-              .catch((ex) => {
-                this.setState({
-                  isLoaded: true,
-                  runTimeLoading: false,
-                  queryResultRaw: null,
-                  // tableData: null,
-                  queryResult: null,
-                });
-              });
+          .catch((ex) => {
+            this.setState({
+              isLoaded: true,
+              runTimeLoading: false,
+              queryResultRaw: null,
+              // tableData: null,
+              queryResult: null,
+            });
           });
+        // query
+        //   .getQueryResultPromise()
+        //   .then((queryRes) => {
+        //     this.setState({
+        //       runTimeLoading: false,
+        //       queryResultRaw: queryRes,
+        //       queryResult: this.normalizedTableData(queryRes.query_result),
+        //     });
+        //     this.getGroupsWithPermission();
+        //   })
+        //   .catch((err) => {
+        //     query
+        //       .getQueryResultByText(-1, this.state.query.query)
+        //       .toPromise()
+        //       .then((queryRes) => {
+        //         this.setState({
+        //           runTimeLoading: false,
+        //           queryResultRaw: queryRes,
+        //           queryResult: this.normalizedTableData(queryRes.query_result),
+        //         });
+        //         this.getGroupsWithPermission();
+        //       })
+        //       .catch((ex) => {
+        //         this.setState({
+        //           isLoaded: true,
+        //           runTimeLoading: false,
+        //           queryResultRaw: null,
+        //           // tableData: null,
+        //           queryResult: null,
+        //         });
+        //       });
+        //   });
       })
       .catch((exFinal) => {
         this.setState({
@@ -473,7 +503,7 @@ class QueriesListTabs extends React.Component {
                 <div style={{ paddingRight: '10px' }}>
                   <Form>
                     <Form.Item
-                      label="数据集对其他人可见"
+                      label="作为参数数据集开放"
                       labelAlign="left"
                       labelCol={{ span: 10 }}
                       wrapperCol={{ span: 4, offset: 10 }}
@@ -730,6 +760,9 @@ class QueriesListTabs extends React.Component {
                               enumOptions={parameter.enumOptions}
                               queryId={parameter.queryId}
                               onSelect={value => {
+                                console.log(parameter);
+                                console.log(parameter.$$value);
+                                console.log(parameter.normalizedValue);// 遗留值 需要分类？
                                   parameter.setValue(value);
                                 }}
                             />
