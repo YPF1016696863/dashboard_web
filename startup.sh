@@ -12,6 +12,7 @@ PORT_FRONTEND_DASHBOARD=${PORT_FRONTEND_DASHBOARD:-${DEFAULT_PORT_FRONTEND_DASHB
 
 cd /usr/share/nginx/html/static
 
+
 TARGET_FILE="app.*.js"
 
 cp app.template ${TARGET_FILE}

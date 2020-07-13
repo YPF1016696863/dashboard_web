@@ -1,3 +1,4 @@
+/* eslint-disable compat/compat */
 import { each, trim, without } from 'lodash';
 import Mousetrap from 'mousetrap';
 import 'mousetrap/plugins/global-bind/mousetrap-global-bind';
