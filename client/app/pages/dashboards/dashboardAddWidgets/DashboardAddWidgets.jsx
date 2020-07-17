@@ -30,11 +30,10 @@ class DashboardAddWidgets extends React.Component {
 
   componentDidMount() {
     const { slugId } = this.props;
-
+    
     if (slugId) {
       this.getDashboard(slugId);
     }
-
     ChartsListSelectViewDOM = angular2react(
       'chartsListSelectView',
       ChartsListSelectView,

@@ -148,8 +148,13 @@ function EchartsScatterNumberRenderer($rootScope) {
               myChart.setOption($scope.options, true);
             }
             if (_.get($scope.options, "size.responsive", false)) {
-              let height = $element.parent().parent()["0"].clientHeight;// + 50
-              let width = $element.parent().parent()["0"].clientWidth;
+              let height = "100%";
+              let width = "100%";
+
+              if ($("#preview").length !== 0) {
+                height = $element.parent().parent()["0"].clientHeight;
+                width = $element.parent().parent()["0"].clientWidth;
+              }
 
 
               if ($("#Preview").length !== 0) {

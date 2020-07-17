@@ -85,7 +85,8 @@ function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, 
   };
 
   this.editWidget = () => {// 跳转编辑组件页面
-    navigateTo("query/"+this.widget.query.id+"/charts/"+this.widget.visualization.id);
+    // console.log(window.location.href);
+    navigateTo("query/"+this.widget.query.id+"/charts/"+this.widget.visualization.id+"?index="+window.location.href);
   };
 
 

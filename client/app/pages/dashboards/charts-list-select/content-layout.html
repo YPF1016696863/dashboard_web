@@ -1,11 +1,12 @@
 <div class="dashboard-content-wrapper">
   <main class="dashboard-fullscreen">
+    <!-- r-directions="['right']" -->
     <nav
       resizable
-      r-directions="['right']"
+      
       r-flex="true"
       resizable-toggle
-      style="min-width: 300px;"
+      style="min-width: 350px;height: 50%;"
     >
       <div class="editor__left__schema">
         <div
@@ -14,6 +15,29 @@
         >
           <div class="scrollbox" style="height: 100% !important;margin-right:5px;">
             <charts-list-search query-search-cb="querySearchCb" simple-mode="true"></charts-list-search>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+<!-- r-directions="['right']" -->
+    <nav
+      resizable
+      
+      r-flex="true"
+      resizable-toggle
+      style="min-width: 350px;height: 36%;
+      position: absolute; 
+      top: 54%;"
+    >
+      <div class="editor__left__schema">
+        <div
+          class="d-flex flex-column p-absolute"
+          style="left: 20px; top: 0; right: 0; bottom: 0;"
+        >
+          <div class="scrollbox" style="height: 100% !important;margin-right:5px;">
+            已选组件列表
+            <list-used-widgets></list-used-widgets>
           </div>
         </div>
       </div>

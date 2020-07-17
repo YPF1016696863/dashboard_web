@@ -73,14 +73,15 @@ function EchartsZoneRenderer($rootScope) {
                         $scope.options.series.push({
                             name: '最小值',
                             type: 'bar',
-                            itemStyle: {
-                                barBorderColor: 'rgba(0,0,0,0)',
-                                color: 'rgba(0,0,0,0)'
+                            itemStyle: {                    // 鼠标覆盖区间之前
+                                barBorderColor: 'rgba(0,0,0,0)',  // 下区间边框颜色'rgba(0,0,0,0)',
+                                // 
+                                color: _.get($scope.options, "colorMinBar", '') // 下区间颜色，默认红色
                             },
-                            emphasis: {
+                            emphasis: {               // 鼠标覆盖区间后
                                 itemStyle: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(0,0,0,0)'
+                                    // barBorderColor:'rgba(0,0,0,0)', // 下区间边框颜色
+                                    // color: 'rgba(0,0,0,0)'  // 下区间颜色 '#00FFFF'
                                 }
                             },
                             data: dataMin

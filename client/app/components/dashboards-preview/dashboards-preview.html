@@ -28,7 +28,7 @@
   <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit"
     params="$ctrl.globalParameters"></parameter-drawer>
 
-  <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged"
+  <div gridstack editing="$ctrl.layoutEditing" id="preview" on-layout-changed="$ctrl.onLayoutChanged"
     is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"
     ng-class="{'preview-mode': !$ctrl.editing, 'editing-mode':$ctrl.editing}">
     <div class="dashboard-widget-wrapper" ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id"
@@ -41,14 +41,15 @@
 
     <!-- 切换 -->
     <!-- ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1" -->
-    <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0  "
+    <!-- $ctrl.globalParameters.length > 0  -->
+    <!-- <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0"
       ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 " gridstack-item="widget.options.position"
       gridstack-item-id="a99" data-test="WidgetIda99" id="switch">
       <div class="grid-stack-item-content grid-stack-item-content-design">
         <parameter-drawer-c widget="widget" ng-if="$ctrl.globalParameters.length > 0" on-submit="$ctrl.onSubmit"
           params="$ctrl.globalParameters"></parameter-drawer-c>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>
