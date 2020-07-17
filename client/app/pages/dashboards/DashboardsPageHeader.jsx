@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
-import { Menu, Button, Row, Icon, Divider, Col } from 'antd';
+import { Menu, Button, Row, Icon, Divider, Col,Input } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
 
 import './DashboardsPageHeader.less';
+
 
 const { SubMenu } = Menu;
 
@@ -31,7 +32,7 @@ class DashboardsPageHeader extends React.Component {
             <Icon type="save" />
             自动保存
           </Menu.Item>
-
+          
           <Menu.Item key="preview" style={{ float: 'right' }}>
             <a href={"/view/"+this.props.slugId} target="_blank" rel="noopener noreferrer">
               <Icon type="play-square" />

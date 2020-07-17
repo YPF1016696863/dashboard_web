@@ -68,7 +68,7 @@ class DashboardsTabs extends React.Component {
     this.setState({
       isLoaded: true,
       dashboard: null,
-      isDashboardOwner: false
+      isDashboardOwner: false,
     });
 
     DashboardsPreviewDOM = angular2react(
@@ -98,7 +98,7 @@ class DashboardsTabs extends React.Component {
     });
     Dashboard.get(
       { slug: slugId },
-      dashboard => {
+      dashboard => {        
         this.setState({
           isLoaded: true,
           dashboard,
@@ -126,7 +126,11 @@ class DashboardsTabs extends React.Component {
   };
 
   render() {
-    const { slugId,widgetData,dashboardBgImg } = this.props;
+    const { slugId,widgetData,
+      dashboardBgImg,rateData,
+      listSwitch ,gridData,dashboardBgImgType} = this.props;
+ 
+    // console.log(dashboardBgImgType);
     // eslint-disable-next-line no-unused-vars
     const {isDashboardOwner} = this.state;
 
@@ -145,7 +149,16 @@ class DashboardsTabs extends React.Component {
           </div>
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
-          <DashboardsPreviewDOM slugId={slugId} widgetData={widgetData} dashboardBgImg={dashboardBgImg} editing />
+          <DashboardsPreviewDOM 
+            slugId={slugId} 
+            widgetData={widgetData} 
+            dashboardBgImg={dashboardBgImg} 
+            rateData={rateData} 
+            listSwitch={listSwitch} 
+            gridData={gridData}
+            dashboardBgImgType={dashboardBgImgType}
+            editing 
+          />
         )}
       </>
     );
@@ -156,12 +169,20 @@ DashboardsTabs.propTypes = {
   slugId: PropTypes.string,
   widgetData: PropTypes.object,
   dashboardBgImg: PropTypes.string,
+  rateData: PropTypes.number,
+  gridData: PropTypes.number,
+  listSwitch:PropTypes.string,
+  dashboardBgImgType: PropTypes.string,
 };
 
 DashboardsTabs.defaultProps = {
   slugId: null,
   widgetData: null,
-  dashboardBgImg:null
+  dashboardBgImg:null,
+  rateData:null,
+  gridData: null,
+  listSwitch:null,
+  dashboardBgImgType:null,
 };
 
 export default function init(ngModule) {

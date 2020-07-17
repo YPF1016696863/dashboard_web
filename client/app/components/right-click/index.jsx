@@ -21,6 +21,8 @@ import './index.less';
 
 const { Header, Footer, Sider, Content } = Layout;
 
+let checked =[];
+
 class RightClick extends React.Component {
   state = {
     visible: this.props.open,
@@ -41,6 +43,11 @@ class RightClick extends React.Component {
   };
 
   componentDidMount() {
+    // console.log('da');
+    
+    // // this.onExpand();
+    // this.onSubmit();
+
     this.setState({
       visible: this.props.open
     });
@@ -83,16 +90,16 @@ class RightClick extends React.Component {
     this.setState({
       visible: false
     });
-    // console.log("onSubmit");
+    console.log(this.state.checkWidget);
     this.props.onClose();
-    this.props.onSubmit(this.state.checkWidget);
+    this.props.onSubmit(this.state.checkWidget,true);// true表示不为第一次进入刷新 第一次默认显示全部
   };
 
   onCheck = (checkedKeys, info) => {// 得到选中的组件id数组
     // console.log('onCheck', checkedKeys);
     const a = /[a-z]/i;// true,说明有英文字母 
     // eslint-disable-next-line func-names
-    const checked = _.filter(checkedKeys, function (item) {
+     checked = _.filter(checkedKeys, function (item) {
       return !a.test(item);
     });
     // console.log(checked);
@@ -119,12 +126,12 @@ class RightClick extends React.Component {
         }
       ]
     };
-    // console.log(this.props.params);
+    console.log(this.props.params);
     // debugger
     const widgetsSourceName = _.map(this.props.params, 'query.name');
-    const widgetsSourceId = _.map(this.props.params, 'data.query_result.data_source_id')
-    const widgetsName = _.map(this.props.params, 'visualization.name')
-    const widgetsId = _.map(this.props.params, 'id')
+    const widgetsSourceId = _.map(this.props.params, 'data.query_result.data_source_id');
+    const widgetsName = _.map(this.props.params, 'visualization.name');
+    const widgetsId = _.map(this.props.params, 'id');
     // 组件是否为参数组件
     const isParamsTemp = _.map(this.props.params, 'options.parameterMappings');
     const isParams = [];
@@ -134,7 +141,10 @@ class RightClick extends React.Component {
     // 参数组件是否有值 有值才显示在列表上
     // const isDataTemp = _.map(this.props.params, 'queryResult.query_result.data.rows');// **
     // [1].query.queryResult.query_result.data.rows
+    // [2][2].queryResult.query_result.data.rows
+    // [""0""].query.queryResult.filteredData
     const isDataTemp = _.map(this.props.params, 'query.queryResult.query_result.data.rows');
+    
     const isData = [];
     _.forEach(isDataTemp, function (value, key) {
       let flag = false;
@@ -148,7 +158,7 @@ class RightClick extends React.Component {
       }
       isData.push(flag);
     });
-
+    
     // 普通组件数据源的id 名称
     let widgetsNormalSourceId = [];
     let widgetsNormalSourceName = [];
@@ -160,7 +170,7 @@ class RightClick extends React.Component {
     let paramsWidgetsId = [];
     let paramsWidgetsName = [];
     for (let i = 0; i < isParams.length; i += 1) {
-      if (!isParams[i]) {// 普通组件 
+      if (!isParams[i]) {// 普通组件  
         // 数据源
         widgetsNormalSourceId[i] = widgetsSourceId[i];
         widgetsNormalSourceName[i] = widgetsSourceName[i];
@@ -174,17 +184,17 @@ class RightClick extends React.Component {
         paramsWidgetsId[i] = 0;
         paramsWidgetsName[i] = 0;
       } else {// 是参数组件
-        if (isData[i]) {// 此时的参数有数据
+        // if (isData[i]) {// 此时的参数有数据
           widgetsParamsSourceId[i] = widgetsSourceId[i];
           widgetsParamsSourceName[i] = widgetsSourceName[i];
           paramsWidgetsId[i] = widgetsId[i];
           paramsWidgetsName[i] = widgetsName[i];
-        } else { // 没有选中有效参数 不显示数据源和组件 
-          widgetsParamsSourceId[i] = 0;
-          widgetsParamsSourceName[i] = 0;
-          paramsWidgetsId[i] = 0;
-          paramsWidgetsName[i] = 0;
-        }
+        // } else { // 没有选中有效参数 不显示数据源和组件 
+        //   widgetsParamsSourceId[i] = 0;
+        //   widgetsParamsSourceName[i] = 0;
+        //   paramsWidgetsId[i] = 0;
+        //   paramsWidgetsName[i] = 0;
+        // }
         // 普通组件初始值
         widgetsNormalSourceId[i] = 0;
         widgetsNormalSourceName[i] = 0;
@@ -210,7 +220,7 @@ class RightClick extends React.Component {
       normalChild.push(
         {
           title: "数据来源:" + (widgetsNormalSourceName[i]===undefined?"文本":widgetsNormalSourceName[i]),
-          key: "ID" + widgetsNormalSourceId[i],// 前面加个id 到时候筛选出来不要
+          key: "IDN" + widgetsNormalSourceId[i],// 前面加个id 到时候筛选出来不要
           children: []
         }
       )
@@ -219,7 +229,7 @@ class RightClick extends React.Component {
       paramsChild.push(
         {
           title: "数据来源:" + widgetsParamsSourceName[i],
-          key: "ID" + widgetsParamsSourceId[i],// 前面加个id 到时候筛选出来不要
+          key: "IDP" + widgetsParamsSourceId[i],// 前面加个id 到时候筛选出来不要
           children: []
         }
       )
@@ -235,7 +245,7 @@ class RightClick extends React.Component {
       // console.log(dataHead.children[0].children.length); 
       for (let j = 0; j < dataHead.children[0].children.length; j += 1) {
         // 数据源匹配
-        if (dataHead.children[0].children[j].key + "" === "ID" + widgetsSourceId[index] + "") {
+        if (dataHead.children[0].children[j].key + "" === "IDN" + widgetsSourceId[index] + "") {
           dataHead.children[0].children[j].children.push({
             title: normalWidgetsName[i],
             key: normalWidgetsId[i],
@@ -250,7 +260,7 @@ class RightClick extends React.Component {
       const index = _.findIndex(widgetsId, function (o) { return o === paramsWidgetsId[i]; });
       for (let j = 0; j < dataHead.children[1].children.length; j += 1) {
         // 数据源匹配
-        if (dataHead.children[1].children[j].key + "" === "ID" + widgetsSourceId[index] + "") {
+        if (dataHead.children[1].children[j].key + "" === "IDP" + widgetsSourceId[index] + "") {
           dataHead.children[1].children[j].children.push({
             title: paramsWidgetsName[i],
             key: paramsWidgetsId[i],
@@ -260,13 +270,18 @@ class RightClick extends React.Component {
       }
     }
 
-    // console.log(dataHead);
+    console.log(dataHead);
 
 
     this.setState({
       treeData: [dataHead]
     });
   }
+
+  // onLoadData=()=>{
+  //   console.log("asdasd");
+  //   this.onExpand();
+  // }
 
   render() {
 
@@ -284,10 +299,13 @@ class RightClick extends React.Component {
           <Tree
             // eslint-disable-next-line react/jsx-boolean-value
             checkable={true}
-            autoExpandParent={false}
+            // autoExpandParent={false}
+            // eslint-disable-next-line react/jsx-boolean-value
             defaultExpandAll={false}
             // eslint-disable-next-line react/jsx-no-duplicate-props
             autoExpandParent={false}
+            // defaultCheckedKeys={['root']}
+            // defaultSelectedKeys={['root']}
             onExpand={this.onExpand}
             onCheck={this.onCheck}
             loadData={this.onLoadData}

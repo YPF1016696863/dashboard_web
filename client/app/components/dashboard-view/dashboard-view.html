@@ -1,5 +1,5 @@
 <div class="dashboard-dark-theme" style="height:100vh;width:100vw;overflow: hidden;" ng-style="$ctrl.dashboardStyle"
-    ng-if="$ctrl.dashboard.widgets.length > 0">
+    ng-if="$ctrl.dashboard.widgets.length > 0"  >
     <!--
   <div class="dashboard-dark-theme" ng-if="$ctrl.globalParameters.length > 0">
     <parameters parameters="$ctrl.globalParameters"></parameters>
@@ -19,8 +19,9 @@
             </div>
         </div>
     </div> -->
+
     <!-- 屏幕左侧 右键唤出组件列表 -->
-    <div ng-right-click="$ctrl.meau()">
+    <div ng-right-click="$ctrl.meau()" ng-if="$ctrl.modeList">
         <i class="fa fa-square"
             style="color: rgba(255, 255, 255, 0);position: absolute;top: 0%;left: 0%;width: 5%;height: 100%;z-index: 99; ">
             <md-tooltip md-direction="left"> > </md-tooltip>
@@ -29,7 +30,7 @@
     <!-- 组件列表 $ctrl.openRight-->
     <right-click open="$ctrl.openRight" on-close="$ctrl.onRightClose" on-submit="$ctrl.onRightSubmit"
         params="$ctrl.widgetList"></right-click>
-
+ 
     <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose" on-submit="$ctrl.onSubmit"
         params="$ctrl.globalParameters"></parameter-drawer>
 
@@ -37,24 +38,38 @@
     <div gridstack editing="$ctrl.layoutEditing" on-layout-changed="$ctrl.onLayoutChanged"
         is-one-column-mode="$ctrl.isGridDisabled" class="dashboard-wrapper"  
         ng-class="{'preview-mode': true, 'editing-mode':false}" >
-        <div class="dashboard-widget-wrapper"  ng-repeat="widget in $ctrl.modifiedWidget track by widget.id"
+
+        <!-- ng-show='widget.data.errorMessage==undefined' -->
+        <div class="dashboard-widget-wrapper"  ng-repeat="widget in $ctrl.modifiedWidget track by widget.id" 
+        gridstack-item="widget.options.position" gridstack-item-id="{{ widget.id }}"
+        data-test="WidgetId{{ widget.id }}"        
+        >
+        <div class="grid-stack-item-content"  >
+            <dashboard-widget widget="widget" dashboard="$ctrl.dashboard" on-delete="$ctrl.removeWidget(widget.id)">
+            </dashboard-widget>
+        </div>
+        </div>
+        <!-- 组件集合 原版 -->
+        <!-- <div class="dashboard-widget-wrapper"  ng-repeat="widget in $ctrl.dashboard.widgets track by widget.id" ng-show='widget.query.queryResult!=undefined'
             gridstack-item="widget.options.position" gridstack-item-id="{{ widget.id }}"
             data-test="WidgetId{{ widget.id }}">
             <div class="grid-stack-item-content"  >
                 <dashboard-widget widget="widget" dashboard="$ctrl.dashboard" on-delete="$ctrl.removeWidget(widget.id)">
                 </dashboard-widget>
             </div>
-        </div>
+        </div> -->
 
-
-        <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0  "
+        <!-- 下拉框集合 -->
+        <!--  ng-if="$ctrl.globalParameters.length > 0 " -->
+        <!-- <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0 "
             ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 " gridstack-item="widget.options.position"
-            gridstack-item-id="a99" data-test="WidgetIda99" id="switch">
+            gridstack-item-id="a99" data-test="WidgetIda99" id="switch"
+           >
             <div class="grid-stack-item-content ">
                 <parameter-drawer-c widget="widget" ng-if="$ctrl.globalParameters.length > 0" on-submit="$ctrl.onSubmit"
                     params="$ctrl.globalParameters"></parameter-drawer-c>
             </div>
-        </div>
+        </div> -->
     </div>
 
 

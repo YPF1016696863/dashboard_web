@@ -7,17 +7,34 @@
         <div class="d-flex flex-column p-absolute" style="left: 0; top: 0; right: 0; bottom: 0;">
           <div class="scrollbox" style="height: 100% !important;background-color: #20263B">
             <dashboards-search slug-id="slugId" dashboard-search-cb="dashboardSearchCb"
-              update-dashboard-bg-img-cb="updateDashboardBgImgCb"></dashboards-search>
-            <md-button aria-label="添加可视化组件" style="color: #fff">
+              update-dashboard-bg-img-cb="updateDashboardBgImgCb" type-dashboard-bg-img-cb="typeDashboardBgImgCb">
+            </dashboards-search>
+
+            <md-button aria-label="基础设置" style="color: #fff;width: 48%;" ng-click="baseOption=!baseOption">
+              <div>基础设置</div>
+            </md-button>
+            </br>
+            <span class="control-label" style="color: #fff;" ng-show="baseOption">刷新率：</span>
+            <rate-input get-rate-cb="getRateCb" slug-id="slugId" ng-show="baseOption"></rate-input>
+            </br>
+            <list-switch get-list-switch-cb="getListSwitchCb" get-grid-cb="getGridCb" slug-id="slugId"
+              ng-show="baseOption"></list-switch>
+            <div>
+              <md-button aria-label="组件设置" style="color: #fff;width: 48%;" ng-click="weigetOption=!weigetOption">
+                <div>组件设置</div>
+              </md-button>
+            </div>
+            <md-button aria-label="添加可视化组件" style="color: #fff" ng-show="weigetOption">
               <dashboard-add-widgets add-widget-cb="addWidgetCb" slug-id="slugId"></dashboard-add-widgets>
             </md-button>
-            <md-button aria-label="添加文本框" style="color: #fff">
+            <md-button aria-label="添加文本框" style="color: #fff" ng-show="weigetOption">
               <dashboard-add-textbox add-widget-cb="addWidgetCb"></dashboard-add-textbox>
             </md-button>
 
-            <md-button aria-label="添加其他可视化仪表盘">
+
+            <!-- <md-button aria-label="添加其他可视化仪表盘">
               添加可视化仪表盘
-            </md-button>
+            </md-button> -->
           </div>
         </div>
       </div>
@@ -37,7 +54,9 @@
                 <div class="d-flex flex-column p-absolute static-position__mobile"
                   style="left: 0; top: 0; right: 0; bottom: 0;">
                   <div class="query__vis scrollbox">
-                    <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg">
+                    <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg"
+                      rate-data="rateData" list-switch="listSwitch" grid-data="gridData"
+                      dashboard-bg-img-type="dashboardBgImgType">
                     </dashboards-tabs>
                   </div>
                   <!-- <div class="FAB">
