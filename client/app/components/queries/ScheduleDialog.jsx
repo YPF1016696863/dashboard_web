@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { InputNumber, Button } from 'antd';
 import Modal from 'antd/lib/modal';
 import DatePicker from 'antd/lib/date-picker';
 import TimePicker from 'antd/lib/time-picker';
@@ -39,7 +40,7 @@ export function TimeEditor(props) {
       />
       {showUtc && (
         <span className="utc" data-testid="utc">
-          ({ moment.utc(time).format(HOUR_FORMAT) } UTC)
+          ({ moment.utc(time).format(HOUR_FORMAT)} UTC)
         </span>
       )}
     </React.Fragment>
@@ -81,6 +82,7 @@ class ScheduleDialog extends React.Component {
       interval,
       dayOfWeek: day ? WEEKDAYS_SHORT[WEEKDAYS_FULL.indexOf(day)] : null,
       newSchedule,
+      reFlashChange:true
     };
   }
 
@@ -114,6 +116,12 @@ class ScheduleDialog extends React.Component {
         .format(HOUR_FORMAT),
     };
   };
+
+  onChangeReflash = () => {
+    this.setState({
+      reFlashChange:!this.state.reFlashChange
+    }) 
+  }
 
   setInterval = (newSeconds) => {
     const { newSchedule } = this.state;
@@ -204,20 +212,32 @@ class ScheduleDialog extends React.Component {
         <div className="schedule-component">
           <h5>刷新周期</h5>
           <div data-testid="interval">
-            <Select className="input" value={seconds} onChange={this.setInterval} dropdownMatchSelectWidth={false}>
-              <Option value={null} key="never">
-                从不
-              </Option>
-              {Object.keys(this.intervals).map(int => (
-                <OptGroup label={capitalize(pluralize(int))} key={int}>
-                  {this.intervals[int].map(([cnt, secs]) => (
-                    <Option value={secs} key={cnt}>
-                      {durationHumanize(secs)}
-                    </Option>
+            {this.state.reFlashChange?(
+              <Select className="input" value={seconds} onChange={this.setInterval} dropdownMatchSelectWidth={false}>
+                <Option value={null} key="never">
+                  从不
+                </Option>
+                {Object.keys(this.intervals).map(int => (// Never minute hour day week
+                  <OptGroup label={capitalize(pluralize(int))} key={int}>
+                    {this.intervals[int].map(([cnt, secs]) => (// 1  60    5  300
+                      <Option value={secs} key={cnt}>
+                        {durationHumanize(secs)}
+                      </Option>
                   ))}
-                </OptGroup>
+                  </OptGroup>
               ))}
-            </Select>
+              </Select>
+              ):
+            (
+              <InputNumber
+                min={1}
+                defaultValue={seconds}
+                onChange={this.setInterval}
+              />
+            )}
+            <Button type="primary" shape="circle" onClick={this.onChangeReflash}>
+              切换
+            </Button>
           </div>
         </div>
         {[IntervalEnum.DAYS, IntervalEnum.WEEKS].indexOf(interval) !== -1 ? (

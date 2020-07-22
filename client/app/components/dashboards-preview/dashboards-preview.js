@@ -57,7 +57,7 @@ function DashboardPreviewCtrl(
   this.saveInProgress = false;
   this.saveDelay = false;
   const vm = this;
-  const updateDashboard = (data,isForced) => {
+  const updateDashboard = (data, isForced) => {
 
     if (!this.dashboard) {
       return;
@@ -68,90 +68,158 @@ function DashboardPreviewCtrl(
       slug: this.dashboard.id
     });
 
-    if(!isForced) {
+
+    if (!isForced) {
       data = _.extend({}, data, {
         version: this.dashboard.version
       });
     }
 
     Dashboard.save(
-        data,
-        dashboard => {
-          _.extend(this.dashboard, _.pick(dashboard, _.keys(data)));
-        },
-        error => {
-          if (error.status === 403) {
-            notification.error('可视化面板更新失败', '许可拒绝。');
-          } else if (error.status === 409) {
-            notification.error(
-                '此可视化面板似乎已经被另一个用户修改了。',
-                '请复制/备份您的更改并重新加载此页。 ',
-                { duration: null }
-            );
-          }
+      data,
+      dashboard => {
+        _.extend(this.dashboard, _.pick(dashboard, _.keys(data)));
+      },
+      error => {
+        if (error.status === 403) {
+          notification.error('可视化面板更新失败', '许可拒绝。');
+        } else if (error.status === 409) {
+          notification.error(
+            '此可视化面板似乎已经被另一个用户修改了。',
+            '请复制/备份您的更改并重新加载此页。 ',
+            { duration: null }
+          );
         }
+      }
     );
   };
 
   $scope.$watch(
-    function() {
+    function () {
       return vm.slugId;
     },
-    function(data) {
+    function (data) {
       vm.loadDashboard();
     }
   );
 
+
   $scope.$watch(
-    function() {
+    function () {
       return vm.widgetData;
     },
-    function(data) {
+    function (data) {
       if (vm.widgetData && vm.widgetData.widget) {
-        if(vm.widgetData.widget.text){
+        if (vm.widgetData.widget.text) {
           vm.addTextbox(vm.widgetData.widget.text);
         }
-        else{
+        else {
           vm.addWidget(
             vm.widgetData.widget,
             vm.widgetData.paramMapping ? vm.widgetData.paramMapping : {}
           );
         }
-      }      
+      }
+    }
+  );
+
+  const imageAndrefreshRate = [];
+
+  $scope.$watch(
+    function () {
+      return vm.listSwitch;
+    },
+    function (data) {
+      // console.log(vm.listSwitch);
+      imageAndrefreshRate[2] = vm.listSwitch + "";
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
 
   $scope.$watch(
-      function() {
-        return vm.dashboardBgImg;
-      },
-      function(data) {
-        if(_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
-          vm.dashboardStyle = {
-          };
-          updateDashboard({ background_image:"" }, true);
-          return;
-        }
+    function () {
+      return vm.rateData;
+    },
+    function (data) {
+      console.log(vm.rateData);
+      imageAndrefreshRate[1] = vm.rateData;
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+
+    }
+  );
+
+  $scope.$watch(
+    function () {
+      return vm.gridData;
+    },
+    function (data) {
+      // console.log(vm.gridData);
+      imageAndrefreshRate[3] = vm.gridData;
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+    }
+  );
+
+  $scope.$watch(
+    function () {
+      return vm.dashboardBgImgType;
+    },
+    function (data) {
+      console.log(vm.dashboardBgImgType);
+      imageAndrefreshRate[4] = vm.dashboardBgImgType;
+      const imgType = vm.dashboardBgImgType;
+      // console.log(dashboard.background_image);
+      if (imgType === "tianchong" || imgType === "lasheng") {
+        // Get dashboard style
         vm.dashboardStyle = {
-          'background-image': 'url("'+vm.dashboardBgImg+'")',
+          'background-image': 'url("' + vm.dashboardBgImg + '")',
           'background-position': 'center',
           'background-repeat': 'no-repeat',
           'background-size': 'cover'
         };
-
-        updateDashboard({ background_image:vm.dashboardBgImg },true);
-
+      } else if (imgType === "pingpu") {
+        vm.dashboardStyle = {
+          'background-image': 'url("' + vm.dashboardBgImg + '")',
+          'background-position': 'center',
+          'background-repeat': 'repeat',
+        };
       }
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+    }
+  );
+
+  $scope.$watch(
+    function () {
+      return vm.dashboardBgImg;
+    },
+    function (data) {
+      if (_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
+        vm.dashboardStyle = {
+        };
+        imageAndrefreshRate[0] = "";
+        updateDashboard({ background_image: imageAndrefreshRate }, true);
+        return;
+      }
+      console.log(vm.dashboardBgImg);
+      vm.dashboardStyle = {
+        'background-image': 'url("' + vm.dashboardBgImg + '")',
+        'background-position': 'center',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover'
+      };
+      imageAndrefreshRate[0] = vm.dashboardBgImg;
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+      // updateDashboard({ background_image:vm.dashboardBgImg},true);
+    }
   );
 
   this.openParamDraw = false;
-  this.openParameterDialog = ()=>{
+  this.openParameterDialog = () => {
     this.openParamDraw = true;
   }
-  this.onPramClose = ()=>{
+  this.onPramClose = () => {
     this.openParamDraw = false;
   }
-  this.onSubmit = (updatedParameters)=>{
+  this.onSubmit = (updatedParameters) => {
     // Read parameter and reset url
     // 由参数设置url
     const params = _.extend({}, $location.search());
@@ -170,7 +238,6 @@ function DashboardPreviewCtrl(
     }
 
     this.isLayoutDirty = true;
-
     // calc diff, bail if none
     const changedWidgets = getWidgetsWithChangedPositions(
       this.dashboard.widgets
@@ -346,13 +413,44 @@ function DashboardPreviewCtrl(
       dashboard => {
         this.dashboard = dashboard;
 
-        // Get dashboard style
-        this.dashboardStyle = {
-          'background-image': 'url("'+dashboard.background_image+'")',
-          'background-position': 'center',
-          'background-repeat': 'no-repeat',
-          'background-size': 'cover'
-        };
+        // console.log(dashboard);
+        let arr = [];
+        let image = "/static/images/themeBackgroundImages/empty-overview.png";
+        let rate = 2;
+        let LSwitch = "true";
+        let imgType = "tianchong"
+        if(dashboard.background_image!==null){
+          console.log("1");
+           arr = dashboard.background_image.slice(1, -1).split(",");
+           image = arr[0];
+           rate = arr[1];
+           LSwitch = arr[2];
+           imgType = arr[4];
+          // console.log(imgType);
+          imageAndrefreshRate[0] = image;
+          imageAndrefreshRate[1] = rate;
+          imageAndrefreshRate[2] = LSwitch;
+          imageAndrefreshRate[3] = arr[3];
+          imageAndrefreshRate[4] = arr[4];
+        }       
+
+        if (imgType === "tianchong" || imgType === "lasheng") {
+          // Get dashboard style
+          this.dashboardStyle = {
+            'background-image': 'url("' + image + '")',
+            'background-position': 'center',
+            'background-repeat': 'no-repeat',
+            'background-size': 'cover'
+          };
+        }else if(imgType==="pingpu"){
+          this.dashboardStyle = {
+            'background-image': 'url("' + image + '")',
+            'background-position': 'center',
+            'background-repeat': 'repeat',
+          };
+        }
+
+        // 
 
         this.isDashboardOwner =
           currentUser.id === dashboard.user.id ||
@@ -364,22 +462,20 @@ function DashboardPreviewCtrl(
           this.editLayout(true);
         }
         this.editLayout(true);
-        if ($location.search().refresh !== undefined) {
-          if (this.refreshRate === null) {
-            const refreshRate = Math.max(
-              30,
-              parseFloat($location.search().refresh)
-            );
 
-            this.setRefreshRate(
-              {
-                name: durationHumanize(refreshRate),
-                rate: refreshRate
-              },
-              false
-            );
-          }
-        }
+        const refreshRate = Math.max(
+          1,
+          30
+        );
+
+        this.setRefreshRate(
+          {
+            name: durationHumanize(refreshRate),
+            rate: refreshRate
+          },
+          false
+        );
+
       },
       rejection => {
         const statusGroup = Math.floor(rejection.status / 100);
@@ -395,13 +491,14 @@ function DashboardPreviewCtrl(
     );
   }, 1000);
 
-  // this.loadDashboard();
-
   this.refreshDashboard = () => {
     renderDashboard(this.dashboard, true);
   };
 
   this.autoRefresh = () => {
+
+    // console.log(vm);
+
     $timeout(() => {
       this.refreshDashboard();
     }, this.refreshRate.rate * 1000).then(() => this.autoRefresh());
@@ -465,7 +562,8 @@ function DashboardPreviewCtrl(
       {
         slug: this.dashboard.id,
         version: this.dashboard.version,
-        dashboard_filters_enabled: this.dashboard.dashboard_filters_enabled
+        dashboard_filters_enabled: this.dashboard.dashboard_filters_enabled,
+        rateDash: vm.rateData
       },
       dashboard => {
         this.dashboard = dashboard;
@@ -503,7 +601,7 @@ function DashboardPreviewCtrl(
       visualization: null,
       visualization_id: null
     });
-    
+
     const position = this.dashboard.calculateNewWidgetPosition(widget);
     widget.options.position.col = position.col;
     widget.options.position.row = position.row;
@@ -598,7 +696,8 @@ function DashboardPreviewCtrl(
       {
         slug: this.dashboard.id,
         name: this.dashboard.name,
-        is_draft: this.dashboard.is_draft
+        is_draft: this.dashboard.is_draft,
+        rateDash: vm.rateData
       },
       dashboard => {
         this.saveInProgress = false;
@@ -627,7 +726,11 @@ export const DashboardsPreview = {
     slugId: '<',
     widgetData: '<',
     dashboardBgImg: '<',
-    editing:'<'
+    editing: '<',
+    rateData: '<',
+    listSwitch: '<',
+    gridData: '<',
+    dashboardBgImgType: '<'
   },
   controller: DashboardPreviewCtrl
 };

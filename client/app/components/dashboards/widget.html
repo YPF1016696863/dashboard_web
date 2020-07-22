@@ -4,8 +4,11 @@
     <div class="body-row">
       <div class="t-header widget clearfix" style="padding: 0px !important;">
         <div class="dropdown pull-right widget-menu-remove"  ng-if="!$ctrl.public && $ctrl.dashboard.canEdit()">
+           <a style="position: absolute;
+           right: 84%;
+           top: 25%;" ng-click="$ctrl.editWidget()" title="编辑组件"><i class="zmdi zmdi-more" style="font-size: 18px !important;"></i></a>
           <div class="actions">
-            <a ng-click="$ctrl.deleteWidget()" title="从可视化面板中移除"><i class="zmdi zmdi-close" style="color: white !important; font-size: 18px !important;"></i></a>
+            <a ng-click="$ctrl.deleteWidget()" title="从可视化面板中移除"> <i class="zmdi zmdi-close" style="color: white !important; font-size: 18px !important;"></i></a>
           </div>
         </div>
       </div>

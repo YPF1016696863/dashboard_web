@@ -17,6 +17,13 @@ const { Option } = Select;
 let fatherParameter = [];
 let id = 0;
 
+let keyName = "";
+let keyList = [];
+let xialaName = "";
+let xialaList = [];
+let condition={};
+let enumOptionsArrayForQuery = [];
+
 export class ParameterValueInput extends React.Component {
   static propTypes = {
     type: PropTypes.string,
@@ -42,15 +49,29 @@ export class ParameterValueInput extends React.Component {
     super(props);
     this.state = {
       fatherParameterState: [],
-      loader: true
+      loader: true,
+      keyNameState: "",
+      xialaNameState: "",
+
+      
+      switchResState: [],
+      keyname: '',
+      conditionState: null,
+      resultState: [],
+      enumOptionsArrayState:[{
+        name: "无.",
+        key: "null"
+      }],
     };
   }
 
-  componentDidMount() {
-    // console.log(this.props.type);
-    if (this.props.type === 'query') {
+  componentWillMount(){
+    // console.log('componentWillMount');
+     if (this.props.type === 'query') {
       id = this.props.parameter.queryId;
-
+      this.setState({
+        loader: true,
+      });
       Query.query({ id })
         .$promise.then(query => {
           query
@@ -58,10 +79,30 @@ export class ParameterValueInput extends React.Component {
             .then(queryRes => {
               fatherParameter = queryRes.query_result.data.rows;// 后执行
               if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
+                
+                this.whereUpdata();
+                // console.log(fatherParameter);
+                if(enumOptionsArrayForQuery.length===0){
+                  enumOptionsArrayForQuery.push(
+                    {
+                      name: "无",
+                      key: "null"
+                    }
+                  )
+                }
                 this.setState({
                   fatherParameterState: fatherParameter,
-                  loader: false
+                  resultState: keyList,
+                  switchResState: xialaList,
+                  conditionState:condition,
+                  loader: false,
+
+                  keyNameState: keyName,
+                  xialaNameState: xialaName,
+                  enumOptionsArrayState:enumOptionsArrayForQuery
                 });
+
+
               }
             }
             )
@@ -73,14 +114,12 @@ export class ParameterValueInput extends React.Component {
                   fatherParameter = queryRes.query_result.data.rows;// 后执行
                   // console.log(fatherParameter);
                   if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
-                    this.setState({
-                      fatherParameterState: fatherParameter,
-                      loader: false
-                    });
+                    this.whereUpdata();
                   }
                 })
                 .catch(ex => {
                   console.log(ex);
+                  console.log(this.state);
                 });
             });
 
@@ -91,6 +130,124 @@ export class ParameterValueInput extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // console.log("下拉框初始化函数");
+    // console.log(this.state);
+    if (this.props.type === 'query') {
+      id = this.props.parameter.queryId;
+      this.setState({
+        loader: true,
+      });
+      Query.query({ id })
+        .$promise.then(query => {
+          query
+            .getQueryResultPromise()
+            .then(queryRes => {
+              fatherParameter = queryRes.query_result.data.rows;// 后执行
+              if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
+                // console.log(fatherParameter);
+                this.whereUpdata();
+                // console.log(keyList);
+                // console.log(xialaName);
+                // this.props.parent.getChildrenMsg( this.state);// 子组件传给父组件
+                if(enumOptionsArrayForQuery.length===0){
+                  enumOptionsArrayForQuery.push(
+                    {
+                      name: "无",
+                      key: "null"
+                    }
+                  )
+                }
+                this.setState({
+                  fatherParameterState: fatherParameter,
+                  resultState: keyList,
+                  switchResState: xialaList,
+                  conditionState:condition,
+                  loader: false,
+
+                  keyNameState: keyName,
+                  xialaNameState: xialaName,
+                  enumOptionsArrayState:enumOptionsArrayForQuery
+                });
+
+
+              }
+            }
+            )
+            .catch(err => {
+              query
+                .getQueryResultByText(-1, query.query)
+                .toPromise()
+                .then(queryRes => {
+                  fatherParameter = queryRes.query_result.data.rows;// 后执行
+                  // console.log(fatherParameter);
+                  if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
+                    this.whereUpdata();
+                  }
+                })
+                .catch(ex => {
+                  console.log(ex);
+                  console.log(this.state);
+                });
+            });
+
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  }
+ 
+
+  whereUpdata = () => {
+    if (this.props.parameter.conditionvalue !== null && this.props.parameter.conditionvalue !== undefined) {
+      // console.log("1");
+      condition=this.props.parameter.conditionvalue;
+      const res = _.filter(fatherParameter, this.props.parameter.conditionvalue);
+      keyName = this.props.parameter.keyname;
+      xialaName = this.props.parameter.xialaname;
+      keyList = _.map(res, keyName);
+      xialaList = _.map(res, xialaName);
+      
+    } else {
+      // console.log("2");
+      condition=this.props.parameter.global[0][0];
+      const res = _.filter(fatherParameter, this.props.parameter.global[0][0]);
+      keyName = this.props.parameter.global[1][0];
+      xialaName = this.props.parameter.global[2][0];
+      keyList = _.map(res, keyName);
+      xialaList = _.map(res, xialaName);
+    }
+    
+    enumOptionsArrayForQuery = [];
+    for (let i = 0; i < keyList.length; i += 1) {
+      enumOptionsArrayForQuery.push(
+        {
+          name: xialaList[i],
+          key: keyList[i]
+        }
+      )
+    }
+    if(enumOptionsArrayForQuery.length===0){
+      enumOptionsArrayForQuery.push(
+        {
+          name: "无",
+          key: "null"
+        }
+      )
+    }
+    this.setState({
+      fatherParameterState: fatherParameter,
+      resultState: keyList,
+      switchResState: xialaList,
+      conditionState:condition,
+
+      loader: false,
+      keyNameState: keyName,
+      xialaNameState: xialaName,
+      enumOptionsArrayState:enumOptionsArrayForQuery
+    });
+  }
 
   upDataEnum = () => {
     if (this.props.type === 'query') {
@@ -102,11 +259,35 @@ export class ParameterValueInput extends React.Component {
             .toPromise()
             .then(queryRes => {
               fatherParameter = queryRes.query_result.data.rows;// 后执行
-              // console.log(fatherParameter);
               if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
+                this.whereUpdata();
+                enumOptionsArrayForQuery = [];
+                for (let i = 0; i < keyList.length; i += 1) {
+                  enumOptionsArrayForQuery.push(
+                    {
+                      name: xialaList[i],
+                      key: keyList[i]
+                    }
+                  )
+                }
+                if(enumOptionsArrayForQuery.length===0){
+                  enumOptionsArrayForQuery.push(
+                    {
+                      name: "无",
+                      key: "null"
+                    }
+                  )
+                }
                 this.setState({
                   fatherParameterState: fatherParameter,
-                  loader: false
+                  resultState: keyList,
+                  switchResState: xialaList,
+                  conditionState:condition,
+
+                  loader: false,
+                  keyNameState: keyName,
+                  xialaNameState: xialaName,
+                  enumOptionsArrayState:enumOptionsArrayForQuery
                 });
               }
             })
@@ -209,36 +390,54 @@ export class ParameterValueInput extends React.Component {
 
   renderQueryQueryInput() {
     const { value, onSelect, queryId, parameter } = this.props;
-    const enumOptionsArray = [];
-    // eslint-disable-next-line func-names
-    _.forEach(this.state.fatherParameterState, function (v, key) {
-      enumOptionsArray.push(v.KEYID);
-    });
+    enumOptionsArrayForQuery = [];
+    for (let i = 0; i < this.state.resultState.length; i += 1) {
+      enumOptionsArrayForQuery.push(
+        {
+          name: this.state.switchResState[i],
+          key: this.state.resultState[i]
+        }
+      )
+    }
+    
+    // console.log(enumOptionsArrayForQuery);
+    // console.log(this.state.enumOptionsArrayState);
     return (
-      this.state.loader ? (
-        <Select
-          className={this.props.className}
-          disabled={enumOptionsArray.length === 0}
-          defaultValue={value}
-          onChange={onSelect}
-          dropdownMatchSelectWidth={false}
-          dropdownClassName="ant-dropdown-in-bootstrap-modal"
-          onDropdownVisibleChange={this.upDataEnum}
-        ><Option key="null" value="null">null</Option>
-        </Select>
-      ) : (
-        <Select
-          className={this.props.className}
-          disabled={enumOptionsArray.length === 0}
-          defaultValue={enumOptionsArray[0]}
-          onChange={onSelect}
-          dropdownMatchSelectWidth={false}
-          dropdownClassName="ant-dropdown-in-bootstrap-modal"
-          onDropdownVisibleChange={this.upDataEnum}
-        >
-          {enumOptionsArray.map(option => (<Option key={option} value={option}>{option}</Option>))}
-        </Select>
-        )
+        this.props.parameter.global !== undefined&& 
+        !this.state.loader&&!(enumOptionsArrayForQuery === [] ||
+           enumOptionsArrayForQuery === undefined || 
+           enumOptionsArrayForQuery.length === 0) ?(// 加载完获得数据才加载显示下拉框的模块
+             <Select
+               className={this.props.className}
+            // disabled={enumOptionsArray.length === 0}
+            // defaultValue={this.state.enumOptionsArrayState[0].name}// enumOptionsArray[0].name==='无'?"无":value
+               defaultValue={this.state.enumOptionsArrayState[0].name}
+               key={this.state.enumOptionsArrayState[0].key}
+               onChange={onSelect}
+               dropdownMatchSelectWidth={false}
+               dropdownClassName="ant-dropdown-in-bootstrap-modal"
+               onDropdownVisibleChange={this.upDataEnum}
+             >
+               {enumOptionsArrayForQuery.map(option => (
+                 <Option key={option.name} value={option.key}>{option.name}</Option>))}
+             </Select>
+          )
+          :
+          (
+            <Select
+              className={this.props.className}
+              // disabled={enumOptionsArray.length === 0}
+              defaultValue={this.state.enumOptionsArrayState[0].name}
+              key={this.state.enumOptionsArrayState[0].key}
+              onChange={onSelect}
+              dropdownMatchSelectWidth={false}
+              dropdownClassName="ant-dropdown-in-bootstrap-modal"
+              onDropdownVisibleChange={this.upDataEnum}
+            >
+              <Option key="null" value="null">无数据</Option>
+            </Select>
+          )
+        // )
     );
   }
 

@@ -21,24 +21,46 @@ import { ParameterValueInput } from '@/components/ParameterValueInput';
 import { Widget } from '@/services/widget';
 
 const { Option } = Select;
-
+let name=[];
+let key=[];
 export class ParameterDrawerC extends React.Component { 
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      nameState:[],
+      keyState:[]
+    };
+  }
+  // componentDidMount() {
+  //   this.getChildrenMsg 
+  // }
+
   onSubmit = () => {  
+    
     this.props.onSubmit(this.props.params);
     // 提交后要在执行查询刷新下拉框？
   };
 
-  render() {
+  getChildrenMsg = (msg) => {   
+    // debugger 
+    name=msg.switchResState;
+    key=msg.resultState;
+    console.log(this.state.nameState);
+    console.log(this.state.keyState);
+  }
 
+  render() {
     return (
       <div> 
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={[8, 8]}>
+
             {_.map(this.props.params, parameter => (
               <Col span={6}>
                 <Form.Item
                   label={parameter.title + ":"}
+                  style={{color:'rgba(250, 250, 248, 0.85)  !important'}}
                   // help={'ID:' + parameter.name + ',类型:' + parameter.type}
                 >
                   <ParameterValueInput
@@ -51,10 +73,12 @@ export class ParameterDrawerC extends React.Component {
                       parameter.setValue(value);
                       this.onSubmit();
                     }}
+                    // parent={this}
                   />
                 </Form.Item>
               </Col>
             ))}
+           
           </Row>
         </Form> 
       </div>
