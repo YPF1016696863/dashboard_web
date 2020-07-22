@@ -8,14 +8,14 @@ import {
   Menu,
   Icon,
   Modal,
-  Form,
+  Row,
   Col,
   Tree,
   Input,
   Alert,
   Empty,
   message,
-  Tabs
+  Tabs, Avatar
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -46,6 +46,7 @@ import { routesToAngularRoutes } from '@/lib/utils';
 import { Dashboard } from '@/services/dashboard';
 import { Widget } from '@/services/widget';
 import { policy } from '@/services/policy';
+import {IMG_ROOT} from "@/services/data-source";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -53,9 +54,10 @@ const { Search } = Input;
 export class MoveToFolder extends React.Component {
   state = {
     visible: false,
-    // structure: null,
+    targetfolder: null
     // current: null
   };
+
 
   componentDidMount() {}
 
@@ -69,7 +71,7 @@ export class MoveToFolder extends React.Component {
     this.setState({
       visible: false
     });
-    this.props.onSuccess(this.state.name);
+    this.props.onSuccess(this.state.targetfolder);
   };
 
   handleCancel = e => {
@@ -78,10 +80,24 @@ export class MoveToFolder extends React.Component {
     });
   };
 
+  renderTree = (treelist,idx) => {
+    return treelist.map(item => {
+      if (!item.children){
+        return (
+          <TreeNode title={item.title} key={item.key} />
+        )}
+      return(
+        <TreeNode title={item.title} key={item.key}>
+          {this.renderTree(item.children)}
+        </TreeNode>
+      )
+    })
+  };
+  
   render() {
     const { appSettings } = this.props;
     const { defaultName } = this.state;
-    // console.log(selectedName);
+    const { structure } = this.props;
     return (
       <>
         <Button size="small" type="link" style={{ color: '#3d4d66' }} onClick={this.showModal}>
@@ -98,10 +114,24 @@ export class MoveToFolder extends React.Component {
           cancelText="取消"
           okText="确认"
           okButtonProps={{
-            disabled: true // !this.state.name
+            disabled: false // !this.state.name
           }}
         >
-          正在开发
+          <Row>
+            <Col style={{ paddingRight: '10px' }}>
+              <DirectoryTree
+                expandAction="doubleClick"
+                onSelect={(value,node,extra)=>
+                    this.setState({
+                            targetfolder:node.node.props.eventKey
+                        }
+                    )
+                }
+              >
+                {structure? this.renderTree(structure):null}
+              </DirectoryTree>
+            </Col>
+          </Row>
         </Modal>
       </>
     );
@@ -119,7 +149,7 @@ MoveToFolder.defaultProps = {
 
 export default function init(ngModule) {
   ngModule.component(
-    'createNewFolder',
+    'moveToFolder',
     react2angular(MoveToFolder, Object.keys(MoveToFolder.propTypes), [
       'appSettings',
       '$location'

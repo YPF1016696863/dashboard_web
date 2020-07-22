@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  message,
-  Button,
-  Dropdown,
-  Menu,
-  Icon,
-  Divider,
-  Row,
-  Col,
-  Tree,
-  Input,
-  Modal,
-  Alert
+    message,
+    Button,
+    Dropdown,
+    Menu,
+    Icon,
+    Divider,
+    Row,
+    Col,
+    Tree,
+    Input,
+    Modal,
+    Alert, Avatar
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -27,7 +27,12 @@ import { policy } from '@/services/policy';
 import { navigateToWithSearch } from '@/services/navigateTo';
 import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
 import { MoveToFolder } from '@/components/move-to-folder/MoveToFolder';
+import {appSettingsConfig} from "@/config/app-settings";
+import {$http} from "@/services/ng";
+import {IMG_ROOT} from "@/services/data-source";
 
+const FOLDER_STRUCTURE_URL =
+    appSettingsConfig.server.backendUrl + '/api/folder_structures';
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
@@ -39,7 +44,8 @@ class QueriesListSearch extends React.Component {
     all: null,
     filtered: null,
     loading: true,
-    visible: false
+    visible: false,
+    treelist: null
   };
 
   componentDidMount() {
@@ -55,8 +61,17 @@ class QueriesListSearch extends React.Component {
         all: res,
         filtered: res,
         loading: false
-      });
+      },()=>console.log("allquery",this.state.all));
     });
+      if(FOLDER_STRUCTURE_URL){
+          $http
+              .get(FOLDER_STRUCTURE_URL)
+              .success(data => this.setState(
+                  {
+                      treelist:this.convertToTreeData(data.filter(item => item.catalog === "query"),null)
+                  })
+              )
+      }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,6 +92,33 @@ class QueriesListSearch extends React.Component {
     });
   };
 
+    createFolder = (name, key) =>{
+        const parentId = (key===null || key==="datavis-group#ungrouped") ? null:key.substring(1);
+        const data={
+            "parent_id":parentId,
+            "name":name,
+            "catalog":"query"
+        };
+        $http
+            .post(FOLDER_STRUCTURE_URL,data)
+            .success(() => {this.reload(); console.log("folder-created")})
+            .error(() => alert("创建失败"))
+    }
+
+    moveTofolder = (selected, targetfolder) => {
+        const data={
+            folder_id:targetfolder.substring(1)
+        }
+        if (selected === null || selected.substr(0,1)==="s" || selected === "datavis-group#ungrouped"){
+            alert("请选择一个数据集")
+        } else {
+            $http
+                .post(appSettingsConfig.server.backendUrl+'/api/queries/'+selected+'/folder',data)
+                .success(() => {this.reload(); console.log("move done")})
+                .error(() => alert("移动失败"))
+        }
+    }
+  
   reload(holdTab) {
     let queryid = null;
     if (holdTab) {
@@ -99,6 +141,15 @@ class QueriesListSearch extends React.Component {
         loading: false
       });
     });
+      if(FOLDER_STRUCTURE_URL){
+          $http
+              .get(FOLDER_STRUCTURE_URL)
+              .success(data => this.setState(
+                  {
+                      treelist:this.convertToTreeData(data.filter(item => item.catalog === "query"),null)
+                  })
+              )
+      }
   }
 
   searchBy(value) {
@@ -176,8 +227,180 @@ class QueriesListSearch extends React.Component {
     });
   }
 
-  render() {
+  renderTree = (treelist,idx) => {
+        const allItems = _.cloneDeep(this.state.all);
+        const folderItem = _.filter(allItems, item3 => item3.folder_id != null)
+        return treelist.map(item => {
+            if (!item.children){
+                return (
+                  <TreeNode title={item.title} key={item.key}>
+                    {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
+                      <TreeNode
+                        icon={(
+                          <Icon
+                            type="file-search"
+                            style={{ color: '#FAAA39' }}
+                          />
+                                )}
+                        title={(
+                          <span
+                            onDoubleClick={() => {
+                                            this.setState({ editMode: true });
+                                        }}
+                          >
+                            {this.state.editMode &&
+                              this.state.selected &&
+                              _.parseInt(this.state.selected) === item2.id &&
+                              !item2.readOnly() ? (
+                                <Input
+                                  autoFocus
+                                  size="small"
+                                  value={this.state.rename}
+                                  onFocus={() => {
+                                          this.setState({ rename: item2.name });
+                                      }}
+                                  onChange={event => {
+                                          this.setState(
+                                              {
+                                                  rename: event.target.value
+                                              },
+                                              () => {}
+                                          );
+                                      }}
+                                  onBlur={() => {
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.saveQuery(item2, undefined, {
+                                                  name: this.state.rename
+                                              }).then(() => {
+                                                  this.reload(true);
+                                              });
+                                          }
+                                      }}
+                                  onPressEnter={() => {
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.saveQuery(item2, undefined, {
+                                                  name: this.state.rename
+                                              }).then(() => {
+                                                  this.reload(true);
+                                              });
+                                          }
+                                      }}
+                                />
+                              ) : (
+                                  item2.name
+                              )}
+                          </span>
+                                )}
+                        key={item2.id}
+                        isLeaf
+                      />
+                        ))}
+                  </TreeNode>
+                )}
+            return(
+              <TreeNode title={item.title} key={item.key}>
+                {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
+                  <TreeNode
+                    icon={(
+                      <Icon
+                        type="file-search"
+                        style={{ color: '#FAAA39' }}
+                      />
+                            )}
+                    title={(
+                      <span
+                        onDoubleClick={() => {
+                                        this.setState({ editMode: true });
+                                    }}
+                      >
+                        {this.state.editMode &&
+                              this.state.selected &&
+                              _.parseInt(this.state.selected) === item2.id &&
+                              !item2.readOnly() ? (
+                                <Input
+                                  autoFocus
+                                  size="small"
+                                  value={this.state.rename}
+                                  onFocus={() => {
+                                          this.setState({ rename: item2.name });
+                                      }}
+                                  onChange={event => {
+                                          this.setState(
+                                              {
+                                                  rename: event.target.value
+                                              },
+                                              () => {}
+                                          );
+                                      }}
+                                  onBlur={() => {
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.saveQuery(item2, undefined, {
+                                                  name: this.state.rename
+                                              }).then(() => {
+                                                  this.reload(true);
+                                              });
+                                          }
+                                      }}
+                                  onPressEnter={() => {
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.saveQuery(item2, undefined, {
+                                                  name: this.state.rename
+                                              }).then(() => {
+                                                  this.reload(true);
+                                              });
+                                          }
+                                      }}
+                                />
+                              ) : (
+                                  item2.name
+                              )}
+                      </span>
+                            )}
+                    key={item2.id}
+                    isLeaf
+                  />
+                    ))}
+                {this.renderTree(item.children)}
+              </TreeNode>
+            )
+        })
+    };
 
+  convertToTreeData(data, pid){
+        const result = []
+        let temp = []
+        for (let i = 0; i < data.length; i+=1) {
+            if (data[i].parent_id === pid) {
+                const obj = { 'title': data[i].name, 'key': "s"+data[i].id }
+                temp = this.convertToTreeData(data, data[i].id)
+                if (temp.length > 0) {
+                    obj.children = temp
+                }
+                result.push(obj)
+            }
+        }
+        return result
+    }  
+    
+    
+
+  render() {
     return (
       <>
         {this.state.loading && <LoadingState />}
@@ -275,10 +498,10 @@ class QueriesListSearch extends React.Component {
                 </Button>
               </Col>
               <Col span={8}>
-                <CreateNewFolder onSuccess={name => alert(name)} />
+                <CreateNewFolder onSuccess={name => { return this.state.selected===null ? this.createFolder(name, null):this.createFolder(name,this.state.selected);}} />
               </Col>
               <Col span={8}>
-                <MoveToFolder current={null} structure={null} />
+                <MoveToFolder structure={this.state.treelist} onSuccess={(targetfolder) => this.moveTofolder(this.state.selected,targetfolder)} />
               </Col>
               <Col span={24}>
                 <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
@@ -371,6 +594,7 @@ class QueriesListSearch extends React.Component {
                       );
                     })}
                   </TreeNode>
+                  {this.state.treelist? this.renderTree(this.state.treelist):<></>}
                 </DirectoryTree>
               </Col>
             </Row>

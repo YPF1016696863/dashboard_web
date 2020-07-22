@@ -39,13 +39,14 @@ import * as Sidebar from '@/components/items-list/components/Sidebar';
 import ItemsTable, {
   Columns
 } from '@/components/items-list/components/ItemsTable';
-
+import { $http } from '@/services/ng';
 import { Query } from '@/services/query';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 import { Dashboard } from '@/services/dashboard';
 import { Widget } from '@/services/widget';
 import { policy } from '@/services/policy';
+import {appSettingsConfig} from "@/config/app-settings";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
@@ -89,7 +90,7 @@ export class CreateNewFolder extends React.Component {
         </Button>
         <Modal
           destroyOnClose
-          title="新建文件夹[正在开发]"
+          title="新建文件夹"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -97,7 +98,7 @@ export class CreateNewFolder extends React.Component {
           cancelText="取消"
           okText="确认"
           okButtonProps={{
-            disabled: true // !this.state.name
+            disabled: false // !this.state.name
           }}
         >
           <Form>
