@@ -43,7 +43,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                     
                 try {
-                    if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+                    if (!_.isUndefined($scope.queryResult) && $scope.queryResult && $scope.queryResult.getData()) {
                         // const data = $scope.queryResult.getData();
 
                         // 切换主题颜色

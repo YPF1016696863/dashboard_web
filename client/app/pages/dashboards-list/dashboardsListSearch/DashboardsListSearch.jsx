@@ -15,7 +15,7 @@ import {
   Alert,
   Modal,
   Form,
-  message
+  message, Avatar
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -45,7 +45,12 @@ import './dashboards-search.css';
 import { policy } from '@/services/policy';
 import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
 import { MoveToFolder } from '@/components/move-to-folder/MoveToFolder';
+import {appSettingsConfig} from "@/config/app-settings";
+import {$http} from "@/services/ng";
+import {IMG_ROOT} from "@/services/data-source";
 
+const FOLDER_STRUCTURE_URL =
+    appSettingsConfig.server.backendUrl + '/api/folder_structures';
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 
@@ -59,7 +64,8 @@ class DashboardsListSearch extends React.Component {
     all: null,
     filtered: null,
     loading: true,
-    visible: false
+    visible: false,
+    treelist: null
   };
 
   componentDidMount() {
@@ -77,6 +83,19 @@ class DashboardsListSearch extends React.Component {
         this.props.dashboardSearchCb([this.props.slugId]);
       }
     });
+    if(FOLDER_STRUCTURE_URL){
+      $http
+          .get(FOLDER_STRUCTURE_URL)
+          .success(data =>
+          {
+            const tl=this.convertToTreeData(data.filter(item => item.catalog === "dashboard"),null)
+            this.setState(
+                {
+                  treelist:tl
+                })
+          }
+          )
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -108,8 +127,17 @@ class DashboardsListSearch extends React.Component {
         loading: false
       });
     });
+    $http
+        .get(FOLDER_STRUCTURE_URL)
+        .success(data => this.setState(
+            {
+              treelist:this.convertToTreeData(data.filter(item => item.catalog === "dashboard"),null)
+            }
+        ));
   }
 
+  
+  
   searchBy(value) {
     const allItems = _.cloneDeep(this.state.all);
     this.props.dashboardSearchCb(null);
@@ -186,9 +214,223 @@ class DashboardsListSearch extends React.Component {
     this.setState({ dashboardName: value });
   };
 
+  renderTree = (treelist,idx) => {
+    const allItems = _.cloneDeep(this.state.all);
+    const folderItem = _.filter(allItems, item3 => item3.folder_id != null)
+    return treelist.map(item => {
+      if (!item.children){
+        return (
+          <TreeNode title={item.title} key={item.key}>
+            {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
+              <TreeNode
+                icon={(
+                  <Icon
+                    type="dashboard"
+                    style={{ color: '#801336' }}
+                  />
+                    )}
+                title={(
+                  <span
+                    onDoubleClick={event => {
+                                this.setState({ editMode: true });
+                            }}
+                  >
+                    {this.state.editMode &&
+                              this.state.selected &&
+                              (this.state.selected === item2.slug && !this.state.dashboard.readOnly()) ? (
+                                <Input
+                                  autoFocus
+                                  size="small"
+                                  value={this.state.rename}
+                                  onFocus={event => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState({ rename: item2.name });
+                                      }}
+                                  onChange={event => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState(
+                                              {
+                                                  rename: event.target.value
+                                              },
+                                              () => { }
+                                          );
+                                      }}
+                                  onBlur={() => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.updateDashboard({
+                                                  name: this.state.rename
+                                              });
+                                          }
+                                      }}
+                                  onPressEnter={() => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.updateDashboard({
+                                                  name: this.state.rename
+                                              });
+                                          }
+                                      }}
+                                />
+                              ) : (
+                                  item2.name
+                              )}
+                  </span>
+                    )}
+                key={item2.slug}
+                isLeaf
+              />
+              ))
+
+              }
+          </TreeNode>
+        )}
+      return(
+        <TreeNode title={item.title} key={item.key}>
+          {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
+            <TreeNode
+              icon={(
+                <Icon
+                  type="dashboard"
+                  style={{ color: '#801336' }}
+                />
+                    )}
+              title={(
+                <span
+                  onDoubleClick={event => {
+                                this.setState({ editMode: true });
+                            }}
+                >
+                  {this.state.editMode &&
+                              this.state.selected &&
+                              (this.state.selected === item2.slug && !this.state.dashboard.readOnly()) ? (
+                                <Input
+                                  autoFocus
+                                  size="small"
+                                  value={this.state.rename}
+                                  onFocus={event => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState({ rename: item2.name });
+                                      }}
+                                  onChange={event => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState(
+                                              {
+                                                  rename: event.target.value
+                                              },
+                                              () => { }
+                                          );
+                                      }}
+                                  onBlur={() => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.updateDashboard({
+                                                  name: this.state.rename
+                                              });
+                                          }
+                                      }}
+                                  onPressEnter={() => {
+                                          if (this.state.dashboard.readOnly()) {
+                                              return;
+                                          }
+                                          this.setState({ editMode: false });
+                                          if (this.state.rename === item2.name) {
+                                              console.log('NO CHANGE');
+                                          } else {
+                                              this.setState({ loading: true });
+                                              this.updateDashboard({
+                                                  name: this.state.rename
+                                              });
+                                          }
+                                      }}
+                                />
+                              ) : (
+                                  item2.name
+                              )}
+                </span>
+                    )}
+              key={item2.slug}
+              isLeaf
+            />
+            ))}
+          {this.renderTree(item.children)}
+        </TreeNode>
+      )
+    })
+  };
+  
+  convertToTreeData(data, pid){
+    const result = []
+    let temp = []
+    for (let i = 0; i < data.length; i+=1) {
+      if (data[i].parent_id === pid) {
+        const obj = { 'title': data[i].name, 'key': "s"+data[i].id }
+        temp = this.convertToTreeData(data, data[i].id)
+        if (temp.length > 0) {
+          obj.children = temp
+        }
+        result.push(obj)
+      }
+    }
+    return result
+
+  }
+
+  createFolder = (name, key) =>{
+        const parentId = (key===null || key==="datavis-group#ungrouped") ? null:key.substring(1);
+        const data={
+            "parent_id":parentId,
+            "name":name,
+            "catalog":"dashboard"
+        };
+        $http
+            .post(FOLDER_STRUCTURE_URL,data)
+            .success(() => {this.reload(); console.log("folder-created")})
+            .error(() => alert("创建失败"))
+    }
+
+  moveTofolder = (selected, targetfolder) => {
+        const data={
+            folder_id:targetfolder.substring(1)
+        }
+        if (selected.substr(0,1) !== "-"){
+            alert("请选择一个仪表盘")
+        } else {
+            $http
+                .post(appSettingsConfig.server.backendUrl+'/api/dashboards/'+selected+'/folder',data)
+                .success(() => {this.reload(); console.log("move done")})
+                .error(() => alert("移动失败"))
+        }
+    }
+
   render() {
     const { appSettings } = this.props;
-
     return (
       <>
         {this.state.loading && <LoadingState />}
@@ -307,10 +549,10 @@ class DashboardsListSearch extends React.Component {
                 </Button>
               </Col>
               <Col span={8}>
-                <CreateNewFolder onSuccess={name => alert(name)} />
+                <CreateNewFolder onSuccess={name => { return this.state.selected===null ? this.createFolder(name, null):this.createFolder(name,this.state.selected);}} />
               </Col>
               <Col span={8}>
-                <MoveToFolder current={null} structure={null} />
+                <MoveToFolder structure={this.state.treelist} onSuccess={(targetfolder) => this.moveTofolder(this.state.selected,targetfolder)} />
               </Col>
               <Col span={24}>
                 <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
@@ -337,7 +579,6 @@ class DashboardsListSearch extends React.Component {
                   <TreeNode
                     title="可视化仪表板(无分组)"
                     key="datavis-group#ungrouped"
-                    selectable={false}
                   >
                     {_.map(this.state.filtered, item => {
                       return (
@@ -418,6 +659,7 @@ class DashboardsListSearch extends React.Component {
                       );
                     })}
                   </TreeNode>
+                  {this.state.treelist? this.renderTree(this.state.treelist):<></>}
                 </DirectoryTree>
               </Col>
             </Row>
