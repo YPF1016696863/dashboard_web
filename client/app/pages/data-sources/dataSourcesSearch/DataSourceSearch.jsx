@@ -337,10 +337,19 @@ class DataSourceSearch extends React.Component {
                 </Button>
               </Col>
               <Col span={8}>
-                <CreateNewFolder onSuccess={(name) => { return this.state.runtime.selected===null ? this.createFolder(name, null):this.createFolder(name,this.state.runtime.selected.eventKey);}} />
+                <CreateNewFolder 
+                  onSuccess={(name) => { 
+                  return this.state.runtime.selected===null ? 
+                  this.createFolder(name, null):
+                  this.createFolder(name,this.state.runtime.selected.eventKey);}} 
+                />
               </Col>
               <Col span={8}>
-                <MoveToFolder structure={this.state.treelist} onSuccess={(targetfolder) => this.moveTofolder(this.state.runtime.selected,targetfolder)} />
+                <MoveToFolder 
+                  structure={this.state.treelist} 
+                  onSuccess={(targetfolder) => 
+                  this.moveTofolder(this.state.runtime.selected,targetfolder)} 
+                />
               </Col>
               <Col span={24}>
                 <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
