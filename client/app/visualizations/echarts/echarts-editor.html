@@ -906,6 +906,25 @@
 
         <label class="control-label">配置文件</label>
         <button ng-click="downloadOption()" id="download">下载文件</button>
+        <label class="control-label">背景图片</label>
+        <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
+        <input ng-show="false" name="name" type="text" 
+        class="form-control" ng-model="options.images" placeholder="url" />
+        <label class="control-label">背景图片高</label>
+        <input name="name" type="text" class="form-control"
+        ng-model="options.bgH" placeholder="" /> 
+        <label class="control-label">背景图片宽</label>
+        <input name="name" type="text" class="form-control"
+        ng-model="options.bgW" placeholder="" /> 
+
+        <label class="control-label">背景位置X</label>
+        <input name="name" type="text" class="form-control"
+        ng-model="options.bgX" placeholder="" /> 
+        <label class="control-label">背景位置Y</label>
+        <input name="name" type="text" class="form-control"
+        ng-model="options.bgY" placeholder="" /> 
+
+        
     </div>
 
 </div>

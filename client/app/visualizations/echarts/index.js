@@ -412,7 +412,13 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             _.set($scope.options, "size", {
                                 responsive: true,
                                 width,
-                                height
+                                height,
+                                'background': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': _.get($scope.options, "bgW", "100%")+" "
+                                +_.get($scope.options, "bgH", " 100%"),
+                                'background-position':_.get($scope.options, "bgX", "0px")+" "
+                                +_.get($scope.options, "bgY", "0px"),
+
                             });
                         }
 
@@ -566,6 +572,11 @@ function EchartsEditor() {
                 console.log(BrowseFolder());
             }
 
+            // 组件背景
+            $scope.getImageUrlCb = (a) => {
+                _.set($scope.options, "images", a);
+                $scope.$apply();
+            }
 
             function BrowseFolder() {
                 const jsonObj =  $scope.options;

@@ -214,61 +214,65 @@ function ViewDashboardCtrl(
     const collectFilters = (dashboard, forceRefresh) => { // ... ,true
         const originalWidget = this.dashboard.widgets;
         // console.log(originalWidget);
-        // console.log(this.noDefault);
-
-        if (this.modeList) {  // 打开列表模式 清空组件 显示列表
-            this.modifiedWidget = [];
-            for (let i = 0; i < originalWidget.length; i += 1) {
-                for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
-                    // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
-                    if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
-                        this.modifiedWidget.push(originalWidget[i]);
+        // console.log(this.modeList);
+        if (this.layoutEditing) {// 固定
+            this.modifiedWidget = originalWidget;
+        } else {
+            if (this.modeList) {  // 打开列表模式 清空组件 显示列表
+                this.modifiedWidget = [];
+                for (let i = 0; i < originalWidget.length; i += 1) {
+                    for (let j = 0; j < this.checkedWidgetIndashboard.length; j += 1) {
+                        // console.log(originalWidget[i].id+"::::"+this.checkedWidgetIndashboard[j]+"");
+                        if (originalWidget[i].id + "" === this.checkedWidgetIndashboard[j] + "") { // 通过组件id来筛选
+                            this.modifiedWidget.push(originalWidget[i]);
+                        }
                     }
                 }
-            }
-            // console.log(this.modifiedWidget);
-        } else {
-            this.modifiedWidget=[];
-            
-            let status = [];
-            status = _.map(originalWidget, "data.errorMessage");
-            const originalWidgetView = [];
-             
-            for (let i = 0, j = 0; i < status.length; i += 1) {
-                if (status[i] === undefined ) {
-                    originalWidgetView[j] = originalWidget[i];// 滤出有效的组件
+                // console.log(this.modifiedWidget);
+            } else {
+                this.modifiedWidget = [];
+
+                let status = [];
+                status = _.map(originalWidget, "data.errorMessage");
+                const originalWidgetView = [];
+
+                for (let i = 0, j = 0; i < status.length; i += 1) {
+                    if (status[i] === undefined) {
+                        originalWidgetView[j] = originalWidget[i];// 滤出有效的组件
+                        j += 1;
+                    }
+                }
+
+
+                // 计算位置大小
+                const step = 6 / this.gridNum;
+                const colArr = [];
+                for (let i = 0, j = 0; i < 6;) {
+                    colArr[j] = step * (j);
                     j += 1;
+                    i += step;
                 }
+                // // const colArr=[0,2,4];
+                for (let i = 0; i < originalWidgetView.length; i += 1) {
+                    const newPosition = {
+                        autoHeight: false,
+                        col: colArr[i % this.gridNum],
+                        // col: 4,
+                        maxSizeX: 6,
+                        maxSizeY: 1000,
+                        minSizeX: 1,
+                        minSizeY: 1,
+                        // row: i!==0&&i%3===0?8:0,// c此处写成一个即可？or动态累加
+                        row: 0,
+                        sizeX: step,
+                        sizeY: 8
+                    }
+                    originalWidgetView[i].options.position = newPosition;
+                }
+
+                this.modifiedWidget = originalWidgetView;
             }
 
-
-            // 计算位置大小
-            const step = 6 / this.gridNum;
-            const colArr = [];
-            for (let i = 0, j = 0; i < 6;) {
-                colArr[j] = step * (j);
-                j += 1;
-                i += step;
-            }
-            // // const colArr=[0,2,4];
-            for (let i = 0; i < originalWidgetView.length; i += 1) {
-                const newPosition = {
-                    autoHeight: false,
-                    col: colArr[i % this.gridNum],
-                    // col: 4,
-                    maxSizeX: 6,
-                    maxSizeY: 1000,
-                    minSizeX: 1,
-                    minSizeY: 1,
-                    // row: i!==0&&i%3===0?8:0,// c此处写成一个即可？or动态累加
-                    row: 0,
-                    sizeX: step,
-                    sizeY: 8
-                }
-                originalWidgetView[i].options.position = newPosition;
-            }
-            
-            this.modifiedWidget = originalWidgetView;
         }
 
         const queryResultPromises = _.compact(
@@ -336,8 +340,11 @@ function ViewDashboardCtrl(
                 const image = dashboard.background_image.slice(1, -1).split(",")[0];
                 const rate = dashboard.background_image.slice(1, -1).split(",")[1];
                 this.modeList = dashboard.background_image.slice(1, -1).split(",")[2] === "true";
+                console.log(this.modeList);
                 this.gridNum = dashboard.background_image.slice(1, -1).split(",")[3];
                 const imgType = dashboard.background_image.slice(1, -1).split(",")[4];
+                this.layoutEditing = dashboard.background_image.slice(1, -1).split(",")[5] === "true";
+                console.log(this.layoutEditing);
                 // console.log(dashboard.background_image);
                 if (imgType === "tianchong" || imgType === "lasheng") {
                     // Get dashboard style

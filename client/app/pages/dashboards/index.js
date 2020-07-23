@@ -89,6 +89,13 @@ function DashboardsViewCtrl(
     $scope.listSwitch= listswitch;
     $scope.$applyAsync();
   };
+
+  $scope.getEditSwitchCb = (editswitch) => {
+    // console.log(editswitch);
+    $scope.editSwitch= editswitch;
+    $scope.$applyAsync();
+  };
+
   // currentUser.hasPermission('admin');
 }
 

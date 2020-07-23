@@ -130,18 +130,19 @@ function DashboardPreviewCtrl(
       return vm.listSwitch;
     },
     function (data) {
-      // console.log(vm.listSwitch);
+      console.log(vm.listSwitch);
       imageAndrefreshRate[2] = vm.listSwitch + "";
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
+  
 
   $scope.$watch(
     function () {
       return vm.rateData;
     },
     function (data) {
-      console.log(vm.rateData);
+      // console.log(vm.rateData);
       imageAndrefreshRate[1] = vm.rateData;
       updateDashboard({ background_image: imageAndrefreshRate }, true);
 
@@ -164,7 +165,7 @@ function DashboardPreviewCtrl(
       return vm.dashboardBgImgType;
     },
     function (data) {
-      console.log(vm.dashboardBgImgType);
+      // console.log(vm.dashboardBgImgType);
       imageAndrefreshRate[4] = vm.dashboardBgImgType;
       const imgType = vm.dashboardBgImgType;
       // console.log(dashboard.background_image);
@@ -183,6 +184,18 @@ function DashboardPreviewCtrl(
           'background-repeat': 'repeat',
         };
       }
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+    }
+  );
+
+  // editSwitch
+  $scope.$watch(
+    function () {
+      return vm.editSwitch;
+    },
+    function (data) {
+      // console.log(vm.editSwitch);
+      imageAndrefreshRate[5] = vm.editSwitch + "";
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
@@ -413,27 +426,30 @@ function DashboardPreviewCtrl(
       dashboard => {
         this.dashboard = dashboard;
 
-        // console.log(dashboard);
+        // console.log(imageAndrefreshRate);
         let arr = [];
         let image = "/static/images/themeBackgroundImages/empty-overview.png";
         let rate = 2;
         let LSwitch = "true";
-        let imgType = "tianchong"
+        let imgType = "tianchong";
+        let edit = "true";
         if(dashboard.background_image!==null){
-          console.log("1");
+          // console.log("1");
            arr = dashboard.background_image.slice(1, -1).split(",");
            image = arr[0];
            rate = arr[1];
            LSwitch = arr[2];
            imgType = arr[4];
+           edit=arr[5];
           // console.log(imgType);
           imageAndrefreshRate[0] = image;
           imageAndrefreshRate[1] = rate;
           imageAndrefreshRate[2] = LSwitch;
           imageAndrefreshRate[3] = arr[3];
           imageAndrefreshRate[4] = arr[4];
+          imageAndrefreshRate[5] = arr[5];
         }       
-
+        
         if (imgType === "tianchong" || imgType === "lasheng") {
           // Get dashboard style
           this.dashboardStyle = {
@@ -729,6 +745,7 @@ export const DashboardsPreview = {
     editing: '<',
     rateData: '<',
     listSwitch: '<',
+    editSwitch: '<',
     gridData: '<',
     dashboardBgImgType: '<'
   },

@@ -30,7 +30,7 @@
                                         </div>
                                     </div> -->
                                     <!-- 屏幕左侧 右键唤出组件列表 -->
-                                    <div ng-right-click="$ctrl.meau()" ng-if="$ctrl.modeList">
+                                    <div ng-right-click="$ctrl.meau()" ng-if="$ctrl.modeList&&!$ctrl.layoutEditing">
                                         <i class="fa fa-square"
                                             style="color: rgba(255, 255, 255, 0);position: absolute;top: 0%;left: 0%;width: 5%;height: 100%;z-index: 99; ">
                                             <md-tooltip md-direction="left"> > </md-tooltip>
@@ -43,20 +43,21 @@
                                     <parameter-drawer open="$ctrl.openParamDraw" on-close="$ctrl.onPramClose"
                                         on-submit="$ctrl.onSubmit" params="$ctrl.globalParameters"></parameter-drawer>
 
-                                        <!-- /false -->
-                                        <!--  widget in $ctrl.dashboard.widgets  $ctrl.modifiedWidget -->
-                                    <div gridstack editing="true" class="dashboard-wrapper preview-mode">
+                                    <!-- /false -->
+                                    <!--  widget in $ctrl.dashboard.widgets  $ctrl.modifiedWidget -->
+                                    <div gridstack editing="!$ctrl.layoutEditing" class="dashboard-wrapper preview-mode">
                                         <div class="dashboard-widget-wrapper"
                                             ng-repeat="widget in $ctrl.modifiedWidget track by widget.id"
-                                            ng-show='widget.query.queryResult!=undefined'
+                                            
                                             gridstack-item="widget.options.position"
                                             gridstack-item-id="{{ widget.id }}">
-                                            <div class="grid-stack-item-content">
+                                            <div
+                                            ng-class="{'grid-stack-item-content':!$ctrl.layoutEditing,'grid-stack-item-content2':$ctrl.layoutEditing}">
                                                 <dashboard-widget widget="widget" dashboard="$ctrl.dashboard"
                                                     public="true"></dashboard-widget>
                                             </div>
                                         </div>
-                                          <!-- 下拉框集合 -->
+                                        <!-- 下拉框集合 -->
                                         <!-- ng-if="$ctrl.globalParameters.length > 0  " -->
                                         <!-- <div class="dashboard-widget-wrapper"
                                             ng-if="false"

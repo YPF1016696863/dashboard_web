@@ -53,7 +53,7 @@ const { TreeNode, DirectoryTree } = Tree;
 const emptyChartImg = '/static/images/emptyChart.png';
 
 
-const UPLOAD_URL = appSettingsConfig.server.backendUrl + "/api/file_upload";
+const UPLOAD_URL = appSettingsConfig.server.backendUrl + "/api/image_upload";
 
 
 
@@ -196,11 +196,11 @@ class DashboardsSearch extends React.Component {
 
         let arr=[[],[],[],[],["/static/images/themeBackgroundImages/empty-overview.png"]];
         if(dashboard.background_image!==null){
-          console.log("1");
+          // console.log("1");
           arr = dashboard.background_image.slice(1, -1).split(",");
         }
          
-        console.log(arr[4]);
+        // console.log(arr[4]);
         // /static/images/themeBackgroundImages/empty-overview.png
 
         this.setState({
@@ -313,6 +313,7 @@ class DashboardsSearch extends React.Component {
     // 查找背景列表的id有没有包含现在上传的 有就不添加 找不到返回undefine 添加
     // 同时判断 item.thumbUrl 这个值是不是 undefine 是就不添加
     fileList.map((item) => {
+		console.log(item);
       if (
         _.find(tmp, function (o) { return o.meta === item.uid; }) === undefined &&
         item.thumbUrl !== undefined
@@ -321,7 +322,7 @@ class DashboardsSearch extends React.Component {
           // id 值需要获取最后一个元素的id+1
           id: parseInt(this.state.backgroundImages[len - 1].id, 10) + 1,
           meta: item.uid,
-          image: item.thumbUrl,
+          image: appSettingsConfig.server.backendUrl+'/static/'+item.response.url,
           overview: item.thumbUrl,
           name: item.uid
         });
@@ -329,7 +330,7 @@ class DashboardsSearch extends React.Component {
       return null;
     })
 
-    // console.log(tmp);
+    console.log(tmp);
     this.setState({
       fileList,
       backgroundImages: tmp
@@ -448,8 +449,9 @@ class DashboardsSearch extends React.Component {
                       {/* 上传背景 */}
                       <div className="clearfix">
                         <Upload
-                          // action={UPLOAD_URL}
-                          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                          action={UPLOAD_URL}
+                          name="file"
+                          // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                           accept=".jpg,.jpeg,.png,.tif,.gif,.svg"
                           listType="picture-card"
                           method="POST"

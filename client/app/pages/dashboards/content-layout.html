@@ -17,7 +17,11 @@
             <span class="control-label" style="color: #fff;" ng-show="baseOption">刷新率：</span>
             <rate-input get-rate-cb="getRateCb" slug-id="slugId" ng-show="baseOption"></rate-input>
             </br>
-            <list-switch get-list-switch-cb="getListSwitchCb" get-grid-cb="getGridCb" slug-id="slugId"
+            <list-switch 
+              get-list-switch-cb="getListSwitchCb" 
+              get-grid-cb="getGridCb"  
+              get-edit-switch-cb="getEditSwitchCb"
+              slug-id="slugId"
               ng-show="baseOption"></list-switch>
             <div>
               <md-button aria-label="组件设置" style="color: #fff;width: 48%;" ng-click="weigetOption=!weigetOption">
@@ -56,6 +60,7 @@
                   <div class="query__vis scrollbox">
                     <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg"
                       rate-data="rateData" list-switch="listSwitch" grid-data="gridData"
+                      edit-switch="editSwitch"
                       dashboard-bg-img-type="dashboardBgImgType">
                     </dashboards-tabs>
                   </div>
