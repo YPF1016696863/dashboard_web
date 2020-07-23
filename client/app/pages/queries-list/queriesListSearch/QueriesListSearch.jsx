@@ -68,7 +68,8 @@ class QueriesListSearch extends React.Component {
               .get(FOLDER_STRUCTURE_URL)
               .success(data => this.setState(
                   {
-                      treelist:this.convertToTreeData(data.filter(item => item.catalog === "query"),null)
+                      treelist:this.convertToTreeData(
+                        data.filter(item => item.catalog === "query"),null)
                   })
               )
       }
@@ -146,7 +147,8 @@ class QueriesListSearch extends React.Component {
               .get(FOLDER_STRUCTURE_URL)
               .success(data => this.setState(
                   {
-                      treelist:this.convertToTreeData(data.filter(item => item.catalog === "query"),null)
+                      treelist:this.convertToTreeData(
+                        data.filter(item => item.catalog === "query"),null)
                   })
               )
       }
@@ -234,21 +236,25 @@ class QueriesListSearch extends React.Component {
             if (!item.children){
                 return (
                   <TreeNode title={item.title} key={item.key}>
-                    {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
-                      <TreeNode
-                        icon={(
-                          <Icon
-                            type="file-search"
-                            style={{ color: '#FAAA39' }}
-                          />
+                    {_.map(
+                      _.filter(
+                        folderItem, item1 => 
+                        item1.folder_id.toString() === item.key.substring(1)), 
+                        item2 => (
+                          <TreeNode
+                            icon={(
+                              <Icon
+                                type="file-search"
+                                style={{ color: '#FAAA39' }}
+                              />
                                 )}
-                        title={(
-                          <span
-                            onDoubleClick={() => {
+                            title={(
+                              <span
+                                onDoubleClick={() => {
                                             this.setState({ editMode: true });
                                         }}
-                          >
-                            {this.state.editMode &&
+                              >
+                                {this.state.editMode &&
                               this.state.selected &&
                               _.parseInt(this.state.selected) === item2.id &&
                               !item2.readOnly() ? (
@@ -297,11 +303,11 @@ class QueriesListSearch extends React.Component {
                               ) : (
                                   item2.name
                               )}
-                          </span>
+                              </span>
                                 )}
-                        key={item2.id}
-                        isLeaf
-                      />
+                            key={item2.id}
+                            isLeaf
+                          />
                         ))}
                   </TreeNode>
                 )}
@@ -498,10 +504,18 @@ class QueriesListSearch extends React.Component {
                 </Button>
               </Col>
               <Col span={8}>
-                <CreateNewFolder onSuccess={name => { return this.state.selected===null ? this.createFolder(name, null):this.createFolder(name,this.state.selected);}} />
+                <CreateNewFolder onSuccess={
+                  name => { return this.state.selected===null ? 
+                  this.createFolder(name, null):
+                  this.createFolder(name,this.state.selected);}} 
+                />
               </Col>
               <Col span={8}>
-                <MoveToFolder structure={this.state.treelist} onSuccess={(targetfolder) => this.moveTofolder(this.state.selected,targetfolder)} />
+                <MoveToFolder 
+                  structure={this.state.treelist} 
+                  onSuccess={
+                  (targetfolder) => this.moveTofolder(this.state.selected,targetfolder)}
+                />
               </Col>
               <Col span={24}>
                 <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
