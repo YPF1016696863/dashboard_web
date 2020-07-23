@@ -128,9 +128,10 @@ class DashboardsTabs extends React.Component {
   render() {
     const { slugId,widgetData,
       dashboardBgImg,rateData,
-      listSwitch ,gridData,dashboardBgImgType} = this.props;
+      listSwitch ,gridData,dashboardBgImgType,
+      editSwitch} = this.props;
  
-    // console.log(dashboardBgImgType);
+    // console.log(editSwitch);
     // eslint-disable-next-line no-unused-vars
     const {isDashboardOwner} = this.state;
 
@@ -155,6 +156,7 @@ class DashboardsTabs extends React.Component {
             dashboardBgImg={dashboardBgImg} 
             rateData={rateData} 
             listSwitch={listSwitch} 
+            editSwitch={editSwitch} 
             gridData={gridData}
             dashboardBgImgType={dashboardBgImgType}
             editing 
@@ -172,6 +174,7 @@ DashboardsTabs.propTypes = {
   rateData: PropTypes.number,
   gridData: PropTypes.number,
   listSwitch:PropTypes.string,
+  editSwitch:PropTypes.string,
   dashboardBgImgType: PropTypes.string,
 };
 
@@ -179,9 +182,10 @@ DashboardsTabs.defaultProps = {
   slugId: null,
   widgetData: null,
   dashboardBgImg:null,
-  rateData:null,
-  gridData: null,
-  listSwitch:null,
+  rateData:2,
+  gridData: 3,
+  listSwitch:true,
+  editSwitch:true,
   dashboardBgImgType:null,
 };
 

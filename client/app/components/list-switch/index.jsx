@@ -26,20 +26,23 @@ class ListSwitch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      swicthState: null,
+      swicthState: true,
       load: false,
-      selected: false,
-      gridState:"3"
+      // selected: true,
+      gridState:"3",
+      editState:true
     };
     Dashboard.get(
       { slug: this.props.slugId },
       dashboard => {
-        // console.log(dashboard.background_image.slice(1,-1).split(",")[2]);
+        // console.log(dashboard.background_image.slice(1,-1).split(",")[5]);
         // let check=dashboard.background_image.slice(1,-1).split(",")[2]==="true";
         // console.log((dashboard.background_image.slice(1,-1).split(",")[3]));
         this.setState({
           swicthState: dashboard.background_image===null?true:
           dashboard.background_image.slice(1, -1).split(",")[2] === "true",
+          editState: dashboard.background_image===null?true:
+          dashboard.background_image.slice(1, -1).split(",")[5] === "true",
           gridState:dashboard.background_image===null?"3":
           dashboard.background_image.slice(1, -1).split(",")[3],
           load: true
@@ -64,9 +67,18 @@ class ListSwitch extends React.Component {
   onSwitchChange(e) {
     // console.log(e);
     this.setState({
-      selected: e
+      swicthState: e
     });
     this.props.getListSwitchCb(e);
+
+  }
+
+  onEditChange(e) {
+    // console.log(e);
+    this.setState({
+      editState: e
+    });
+    this.props.getEditSwitchCb(e);
 
   }
 
@@ -109,7 +121,7 @@ class ListSwitch extends React.Component {
           onChange={e => this.onSwitchChange(e)}
         />
         )}
-        {!this.state.selected&&(
+        {!this.state.swicthState&&(
           <span>
             <span className="control-label" style={{color:'#fff'}}>组件数(1/2/3/6)：</span>
             <Input 
@@ -118,8 +130,15 @@ class ListSwitch extends React.Component {
               onChange={e=>this.onGridChange(e.target.value)}
             />
           </span>
-         
-
+        )}
+        {this.state.load && (
+        <Switch
+          defaultChecked={this.state.editState}
+          loading={!this.state.load}
+          checkedChildren="固定"
+          unCheckedChildren="可动"
+          onChange={e => this.onEditChange(e)}
+        />
         )}
       </span>
     );
@@ -130,11 +149,13 @@ ListSwitch.propTypes = {
   getListSwitchCb: PropTypes.func,
   slugId: PropTypes.string,
   getGridCb: PropTypes.func,  
+  getEditSwitchCb: PropTypes.func,
 };
 ListSwitch.defaultProps = {
   getListSwitchCb: a => { },
   slugId: null,
   getGridCb: a => {},
+  getEditSwitchCb: a => {},
 };
 
 export default function init(ngModule) {

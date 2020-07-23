@@ -223,6 +223,8 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-LIQUID': type = 'ECHARTS-LIQUID'; break;// 指标球
                           case 'ECHARTS-TUBE': type = 'ECHARTS-TUBE'; break;// 试管温度计
                           case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
+                          case 'ECHARTS-PIC': type = 'ECHARTS-PIC'; break;// 图片
+                          
                           case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
                           // case 'ECHARTS-TXT': type = 'ECHARTS-TXT'; break;// TXT
                           case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 3D地图
@@ -725,20 +727,20 @@ class ChartsSearch extends React.Component {
                               </Radio>
                             </Col>
 
-                            {/* <Col
+                            <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
                               align="center"
                             >
-                              <Radio value="ECHARTS-TXT" style={{ width: '95%' }}>
+                              <Radio value="ECHARTS-PIC" style={{ width: '95%' }}>
                                 <Avatar
                                   shape="square"
                                   size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-gante.png`}
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/picture.png`}
                                 />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>文本图</p>
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>图片</p>
                               </Radio>
-                            </Col> */}
+                            </Col>
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
