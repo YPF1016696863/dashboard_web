@@ -22,6 +22,8 @@ function EchartsZoneRenderer($rootScope) {
                 $scope.options = defaultZoneChartOptions();
             }
 
+            console.log($scope.queryResult.getData());
+            
             let dataX = [];
             let dataMaxtemp = [];
             let dataMin = [];
@@ -121,9 +123,9 @@ function EchartsZoneRenderer($rootScope) {
 
                             // let height =  $element.closest('.t-body').outerHeight(true);
                             // let width = $element.closest('.t-body').outerWidth(true);
-                            
-                            let height ='100%';
-                            let width ='100%';
+
+                            let height = '100%';
+                            let width = '100%';
 
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
@@ -148,7 +150,7 @@ function EchartsZoneRenderer($rootScope) {
                 }
             };
             $scope.handleResize = _.debounce(() => {
-                refreshData();  
+                refreshData();
             }, 50);
 
 
@@ -314,7 +316,7 @@ function EchartsZoneEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }

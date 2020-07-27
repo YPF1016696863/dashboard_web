@@ -20,7 +20,8 @@ import {
   Switch,
   Statistic,
   Form,
-  Input
+  Input,
+  InputNumber
 } from 'antd';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
@@ -67,6 +68,7 @@ const API_SHARE_URL =
   appSettingsConfig.server.backendUrl + '/api/visualizations/{id}/share';
 const VISUALIZATION_SHARE_URL =
   window.location.origin + '/public/visualizations/';
+
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["normalizedTableData"] }] */
 class ChartsListTabs extends React.Component {
   state = {};
@@ -110,7 +112,8 @@ class ChartsListTabs extends React.Component {
           apiurl: null,
           saving: false
         }
-      }
+      },
+      refashValue:5
     });
     ChartsPreviewDOM = angular2react(
       'chartsPreview',
@@ -291,7 +294,8 @@ class ChartsListTabs extends React.Component {
                 runtime: {
                   share: {
                     public: visualization.publicAccessEnabled
-                      ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
+                      ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key
+                        +"?refresh="+this.state.refashValue)
                       : '打开可视化面板共享按钮以获取url链接',
                     api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                     saving: false
@@ -346,7 +350,8 @@ class ChartsListTabs extends React.Component {
                     runtime: {
                       share: {
                         public: visualization.publicAccessEnabled
-                          ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key)
+                          ? this.generateIframeCode(VISUALIZATION_SHARE_URL +
+                             visualization.api_key+"?refresh="+this.state.refashValue)
                           : '打开可视化面板共享按钮以获取url链接',
                         api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                         saving: false
@@ -456,6 +461,14 @@ class ChartsListTabs extends React.Component {
     }
   };
 
+  onChangeFreash=(value) =>{
+    console.log('changed', value);
+    this.setState({
+      refashValue:value
+    });
+    
+  }
+
   enableAccess = () => {
     const { visualization } = this.state;
     this.setState({
@@ -474,12 +487,14 @@ class ChartsListTabs extends React.Component {
           this.setState({
             runtime: {
               share: {
-                public: this.generateIframeCode(VISUALIZATION_SHARE_URL + data.api_key),
+                public: 
+                this.generateIframeCode(VISUALIZATION_SHARE_URL + data.api_key+"?refresh="+this.state.refashValue),
                 api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                 saving: false
               }
             }
           });
+          // console.log(this.runtime.share.public);
         })
         .error(() => {
           message.error('未能打开此可视化组件的共享');
@@ -633,7 +648,7 @@ class ChartsListTabs extends React.Component {
                         value={this.state.query.name}
                       /> */}
                       <b style={{ fontSize: '14px' }}>可视化组件共享设置:</b>
-                      <div style={{ paddingRight: '10px' }}>
+                      <div style={{ paddingRight: '10px',margin: '0' }}>
                         <Form>
                           <Form.Item
                             label="共享可视化组件"
@@ -648,6 +663,15 @@ class ChartsListTabs extends React.Component {
                               onChange={this.onChange}
                               loading={this.state.runtime.share.saving}
                             />
+                          </Form.Item>
+
+                          <Form.Item
+                            label="刷新率"
+                            labelAlign="left"
+                            labelCol={{ span: 10 }}
+                            wrapperCol={{ span: 4, offset: 10 }}
+                          >
+                            <InputNumber min={1} defaultValue={5} onChange={this.onChangeFreash} />
                           </Form.Item>
                           <Form.Item
                             label="共享可视化组件URL"

@@ -449,7 +449,7 @@ function DashboardPreviewCtrl(
           imageAndrefreshRate[4] = arr[4];
           imageAndrefreshRate[5] = arr[5];
         }       
-        
+        // console.log(image);
         if (imgType === "tianchong" || imgType === "lasheng") {
           // Get dashboard style
           this.dashboardStyle = {

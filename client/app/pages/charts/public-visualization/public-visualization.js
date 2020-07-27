@@ -1,13 +1,17 @@
+import { appSettingsConfig } from '@/config/app-settings';
 import template from './public-visualization.html';
-
 import './public-visualization.less';
 
-function loadVisualization($http, $route, appSettings) {
+const BK_URL = appSettingsConfig.server.backendUrl;
+
+function loadVisualization($http, $route) {
   const token = $route.current.params.token;
+  console.log("loadVisualization");
   return $http
-    .get(appSettings.server.backendUrl + `/api/visualizations/public/${token}`)
+    .get(BK_URL + `/api/visualizations/public/${token}`)
     .then(response => response.data);
 }
+
 
 const PublicVisualizationPage = {
   template,
@@ -32,27 +36,32 @@ const PublicVisualizationPage = {
     this.dashboard = {
       widgets: Dashboard.prepareDashboardWidgets([
         {
-          id:'widget#-public',
+          id: 'widget#-public',
           visualization: this.visualization,
           options: {
-            position:{
+            position: {
               autoHeight: true,
               sizeX: 6,
               col: 0
             },
-            isHidden:false,
+            isHidden: false,
             parameterMappings: {}
           }
         }
       ])
     };
 
-    const refreshRate = Math.max(30, parseFloat($location.search().refresh));
+    const refreshRate = Math.max(1, parseFloat($location.search().refresh));
+    // const refreshRate = 10;
 
     if (refreshRate) {
       const refresh = () => {
+        // console.log(refreshRate);
+       
         loadVisualization($http, $route).then(data => {
-          this.visualization = data;
+          // console.log(data);
+          this.dashboard.widgets[0].visualization= data;
+          // this.visualization = data;
           $timeout(refresh, refreshRate * 1000.0);
         });
       };

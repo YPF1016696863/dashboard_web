@@ -82,7 +82,7 @@ class RightClick extends React.Component {
     });
     this.props.onClose();
   };
-
+ 
 
 
   onSubmit = () => {
@@ -311,9 +311,11 @@ class RightClick extends React.Component {
             loadData={this.onLoadData}
             treeData={this.state.treeData}
           />
+          {this.state.visible&&(
           <Button type="primary" onClick={this.onSubmit} style={{ position:'absolute', bottom: '4%',left: '60%'}}>
             确认
           </Button>
+)}
         </Drawer>
         {/* <Modal
           title=""
