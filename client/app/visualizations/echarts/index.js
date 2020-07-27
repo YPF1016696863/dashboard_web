@@ -2,6 +2,7 @@
 import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
+import echarts2 from 'echarts2'; // 多版本 npm install echarts2@npm:echarts@2
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 import './index.css';
@@ -366,7 +367,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             disabled: _.get($scope.options, "dataZoom_Disabled", true),
                         });
 
-
+                        
 
                         let myChart = null;
                         if (document.getElementById("main")) {
@@ -377,7 +378,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             // eslint-disable-next-line
                             myChart = echarts.init(document.getElementById($scope.options.id));
                         }
-
+                            
+                        
                         // use configuration item and data specified to show chart
 
                         if (_.get($scope.options, "form.isCodeEnabled", false)) {
@@ -413,6 +415,18 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 responsive: true,
                                 width,
                                 height,
+                                // 'background': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                // 'background-size': _.get($scope.options, "bgW", "100%")+" "
+                                // +_.get($scope.options, "bgH", " 100%"),
+                                // 'background-position':_.get($scope.options, "bgX", "0px")+" "
+                                // +_.get($scope.options, "bgY", "0px"),
+
+                            });
+
+                            _.set($scope.options, "sizeBg", {
+                                // responsive: true,
+                                // width,
+                                // height,
                                 'background': "url(" + _.get($scope.options, "images", "url111") + ")",
                                 'background-size': _.get($scope.options, "bgW", "100%")+" "
                                 +_.get($scope.options, "bgH", " 100%"),

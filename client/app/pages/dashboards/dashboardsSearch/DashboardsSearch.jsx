@@ -200,7 +200,7 @@ class DashboardsSearch extends React.Component {
           arr = dashboard.background_image.slice(1, -1).split(",");
         }
          
-        // console.log(arr[4]);
+        console.log(arr[4]);
         // /static/images/themeBackgroundImages/empty-overview.png
 
         this.setState({
@@ -313,7 +313,7 @@ class DashboardsSearch extends React.Component {
     // 查找背景列表的id有没有包含现在上传的 有就不添加 找不到返回undefine 添加
     // 同时判断 item.thumbUrl 这个值是不是 undefine 是就不添加
     fileList.map((item) => {
-		console.log(item);
+		// console.log(item);
       if (
         _.find(tmp, function (o) { return o.meta === item.uid; }) === undefined &&
         item.thumbUrl !== undefined
