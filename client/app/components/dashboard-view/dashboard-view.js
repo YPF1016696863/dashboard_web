@@ -336,13 +336,12 @@ function ViewDashboardCtrl(
         Dashboard.get({ slug: this.slugId },
             dashboard => {
                 this.dashboard = dashboard;
-                console.log(dashboard);
-                console.log(dashboard.background_image);
+                // console.log(dashboard.background_image);
                 const image = dashboard.background_image.slice(1, -1).split(",")[0];
-                const rate = dashboard.background_image.slice(1, -1).split(",")[1];
+                const rate = dashboard.background_image.slice(1, -1).split(",")[1]+"";
                 this.modeList = dashboard.background_image.slice(1, -1).split(",")[2] === "true";
                 // console.log(this.modeList);
-                this.gridNum = dashboard.background_image.slice(1, -1).split(",")[3];
+                this.gridNum = dashboard.background_image.slice(1, -1).split(",")[3]+"";
                 const imgType = dashboard.background_image.slice(1, -1).split(",")[4];
                 this.layoutEditing = dashboard.background_image.slice(1, -1).split(",")[5] === "true";
                 // console.log(this.layoutEditing);

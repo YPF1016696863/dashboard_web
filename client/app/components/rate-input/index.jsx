@@ -24,7 +24,7 @@ class RateInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rateState:0
+      rateState:"20"
     };
   }
 
@@ -65,7 +65,11 @@ class RateInput extends React.Component {
 
     return (
      
-      <Input placeholder={this.state.rateState} style={{    width: '17%',height:' 3%'}} onChange={e=>this.onRateChange(e.target.value)} />        
+      <Input 
+        placeholder={this.state.rateState} 
+        style={{    width: '17%',height:' 3%'}} 
+        onChange={e=>this.onRateChange(e.target.value)} 
+      />        
      
     );
   }

@@ -427,8 +427,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                             _.set($scope.options, "sizeBg", {
                                 // responsive: true,
-                                // width,
-                                // height,
+                                'width':'100%',
+                                'height':'100%',
                                 'background': "url(" + _.get($scope.options, "images", "url111") + ")",
                                 'background-size': _.get($scope.options, "bgW", "100%") + " "
                                     + _.get($scope.options, "bgH", " 100%"),

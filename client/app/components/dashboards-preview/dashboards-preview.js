@@ -123,8 +123,49 @@ function DashboardPreviewCtrl(
     }
   );
 
+  // 背景地址、刷新率、组件列表开启（手动布局）、自动布局时 的一行多少块组件、背景是平铺还是填充等、开启发布后组件可移动
   const imageAndrefreshRate = [];
+  // 大屏背景地址
+  $scope.$watch(
+    function () {
+      return vm.dashboardBgImg;
+    },
+    function (data) {
+      if (_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
+        vm.dashboardStyle = {
+        };
+        imageAndrefreshRate[0] = "";
+        updateDashboard({ background_image: imageAndrefreshRate }, true);
+        return;
+      }
+      // console.log(vm.dashboardStyle);
+      vm.dashboardStyle = {
+        'background-image': 'url("' + vm.dashboardBgImg + '")',
+        'background-position': 'center',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover'
+      };
+      // console.log(vm.dashboardStyle);
+      imageAndrefreshRate[0] = vm.dashboardBgImg;
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+      // updateDashboard({ background_image:vm.dashboardBgImg},true);
+    }
+  );
 
+  // 大屏刷新率设置获取
+  $scope.$watch(
+    function () {
+      return vm.rateData;
+    },
+    function (data) {
+      // console.log(vm.rateData);
+      imageAndrefreshRate[1] = vm.rateData+"";
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+
+    }
+  );
+
+  // 开启组件列表（手动布局）
   $scope.$watch(
     function () {
       return vm.listSwitch;
@@ -136,29 +177,19 @@ function DashboardPreviewCtrl(
     }
   );
   
-
-  $scope.$watch(
-    function () {
-      return vm.rateData;
-    },
-    function (data) {
-      console.log(vm.rateData);
-      imageAndrefreshRate[1] = vm.rateData;
-      updateDashboard({ background_image: imageAndrefreshRate }, true);
-    }
-  );
-
+  // 自动布局时的每行组件数
   $scope.$watch(
     function () {
       return vm.gridData;
     },
     function (data) {
       // console.log(vm.gridData);
-      imageAndrefreshRate[3] = vm.gridData;
+      imageAndrefreshRate[3] = vm.gridData+"";
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
 
+  // 大屏背景
   $scope.$watch(
     function () {
       return vm.dashboardBgImgType;
@@ -187,7 +218,7 @@ function DashboardPreviewCtrl(
     }
   );
 
-  // editSwitch
+  // editSwitch 可否移动（固定开关）
   $scope.$watch(
     function () {
       return vm.editSwitch;
@@ -199,30 +230,7 @@ function DashboardPreviewCtrl(
     }
   );
 
-  $scope.$watch(
-    function () {
-      return vm.dashboardBgImg;
-    },
-    function (data) {
-      if (_.isEmpty(vm.dashboardBgImg) || vm.dashboardBgImg === "") {
-        vm.dashboardStyle = {
-        };
-        imageAndrefreshRate[0] = "";
-        updateDashboard({ background_image: imageAndrefreshRate }, true);
-        return;
-      }
-      console.log(vm.dashboardBgImg);
-      vm.dashboardStyle = {
-        'background-image': 'url("' + vm.dashboardBgImg + '")',
-        'background-position': 'center',
-        'background-repeat': 'no-repeat',
-        'background-size': 'cover'
-      };
-      imageAndrefreshRate[0] = vm.dashboardBgImg;
-      updateDashboard({ background_image: imageAndrefreshRate }, true);
-      // updateDashboard({ background_image:vm.dashboardBgImg},true);
-    }
-  );
+  
 
   this.openParamDraw = false;
   this.openParameterDialog = () => {
@@ -428,7 +436,7 @@ function DashboardPreviewCtrl(
         console.log(dashboard);
         let arr = [];
         let image = "/static/images/themeBackgroundImages/empty-overview.png";
-        let rate = 2;
+        let rate = 2+"";
         let LSwitch = "true";
         let imgType = "tianchong";
         let edit = "true";
@@ -444,11 +452,11 @@ function DashboardPreviewCtrl(
           imageAndrefreshRate[0] = image;
           imageAndrefreshRate[1] = rate;
           imageAndrefreshRate[2] = LSwitch;
-          imageAndrefreshRate[3] = arr[3];
+          imageAndrefreshRate[3] = arr[3]+"";
           imageAndrefreshRate[4] = arr[4];
           imageAndrefreshRate[5] = arr[5];
         }       
-        console.log(imageAndrefreshRate);
+        // console.log(image);
         if (imgType === "tianchong" || imgType === "lasheng") {
           // Get dashboard style
           this.dashboardStyle = {
