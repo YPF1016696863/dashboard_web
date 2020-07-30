@@ -395,7 +395,7 @@ class DashboardsSearch extends React.Component {
                     >
                       <Radio.Group
                         onChange={this.onChangeImgType}
-                        defaultValue={this.state.imgTypeState}
+                        defaultValue={this.state.imgTypeState===null?"tianchong":this.state.imgTypeState}
                       >
                         <Radio value="tianchong">填充</Radio>
                         <Radio value="pingpu">平铺</Radio>

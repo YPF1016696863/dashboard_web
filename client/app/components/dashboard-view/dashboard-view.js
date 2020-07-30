@@ -336,7 +336,8 @@ function ViewDashboardCtrl(
         Dashboard.get({ slug: this.slugId },
             dashboard => {
                 this.dashboard = dashboard;
-                // console.log(dashboard.background_image);
+                console.log(dashboard);
+                console.log(dashboard.background_image);
                 const image = dashboard.background_image.slice(1, -1).split(",")[0];
                 const rate = dashboard.background_image.slice(1, -1).split(",")[1];
                 this.modeList = dashboard.background_image.slice(1, -1).split(",")[2] === "true";

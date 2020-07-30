@@ -142,10 +142,9 @@ function DashboardPreviewCtrl(
       return vm.rateData;
     },
     function (data) {
-      // console.log(vm.rateData);
+      console.log(vm.rateData);
       imageAndrefreshRate[1] = vm.rateData;
       updateDashboard({ background_image: imageAndrefreshRate }, true);
-
     }
   );
 
@@ -426,7 +425,7 @@ function DashboardPreviewCtrl(
       dashboard => {
         this.dashboard = dashboard;
 
-        // console.log(imageAndrefreshRate);
+        console.log(dashboard);
         let arr = [];
         let image = "/static/images/themeBackgroundImages/empty-overview.png";
         let rate = 2;
@@ -449,7 +448,7 @@ function DashboardPreviewCtrl(
           imageAndrefreshRate[4] = arr[4];
           imageAndrefreshRate[5] = arr[5];
         }       
-        // console.log(image);
+        console.log(imageAndrefreshRate);
         if (imgType === "tianchong" || imgType === "lasheng") {
           // Get dashboard style
           this.dashboardStyle = {

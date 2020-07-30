@@ -1,12 +1,13 @@
 <span ng-style="options.sizeBg" style="position: absolute;background-repeat: no-repeat;
 background-size: 100% 100%;" >
+    <!-- restful发送图片 -->
     <span ng-click="imgSave()" id="imgH" style="position: absolute;
     top: -4px;
     left: 95%;
     z-index: 999;">
         ⊙
     </span>
-
+    <!-- 下拉框 -->
     <div style="width: 20%; z-index: 999;" ng-if="options.form.zAxisColumn!=='不筛选'&&options.showCondition">
         <ui-select name="filterColumn" required ng-model="options.form.filterColumn">
             <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>

@@ -53,8 +53,9 @@ function ChartsViewCtrl(
   $rootScope.selectChartType = null;
   $rootScope.selectDECharts = null;
   $scope.chartSearchCb = (type, shouldUpdate, select) => {// 似乎有id的时候才会进入这
+    // console.log($route);
     $scope.chartType = type;// type
-    // console.log("123:" + type);
+    // console.log("chartType:" + type);
     $rootScope.selectDECharts = type;
     $rootScope.selectChartType = select;      // 默认值没有（上一次的值没有） 导致undefined-》line 
     // 有时候预览页面页面不关闭 编辑页面选了之后？，没有清除 导致预览的时候全部系列重置为上一次选的图表类型2019/12/13

@@ -612,7 +612,11 @@ class DashboardsListTabs extends React.Component {
                       type="primary"
                       disabled={slugId == null || this.state.dashboard.readOnly()}
                       onClick={e => {
-                        navigateToWithSearch('dashboards/' + slugId);
+                        if (e.ctrlKey) {
+                          window.open(window.location.origin + '/dashboards/' + slugId);
+                        }else{
+                          navigateToWithSearch('dashboards/' + slugId);
+                        }
                       }}
                     >
                       <i className="fa fa-edit m-r-5" />

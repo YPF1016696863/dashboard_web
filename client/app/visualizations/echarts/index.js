@@ -39,6 +39,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 $scope.options = defaultBasicChartOptions();
             }
 
+
+
             const refreshData = () => {
                 // 找到选中serise的下标        
                 _.set($scope.options, 'useSerie_Index',
@@ -367,7 +369,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             disabled: _.get($scope.options, "dataZoom_Disabled", true),
                         });
 
-                        
+
 
                         let myChart = null;
                         if (document.getElementById("main")) {
@@ -378,8 +380,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             // eslint-disable-next-line
                             myChart = echarts.init(document.getElementById($scope.options.id));
                         }
-                            
-                        
+
+
                         // use configuration item and data specified to show chart
 
                         if (_.get($scope.options, "form.isCodeEnabled", false)) {
@@ -428,10 +430,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 // width,
                                 // height,
                                 'background': "url(" + _.get($scope.options, "images", "url111") + ")",
-                                'background-size': _.get($scope.options, "bgW", "100%")+" "
-                                +_.get($scope.options, "bgH", " 100%"),
-                                'background-position':_.get($scope.options, "bgX", "0px")+" "
-                                +_.get($scope.options, "bgY", "0px"),
+                                'background-size': _.get($scope.options, "bgW", "100%") + " "
+                                    + _.get($scope.options, "bgH", " 100%"),
+                                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                                    + _.get($scope.options, "bgY", "0px"),
 
                             });
                         }
@@ -442,6 +444,9 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     console.log(e);
                 }
             };
+
+
+
 
             $scope.handleResize = _.debounce(() => {
                 refreshData();
@@ -586,6 +591,28 @@ function EchartsEditor() {
                 console.log(BrowseFolder());
             }
 
+            $scope.addCondition = () => {
+                if ($scope.conditionArray === undefined || $scope.conditionArray.length === 0) {
+                    $scope.conditionArray = [1];
+                } else {
+                    const tailNum = $scope.conditionArray[$scope.conditionArray.length - 1];
+                    $scope.conditionArray.push(tailNum + 1);
+                }
+                console.log($scope.conditionArray);
+            }
+
+            $scope.deleteCondition = () => {
+                const id = $(event.target).attr('id');
+                // const index = _.indexOf($scope.conditionArray, id);
+                _.remove($scope.conditionArray, function (n) {
+                    return n+"" === id;
+                });
+
+                console.log($scope.conditionArray);
+            }
+
+
+
             // 组件背景
             $scope.getImageUrlCb = (a) => {
                 _.set($scope.options, "images", a);
@@ -593,7 +620,7 @@ function EchartsEditor() {
             }
 
             function BrowseFolder() {
-                const jsonObj =  $scope.options;
+                const jsonObj = $scope.options;
                 // 创建a标签
                 const elementA = document.createElement('a');
 
