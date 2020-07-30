@@ -4,18 +4,18 @@
     <nav resizable r-directions="['right']" r-flex="true" resizable-toggle style="min-width: 220px;">
       <div class="editor__left__schema">
         <div class="d-flex flex-column p-absolute" style="left: 20px; top: 0; right: 0; bottom: 0;">
-          <div class="scrollbox" style="height: 100% !important;margin-right:5px;">
-            <div style="height: 50%">
+          <div class="scrollbox" style="height: 50% !important;margin-right:5px;">
+            <div style="height: 10%">
               <b>选择数据集</b>
               <queries-list-nomodal query-search-cb="$ctrl.querySearchCb" chart-type="$ctrl.chartType">
               </queries-list-nomodal> 
-              <zhi-duan-list query-result="$ctrl.queryResult"></zhi-duan-list>
+              <zhi-duan-list query-id="queryId"></zhi-duan-list>
             </div> 
           </div> 
           <hr>
           <b>图表类型</b>
           <div class="scrollbox" style="height: 100% !important;margin-right:5px;">
-            <div style="height: 50%"> 
+            <div style="height: 10%"> 
               <charts-search chart-search-cb="chartSearchCb" query-id="queryId" chart-id="chartId"
                 chart-type="chartType"></charts-search>
             </div>

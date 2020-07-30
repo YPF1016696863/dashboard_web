@@ -726,12 +726,20 @@ class ChartsListTabs extends React.Component {
                       <Button
                         type="primary"
                         onClick={e => {
-                          navigateToWithSearch(
-                            'query/' +
+                          if (e.ctrlKey) {
+                            window.open(window.location.origin + 
+                              '/query/' +
                             this.getQueryId() +
                             '/charts/' +
-                            this.getChartId()
-                          );
+                            this.getChartId());
+                          }else{
+                            navigateToWithSearch(
+                              'query/' +
+                              this.getQueryId() +
+                              '/charts/' +
+                              this.getChartId()
+                            );
+                          }                          
                         }}
                       >
                         <i className="fa fa-edit m-r-5" />

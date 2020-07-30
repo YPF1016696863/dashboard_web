@@ -677,9 +677,14 @@ console.log("QueriesListTabs");
                       <Button
                         type="primary"
                         onClick={e => {
-                          navigateToWithSearch(
-                            '/queries/' + this.props.queryId + '/source'
-                          );
+                          if (e.ctrlKey) {
+                            window.open(window.location.origin + 
+                              '/queries/' + this.props.queryId + '/source');
+                          }else{
+                            navigateToWithSearch(
+                              '/queries/' + this.props.queryId + '/source'
+                            );
+                          }
                         }}
                       >
                         <i className="fa fa-edit m-r-5" />

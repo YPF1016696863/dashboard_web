@@ -100,26 +100,43 @@ class ChartsSearch extends React.Component {
       Query.query({ id: queryId })
         .$promise.then(query => {
 
-          // console.log(query.query);
-
-
-
           query
             .getQueryResultPromise()
             .then(queryRes => {
               if (visualizationId) {
+                const visTemp=_.find(
+                  query.visualizations,
+                  // eslint-disable-next-line eqeqeq
+                  visualization => visualization.id == visualizationId
+                )
+                
+                let typeChange= "ECHARTS_line";
+                switch (visTemp.type) {
+                  case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
+                  case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
+                  case 'CHART': typeChange = 'CHART_line'; break;
+                  default: typeChange = this.props.chartType; 
+                }
+                if(typeChange!==null&&typeChange.length!==0){
+                  visTemp.type=typeChange;
+                }
+                
                 this.setState({
                   isLoaded: true,
-                  visualization: _.find(
-                    query.visualizations,
-                    // eslint-disable-next-line eqeqeq
-                    visualization => visualization.id == visualizationId
-                  )
+                  visualization: visTemp
                 });
+                
               } else {
+                let typeChange= "ECHARTS_line";
+                switch (this.props.chartType) {
+                  case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
+                  case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
+                  case 'CHART': typeChange = 'CHART_line'; break;
+                  default: typeChange = this.props.chartType; 
+                }
                 this.setState({
                   isLoaded: true,
-                  visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
+                  visualization: { type: this.props.chartType ? typeChange : 'new' }
                 });
               }
               this.props.chartSearchCb(this.state.visualization.type);
@@ -131,18 +148,37 @@ class ChartsSearch extends React.Component {
                 .toPromise()
                 .then(queryRes => {
                   if (visualizationId) {
+                    const visTemp=_.find(
+                      query.visualizations,
+                      // eslint-disable-next-line eqeqeq
+                      visualization => visualization.id == visualizationId
+                    )
+                    
+                    let typeChange= "ECHARTS_line";
+                    switch (visTemp.type) {
+                      case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
+                      case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
+                      case 'CHART': typeChange = 'CHART_line'; break;
+                      default: typeChange = this.props.chartType; 
+                    }
+                    if(typeChange!==null&&typeChange.length!==0){
+                      visTemp.type=typeChange;
+                    }
                     this.setState({
                       isLoaded: true,
-                      visualization: _.find(
-                        query.visualizations,
-                        // eslint-disable-next-line eqeqeq
-                        visualization => visualization.id == visualizationId
-                      )
+                      visualization: visTemp
                     });
                   } else {
+                    let typeChange= "ECHARTS_line";
+                    switch (this.props.chartType) {
+                      case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
+                      case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
+                      case 'CHART': typeChange = 'CHART_line'; break;
+                      default: typeChange = this.props.chartType; 
+                    }
                     this.setState({
                       isLoaded: true,
-                      visualization: { type: this.props.chartType ? this.props.chartType : 'new' }
+                      visualization: { type: this.props.chartType ? typeChange : 'new' }
                     });
                   }
                   this.props.chartSearchCb(this.state.visualization.type);
@@ -154,7 +190,7 @@ class ChartsSearch extends React.Component {
                     visualization: { type: 'new' }
                   });
                 });
-            }); 
+            });
 
 
 
@@ -199,9 +235,10 @@ class ChartsSearch extends React.Component {
                     <Radio.Group
                       // disabled={this.state.visualization.type !== 'new'}// 开放随意变换图表类型
                       defaultValue={this.state.visualization.type}
-                      value={this.state.value}
+                      // value={this.state.value}
                       onChange={e => {
                         this.setState({
+                          // eslint-disable-next-line react/no-unused-state
                           value: e.target.value,
                           visualization: { type: e.target.value }// 
                         });
@@ -224,7 +261,7 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-TUBE': type = 'ECHARTS-TUBE'; break;// 试管温度计
                           case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
                           case 'ECHARTS-PIC': type = 'ECHARTS-PIC'; break;// 图片
-                          
+
                           case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
                           // case 'ECHARTS-TXT': type = 'ECHARTS-TXT'; break;// TXT
                           case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 3D地图
@@ -257,7 +294,6 @@ class ChartsSearch extends React.Component {
                         this.props.chartSearchCb(type, true, chart);
                       }}
                     >
-
                       <Collapse bordered={false} style={{ position: "absolute", left: '0%', width: '100%' }}>
 
                         {/* *** *****Radio value="ECHARTS" Echarts基础图  key 1 */}
@@ -348,13 +384,8 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>区间图</p>
                               </Radio>
                             </Col>
-                          </Row>
 
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
-                        {/* *  *Radio value="ECHARTS-PIE-AND-RADAR"**E-charts饼图,环形图,玫瑰图  key 2 */}
-                        <Panel header="E-charts饼图组" id="p1" key="2">
-                          <Row gutter={[8, 8]}>
+
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
@@ -398,10 +429,10 @@ class ChartsSearch extends React.Component {
                               </Radio>
                             </Col>
                           </Row>
+
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
-                        {/* * *Radio value="ECHARTS-GAUGE"*E-charts仪表  key 3 */}
-                        <Panel header="E-charts仪表" id="p1" key="3">
+                        <Panel header="E-charts仪表" id="p2" key="2">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -446,12 +477,6 @@ class ChartsSearch extends React.Component {
                               </Radio>
                             </Col>
 
-                          </Row>
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
-                        {/* ** *Radio value="ECHARTS-POLAR"**E-charts极坐标  key 4 */}
-                        <Panel header="E-charts极坐标图" id="p1" key="4">
-                          <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
@@ -481,11 +506,11 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>扇形图</p>
                               </Radio>
                             </Col>
+
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
-                        {/* ** *Radio value="CHART"***DataVis  key 5 */}
-                        <Panel header="DataVis基础图组" id="p1" key="5">
+                        <Panel header="DataVis基础图组" id="p3" key="3">
 
                           <Row gutter={[8, 8]}>
                             <Col
@@ -600,14 +625,8 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>箱型图</p>
                               </Radio>
                             </Col>
-                          </Row>
-                          <Divider style={{ margin: ' 0' }} />
 
-                        </Panel>
 
-                        {/* Radio value="TABLE"*"SUNBURST_SEQUENCE"*SANKEY*COUNTER "WORD_CLOUD" DataVis  key 6 */}
-                        <Panel header="DataVis其他组" id="p1" key="6">
-                          <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
@@ -695,8 +714,8 @@ class ChartsSearch extends React.Component {
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
-                        {/* ** *Radio value="ECHARTS-GRAPH"**E-charts拓扑图  key 7 */}
-                        <Panel header="E-charts拓展图" id="p1" key="7">
+
+                        <Panel header="E-charts拓展图" id="p4" key="4">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -741,14 +760,8 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>图片</p>
                               </Radio>
                             </Col>
-                          </Row>
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
 
 
-                        {/* ** *Radio value="ECHARTS-THREEDBAR"**E-charts3D柱状图  key 8 */}
-                        <Panel header="E-charts3D图" id="p1" key="8">
-                          <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
@@ -778,14 +791,7 @@ class ChartsSearch extends React.Component {
                               </Radio>
                             </Col>
 
-                          </Row>
 
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
-
-                        {/* ** *Radio value="ECHARTS-CONTRAST"**E-charts散点重构图  key 9 */}
-                        <Panel header="E-charts散点重构图" id="p1" key="9">
-                          <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
@@ -829,12 +835,7 @@ class ChartsSearch extends React.Component {
                               </Radio>
                             </Col>
 
-                          </Row>
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
-                        {/* ** *Radio value="ECHARTS-CONTRAST"**E-charts条形图重构  key 10 */}
-                        <Panel header="E-charts双数值对比图" id="p1" key="10">
-                          <Row gutter={[8, 8]}>
+
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}
@@ -849,12 +850,15 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>柱状图</p>
                               </Radio>
                             </Col>
+
+
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
 
                       </Collapse>
                     </Radio.Group>
+                   
                   </Row>
                 </Col>
               </Row>

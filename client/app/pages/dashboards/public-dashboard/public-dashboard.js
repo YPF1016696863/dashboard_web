@@ -144,9 +144,9 @@ const PublicDashboardPage = {
             Title.set(this.dashboard.name);
             // console.log(dashboard);
             const image = dashboard.background_image.slice(1, -1).split(",")[0];
-            rate = dashboard.background_image.slice(1, -1).split(",")[1];
+            rate =parseInt(dashboard.background_image.slice(1, -1).split(",")[1],10);
             this.modeList = dashboard.background_image.slice(1, -1).split(",")[2] === "true";
-            this.gridNum = dashboard.background_image.slice(1, -1).split(",")[3];
+            this.gridNum = parseInt(dashboard.background_image.slice(1, -1).split(",")[3],10);
             const imgType = dashboard.background_image.slice(1, -1).split(",")[4];
             this.layoutEditing = dashboard.background_image.slice(1, -1).split(",")[5] === "true";
             // console.log(dashboard.background_image);

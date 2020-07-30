@@ -32,11 +32,15 @@ class NavSidebar extends React.Component {
           <Menu.Item
             name="data_sources"
             active={this.state.activeItem === 'data_sources'}
-            onClick={() => {
-              this.setState({
-                activeItem: 'data_sources'
-              });
-              navigateTo('/data_sources');
+            onClick={(event) => {
+              if (event.ctrlKey) {
+                window.open(window.location.origin + '/data_sources');
+              } else {
+                navigateTo('/data_sources');
+                this.setState({
+                  activeItem: 'data_sources'
+                });
+              }
             }}
           >
             <Icon name="database" style={{ fontSize: '4em !important' }} />
@@ -47,11 +51,15 @@ class NavSidebar extends React.Component {
         <Menu.Item
           name="queries"
           active={this.state.activeItem === 'queries'}
-          onClick={() => {
-            this.setState({
-              activeItem: 'queries'
-            });
-            navigateTo('/queries');
+          onClick={(event) => {
+            if (event.ctrlKey) {
+              window.open(window.location.origin + '/queries');
+            } else {
+              navigateTo('/queries');
+              this.setState({
+                activeItem: 'queries'
+              });
+            }
           }}
         >
           <Icon name="filter" style={{ fontSize: '4em !important' }} />
@@ -62,11 +70,15 @@ class NavSidebar extends React.Component {
         <Menu.Item
           name="queries"
           active={this.state.activeItem === 'charts'}
-          onClick={() => {
-            this.setState({
-              activeItem: 'charts'
-            });
-            navigateTo('/charts');
+          onClick={(event) => {
+            if (event.ctrlKey) {
+              window.open(window.location.origin + '/charts');
+            } else {
+              navigateTo('/charts');
+              this.setState({
+                activeItem: 'charts'
+              });
+            }
           }}
         >
           <Icon name="chart pie" style={{ fontSize: '4em !important' }} />
@@ -77,11 +89,15 @@ class NavSidebar extends React.Component {
         <Menu.Item
           name="dashboards"
           active={this.state.activeItem === 'dashboards'}
-          onClick={() => {
-            this.setState({
-              activeItem: 'dashboards'
-            });
-            navigateTo('/dashboards');
+          onClick={(event) => {
+            if (event.ctrlKey) {
+              window.open(window.location.origin + '/dashboards');
+            } else {
+              navigateTo('/dashboards');
+              this.setState({
+                activeItem: 'dashboards'
+              });
+            }
           }}
         >
           <Icon name="dashboard" style={{ fontSize: '4em !important' }} />

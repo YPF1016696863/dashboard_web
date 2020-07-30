@@ -200,7 +200,7 @@ class DashboardsSearch extends React.Component {
           arr = dashboard.background_image.slice(1, -1).split(",");
         }
          
-        console.log(arr[4]);
+        // console.log(arr[4]);
         // /static/images/themeBackgroundImages/empty-overview.png
 
         this.setState({
@@ -278,15 +278,15 @@ class DashboardsSearch extends React.Component {
 
   // 上传验证格式及大小
   beforeUpload = (file) => {
-    console.log(file);
+    // console.log(file);
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
       message.error("只能上传JPG或PNG...文件!");
       return false;
     }
-    const isLt2M = file.size / 1024 / 1024 < 4;
+    const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error("图片大小需小于4MB!");
+      message.error("图片大小需小于2MB!");
       return false;
     }
     return isJpgOrPng && isLt2M;
@@ -301,7 +301,7 @@ class DashboardsSearch extends React.Component {
     //     imgItem.thumbUrl = imgItem.response.imgUrl;
     //   }
     // });
-    console.log(fileList);
+    // console.log(fileList);
 
     let len = 0;
     this.state.backgroundImages.map((item) => {
@@ -330,7 +330,7 @@ class DashboardsSearch extends React.Component {
       return null;
     })
 
-    console.log(tmp);
+    // console.log(tmp);
     this.setState({
       fileList,
       backgroundImages: tmp
@@ -350,6 +350,7 @@ class DashboardsSearch extends React.Component {
         <div className="ant-upload-text">上传</div>
       </div>
     );
+    // console.log(this.state.imgTypeState);
     return (
       <>
         {!this.state.isLoaded && (
@@ -395,7 +396,7 @@ class DashboardsSearch extends React.Component {
                     >
                       <Radio.Group
                         onChange={this.onChangeImgType}
-                        defaultValue={this.state.imgTypeState}
+                        defaultValue={this.state.imgTypeState===null?"tianchong":this.state.imgTypeState}
                       >
                         <Radio value="tianchong">填充</Radio>
                         <Radio value="pingpu">平铺</Radio>

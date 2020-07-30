@@ -119,7 +119,7 @@ export const EditVisualizationDialog = {
           }
           const urlStr = window.location.href
           const indexStart = urlStr.indexOf("index") + 6;
-          console.log("1");
+          // console.log("1");
           if (indexStart < 6) {// 不是跳转过来的
             navigateTo("/charts");
           } else {
