@@ -13,7 +13,6 @@ export function defaultBasicChartOptions() {
         useSerie_Index: -1,     // 选中的系列下标
         bar2Flag: false,
 
-
         form: {
             xAxisColumn: "",
             yAxisColumns: []
@@ -24,7 +23,8 @@ export function defaultBasicChartOptions() {
             height: "400px"
         },
         title: {
-            text: '',
+            text: '默认标题',
+            left:0,
             subtext: '',
             x: 'center',
             backgroundColor: 'transparent',
@@ -42,7 +42,7 @@ export function defaultBasicChartOptions() {
             },
         },
         tooltip: {
-            show: false,
+            show: true,
             axisPointer: {
                 show: true,
                 type: 'cross',
@@ -63,7 +63,7 @@ export function defaultBasicChartOptions() {
         },
         toolbox: {
             show: false,
-            right:'10%',
+            right: '10%',
             feature: {
                 // dataView:{
                 //     show:true
@@ -74,32 +74,33 @@ export function defaultBasicChartOptions() {
                 // magicType: { type: ['line', 'bar'] },
                 restore: {},
                 saveAsImage: {},
-    // myTool1: {
-    //     show: true,
-    //     title: 'RESTFul发送',
-    //     icon: `path://M1009.19461 5.118447a32.054274 
-    //     32.054274 0 0 0-35.125341 0.255922l-959.708789 
-    //     639.805859a31.830341 31.830341 0 0 0-14.043738 
-    //     29.942914 31.830341 31.830341 0 0 0 19.929952 
-    //     26.360002l250.292052 100.161607 117.692288 
-    //     205.953506a31.990293 31.990293 0 0 0 27.415681 
-    //     16.123108H415.998608c11.228593 0 21.657428-5.950194 
-    //     27.415681-15.547283l66.443839-110.782384 310.14589 
-    //     124.026365a31.734371 31.734371 0 0 0 
-    //     27.543642-1.855437c8.445437-4.734563 
-    //     14.23568-13.05204 15.867185-22.617137l159.951465-959.708788A32.054274 
-    //     32.054274 0 0 0 1009.19461 5.118447zM100.446359 664.662317L841.821398 
-    //     170.3803 302.784962 
-    //     747.389214c-2.847136-1.695486-5.374369-3.934806-8.509418-5.182427l-193.829185-77.54447z 
-    //     m225.627536 105.216073l-0.223932-0.319903L931.842082 120.955298 
-    //     415.230841 925.895049l-89.156946-156.016659z 
-    //     m480.750122 177.322194l-273.229092-109.278841a63.564712 63.564712 0 0 0-19.929952-3.806845L934.401305 
-    //     181.896806l-127.577288 765.303778z`,
-    //     // eslint-disable-next-line object-shorthand
-    //     onclick: function () {
-    //         alert('RESTFul发送2')
-    //     }
-    // }
+                // myTool1: {
+                //     show: true,
+                //     title: 'RESTFul发送',
+                //     icon: `path://M1009.19461 5.118447a32.054274 
+                //     32.054274 0 0 0-35.125341 0.255922l-959.708789 
+                //     639.805859a31.830341 31.830341 0 0 0-14.043738 
+                //     29.942914 31.830341 31.830341 0 0 0 19.929952 
+                //     26.360002l250.292052 100.161607 117.692288 
+                //     205.953506a31.990293 31.990293 0 0 0 27.415681 
+                //     16.123108H415.998608c11.228593 0 21.657428-5.950194 
+                //     27.415681-15.547283l66.443839-110.782384 310.14589 
+                //     124.026365a31.734371 31.734371 0 0 0 
+                //     27.543642-1.855437c8.445437-4.734563 
+                //     14.23568-13.05204 15.867185-22.617137l159.951465-959.708788A32.054274 
+                //     32.054274 0 0 0 1009.19461 5.118447zM100.446359 664.662317L841.821398 
+                //     170.3803 302.784962 
+                //     747.389214c-2.847136-1.695486-5.374369-3.934806-8.509418-5.182427l-193.829185-77.54447z 
+                //     m225.627536 105.216073l-0.223932-0.319903L931.842082 120.955298 
+                //     415.230841 925.895049l-89.156946-156.016659z 
+                //     m480.750122 177.322194l-273.229092-109.278841a63.564712 
+                //     63.564712 0 0 0-19.929952-3.806845L934.401305 
+                //     181.896806l-127.577288 765.303778z`,
+                //     // eslint-disable-next-line object-shorthand
+                //     onclick: function () {
+                //         alert('RESTFul发送2')
+                //     }
+                // }
             }
         },
         xAxis: {
@@ -118,6 +119,14 @@ export function defaultBasicChartOptions() {
             },
             axisLabel: {
                 show: true
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: 'rgba(125,125,125,0.3)',
+                    width: 1,
+                    type: 'dashed'
+                }
             }
         },
 
@@ -137,7 +146,15 @@ export function defaultBasicChartOptions() {
             },
             axisTick: {
                 show: true
-            }
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: 'rgba(125,125,125,0.3)',
+                    width: 1,
+                    type: 'dashed'
+                }
+            },
         },
 
         dataZoom: [{
@@ -269,7 +286,7 @@ export function getFullCanvasDataURL(divId) {// 延迟一秒执行
     });
     // 获取base64位的url
     return baseCanvas.toDataURL();
-} 
+}
 
 export function setThemeColor(options, theme) {
     if (theme === "light") {

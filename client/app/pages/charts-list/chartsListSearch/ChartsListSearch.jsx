@@ -237,6 +237,21 @@ class ChartsListSearch extends React.Component {
                   onDoubleClick={event => {
                     this.setState({ editMode: true });
                   }}
+
+                  onContextMenu={(e)=>{
+                    e.preventDefault();
+                    console.log(query.id + ':' + visualization.id);
+
+                    // Visualization.save(
+                    //   this.visualization,
+                    //   result => {
+              
+                    //   },
+                    //   () => {
+                    //     notification.error('无法保存');
+                    //   }
+                    // );
+                  }}
                 >
                   {this.state.editMode &&
                   this.state.selected &&
