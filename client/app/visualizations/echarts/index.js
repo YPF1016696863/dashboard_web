@@ -2,7 +2,7 @@
 import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
-import echarts2 from 'echarts2'; // 多版本 npm install echarts2@npm:echarts@2
+// import echarts2 from 'echarts2'; // 多版本 npm install echarts2@npm:echarts@2
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 import './index.css';
@@ -57,7 +57,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
-                        const data = $scope.queryResult.getData();
+                        let data = $scope.queryResult.getData();
                         // console.log(data);
                         // 全局变量
                         const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
@@ -68,17 +68,37 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         // ****************************别名to原名 转换
                         // x筛选列名转换
                         const xAxisColumnName = _.filter(searchColumns,
-                            { 'friendly_name': _.get($scope.options, "form.xAxisColumn", '') })[0].name;
+                            { 'friendly_name': _.get($scope.options, "form.xAxisColumn", '') })[0] === undefined ?
+                            "" :
+                            _.filter(searchColumns,
+                                { 'friendly_name': _.get($scope.options, "form.xAxisColumn", '') })[0].name;
                         // y筛选列名转换
                         const yAxisColumnsName = _.filter(searchColumns,
-                            { 'friendly_name': _.get($scope.options, "form.yAxisColumns", '') })[0].name;
+                            { 'friendly_name': _.get($scope.options, "form.yAxisColumns", '') })[0] === undefined ?
+                            "" :
+                            _.filter(searchColumns,
+                                { 'friendly_name': _.get($scope.options, "form.yAxisColumns", '') })[0].name;
+
+                        // 初始化为不筛选
+                        if (_.get($scope.options, "form.zAxisColumn", []).length === 0) {
+                            _.set($scope.options, "form.zAxisColumn", "不筛选");
+                        }
+                        if (_.get($scope.options, "form.filterColumn", []).length === 0) {
+                            _.set($scope.options, "form.filterColumn", "不筛选");
+                        }
+
                         // z筛选列名转换
                         const zAxisColumnName =
                             _.filter(searchColumns,
-                                { 'friendly_name': _.get($scope.options, "form.zAxisColumn", '') })[0] === undefined ?
+                                { 'friendly_name': _.get($scope.options, "form.zAxisColumn", []) })[0]
+                                === undefined ?
                                 "不筛选" :
                                 _.filter(searchColumns,
                                     { 'friendly_name': _.get($scope.options, "form.zAxisColumn", '') })[0].name;
+
+
+
+
                         // ***************************别名to原名 转换 end
 
 
@@ -102,14 +122,66 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                             // 筛选条件
                             // 筛选的数据名称          
-                            const zSelectedName = _.get($scope.options, "form.filterColumn", '');
+                            const zSelectedName = _.get($scope.options, "form.filterColumn", '不筛选');
 
                             if (zSelectedName === "不筛选") {// 数据分组处理     情况2  ok
                                 // 根据z列获得条件的全集 -- zData
                                 // 用全集遍历数据总计集合 生成相应数量的分组数组
+                                const parameters = [];
+                                const parameter1 = {};
+                                const parameter2 = {};
+                                const parameter3 = {};
+
+                                // 条件1
+                                if (_.get($scope.options, 'condition1.col', "") !== "") {
+                                    // 条件1下 该列所有字段
+                                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition1.col', "")));
+                                    _.set($scope.options, 'conditionColList1', colList);
+                                    // 选择到的 筛选的列名1
+                                    const col = _.get($scope.options, 'condition1.col', "");
+                                    parameter1[col] = _.get($scope.options, 'condition1.where', "");
+                                }
+
+                                // 条件2
+                                if (_.get($scope.options, 'condition2.col', "") !== "") {
+                                    // 条件2下 该列所有字段
+                                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition2.col', "")));
+                                    _.set($scope.options, 'conditionColList2', colList);
+                                    // 选择到的 筛选的列名2
+                                    const col = _.get($scope.options, 'condition2.col', "");
+                                    parameter2[col] = _.get($scope.options, 'condition2.where', "");
+                                }
+
+                                // 条件3
+                                if (_.get($scope.options, 'condition3.col', "") !== "") {
+                                    // 条件3下 该列所有字段
+                                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition3.col', "")));
+                                    _.set($scope.options, 'conditionColList3', colList);
+                                    // 选择到的 筛选的列名3
+                                    const col = _.get($scope.options, 'condition3.col', "");
+                                    parameter3[col] = _.get($scope.options, 'condition3.where', "");
+                                }
+
+
+                                const data1 = _.filter(data, parameter1);
+                                const data2 = _.filter(data, parameter2);
+                                const data3 = _.filter(data, parameter3);
+
+                                // console.log(data1);
+                                // console.log(data2);
+                                // console.log(data3);
+                                data = _.union(data1, data2, data3)
+                                // console.log(data);
+                                // data = _.filter(data, parameter1);
                                 const groupDataTemp = _.map(zData, (row) => {
                                     return _.filter(data, [zAxisColumnName, row])
                                 })
+                                // const groupDataTemp = _.map(zData, (row) => {
+                                //     return _.filter(data, {(zAxisColumnName):row})
+                                // })
+                                // console.log("情况2");
+                                // console.log(groupDataTemp);
+
                                 const groupData = [];
                                 for (let i = 0; i < groupDataTemp.length - 1; i += 1) {
                                     groupData[i] = groupDataTemp[i];
@@ -134,7 +206,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     }
                                 }
 
-                                mapList = _.get($scope.options, "filtersNames", []);
+                                mapList = _.get($scope.options, "filtersNames", []);// 系列组
 
                             } else {//  情况3  ok
                                 const condition = {};
@@ -162,7 +234,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 const y = row[yAxisColumnsName];
                                 if (XY[x] === undefined) {
                                     XY[x] = [];
-                                    XY[x].push(y);
                                 }
                                 XY[x].push(y);
                             })
@@ -213,7 +284,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                         // 修改为不筛选时自动分组的组数   
                         _.each(mapList, (yAxisColumn) => { // yAxisColumn
-
+                            // console.log(yAxisColumn);
 
                             if (yAxisColumn !== "不筛选") {
                                 // y列数据
@@ -427,8 +498,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                             _.set($scope.options, "sizeBg", {
                                 // responsive: true,
-                                'width':'100%',
-                                'height':'100%',
+                                'width': '100%',
+                                'height': '100%',
                                 'background': "url(" + _.get($scope.options, "images", "url111") + ")",
                                 'background-size': _.get($scope.options, "bgW", "100%") + " "
                                     + _.get($scope.options, "bgH", " 100%"),
@@ -605,7 +676,7 @@ function EchartsEditor() {
                 const id = $(event.target).attr('id');
                 // const index = _.indexOf($scope.conditionArray, id);
                 _.remove($scope.conditionArray, function (n) {
-                    return n+"" === id;
+                    return n + "" === id;
                 });
 
                 console.log($scope.conditionArray);
@@ -728,6 +799,7 @@ function EchartsEditor() {
                 { label: '默认', value: '' },
                 { label: '透明', value: 'transparent' },
                 { label: '白色', value: '#fff' },
+                { label: '灰色', value: 'rgba(125,125,125,0.3)' },
                 { label: '红色', value: '#ed4d50' },
                 { label: '绿色', value: '#6eb37a' },
                 { label: '蓝色', value: '#5290e9' },

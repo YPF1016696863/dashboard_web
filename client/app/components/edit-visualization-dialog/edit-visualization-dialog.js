@@ -107,19 +107,23 @@ export const EditVisualizationDialog = {
           set($rootScope, 'selectChartType', undefined);
           // console.log("初始化selectChartType=undefined");
           const visIds = map(this.query.visualizations, i => i.id);
+          // console.log("visIds:"+visIds);
           const index = visIds.indexOf(result.id);
+          // console.log("index:"+index);
           if (index > -1) {
             this.query.visualizations[index] = result;
+            // console.log("result:"+result);
           } else {
             // new visualization
             this.query.visualizations.push(result);
+            // console.log(this.query.visualizations);
             if (this.onNewSuccess) {
               this.onNewSuccess(result);
             }
           }
           const urlStr = window.location.href
           const indexStart = urlStr.indexOf("index") + 6;
-          // console.log("1");
+          console.log("1");
           if (indexStart < 6) {// 不是跳转过来的
             navigateTo("/charts");
           } else {
@@ -129,7 +133,7 @@ export const EditVisualizationDialog = {
             const temp = uniq(dashUrlChange.substring(indexWenhao).split("&"));
             // console.log(temp);
 
-            const indexTail = dashUrlChange.indexOf("dashboards");
+            let indexTail = dashUrlChange.indexOf("dashboards");
             dashUrlChange = dashUrlChange.substring(indexTail);
             indexWenhao = dashUrlChange.indexOf("?") + 1;
             dashUrlChange = dashUrlChange.substring(0, indexWenhao);
@@ -139,6 +143,9 @@ export const EditVisualizationDialog = {
             
             // 去掉最后一个&
             dashUrlChange = dashUrlChange.substring(0, dashUrlChange.length-1);
+            // 0806add无参数时跳转错误
+            indexTail = dashUrlChange.indexOf("dashboards");
+            dashUrlChange = dashUrlChange.substring(indexTail);
             // console.log(dashUrlChange);
             navigateTo(dashUrlChange);
           }
