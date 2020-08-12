@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import * as _ from 'lodash';
+import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   Drawer,
   Form,
@@ -19,7 +20,7 @@ import {
 } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { Query } from '@/services/query';
-import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+
 import { Widget } from '@/services/widget';
 
 const { Option } = Select;

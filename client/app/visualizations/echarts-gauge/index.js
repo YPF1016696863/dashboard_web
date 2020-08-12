@@ -55,7 +55,12 @@ function EchartsGaugeRenderer($rootScope) {
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        _.set($scope.options, "series", []); // 清空设置           
+                        _.set($scope.options, "series", []); // 清空设置  
+
+                        // 仪表盘小数数据转为百分比 02显示成20 
+                        const newValue = dataGauge<=1 ? (100.0*dataGauge).toFixed(2) :100;
+                    
+
                         $scope.options.series.push({
                             name: _.get($scope.options, "series_Name", ''),
                             type: 'gauge',
@@ -63,7 +68,8 @@ function EchartsGaugeRenderer($rootScope) {
                             max: _.get($scope.options, "maxValue", 100),
                             detail: {
                                 color: _.get($scope.options, "zbColor", 'auto'),
-                                formatter: _.get($scope.options, "defValue", true) ? '{value}' : '{value}%',
+                                formatter: _.get($scope.options, "defValue", true) ? 
+                                '{value}' + _.get($scope.options, "format.text", '%') : '{value}',
                             },
                             splitNumber: _.get($scope.options, "splitNumber", 10), // 仪表盘刻度的分割段数。
                             itemStyle: {
@@ -81,13 +87,17 @@ function EchartsGaugeRenderer($rootScope) {
                             },
 
                             data: [{
-                                value: setData($scope.options, _.get($scope.options, "defValue", true), dataGauge),
+                                value: _.get($scope.options, "percentage.show", true) ?
+                                    newValue : setData($scope.options, _.get($scope.options, "defValue", false), dataGauge),
                                 // dataGauge / (_.get($scope.options, "maxValue", 100) -
                                 //  _.get($scope.options, "minValue", 0))
                                 name: _.get($scope.options, "series_Name", '') === '' || undefined ?
                                     _.get($scope.options, "form.xAxisColumn", '') : _.get($scope.options, "series_Name", true)
                             }],
                         });
+
+
+
 
                         let myChart = null;
 
@@ -110,12 +120,12 @@ function EchartsGaugeRenderer($rootScope) {
                             // let width = '100%';
                             let height = "100%";
                             let width = "100%";
-                            
+
                             if ($("#preview").length !== 0) {
                                 height = $element.parent().parent()["0"].clientHeight;
                                 width = $element.parent().parent()["0"].clientWidth;
                             }
-                            
+
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
