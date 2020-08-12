@@ -23,7 +23,7 @@ export function defaultBasicChartOptions() {
             height: "400px"
         },
         title: {
-            text: '默认标题',
+            text: '',
             left:0,
             subtext: '',
             x: 'center',
