@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable func-names */
 import * as _ from 'lodash';
 import $ from 'jquery';
@@ -39,6 +41,13 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 $scope.options = defaultBasicChartOptions();
             }
 
+            function sortNumber(a, b) {
+                return a - b
+            }
+
+            function deSortNumber(a, b) {
+                return b - a
+            }
 
 
             const refreshData = () => {
@@ -163,33 +172,53 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 }
 
 
-                                const data1 = _.filter(data, parameter1);
-                                const data2 = _.filter(data, parameter2);
-                                const data3 = _.filter(data, parameter3);
+                                let data1 = data;
+                                let data2 = data;
+                                let data3 = data;
+                                for (const key in parameter1) {
+                                    if (key !== '不筛选') {
+                                        data1 = _.filter(data, parameter1);
+                                    }
+                                }
 
-                                // console.log(data1);
-                                // console.log(data2);
-                                // console.log(data3);
-                                data = _.union(data1, data2, data3)
+                                for (const key in parameter2) {
+                                    if (key !== '不筛选') {
+                                        data2 = _.filter(data, parameter2);
+                                    }
+                                }
+
+                                for (const key in parameter3) {
+                                    if (key !== '不筛选') {
+                                        data3 = _.filter(data, parameter3);
+                                    }
+                                }
+
+
+                                data = _.intersection(data1, data2, data3);
                                 // console.log(data);
-                                // data = _.filter(data, parameter1);
+                                zData = _.uniq(_.map(data, _.get($scope.options, "form.zAxisColumn", [])));
                                 const groupDataTemp = _.map(zData, (row) => {
                                     return _.filter(data, [zAxisColumnName, row])
                                 })
-                                // const groupDataTemp = _.map(zData, (row) => {
-                                //     return _.filter(data, {(zAxisColumnName):row})
-                                // })
-                                // console.log("情况2");
-                                // console.log(groupDataTemp);
+
 
                                 const groupData = [];
-                                for (let i = 0; i < groupDataTemp.length - 1; i += 1) {
+                                // 此处长度-1是为了去除不筛选这一列 有问题
+                                for (let i = 0; i < groupDataTemp.length; i += 1) {
                                     groupData[i] = groupDataTemp[i];
                                 }
-                                // console.log(groupData);
+
                                 // 对于x列 需要合并一个并集
-                                // 筛选后的X 数据数组 全集且有序的x数组
-                                filterXData = _.orderBy(_.uniq(_.map(data, xAxisColumnName)));
+                                // 筛选后的X 数据数组 全集且有序的x数组 Sort desSort noSort                                
+                                if (_.get($scope.options, 'sortRule', 'Sort') === 'Sort') {
+                                    filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(sortNumber);
+                                } else if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
+                                    filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(deSortNumber);
+                                } else {
+                                    filterXData = _.uniq(_.map(data, xAxisColumnName));
+                                }
+
+                                // filterXData = _.orderBy(_.uniq(_.map(data, xAxisColumnName)));
 
                                 seriesYData = []; // y系列数组
 
@@ -205,14 +234,22 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                                 "" : _.filter(groupData[i], [xAxisColumnName, filterXData[j]])[0][yTempUse]);
                                     }
                                 }
+                                mapList = _.uniq(_.map(data, _.get($scope.options, "form.zAxisColumn", [])));
+                                // mapList = _.get($scope.options, "filtersNames", []);// 系列组
 
-                                mapList = _.get($scope.options, "filtersNames", []);// 系列组
-
-                            } else {//  情况3  ok
+                            } else {//  情况3  ok  这一个情况不会出现了
                                 const condition = {};
                                 condition[zAxisColumnName] = zSelectedName;
                                 filterData = _.filter(data, condition);
-                                filterXData = _.map(filterData, xAxisColumnName); // 筛选后的X 数据数组 
+
+                                if (_.get($scope.options, 'sortRule', 'Sort') === 'Sort') {
+                                    filterXData = _.map(filterData, xAxisColumnName).sort(sortNumber);
+                                } else if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
+                                    filterXData = _.map(filterData, xAxisColumnName).sort(deSortNumber);
+                                } else {
+                                    filterXData = _.map(filterData, xAxisColumnName);
+                                }
+                                // filterXData = _.map(filterData, xAxisColumnName); // 筛选后的X 数据数组 
                                 seriesYData = [];
                                 seriesYData.push(_.map(filterData, yAxisColumnsName));
                                 mapList.push(zSelectedName);
@@ -224,7 +261,14 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             // 对于x列 需要合并一个并集
                             // 筛选后的X 数据数组 全集且有序的x数组
                             // const xList = _.map(data, xAxisColumnName);
-                            filterXData = _.orderBy(_.uniq(_.map(data, xAxisColumnName)));
+                            if (_.get($scope.options, 'sortRule', 'Sort') === 'Sort') {
+                                filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(sortNumber);
+                            } else if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
+                                filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(deSortNumber);
+                            } else {
+                                filterXData = _.uniq(_.map(data, xAxisColumnName));
+                            }
+
 
                             // 求出 x对应的Y list 
                             let XY = [];
@@ -238,6 +282,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 XY[x].push(y);
                             })
                             XY = _.without(XY, undefined);
+
                             // x对应y list数据求平均
                             for (let i = 0; i < XY.length; i += 1) {
                                 const len = XY[i].length;
@@ -248,6 +293,11 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 sum = sum * 1.0 / len;
                                 XY[i] = sum.toFixed(2);
                             }
+
+                            if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
+                                XY = XY.reverse();
+                            }
+
                             seriesYData = [];
                             seriesYData.push(XY);
                             // console.log(seriesYData); 
@@ -734,7 +784,7 @@ function EchartsEditor() {
 
             $scope.xAxisScales = [
                 { label: '类目轴(类目轴，适用于离散的类目数据)', value: 'category' },
-                { label: ' 数值轴(适用于连续数据)', value: 'value' },
+                { label: '连续数据轴(适用于连续数据)', value: 'value' },
                 { label: '时间轴(适用于连续的时序数据，与数值轴相比时间轴带有时间的格式化)', value: 'time' },
                 { label: '对数轴(适用于对数数据)', value: 'log' }
             ];
@@ -864,6 +914,12 @@ function EchartsEditor() {
                 { label: '顶部', value: 'top' },
                 { label: '底部', value: 'bottom' },
                 { label: '居中', value: 'middle' }
+            ];
+
+            $scope.SortRule = [
+                { label: '顺序', value: 'Sort' },
+                { label: '逆序', value: 'desSort' },
+                { label: '保持', value: 'noSort' }
             ];
 
             $scope.$watch('options', () => { }, true);

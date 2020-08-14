@@ -287,6 +287,8 @@ class ChartsSearch extends React.Component {
                           case 'SANKEY': type = 'SANKEY'; break;
                           case 'COUNTER': type = 'COUNTER'; break;
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
+                          case 'ECHARTS-GAUGE-STAGE': type = 'ECHARTS-GAUGE-STAGE'; break;
+                          
                           default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");
@@ -474,6 +476,22 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-tube.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>试管图</p>
+                              </Radio>
+                            </Col>
+
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-GAUGE-STAGE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-gauge.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>阶段仪表</p>
                               </Radio>
                             </Col>
 

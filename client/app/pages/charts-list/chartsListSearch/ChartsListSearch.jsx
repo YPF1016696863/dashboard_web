@@ -242,13 +242,13 @@ class ChartsListSearch extends React.Component {
                     e.preventDefault();
                     console.log(query.id + ':' + visualization.id);
 
-                    // Visualization.save(
+                    // this.props.Visualization.save(
                     //   this.visualization,
                     //   result => {
-              
+                    //       console.log("scusee");
                     //   },
                     //   () => {
-                    //     notification.error('无法保存');
+                    //     console.log("error");
                     //   }
                     // );
                   }}
