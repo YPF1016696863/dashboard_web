@@ -212,63 +212,78 @@ class RightClick extends React.Component {
     paramsWidgetsId = _.pull(_.uniq(paramsWidgetsId), 0);
     paramsWidgetsName = _.pull(_.uniq(paramsWidgetsName), 0);
 
+    const totalChild = [];
+    for(let i=0;i<normalWidgetsId.length;i+=1){
+      totalChild.push({
+        title: normalWidgetsName[i],
+        key: normalWidgetsId[i]
+      })
+    }
+    for(let i=0;i<paramsWidgetsId.length;i+=1){
+      totalChild.push({
+        title: paramsWidgetsName[i],
+        key: paramsWidgetsId[i]
+      })
+    }
+    dataHead.children=totalChild;
+    
 
-    const normalChild = [];
-    const paramsChild = [];
-    // 数据源层
-    for (let i = 0; i < widgetsNormalSourceId.length; i += 1) {
-      normalChild.push(
-        {
-          title: "数据来源:" + (widgetsNormalSourceName[i]===undefined?"文本":widgetsNormalSourceName[i]),
-          key: "IDN" + widgetsNormalSourceId[i],// 前面加个id 到时候筛选出来不要
-          children: []
-        }
-      )
-    }
-    for (let i = 0; i < widgetsParamsSourceId.length; i += 1) {
-      paramsChild.push(
-        {
-          title: "数据来源:" + widgetsParamsSourceName[i],
-          key: "IDP" + widgetsParamsSourceId[i],// 前面加个id 到时候筛选出来不要
-          children: []
-        }
-      )
-    }
-    dataHead.children[0].children = normalChild;
-    dataHead.children[1].children = paramsChild;
-    // console.log(dataHead);
-    // 组件层 找到对应数据源id 放入child层 
+    // const normalChild = [];
+    // const paramsChild = [];
+    // // 数据源层
+    // for (let i = 0; i < widgetsNormalSourceId.length; i += 1) {
+    //   normalChild.push(
+    //     {
+    //       title: "数据来源:" + (widgetsNormalSourceName[i]===undefined?"文本":widgetsNormalSourceName[i]),
+    //       key: "IDN" + widgetsNormalSourceId[i],// 前面加个id 到时候筛选出来不要
+    //       children: []
+    //     }
+    //   )
+    // }
+    // for (let i = 0; i < widgetsParamsSourceId.length; i += 1) {
+    //   paramsChild.push(
+    //     {
+    //       title: "数据来源:" + widgetsParamsSourceName[i],
+    //       key: "IDP" + widgetsParamsSourceId[i],// 前面加个id 到时候筛选出来不要
+    //       children: []
+    //     }
+    //   )
+    // }
+    // dataHead.children[0].children = normalChild;
+    // dataHead.children[1].children = paramsChild;
+    // // console.log(dataHead);
+    // // 组件层 找到对应数据源id 放入child层 
 
-    for (let i = 0; i < normalWidgetsId.length; i += 1) {
-      // 找到普通组件在原id数组的位置  对应找到数据源的id 填入响应child
-      const index = _.findIndex(widgetsId, function (o) { return o === normalWidgetsId[i]; });
-      // console.log(dataHead.children[0].children.length); 
-      for (let j = 0; j < dataHead.children[0].children.length; j += 1) {
-        // 数据源匹配
-        if (dataHead.children[0].children[j].key + "" === "IDN" + widgetsSourceId[index] + "") {
-          dataHead.children[0].children[j].children.push({
-            title: normalWidgetsName[i],
-            key: normalWidgetsId[i],
-            children: []
-          })
-        }
-      }
-    }
+    // for (let i = 0; i < normalWidgetsId.length; i += 1) {
+    //   // 找到普通组件在原id数组的位置  对应找到数据源的id 填入响应child
+    //   const index = _.findIndex(widgetsId, function (o) { return o === normalWidgetsId[i]; });
+    //   // console.log(dataHead.children[0].children.length); 
+    //   for (let j = 0; j < dataHead.children[0].children.length; j += 1) {
+    //     // 数据源匹配
+    //     if (dataHead.children[0].children[j].key + "" === "IDN" + widgetsSourceId[index] + "") {
+    //       dataHead.children[0].children[j].children.push({
+    //         title: normalWidgetsName[i],
+    //         key: normalWidgetsId[i],
+    //         children: []
+    //       })
+    //     }
+    //   }
+    // }
 
-    for (let i = 0; i < paramsWidgetsId.length; i += 1) {
-      // 找到参数组件在原id数组的位置  对应找到数据源的id 填入响应child
-      const index = _.findIndex(widgetsId, function (o) { return o === paramsWidgetsId[i]; });
-      for (let j = 0; j < dataHead.children[1].children.length; j += 1) {
-        // 数据源匹配
-        if (dataHead.children[1].children[j].key + "" === "IDP" + widgetsSourceId[index] + "") {
-          dataHead.children[1].children[j].children.push({
-            title: paramsWidgetsName[i],
-            key: paramsWidgetsId[i],
-            children: []
-          })
-        }
-      }
-    }
+    // for (let i = 0; i < paramsWidgetsId.length; i += 1) {
+    //   // 找到参数组件在原id数组的位置  对应找到数据源的id 填入响应child
+    //   const index = _.findIndex(widgetsId, function (o) { return o === paramsWidgetsId[i]; });
+    //   for (let j = 0; j < dataHead.children[1].children.length; j += 1) {
+    //     // 数据源匹配
+    //     if (dataHead.children[1].children[j].key + "" === "IDP" + widgetsSourceId[index] + "") {
+    //       dataHead.children[1].children[j].children.push({
+    //         title: paramsWidgetsName[i],
+    //         key: paramsWidgetsId[i],
+    //         children: []
+    //       })
+    //     }
+    //   }
+    // }
 
     console.log(dataHead);
 

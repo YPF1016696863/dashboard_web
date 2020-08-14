@@ -12,6 +12,7 @@ export function defaultBasicChartOptions() {
         useSerie: '',           // 选中的系列名称
         useSerie_Index: -1,     // 选中的系列下标
         bar2Flag: false,
+        sortRule:"Sort",
 
         form: {
             xAxisColumn: "",

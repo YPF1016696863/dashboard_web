@@ -99,7 +99,7 @@ export const EditVisualizationDialog = {
 
     this.submit = () => {
       this.visualization.query_id = this.query.id;
-
+// console.log(this.visualization);
       Visualization.save(
         this.visualization,
         result => {
