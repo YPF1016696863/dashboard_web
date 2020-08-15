@@ -470,7 +470,7 @@ console.log("QueriesListTabs");
               />
             </Modal>
             <div style={{ padding: '10px' }}>
-              <div style={{ width: '100%' }}>
+              <div style={{ width: '50%', float: 'left' }}>
                 <Descriptions title="数据集信息">
                   <Descriptions.Item label="数据集创建时间">
                     {this.state.query.created_at}
@@ -525,8 +525,8 @@ console.log("QueriesListTabs");
                 {
                   currentUser.isAdmin ? (
                     <>
-                      <Divider />
-                      <p style={{ fontSize: '14px' }}>数据集权限设定:</p>
+                     
+                      <b style={{ fontSize: '14px' }}>数据集权限设定:</b>
                       <p>
                         <Table
                           locale={{ emptyText: "暂无数据" }}
@@ -622,8 +622,8 @@ console.log("QueriesListTabs");
                   ) : null
                 }
               </div>
-              <Divider />
-              <div style={{ width: '100%' }}>
+            
+              <div style={{ width: '50%', float: 'right' }}>
                 <b style={{ fontSize: '14px' }}>数据集描述:</b>
                 <div>
                   <TextArea
@@ -707,7 +707,7 @@ console.log("QueriesListTabs");
                   ) : null
                 }
               </div>
-              <Divider />
+             
               <div style={{ width: '100%', float: 'left' }}>
                 <b style={{ fontSize: '14px' }}>数据集参数配置:</b>
                 {this.state.query.getParametersDefs().length <= 0 ? (

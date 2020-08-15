@@ -57,6 +57,28 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.get($scope.options, "mapList", []),
                         function (o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
+                
+                // 修改筛选框的颜色
+                _.set($scope.options, "form.span.style", {
+                    'background-color':_.get($scope.options, "form.filterColumnCol.backgroundColor", "white"),
+                    'color':_.get($scope.options, "form.filterColumnCol.color", "black"),
+                    'border-color':_.get($scope.options, "form.filterColumnCol.borderColor", "white"),
+                    'font-size':_.get($scope.options, "form.filterColumnCol.fontSize", "14")+"px",  
+                    'margin-left':_.get($scope.options, "form.filterColumnCol.positionX", "0%"),        
+                    'margin-top':_.get($scope.options, "form.filterColumnCol.positionY", "0%"),                        
+                });
+
+                // _.set($scope.options, "size", {
+                //     responsive: true,
+                //     width,
+                //     height,
+                //     'background': "url(" + _.get($scope.options, "images", "url111") + ")",
+                //     'background-size': _.get($scope.options, "bgW", "100%") + " "
+                //         + _.get($scope.options, "bgH", " 100%"),
+                //     'background-position': _.get($scope.options, "bgX", "0px") + " "
+                //         + _.get($scope.options, "bgY", "0px"),
+
+                // });
 
 
                 // 文字单独的自适应调整*($element.parent()[0].clientHeight/789)

@@ -267,7 +267,7 @@
     </div>
 
     <div ng-if="currentTab == 'dataseries'" class="m-t-10 m-b-10">
-        <div class="form-group" ng-init="Show = 0"> 
+        <div class="form-group" ng-init="Show = 0">
             <div class="form-group" style="width:49%;float:left">
                 <label>
                     <input type="radio" value="0" ng-model="Show">
@@ -364,6 +364,13 @@
             <label>
                 <input type="checkbox" ng-model="options.toolbox.show">
                 显示工具栏
+            </label>
+        </div>
+        <!-- 开启小数以百分比显示,如果原来的value为0.2，则转换成20.如果超过1 则转换成100  -->
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-model="options.percentage.show">
+                开启小数以百分比显示(只有一条数据且为小数)
             </label>
         </div>
         <div class="form-group">

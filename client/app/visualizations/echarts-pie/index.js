@@ -82,6 +82,8 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 }
               });
 
+           
+
 
               _.forEach(data, function (value, key) {
                 // [{0},{1}...] 筛选出每一个{0} {1} ...
@@ -94,7 +96,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                     _.forEach(onesValue, function (oneYvalue, oneYkey) {
                       // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                       if (oneYkey === oldYData) { // 这里每次刷新都初始化颜色 导致扇瓣设置不成功***
-                        // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]
+                        // 饼图的系列名选择 目前只选一个的话 找到x 的实际value yData[0]                     
                         pieData.push({
                           name: xValue,
                           value: oneYvalue,
@@ -106,7 +108,33 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                   }
                 });
               });
-              seriesData.push(pieData);
+
+              // 输入为小数0.2以百分比显示的时候，需要创建另外一行数据
+              const pieNewData = [...pieData]
+              if(_.get($scope.options, "percentage.show", false)){   // 打开的百分比显示按钮
+                 console.log(pieData.length);
+                 if(pieData.length ===1){       // 只有一个数且为小数的情况 0-1之间才能另外一条数据
+                  pieNewData.push({
+                    name: '其他',
+                    value: 1-pieNewData[0].value,
+                    itemStyle: { color: '#C3DDEB' }
+                  });
+                  seriesData.push(pieNewData);
+
+                 }
+                 else{  
+                  seriesData.push(pieData);  // 否则push原来的数据
+                 }
+               
+              }else{     // 不打开百分比显示按钮
+                seriesData.push(pieData); // 否则push原来的数据
+              }          
+
+
+
+              // seriesData.push(pieData); // 否则push一条数据
+
+
               // _.set($scope.options, 'fanFlag', false);
             });
 
