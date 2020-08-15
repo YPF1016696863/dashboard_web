@@ -18,7 +18,6 @@ import {
   Empty,
   Switch
 } from 'antd';
-import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import { appSettingsConfig } from '@/config/app-settings';
 import { Query } from '@/services/query';
 
