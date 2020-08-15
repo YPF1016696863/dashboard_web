@@ -4,3 +4,21 @@
 #imgH:hover{
     color:#fff;
 }
+/*common css begin*/
+*{margin:0px;padding:0px;}
+body{font-family: 微软雅黑,Microsoft yahei,Arial,Verdana,Tahoma,sans-serif; font-size: 12px;}
+a { color: #666; text-decoration: none; cursor: pointer; }
+a, input { outline: none; }
+ul li{list-style: none;}
+.fl { float: left; }
+.fr { float: right; }
+.clearfix:after{content:"";display:block;clear: both;}
+.menu{width:300px;height:auto;}
+.menu ul{-webkit-border-radius: 4px;-moz-border-radius: 4px;  border-radius: 4px; }
+.menu ul li .menu_tit{color:#fff;position:relative;width:180px;padding:0 10px;height:30px;line-height:30px;background:#12BCA6;display: block;border-bottom:1px solid #fff;}
+.menu ul li .menu_tit img{vertical-align:middle;position: absolute; right:10px;top:8px;}
+.menu ul li.list .menu_list{display: none;}
+.menu ul li.list.curr .menu_list{display: block;}
+.menu ul li.list.curr a img{transform: rotate(90deg);}
+.menu ul li .menu_list li{width:180px;padding:0 10px;height:30px;line-height:30px;background-color:#444359;border-top: 1px solid #4a495d;display: block;color:#fff;}
+.menu ul li .menu_list li:hover{color:#fff;background: #12BCA6;}

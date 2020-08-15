@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { react2angular } from 'react2angular';
 import * as _ from 'lodash';
-import { Query } from '@/services/query';
 import {
   Form,
   Select,
@@ -16,6 +15,7 @@ import {
   Drawer,
   Modal
 } from 'antd';
+import { Query } from '@/services/query';
 // import { appSettingsConfig } from '@/config/app-settings';
 import './index.less';
 
