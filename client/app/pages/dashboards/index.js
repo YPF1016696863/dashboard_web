@@ -1,4 +1,5 @@
 /* eslint-disable func-names */
+import * as _ from 'lodash';
 // import {
 //   pick,
 //   some,
@@ -9,7 +10,6 @@
 //   isArray,
 //   isObject
 // } from 'lodash';
-import * as _ from 'lodash';
 import {
   SCHEMA_NOT_SUPPORTED,
   SCHEMA_LOAD_ERROR

@@ -314,15 +314,31 @@
             </label>
         </div>
 
-        <div class="form-group" style="width:49%;float:right">
-            <label>
-                <input type="checkbox" ng-model="options.defValue">
-                开启仪表盘绝对值显示
-            </label>
-        </div>     
+        <!-- 开启小数以百分比显示,如果原来的value为0.2，则转换成20.如果超过1 则转换成100  -->
         <div class="form-group">
             <label>
-                <input type="checkbox" ng-model="options.tooltip.show">
+                <input type="checkbox" ng-value=true ng-checked="true" ng-model="options.percentage.show">
+                开启小数以百分比显示
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-value=true ng-checked="true" ng-model="options.defValue" checked>
+                显示自定义单位
+            </label>
+        </div>
+
+        <div class="form-group" ng-if="options.defValue">
+            <label class="control-label">输入单位格式</label>
+            <br>
+            <input name="name" type="text" style="width: 150px;" ng-model="options.format.text" placeholder="" />
+        </div>
+
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" checked ng-model="options.tooltip.show">
                 显示提示框
             </label>
         </div>

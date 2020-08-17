@@ -373,7 +373,7 @@ class DashboardsListTabs extends React.Component {
         )}
         {this.state.isLoaded && this.state.dashboard != null && (
           <div style={{ paddingTop: '10px' }}>
-            <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
+            <div style={{ width: '50%', float: 'left' }}>
               <Descriptions title="可视化仪表盘信息">
                 <Descriptions.Item label="更新时间">
                   {this.state.dashboard.updated_at}
@@ -397,7 +397,7 @@ class DashboardsListTabs extends React.Component {
               <b style={{ fontSize: '14px' }}>可视化面板共享设置:</b>
               <div style={{ paddingRight: '10px' }}>
                 <Form>
-                  <hr />
+                 
                   <Form.Item
                     label="可视化面板对其他人可见"
                     labelAlign="left"
@@ -433,7 +433,7 @@ class DashboardsListTabs extends React.Component {
                       }}
                     />
                   </Form.Item>
-                  <hr />
+                
                   <Form.Item
                     label="共享可视化面板"
                     labelAlign="left"
@@ -458,12 +458,12 @@ class DashboardsListTabs extends React.Component {
                     <InputWithCopy value={this.state.runtime.share.public} />
                   </Form.Item>
                 </Form>
-                <hr />
+              
               </div>
               {
                 currentUser.isAdmin ? (
                   <>
-                    <p style={{ fontSize: '14px' }}>可视化仪表板权限设定:</p>
+                    <b style={{ fontSize: '14px' }}>可视化仪表板权限设定:</b>
                     <p>
                       <Table
                         locale={{ emptyText: "暂无数据" }}
@@ -561,7 +561,7 @@ class DashboardsListTabs extends React.Component {
               }
             </div>
 
-            <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
+            <div style={{ width: '50%', float: 'right' }}>
               <b style={{ fontSize: '14px' }}>可视化仪表板描述:</b>
               <TextArea
                 disabled={this.state.dashboard.readOnly()}

@@ -89,7 +89,7 @@ export function parseChartType(type) {
 };
 
 
-export function setData(options, type, data) {// true为绝对数值
+export function setData(options, type, data) { // true为绝对数值
     if (type) {
         return data;
     }
