@@ -153,8 +153,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                             // 筛选条件
                             // 筛选的数据名称          
-                            const zSelectedName = _.get($scope.options, "form.filterColumn", '不筛选');
-
+                            // const zSelectedName = _.get($scope.options, "form.filterColumn", '不筛选');
+                            const zSelectedName ="不筛选";
                             if (zSelectedName === "不筛选") {// 数据分组处理     情况2  ok
                                 // 根据z列获得条件的全集 -- zData
                                 // 用全集遍历数据总计集合 生成相应数量的分组数组
@@ -167,6 +167,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 if (_.get($scope.options, 'condition1.col', "") !== "") {
                                     // 条件1下 该列所有字段
                                     const colList = _.uniq(_.map(data, _.get($scope.options, 'condition1.col', "")));
+                                    console.log(colList);
                                     _.set($scope.options, 'conditionColList1', colList);
                                     // 选择到的 筛选的列名1
                                     const col = _.get($scope.options, 'condition1.col', "");
