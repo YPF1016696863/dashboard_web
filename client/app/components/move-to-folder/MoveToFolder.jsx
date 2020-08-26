@@ -101,7 +101,7 @@ export class MoveToFolder extends React.Component {
     return (
       <>
         <Button size="small" type="link" style={{ color: '#3d4d66' }} onClick={this.showModal}>
-          <Icon type="folder-open" style={{ color: '#3685f2' }} />
+          <Icon type="switcher" style={{ color: '#3685f2' }} />
           移动至
         </Button>
         <Modal

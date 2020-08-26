@@ -48,6 +48,8 @@ import notification from '@/services/notification';
 import { navigateToWithSearch } from '@/services/navigateTo';
 import {CreateNewFolder} from "@/components/create-new-folder/CreateNewFolder";
 import {MoveToFolder} from "@/components/move-to-folder/MoveToFolder";
+import {DeleteFolder} from "@/components/delete-folder/DeleteFolder";
+import {FolderRename} from "@/components/folder-rename/FolderRename";
 import {appSettingsConfig} from "@/config/app-settings";
 import {$http} from "@/services/ng";
 
@@ -65,7 +67,8 @@ class ChartsListSearch extends React.Component {
     all: null,
     filtered: null,
     loading: true,
-    treelist: null
+    treelist: null,
+    selectedtitle:null
   };
 
   componentDidMount() {
@@ -136,6 +139,27 @@ class ChartsListSearch extends React.Component {
                 .error(() => alert("移动失败"))
         }
     }
+
+    deleteFolder = (selected) => {
+        if (selected && selected.substr(0,1)==="s"){
+            $http
+                .delete(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+selected.substring(1))
+                .success(() => {this.reload();console.log("delete complete")})
+                .error(() => alert("删除失败"))
+
+        } else {
+            alert("请选择一个文件夹")
+        }
+    }
+
+    foldernameUpdate = (data) => {
+        if(this.state.selected && this.state.selected.substr(0,1)==="s")
+            $http
+                .post(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+this.state.selected.substring(1),data)
+                .success(()=>{this.reload();console.log('rename complete')})
+                .error(() => alert("改名失败"))
+    }
+
 
   reload(holdTab) {
     let type = null;
@@ -242,15 +266,6 @@ class ChartsListSearch extends React.Component {
                     e.preventDefault();
                     console.log(query.id + ':' + visualization.id);
 
-                    // this.props.Visualization.save(
-                    //   this.visualization,
-                    //   result => {
-                    //       console.log("scusee");
-                    //   },
-                    //   () => {
-                    //     console.log("error");
-                    //   }
-                    // );
                   }}
                 >
                   {this.state.editMode &&
@@ -502,7 +517,7 @@ class ChartsListSearch extends React.Component {
             </Row>
             {this.props.simpleMode ? null : (
               <Row>
-                <Col span={8}>
+                <Col span={12}>
                   <Button
                     size="small"
                     type="link"
@@ -515,7 +530,7 @@ class ChartsListSearch extends React.Component {
                     新建组件
                   </Button>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <CreateNewFolder 
                     onSuccess={name => { 
                     return this.state.selected===null ? 
@@ -523,11 +538,22 @@ class ChartsListSearch extends React.Component {
                     this.createFolder(name,this.state.selected);}}
                   />
                 </Col>
-                <Col span={8}>
+                <Col span={6}>
                   <MoveToFolder 
                     structure={this.state.treelist} 
                     onSuccess={(targetfolder) => 
                   this.moveTofolder(this.state.selected,targetfolder)} 
+                  />
+                </Col>
+                <Col span={8}>
+                  <DeleteFolder
+                    onSuccess={()=>this.deleteFolder(this.state.selected)}
+                  />
+                </Col>
+                <Col span={8}>
+                  <FolderRename
+                    defaultName={this.state.selected ? this.state.selectedtitle : null}
+                    onSuccess={(name)=>{this.foldernameUpdate({"name":name})}}
                   />
                 </Col>
                 <Col span={24}>
@@ -544,7 +570,8 @@ class ChartsListSearch extends React.Component {
                     this.setState({
                       selected: value[0],
                       editMode: stillEdit,
-                      visualization: this.findVisualization(value[0])
+                      visualization: this.findVisualization(value[0]),
+                      selectedtitle: node.node.props.title
                     });
                     this.props.querySearchCb(
                       node.node.isLeaf() ? 'V' : 'Q',

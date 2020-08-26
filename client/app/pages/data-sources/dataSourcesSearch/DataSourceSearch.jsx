@@ -34,6 +34,8 @@ import CreateSourceDialog from '@/components/CreateSourceDialog';
 import helper from '@/components/dynamic-form/dynamicFormHelper';
 import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
 import {MoveToFolder} from "@/components/move-to-folder/MoveToFolder";
+import {DeleteFolder} from "@/components/delete-folder/DeleteFolder";
+import {FolderRename} from "@/components/folder-rename/FolderRename";
 import {appSettingsConfig} from "@/config/app-settings";
 
 const FOLDER_STRUCTURE_URL =
@@ -126,10 +128,35 @@ class DataSourceSearch extends React.Component {
       }
 }
 
-  createDataSource(selectedType, values) {
-    const target = { options: {}, type: selectedType.type };
-    helper.updateTargetWithValues(target, values);
+deleteFolder = (selected) => {
+    if (selected && selected.eventKey.substr(0,1)==="s"){
+        $http
+            .delete(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+selected.eventKey.substring(1))
+            .success(() => {this.reload();console.log("delete complete")})
+            .error(() => alert("删除失败"))
 
+    } else {
+        // eslint-disable-next-line no-alert
+        alert("请选择一个文件夹")
+    }
+}
+
+foldernameUpdate = (data) => {
+      if(this.state.runtime.selected && this.state.runtime.selected.eventKey.substr(0,1)==="s")
+    $http
+        .post(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+this.state.runtime.selected.eventKey.substring(1),data)
+        .success(()=>{this.reload();console.log('rename complete')})
+        .error(() => alert("改名失败"))
+}
+
+  createDataSource= (selectedType, values)=> {
+    const target = { options: {},
+        type: selectedType.type,
+        folder_id: ((this.state.runtime && this.state.runtime.selected &&
+        this.state.runtime.selected.eventKey.substr(0,1) === 's') ?
+            this.state.runtime.selected.eventKey.substring(1):null)}
+    helper.updateTargetWithValues(target, values);
+    console.log("createDataSourceinformation",target);
     return DataSource.save(target)
       .$promise.then(dataSource => {
         return dataSource;
@@ -188,12 +215,16 @@ class DataSourceSearch extends React.Component {
 
 
    renderTree = (treelist,idx) => {
+      console.log("treelist",treelist);
       const allItems = _.cloneDeep(this.state.all);
       const folderItem = _.filter(allItems, item3 => item3.folder_id != null)
       return treelist.map(item => {
           if (!item.children){
               return (
-                <TreeNode title={item.title} key={item.key}>
+                <TreeNode
+                  title={item.title}
+                  key={item.key}
+                >
                   {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
                     <TreeNode
                       icon={(
@@ -217,7 +248,10 @@ class DataSourceSearch extends React.Component {
                 </TreeNode>
               )}
           return(
-            <TreeNode title={item.title} key={item.key}>
+            <TreeNode
+              title={item.title}
+              key={item.key}
+            >
               {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
                 <TreeNode
                   icon={(
@@ -264,8 +298,8 @@ class DataSourceSearch extends React.Component {
 
   render() {
     const { appSettings } = this.props;
-    // console.log("selected",this.state.runtime.selected ? this.state.runtime.selected: "null")
-
+    console.log("selected",this.state.runtime.selected ? this.state.runtime.selected: "null")
+    console.log("editing",this.state.runtime.editing)
     return (
       <>
         {this.state.loading && <LoadingState />}
@@ -320,7 +354,7 @@ class DataSourceSearch extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Button
                   size="small"
                   type="link"
@@ -336,19 +370,30 @@ class DataSourceSearch extends React.Component {
                   新建数据源
                 </Button>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <CreateNewFolder 
-                  onSuccess={(name) => { 
+                  onSuccess={(name) => {
                   return this.state.runtime.selected===null ? 
                   this.createFolder(name, null):
                   this.createFolder(name,this.state.runtime.selected.eventKey);}} 
                 />
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <MoveToFolder 
                   structure={this.state.treelist} 
-                  onSuccess={(targetfolder) => 
+                  onSuccess={(targetfolder) =>
                   this.moveTofolder(this.state.runtime.selected,targetfolder)} 
+                />
+              </Col>
+              <Col span={8}>
+                <DeleteFolder
+                  onSuccess={()=>this.deleteFolder(this.state.runtime.selected)}
+                />
+              </Col>
+              <Col span={8}>
+                <FolderRename
+                  defaultName={this.state.runtime.selected ? this.state.runtime.selected.title : null}
+                  onSuccess={(name)=>{this.foldernameUpdate({"name":name})}}
                 />
               </Col>
               <Col span={24}>
@@ -358,7 +403,6 @@ class DataSourceSearch extends React.Component {
             <Row>
               <Col style={{ paddingRight: '10px' }}>
                 <DirectoryTree
-                  expandAction="doubleClick"
                   onSelect={(value, node, extra) => {
                     localStorage.setItem(
                       'lastSelectedDataSourceId',
@@ -377,21 +421,7 @@ class DataSourceSearch extends React.Component {
                   }}
                 >
                   <TreeNode
-                    title={
-                      _.get(this.state.runtime, 'selected.eventKey', null) ===
-                        'root' && this.state.runtime.editing ? (
-                          <Input
-                            autoFocus
-                            size="small"
-                            value="数据源(无分组)"
-                            onBlur={() => {
-                              this.setState({ runtime: { editing: false } });
-                            }}
-                          />
-                      ) : (
-                        '数据源(无分组)'
-                      )
-                    }
+                    title="数据源（无分组）"
                     key="root"
                   >
                     {_.map(this.state.filtered, item => (

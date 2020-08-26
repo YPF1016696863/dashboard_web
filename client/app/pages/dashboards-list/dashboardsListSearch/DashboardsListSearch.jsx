@@ -45,6 +45,8 @@ import './dashboards-search.css';
 import { policy } from '@/services/policy';
 import { CreateNewFolder } from '@/components/create-new-folder/CreateNewFolder';
 import { MoveToFolder } from '@/components/move-to-folder/MoveToFolder';
+import { DeleteFolder } from "@/components/delete-folder/DeleteFolder";
+import { FolderRename } from "@/components/folder-rename/FolderRename";
 import {appSettingsConfig} from "@/config/app-settings";
 import {$http} from "@/services/ng";
 import {IMG_ROOT} from "@/services/data-source";
@@ -65,7 +67,8 @@ class DashboardsListSearch extends React.Component {
     filtered: null,
     loading: true,
     visible: false,
-    treelist: null
+    treelist: null,
+    selectedtitle: null
   };
 
   componentDidMount() {
@@ -198,7 +201,10 @@ class DashboardsListSearch extends React.Component {
 
       this.props.$http
         .post(this.props.appSettings.server.backendUrl + '/api/dashboards', {
-          name: this.state.dashboardName
+          name: this.state.dashboardName,
+          folder_id: (this.state.selected &&
+              this.state.selected.substr(0,1) === 's' ?
+              this.state.selected.substring(1):null)
         })
         .success(response => {
           this.props.$location
@@ -419,17 +425,36 @@ class DashboardsListSearch extends React.Component {
         const data={
             folder_id:targetfolder.substring(1)
         }
-        if (selected.substr(0,1) !== "-"){
-            alert("请选择一个仪表盘")
-        } else {
+        $http
+            .post(appSettingsConfig.server.backendUrl+'/api/dashboards/'+selected+'/folder',data)
+            .success(() => {this.reload(); console.log("move done")})
+            .error(() => alert("移动失败,请选择一个仪表盘"))
+
+    }
+
+  deleteFolder = (selected) => {
+    if (selected && selected.substr(0,1)==="s"){
+      $http
+          .delete(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+selected.substring(1))
+          .success(() => {this.reload();console.log("delete complete")})
+          .error(() => alert("删除失败"))
+
+    } else {
+      // eslint-disable-next-line no-alert
+      alert("请选择一个文件夹")
+    }
+  }
+
+    foldernameUpdate = (data) => {
+        if(this.state.selected && this.state.selected.substr(0,1)==="s")
             $http
-                .post(appSettingsConfig.server.backendUrl+'/api/dashboards/'+selected+'/folder',data)
-                .success(() => {this.reload(); console.log("move done")})
-                .error(() => alert("移动失败"))
-        }
+                .post(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+this.state.selected.substring(1),data)
+                .success(()=>{this.reload();console.log('rename complete')})
+                .error(() => alert("改名失败"))
     }
 
   render() {
+    console.log("dashboard selected",this.state.selected ? this.state.selected: "null")
     const { appSettings } = this.props;
     return (
       <>
@@ -537,7 +562,7 @@ class DashboardsListSearch extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Button
                   size="small"
                   type="link"
@@ -548,7 +573,7 @@ class DashboardsListSearch extends React.Component {
                   新建仪表盘
                 </Button>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <CreateNewFolder 
                   onSuccess={name => { 
                   return this.state.selected===null ? 
@@ -556,11 +581,22 @@ class DashboardsListSearch extends React.Component {
                   this.createFolder(name,this.state.selected);}}
                 />
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <MoveToFolder 
                   structure={this.state.treelist} 
                   onSuccess={(targetfolder) => 
                   this.moveTofolder(this.state.selected,targetfolder)} 
+                />
+              </Col>
+              <Col span={8}>
+                <DeleteFolder
+                  onSuccess={()=>this.deleteFolder(this.state.selected)}
+                />
+              </Col>
+              <Col span={8}>
+                <FolderRename
+                  defaultName={this.state.selected ? this.state.selectedtitle : null}
+                  onSuccess={(name)=>{this.foldernameUpdate({"name":name})}}
                 />
               </Col>
               <Col span={24}>
@@ -579,7 +615,8 @@ class DashboardsListSearch extends React.Component {
                       dashboard: _.find(
                         this.state.all,
                         dashboard => dashboard.slug === value[0]
-                      )
+                      ),
+                      selectedtitle: node.node.props.title
                     });
                     this.props.dashboardSearchCb(value);
                   }}
