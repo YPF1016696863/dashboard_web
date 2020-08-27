@@ -85,7 +85,7 @@ export class FolderRename extends React.Component{
         return (
           <>
             <Button size="small" type="link" style={{ color: '#3d4d66' }} onClick={this.showModal}>
-              <Icon type="delete" style={{ color: '#3685f2' }} />
+              <Icon type="gateway" style={{ color: '#3685f2' }} />
               文件夹重命名
             </Button>
             <Modal

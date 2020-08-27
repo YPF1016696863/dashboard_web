@@ -453,8 +453,26 @@ class DashboardsListSearch extends React.Component {
                 .error(() => alert("改名失败"))
     }
 
+    copyDashboard=()=>{
+    if(this.state.selected === null ||
+        this.state.selected === "datavis-group#ungrouped" ||
+        this.state.selected.substr(0,1) === "s")
+    {
+      alert("请选择一个仪表盘")
+    } else {
+      const data = this.state.dashboard;
+      delete data.slug;
+      delete data.created_at;
+      delete data.id;
+      this.props.$http
+          .post(this.props.appSettings.server.backendUrl + '/api/dashboards', data)
+          .success(() => this.reload())
+          .error(e => alert(e));
+    }
+    }
+
   render() {
-    console.log("dashboard selected",this.state.selected ? this.state.selected: "null")
+    console.log("dashboard selected",this.state.selected)
     const { appSettings } = this.props;
     return (
       <>
@@ -562,7 +580,7 @@ class DashboardsListSearch extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={12}>
+              <Col span={8}>
                 <Button
                   size="small"
                   type="link"
@@ -573,7 +591,18 @@ class DashboardsListSearch extends React.Component {
                   新建仪表盘
                 </Button>
               </Col>
-              <Col span={12}>
+              <Col span={8}>
+                <Button
+                  size="small"
+                  type="link"
+                  style={{ color: '#3d4d66' }}
+                  onClick={() => {this.copyDashboard()}}
+                >
+                  <Icon type="copy" style={{ color: '#13cd66' }} />
+                  复制仪表盘
+                </Button>
+              </Col>
+              <Col span={8}>
                 <CreateNewFolder 
                   onSuccess={name => { 
                   return this.state.selected===null ? 

@@ -160,6 +160,27 @@ class ChartsListSearch extends React.Component {
                 .error(() => alert("改名失败"))
     }
 
+    copyVisualization = () => {
+      if(
+          this.state.selected === null ||
+          this.state.visualization === null ||
+          this.state.selected === "datavis-group#ungrouped" ||
+          this.state.selected.substr(0,1) === "s")
+        {
+            alert("请选择一个可视化组件")
+        } else {
+          const data = this.state.visualization;
+          delete data.id
+          delete data.created_at
+          delete data.updated_at
+          const postdata = _.extend({},data,{query_id:_.split(this.state.selected,":")[0]})
+          $http
+            .post(this.props.appSettings.server.backendUrl + '/api/visualizations', postdata)
+            .success(() => this.reload())
+            .error(e => console.log(e));
+        }
+    }
+
 
   reload(holdTab) {
     let type = null;
@@ -398,8 +419,6 @@ class ChartsListSearch extends React.Component {
 
         return tempNodes;
     }
-  
-  
 
   updateVisualization(data) {
     this.props.Visualization.save(
@@ -517,7 +536,7 @@ class ChartsListSearch extends React.Component {
             </Row>
             {this.props.simpleMode ? null : (
               <Row>
-                <Col span={12}>
+                <Col span={7}>
                   <Button
                     size="small"
                     type="link"
@@ -530,7 +549,18 @@ class ChartsListSearch extends React.Component {
                     新建组件
                   </Button>
                 </Col>
-                <Col span={12}>
+                <Col span={7}>
+                  <Button
+                    size="small"
+                    type="link"
+                    style={{ color: '#3d4d66' }}
+                    onClick={() => this.copyVisualization()}
+                  >
+                    <Icon type="copy" style={{ color: '#13cd66' }} />
+                    复制组件
+                  </Button>
+                </Col>
+                <Col span={7}>
                   <CreateNewFolder 
                     onSuccess={name => { 
                     return this.state.selected===null ? 
