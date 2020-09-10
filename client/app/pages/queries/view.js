@@ -54,6 +54,7 @@ function QueryViewCtrl(
 
     $scope.showLog = false;
     // if ($scope.isDirty) { // 未保存时执行
+    console.log("selectedQueryText",selectedQueryText);
       $scope.queryResult = $scope.query.getQueryResultByText(
         maxAge,
         selectedQueryText

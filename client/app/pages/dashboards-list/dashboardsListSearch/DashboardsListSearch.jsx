@@ -460,59 +460,94 @@ class DashboardsListSearch extends React.Component {
     {
       alert("请选择一个仪表盘")
     } else {
-      const data = this.state.dashboard;
-      delete data.slug;
-      delete data.created_at;
-      delete data.id;
-      this.props.$http
-          .post(this.props.appSettings.server.backendUrl + '/api/dashboards', data)
-          .success(() => this.reload())
-          .error(e => alert(e));
+      $http
+          .get(this.props.appSettings.server.backendUrl + '/api/dashboards/'+this.state.selected)
+          .success((response) => {
+              const backgroundinformation = response.background_image;
+              const widgets = response.widgets;
+              _.forEach(widgets,(value)=>{
+                  delete value.id;
+                  delete value.created_at;
+                  delete value.updated_at;
+                  value.visualization_id = value.visualization.id;
+                  delete value.visualization;
+              });
+              const postdata = response;
+              delete postdata.slug;
+              delete postdata.id;
+              delete postdata.created_at;
+              delete postdata.updated_at;
+              delete postdata.widgets;
+              delete postdata.background_image;
+              $http
+                  .post(this.props.appSettings.server.backendUrl + '/api/dashboards', postdata)
+                  .success((newresponse) => {
+                      const backdata =
+                          {
+                              background_image:backgroundinformation
+                          }
+                      $http.
+                          post(this.props.appSettings.server.backendUrl + '/api/dashboards/'+newresponse.id,backdata)
+                          .success(()=>{this.reload()});
+                      _.forEach(widgets,(value)=>{
+                      value.dashboard_id = newresponse.id;
+                      console.log("post value",value);
+                      $http
+                          .post(this.props.appSettings.server.backendUrl + '/api/widgets',value)
+                          .success(()=>{ this.reload();console.log("successvalue",value.visualization_id)})
+                          .error(e => console.log("widget errorlala",e));
+                      })
+                      this.reload();
+                  })
+                  .error(e=>console.log("copy error information ",e));
+          })
+          .error((e)=>console.log("error information",e))
     }
     }
 
   render() {
-    console.log("dashboard selected",this.state.selected)
+    console.log("state dashboard ",this.state.dashboard);
+    console.log("all",this.state.all);
     const { appSettings } = this.props;
     return (
       <>
         {this.state.loading && <LoadingState />}
         {!this.state.loading && (
-          <>
-            <Row>
-              <Col>
-                <Row>
-                  <Col span={12}>
-                    <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
-                      可视化仪表盘列表:
-                    </div>
-                  </Col>
-                  <Col span={11} align="right">
-                    {policy.isCreateDashboardEnabled() ? (
-                      <Modal
-                        destroyOnClose
-                        title="新建仪表盘"
-                        visible={this.state.visible}
-                        onOk={this.hideModal}
-                        onCancel={this.hideModal}
-                        okText="确认"
-                        cancelText="取消"
-                      >
-                        <Form onSubmit={this.handleSubmit}>
-                          <Form.Item label="仪表盘名称">
-                            <Input
-                              prefix={(
-                                <Icon
-                                  type="dashboard"
-                                  style={{ color: 'rgba(0,0,0,.25)' }}
-                                />
+        <>
+          <Row>
+            <Col>
+              <Row>
+                <Col span={12}>
+                  <div style={{ fontWeight: 'bold', paddingBottom: '10px' }}>
+                    可视化仪表盘列表:
+                  </div>
+                </Col>
+                <Col span={11} align="right">
+                  {policy.isCreateDashboardEnabled() ? (
+                    <Modal
+                      destroyOnClose
+                      title="新建仪表盘"
+                      visible={this.state.visible}
+                      onOk={this.hideModal}
+                      onCancel={this.hideModal}
+                      okText="确认"
+                      cancelText="取消"
+                    >
+                      <Form onSubmit={this.handleSubmit}>
+                        <Form.Item label="仪表盘名称">
+                          <Input
+                            prefix={(
+                              <Icon
+                                type="dashboard"
+                                style={{ color: 'rgba(0,0,0,.25)' }}
+                              />
                               )}
-                              placeholder="新仪表盘"
-                              onChange={this.newName}
-                            />
-                          </Form.Item>
-                        </Form>
-                      </Modal>
+                            placeholder="新仪表盘"
+                            onChange={this.newName}
+                          />
+                        </Form.Item>
+                      </Form>
+                    </Modal>
                     ) : (
                       <Modal
                         destroyOnClose
@@ -531,112 +566,112 @@ class DashboardsListSearch extends React.Component {
                         />
                       </Modal>
                       )}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={18}>
-                    <Search
-                      placeholder="搜索可视化仪表板..."
-                      size="small"
-                      onChange={e => {
+                </Col>
+              </Row>
+              <Row>
+                <Col span={18}>
+                  <Search
+                    placeholder="搜索可视化仪表板..."
+                    size="small"
+                    onChange={e => {
                         this.searchBy(e.target.value);
                       }}
-                    />
-                  </Col>
-                  <Col span={2} offset={1}>
-                    <Dropdown
-                      overlay={(
-                        <Menu>
-                          <Menu.Item
-                            key="1"
-                            onClick={() => this.orderBy('name')}
-                          >
-                            <Icon type="sort-ascending" />
-                            按名称排序
-                          </Menu.Item>
-                          <Menu.Item
-                            key="2"
-                            onClick={() => this.orderBy('created_at')}
-                          >
-                            <Icon type="clock-circle" />
-                            按创建时间排序
-                          </Menu.Item>
-                        </Menu>
+                  />
+                </Col>
+                <Col span={2} offset={1}>
+                  <Dropdown
+                    overlay={(
+                      <Menu>
+                        <Menu.Item
+                          key="1"
+                          onClick={() => this.orderBy('name')}
+                        >
+                          <Icon type="sort-ascending" />
+                          按名称排序
+                        </Menu.Item>
+                        <Menu.Item
+                          key="2"
+                          onClick={() => this.orderBy('created_at')}
+                        >
+                          <Icon type="clock-circle" />
+                          按创建时间排序
+                        </Menu.Item>
+                      </Menu>
                       )}
-                    >
-                      <Button icon="menu-fold" size="small" />
-                    </Dropdown>
-                  </Col>
-                  <Col span={2}>
-                    <Button
-                      icon="reload"
-                      size="small"
-                      onClick={() => {
+                  >
+                    <Button icon="menu-fold" size="small" />
+                  </Dropdown>
+                </Col>
+                <Col span={2}>
+                  <Button
+                    icon="reload"
+                    size="small"
+                    onClick={() => {
                         this.reload();
                       }}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Button
-                  size="small"
-                  type="link"
-                  style={{ color: '#3d4d66' }}
-                  onClick={this.showModal}
-                >
-                  <Icon type="plus-square" style={{ color: '#13cd66' }} />
-                  新建仪表盘
-                </Button>
-              </Col>
-              <Col span={8}>
-                <Button
-                  size="small"
-                  type="link"
-                  style={{ color: '#3d4d66' }}
-                  onClick={() => {this.copyDashboard()}}
-                >
-                  <Icon type="copy" style={{ color: '#13cd66' }} />
-                  复制仪表盘
-                </Button>
-              </Col>
-              <Col span={8}>
-                <CreateNewFolder 
-                  onSuccess={name => { 
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Button
+                size="small"
+                type="link"
+                style={{ color: '#3d4d66' }}
+                onClick={this.showModal}
+              >
+                <Icon type="plus-square" style={{ color: '#13cd66' }} />
+                新建仪表盘
+              </Button>
+            </Col>
+            <Col span={8}>
+              <Button
+                size="small"
+                type="link"
+                style={{ color: '#3d4d66' }}
+                onClick={() => {this.copyDashboard()}}
+              >
+                <Icon type="copy" style={{ color: '#13cd66' }} />
+                复制仪表盘
+              </Button>
+            </Col>
+            <Col span={8}>
+              <CreateNewFolder 
+                onSuccess={name => { 
                   return this.state.selected===null ? 
                   this.createFolder(name, null):
                   this.createFolder(name,this.state.selected);}}
-                />
-              </Col>
-              <Col span={6}>
-                <MoveToFolder 
-                  structure={this.state.treelist} 
-                  onSuccess={(targetfolder) => 
-                  this.moveTofolder(this.state.selected,targetfolder)} 
-                />
-              </Col>
-              <Col span={8}>
-                <DeleteFolder
-                  onSuccess={()=>this.deleteFolder(this.state.selected)}
-                />
-              </Col>
-              <Col span={8}>
-                <FolderRename
-                  defaultName={this.state.selected ? this.state.selectedtitle : null}
-                  onSuccess={(name)=>{this.foldernameUpdate({"name":name})}}
-                />
-              </Col>
-              <Col span={24}>
-                <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
-              </Col>
-            </Row>
-            <Row>
-              <Col style={{ paddingRight: '10px' }}>
-                <DirectoryTree
-                  defaultExpandedKeys={['datavis-group#ungrouped']}
-                  onSelect={(value, node, extra) => {
+              />
+            </Col>
+            <Col span={6}>
+              <MoveToFolder 
+                structure={this.state.treelist} 
+                onSuccess={(targetfolder) => 
+                  this.moveTofolder(this.state.selected,targetfolder)}
+              />
+            </Col>
+            <Col span={8}>
+              <DeleteFolder
+                onSuccess={()=>this.deleteFolder(this.state.selected)}
+              />
+            </Col>
+            <Col span={8}>
+              <FolderRename
+                defaultName={this.state.selected ? this.state.selectedtitle : null}
+                onSuccess={(name)=>{this.foldernameUpdate({"name":name})}}
+              />
+            </Col>
+            <Col span={24}>
+              <Divider style={{ marginTop: '5px', marginBottom: '0' }} />
+            </Col>
+          </Row>
+          <Row>
+            <Col style={{ paddingRight: '10px' }}>
+              <DirectoryTree
+                defaultExpandedKeys={['datavis-group#ungrouped']}
+                onSelect={(value, node, extra) => {
                     const stillEdit = value[0] === this.state.selected;
                     this.setState({
                       selected: value[0],
@@ -649,13 +684,13 @@ class DashboardsListSearch extends React.Component {
                     });
                     this.props.dashboardSearchCb(value);
                   }}
-                  selectedKeys={[this.state.selected]}
+                selectedKeys={[this.state.selected]}
+              >
+                <TreeNode
+                  title="可视化仪表板(无分组)"
+                  key="datavis-group#ungrouped"
                 >
-                  <TreeNode
-                    title="可视化仪表板(无分组)"
-                    key="datavis-group#ungrouped"
-                  >
-                    {_.map(this.state.filtered, item => {
+                  {_.map(this.state.filtered, item => {
                       return (
                         <TreeNode
                           icon={(
@@ -733,12 +768,12 @@ class DashboardsListSearch extends React.Component {
                         />
                       );
                     })}
-                  </TreeNode>
-                  {this.state.treelist? this.renderTree(this.state.treelist):<></>}
-                </DirectoryTree>
-              </Col>
-            </Row>
-          </>
+                </TreeNode>
+                {this.state.treelist? this.renderTree(this.state.treelist):<></>}
+              </DirectoryTree>
+            </Col>
+          </Row>
+        </>
         )}
       </>
     );

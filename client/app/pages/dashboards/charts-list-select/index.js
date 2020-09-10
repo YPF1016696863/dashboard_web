@@ -57,7 +57,6 @@ function ChartsListSelectViewCtrl(
   };
 
   // currentUser.hasPermission('admin');
-
 }
 
 // eslint-disable-next-line import/prefer-default-export

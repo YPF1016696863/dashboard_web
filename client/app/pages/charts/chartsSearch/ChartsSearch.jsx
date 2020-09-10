@@ -261,7 +261,7 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-TUBE': type = 'ECHARTS-TUBE'; break;// 试管温度计
                           case 'ECHARTS-GANTE': type = 'ECHARTS-GANTE'; break;// 甘特图
                           case 'ECHARTS-PIC': type = 'ECHARTS-PIC'; break;// 图片
-
+                          case 'ECHARTS-ICONS': type = 'ECHARTS-ICONS'; break;// icon
                           case 'ECHARTS-ZONE': type = 'ECHARTS-ZONE'; break;// 区间图
                           // case 'ECHARTS-TXT': type = 'ECHARTS-TXT'; break;// TXT
                           case 'ECHARTS-CHINA': type = 'ECHARTS-CHINA'; break;// 3D地图
@@ -288,7 +288,6 @@ class ChartsSearch extends React.Component {
                           case 'COUNTER': type = 'COUNTER'; break;
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
                           case 'ECHARTS-GAUGE-STAGE': type = 'ECHARTS-GAUGE-STAGE'; break;
-                          
                           default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");
@@ -869,6 +868,21 @@ class ChartsSearch extends React.Component {
                               </Radio>
                             </Col>
 
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-ICONS" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-icons/datavis-icons.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>Icon</p>
+                              </Radio>
+                            </Col>
 
                           </Row>
                           <Divider style={{ margin: ' 0' }} />

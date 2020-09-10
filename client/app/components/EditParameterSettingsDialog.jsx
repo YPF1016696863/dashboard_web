@@ -164,6 +164,7 @@ function EditParameterSettingsDialog(props) {
   let xialaValue="";
   let numValue="";
   let defValue="";
+  let switchvalue="";
 
   return (
     <Modal
@@ -258,7 +259,7 @@ function EditParameterSettingsDialog(props) {
           {/* 输入值/下拉框/不填选第一个 */}
           <AddCondition 
             selectedcondiRes={param}
-            
+
             condiRes={r => { 
               rValue = r; 
               temp=[];
@@ -267,6 +268,7 @@ function EditParameterSettingsDialog(props) {
               temp.push([xialaValue]); 
               temp.push([numValue]);
               temp.push([defValue]);
+              temp.push([switchvalue]);
               setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue ,global:temp}); 
             }}
             keyRes={k => { 
@@ -277,6 +279,7 @@ function EditParameterSettingsDialog(props) {
               temp.push([xialaValue]);
               temp.push([numValue]);
               temp.push([defValue]);
+              temp.push([switchvalue]);
               setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue ,global:temp});  
             }}
             xialaRes={n => { 
@@ -287,6 +290,7 @@ function EditParameterSettingsDialog(props) {
               temp.push([xialaValue]);
               temp.push([numValue]);
               temp.push([defValue]);
+              temp.push([switchvalue]);
               setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue,global:temp }); 
             }}  
             condiNum={num => { 
@@ -297,6 +301,7 @@ function EditParameterSettingsDialog(props) {
               temp.push([xialaValue]);
               temp.push([numValue]);
               temp.push([defValue]);
+              temp.push([switchvalue]);
               setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue,global:temp }); }}  
             defaultValueForInput={val => {
               defValue = val;console.log(val);// 上一次的配置
@@ -306,8 +311,19 @@ function EditParameterSettingsDialog(props) {
               temp.push([xialaValue]); 
               temp.push([numValue]);
               temp.push([defValue]);
+              temp.push([switchvalue]);
               setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue, global: temp });
-            }}  
+            }}
+            switchInput={switchpara => {
+              switchvalue = switchpara;
+              temp=[];
+              temp.push([rValue]);
+              temp.push([kValue]);
+              temp.push([xialaValue]);
+              temp.push([numValue]);
+              temp.push([defValue]);
+              temp.push([switchvalue]);
+              setParam({ ...param, conditionvalue: rValue, keyname: kValue, xialaname: xialaValue,global:temp }); }}
           />
           
         </div>       

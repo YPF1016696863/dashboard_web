@@ -25,9 +25,9 @@ import { Widget } from '@/services/widget';
 
 const { Option } = Select;
 
-const conditionNum=[];
-const conditionKey=[];
-const conditionValue=[];
+let conditionNum=[];
+let conditionKey=[];
+let conditionValue=[];
 let row=[];// 字段数据
 const corList=[];// 每一列的数据（筛选时使用）
 let conditionRes={};// 条件json结果 传到父组件
@@ -37,6 +37,7 @@ let id=0;
 let keyName="";
 let xialaName="";
 let enumOptionsArray = [];
+let switcharray = [];
 
 export class AddCondition extends React.Component { 
 
@@ -56,26 +57,32 @@ export class AddCondition extends React.Component {
 
   componentDidMount() {
     
-    // console.log(this.props);
+    console.log(this.props);
     if(this.props.selectedcondiRes.global!==undefined&&this.props.selectedcondiRes.global!==null){
-      
-       
       id = this.props.selectedcondiRes.queryId;
       this.whereUpdata();
-      // console.log(this.props.selectedcondiRes.global);
+      console.log("selectedcondiResglobal",this.props.selectedcondiRes.global);
       const values = Object.values(this.props.selectedcondiRes.global[0][0]);
+      conditionValue=[];
+      for(let i=0;i<values.length;i+=1){
+        conditionValue[i]=values[i];
+      }
       // values=_.concat([0],values);
       // console.log(values);
       const keys = Object.keys(this.props.selectedcondiRes.global[0][0]);
+      conditionKey = [];
+      for(let i=0;i<keys.length;i+=1){
+        conditionKey[i]=keys[i];
+      }
       // keys=_.concat([0],keys);
       cont=keys===undefined?0:keys.length;
       // console.log(keys);
-      
+      conditionNum = [];
       for(let i=0;i<keys.length;i+=1){
         conditionNum[i]=i;
       }
 
-      // console.log( this.props);
+      console.log( "fatherParameter",this.props);
       // 给下拉框一个默认初值传入（父传子 props传>
       const resTemp = _.filter(fatherParameter, this.props.selectedcondiRes.global[0][0]);
       const keyNameTemp = this.props.selectedcondiRes.global[1][0];
@@ -91,7 +98,12 @@ export class AddCondition extends React.Component {
           }
         )
       }
-      console.log(enumOptionsArray);
+      console.log("enumOptionArray",enumOptionsArray);
+      switcharray = [];
+      const switchtemp = this.props.selectedcondiRes.global[5][0];
+      for(let i=0;i<switchtemp.length;i+=1){
+          switcharray[i] = switchtemp[i];
+      }
       // console.log(conditionNum);
       this.setState({
         conditionKeyState:keys,
@@ -99,11 +111,10 @@ export class AddCondition extends React.Component {
         keyState:this.props.selectedcondiRes.global[1][0],// key列
         xialaState:this.props.selectedcondiRes.global[2][0],// user列
         conditionNumState:conditionNum,// 条件数量的数组
+        switchState:switcharray,
         rowState: row
       });
     }
-   
-    
   }
 
   upDataRow = () => {
@@ -111,7 +122,6 @@ export class AddCondition extends React.Component {
     this.setState({
       rowState: row
     });
-    
   }
 
   upDataList = (item) => {
@@ -122,6 +132,7 @@ export class AddCondition extends React.Component {
     
   }
 
+  // row,fatherParameter,enumOptionsArray
   whereUpdata = () => {
     
     id = this.props.selectedcondiRes.queryId;
@@ -143,16 +154,18 @@ export class AddCondition extends React.Component {
               .toPromise()
               .then(queryRes => {
                 fatherParameter = queryRes.query_result.data.rows;// 后执行
+                console.log("errfatherParameter",fatherParameter);
                 if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
                   row = Object.keys(fatherParameter[0]);
-                  // console.log(row);
-
+                   console.log("row",row);
                    // 给下拉框一个默认初值传入（父传子 props传>
                   const resTemp = _.filter(fatherParameter, this.props.selectedcondiRes.global[0][0]);
                   const keyNameTemp = this.props.selectedcondiRes.global[1][0];
                   const xialaNameTemp = this.props.selectedcondiRes.global[2][0];
                   const keyListTemp = _.map(resTemp, keyNameTemp);
                   const xialaListTemp = _.map(resTemp, xialaNameTemp);
+                  console.log("keyListTemp",keyListTemp);
+                  console.log("xialaListTemp",xialaListTemp);
                   enumOptionsArray = [];
                   for (let i = 0; i < xialaListTemp.length; i += 1) {
                     enumOptionsArray.push(
@@ -162,7 +175,7 @@ export class AddCondition extends React.Component {
                       }
                     )
                   }
-                  console.log(enumOptionsArray);
+                  console.log("enumOptionsArray",enumOptionsArray);
 
                 }
               })
@@ -193,14 +206,20 @@ export class AddCondition extends React.Component {
 
   deleteCondition = (e) => {
     // console.log(e.currentTarget.id);
+    console.log("before",conditionNum,conditionKey,conditionValue);
+    cont -= 1;
+    switcharray.splice(parseInt(e.currentTarget.id, 10),1);
     _.pull(conditionNum, parseInt(e.currentTarget.id, 10));
-    _.pull(conditionKey, parseInt(e.currentTarget.id, 10));
-    _.pull(conditionValue, parseInt(e.currentTarget.id, 10));
+    conditionKey.splice(parseInt(e.currentTarget.id, 10),1);
+    conditionValue.splice(parseInt(e.currentTarget.id, 10),1);
+    console.log("after",conditionNum,conditionKey,conditionValue);
     this.setState({
       conditionNumState: conditionNum,
       conditionKeyState:conditionKey,
-      conditionValueState:conditionValue
+      conditionValueState:conditionValue,
+      switchState: switcharray
     });
+    this.merage();
     // console.log(this.state)
     // 删除一个条件的时候 需要对数组进行删除操作
     // conditionKV[parseInt(e.currentTarget.id, 10)] = " ";
@@ -272,28 +291,33 @@ export class AddCondition extends React.Component {
     this.props.xialaRes(xialaName);
     this.props.condiNum(this.state.conditionNumState);
     this.props.defaultValueForInput(enumOptionsArray);
+    this.props.switchInput(switcharray);
   }
 
   // 别名开关
   switchChange=(item)=>{
 
-    if(this.state.switchState[item]===null||this.state.switchState[item]===undefined){
+    if(this.state.switchState ===null || this.state.switchState === undefined ||
+        this.state.switchState[item]===null||this.state.switchState[item]===undefined){
       this.state.switchState[item]=true;
     }else{
       this.state.switchState[item]=!this.state.switchState[item];
-    }
-    this.merage();
+    };
     this.setState({
       switchState:this.state.switchState
     });
-  }
+    this.merage();
+  };
 
 
   render() {
+    console.log("this.prorps",this.props);
+    console.log("this.state",this.state);
+    console.log("targetkeyvalue",this.props.selectedcondiRes.$$value);
+    console.log("parameter",conditionNum,conditionKey,conditionValue);
+    console.log("switch",this.state.switchState);
     this.whereUpdata();
-    
     return (
-      
       <div>        
         <PlusCircleOutlined onClick={this.addCondition}>增加</PlusCircleOutlined>
         {this.state.conditionNumState.map((item) => {
@@ -317,13 +341,18 @@ export class AddCondition extends React.Component {
                 onChange={(e)=>this.whereVaule(item,e.target.value)}
               />
 
-              <Switch checkedChildren="" unCheckedChildren="" size="small" onChange={()=>this.switchChange(item)} />
+              <Switch checkedChildren="" unCheckedChildren="" checked={this.state.switchState[item]} size="small" onChange={()=>this.switchChange(item)} />
               {this.state.switchState[item]&&(                 
-                <Select defaultValue={"别名"+item} style={{width:'20%'}} onChange={e=>console.log(e)}>
+                <Select
+                  defaultValue={"别名"+item}
+                  value={this.state.xialaState}
+                  style={{width:'20%'}}
+                  onDropdownVisibleChange={this.upDataRow}
+                  onChange={e=>this.xialaValue(e)}
+                >
                   {row.map(option => (<Option key={option} value={option}>{option}</Option>))}
                 </Select>
               )}
-        
               <DeleteOutlined id={item} onClick={this.deleteCondition} />
             </div>
           )            
@@ -338,18 +367,7 @@ export class AddCondition extends React.Component {
           onChange={e=>this.keyValue(e)}
         >
           {row.map(option => (<Option key={option} value={option}>{option}</Option>))}
-        </Select> 
-        下拉列: 
-        <Select 
-          defaultValue="下拉名称" 
-          value={this.state.xialaState===undefined?"下拉名称":this.state.xialaState} 
-          style={{width:'20%'}} 
-          onDropdownVisibleChange={this.upDataRow}
-          onChange={e=>this.xialaValue(e)}
-        >
-          {row.map(option => (<Option key={option} value={option}>{option}</Option>))}
         </Select>
-
       </div>
     );
   }
@@ -366,6 +384,7 @@ AddCondition.propTypes = {
   xialaRes: PropTypes.func.isRequired,
   condiNum: PropTypes.func.isRequired,
   defaultValueForInput: PropTypes.func.isRequired,
+  switchInput:PropTypes.func.isRequired
 };
 AddCondition.defaultProps = { 
   selectedcondiRes: null,

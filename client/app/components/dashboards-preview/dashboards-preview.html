@@ -1,11 +1,10 @@
 <div class="dashboard-dark-theme"
   style="height:calc(100vh - 35px);width:calc(100% - 1px);overflow: hidden;border: 1px dotted #888888 !important;"
   ng-style="$ctrl.dashboardStyle" ng-if="$ctrl.dashboard.widgets.length > 0">
-  <!--
-  <div class="dashboard-dark-theme" ng-if="$ctrl.globalParameters.length > 0">
+
+  <!-- <div class="dashboard-dark-theme" ng-if="$ctrl.globalParameters.length > 0">
     <parameters parameters="$ctrl.globalParameters"></parameters>
-  </div>
--->
+  </div> -->
 
   <!-- <div class="row" style="background: rgba(37, 55, 76, 0);border: 1px dotted #888888 !important;">
     <div class="col-sm-3" align="left"></div>
@@ -50,6 +49,15 @@
           params="$ctrl.globalParameters"></parameter-drawer-c>
       </div>
     </div> -->
+    <div class="dashboard-widget-wrapper" ng-if="$ctrl.globalParameters.length > 0 "
+         ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 " gridstack-item="widget.options.position"
+         gridstack-item-id="a99" data-test="WidgetIda99" id="switch"
+    >
+      <div class="grid-stack-item-content ">
+        <parameter-drawer-c widget="widget" ng-if="$ctrl.globalParameters.length > 0" on-submit="$ctrl.onSubmit"
+                            params="$ctrl.globalParameters"></parameter-drawer-c>
+      </div>
+    </div>
 
   </div>
 </div>

@@ -157,7 +157,7 @@ class ChartsListSearch extends React.Component {
             $http
                 .post(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+this.state.selected.substring(1),data)
                 .success(()=>{this.reload();console.log('rename complete')})
-                .error(() => alert("改名失败"))
+                .error(() => alert("改名失败"));
     }
 
     copyVisualization = () => {
@@ -170,14 +170,14 @@ class ChartsListSearch extends React.Component {
             alert("请选择一个可视化组件")
         } else {
           const data = this.state.visualization;
-          delete data.id
-          delete data.created_at
-          delete data.updated_at
-          const postdata = _.extend({},data,{query_id:_.split(this.state.selected,":")[0]})
+          delete data.id;
+          delete data.created_at;
+          delete data.updated_at;
+          const postdata = _.extend({},data,{query_id:_.split(this.state.selected,":")[0]});
           $http
             .post(this.props.appSettings.server.backendUrl + '/api/visualizations', postdata)
             .success(() => this.reload())
-            .error(e => console.log(e));
+            .error(()=> alert("复制失败"));
         }
     }
 
