@@ -43,6 +43,21 @@ class TextboxDialog extends React.Component {
     };
   }
 
+  // async componentDidMount() {
+  //   this.setState({
+  //       editorState: BraftEditor.createEditorState(this.state.preview)
+  //   })
+  // }
+
+  // submitContent = async () => {
+  //       const htmlContent = this.state.editorState.toHTML()
+  //     const result = await saveEditorContent(htmlContent)
+  // }
+
+  // handleEditorChange = (editorState) =>{
+  //   this.setState({editorState})
+  // }
+
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
     this.updatePreview();

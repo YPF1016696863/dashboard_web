@@ -56,7 +56,6 @@ export class AddCondition extends React.Component {
   }
 
   componentDidMount() {
-
     if(this.props.selectedcondiRes.global!==undefined&&this.props.selectedcondiRes.global!==null){
       id = this.props.selectedcondiRes.queryId;
       this.whereUpdata();
