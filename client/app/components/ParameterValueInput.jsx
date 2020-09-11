@@ -400,7 +400,7 @@ export class ParameterValueInput extends React.Component {
       )
     }
     
-    // console.log(enumOptionsArrayForQuery);
+     console.log("enumOptionsArrayForQuery",enumOptionsArrayForQuery);
     // console.log(this.state.enumOptionsArrayState);
     return (
         this.props.parameter.global !== undefined&& 
@@ -480,6 +480,7 @@ export class ParameterValueInput extends React.Component {
 
   render() {
     const { type } = this.props;
+    console.log("type显示输入",type);
     switch (type) {
       case 'datetime-with-seconds': return this.renderDateTimeWithSecondsInput();
       case 'datetime-local': return this.renderDateTimeInput();

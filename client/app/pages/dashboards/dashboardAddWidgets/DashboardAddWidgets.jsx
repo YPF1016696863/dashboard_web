@@ -5,7 +5,7 @@ import { angular2react } from 'angular2react';
 import { Modal, Button } from 'antd';
 import { appSettingsConfig } from '@/config/app-settings';
 import { policy } from '@/services/policy';
-
+import * as _ from "lodash";
 import './DashboardAddWidgets.less'; 
 import { Dashboard } from '@/services/dashboard';
 import { currentUser } from '@/services/auth';
@@ -52,10 +52,19 @@ class DashboardAddWidgets extends React.Component {
     this.setState({
       visible: false
     });
-    this.props.addWidgetCb({
-      widget: this.state.selectedWidget,
-      paramMapping: this.state.parameterMappings
-    });
+    const widgetsarray =[];
+    _.forEach(this.state.dashboard.widgets, widget =>
+    {
+        widgetsarray.push(widget.visualization.id);
+  });
+    if(_.includes(widgetsarray,this.state.selectedWidget.id)){
+        alert("该组件已添加,请选择其他组件");
+    }else{
+        this.props.addWidgetCb({
+          widget: this.state.selectedWidget,
+          paramMapping: this.state.parameterMappings
+        });
+    }
   };
 
   handleCancel = e => {

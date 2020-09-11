@@ -8,6 +8,8 @@ import Tooltip from 'antd/lib/tooltip';
 import Divider from 'antd/lib/divider';
 import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
 import notification from '@/services/notification';
+// import BraftEditor from 'braft-editor';
+// import 'braft-editor/dist/index.css';
 
 import './TextboxDialog.less';
 
@@ -31,15 +33,33 @@ class TextboxDialog extends React.Component {
     text: '',
   };
 
-  constructor(props) {
+
+
+    constructor(props) {
     super(props);
     const { text } = props;
     this.state = {
       saveInProgress: false,
       text,
       preview: markdown.toHTML(text),
+      // editorState: BraftEditor.createEditorState(null)
     };
   }
+
+  // async componentDidMount() {
+  //   this.setState({
+  //       editorState: BraftEditor.createEditorState(this.state.preview)
+  //   })
+  // }
+
+  // submitContent = async () => {
+  //       const htmlContent = this.state.editorState.toHTML()
+  //     const result = await saveEditorContent(htmlContent)
+  // }
+
+  // handleEditorChange = (editorState) =>{
+  //   this.setState({editorState})
+  // }
 
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
@@ -64,7 +84,9 @@ class TextboxDialog extends React.Component {
   render() {
     const { dialog } = this.props;
     const isNew = !this.props.text;
-    const translate = this.props.$translate ? this.props.$translate : null;
+    console.log("props",this.state.preview);
+    console.log("editor",this.state.editorState);
+    console.log("text",this.state.text);
     return (
       <Modal
         {...dialog.props}
@@ -92,11 +114,17 @@ class TextboxDialog extends React.Component {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.markdownguide.org/cheat-sheet/#basic-syntax"
+              href="https://daringfireball.net/projects/markdown/syntax"
             >
               <Tooltip title="Markdown guide opens in new window">Markdown</Tooltip>
             </a>.
           </small>
+          {/*
+          <BraftEditor
+            value={this.state.editorState}
+            onChange={this.handleEditorChange}
+          />
+          */}
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />

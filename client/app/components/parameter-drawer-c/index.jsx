@@ -51,6 +51,7 @@ export class ParameterDrawerC extends React.Component {
   }
 
   render() {
+    console.log("show parameter",this.props.params);
     return (
       <div> 
         <Form layout="vertical" hideRequiredMark>

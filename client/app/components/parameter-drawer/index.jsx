@@ -55,7 +55,7 @@ class ParameterDrawer extends React.Component {
   };
 
   render() {
-
+    console.log("para",this.props);
     return (
       <div>
         <Drawer
@@ -95,7 +95,7 @@ class ParameterDrawer extends React.Component {
                       enumOptions={parameter.enumOptions}
                       queryId={parameter.queryId}
                       onSelect={value => {
-                        parameter.setValue(value);
+                      parameter.setValue(value);
                       }}
                     />
                   </Form.Item>
