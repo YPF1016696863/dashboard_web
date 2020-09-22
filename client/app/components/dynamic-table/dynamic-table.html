@@ -1,4 +1,4 @@
-<div class="dynamic-table-container">
+<div class="dynamic-table-container" >
   <table class="table table-condensed table-hover" data-test="DynamicTable" ng-class="$root.theme.widgetBackgroundColor">
     <thead ng-class="$root.theme.widgetBackgroundColor">
       <tr ng-class="$root.theme.dashboardTableTextColor">
@@ -24,11 +24,17 @@
           ng-change="$ctrl.onSearchTermChanged()" ng-class="$root.theme.widgetBackgroundColor">
       </th>
     </thead>
+   
     <tbody>
+      
+      <!-- <div ng-style="$ctrl.styleBgColor">222</div>
+      {{$ctrl.columns[0].color}} -->
+      
       <tr ng-repeat="row in $ctrl.rowsToDisplay"
         dynamic-table-row columns="$ctrl.columns" row="row"
         render="$ctrl.renderSingleRow"
-          ng-class="$root.theme.dashboardTableTextColor"
+        ng-class="$root.theme.dashboardTableTextColor"
+        ng-style="$ctrl.styleBgColor"
       ></tr>
     </tbody>
   </table>

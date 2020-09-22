@@ -44,7 +44,14 @@ export function defaultZoneChartOptions() {
         },
         xAxis: {
             type: 'category',
-            splitLine: { show: false },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: 'rgba(125,125,125,0.3)',
+                    width: 1,
+                    type: 'dashed'
+                }
+            },
             axisLine: {
                 show: true,
                 lineStyle: {
@@ -55,14 +62,17 @@ export function defaultZoneChartOptions() {
                 show: true,
                 color: '#fff',
             },
+            
             data: [ ]
         },
         yAxis: {
             type: 'value',
-            axisLine: {
+            splitLine: {
                 show: true,
                 lineStyle: {
-                    color: '#fff',
+                    color: 'rgba(125,125,125,0.3)',
+                    width: 1,
+                    type: 'dashed'
                 }
             },
             axisLabel: {

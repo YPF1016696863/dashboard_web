@@ -278,7 +278,7 @@ function EchartsChinaRenderer($rootScope) {
             //         [118.1, 24.46]
             //     ]
             // ]
-            const convertData = function(data) {
+            const convertData = function (data) {
                 const res = [];
                 for (let i = 0; i < data.length; i += 1) {
                     const geoCoord = geoCoordMap[data[i].name];
@@ -308,9 +308,9 @@ function EchartsChinaRenderer($rootScope) {
                         nameLineData = [];
                         lineData = [];
                         lineEchartsData = [];
-                        _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
-                            _.forEach(value, function(valueChildren, keyChildren) {
+                            _.forEach(value, function (valueChildren, keyChildren) {
                                 if (keyChildren === _.get($scope.options, "form.barNameAxisColumn", '')) {
                                     nameBarData.push(valueChildren.trim())
                                 }
@@ -425,9 +425,9 @@ function EchartsChinaRenderer($rootScope) {
 
 
                                 data: lineEchartsData
-                                    //  [
-                                    //   [[121.15, 31.89], [109.781327, 39.608266]],
-                                    //   [[120.38, 37.35], [122.207216, 29.985295]],
+                                //  [
+                                //   [[121.15, 31.89], [109.781327, 39.608266]],
+                                //   [[120.38, 37.35], [122.207216, 29.985295]],
 
                                 // ]
                                 // lineEchartsData
@@ -460,7 +460,7 @@ function EchartsChinaRenderer($rootScope) {
                             // }
                             let height = "100%";
                             let width = "100%";
-                            
+
                             if ($("#preview").length !== 0) {
                                 height = $element.parent().parent()["0"].clientHeight;
                                 width = $element.parent().parent()["0"].clientWidth;
@@ -481,6 +481,21 @@ function EchartsChinaRenderer($rootScope) {
                                 width,
                                 height
                             });
+
+                            _.set($scope.options, "sizeBg", {
+                                // responsive: true,
+                                'width': '100%',
+                                'height': '100%',
+                                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
+                                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                                    + _.get($scope.options, "bgY", "0px"),
+                                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                                'border-color': _.get($scope.options, "borderColor", "blue"),
+
+                            });
                         }
                         myChart.resize($scope.options.size.width, $scope.options.size.height);
                     }
@@ -489,9 +504,9 @@ function EchartsChinaRenderer($rootScope) {
                 }
             };
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
-            
+
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);
@@ -519,6 +534,14 @@ function EchartsChinaEditor() {
             if (_.isEmpty($scope.options) || $scope.options.chartType !== "ChinaChart") {
                 $scope.options = defaultChinaChartOptions();
             }
+
+
+            // 组件背景
+            $scope.getImageUrlCb = (a) => {
+                _.set($scope.options, "images", a);
+                $scope.$apply();
+            }
+
             $scope.selectedChartType = getChartType($scope.options);
 
             $scope.currentTab = 'general';
@@ -607,7 +630,7 @@ function EchartsChinaEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];
@@ -658,7 +681,7 @@ function EchartsChinaEditor() {
                 { label: '高', value: 'high' },
                 { label: '超高', value: 'ultra' }
             ];
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }
