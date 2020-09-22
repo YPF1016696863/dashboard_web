@@ -360,6 +360,16 @@
     </div>
 
     <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
+        <label class="control-label">背景图片</label>
+        <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
+        <div class="form-group" style="width:49%;float:left">
+            <label class="control-label">背景位置X</label>
+            <input name="name" type="text" class="form-control" ng-model="options.bgX" placeholder="" />
+        </div>
+        <div class="form-group" style="width:49%;float:right">
+            <label class="control-label">背景位置Y</label>
+            <input name="name" type="text" class="form-control" ng-model="options.bgY" placeholder="" />
+        </div>
         <div class="form-group">
             <label>
                 <input type="checkbox" ng-model="options.toolbox.show">

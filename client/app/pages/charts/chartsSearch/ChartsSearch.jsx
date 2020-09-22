@@ -288,6 +288,12 @@ class ChartsSearch extends React.Component {
                           case 'COUNTER': type = 'COUNTER'; break;
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
                           case 'ECHARTS-GAUGE-STAGE': type = 'ECHARTS-GAUGE-STAGE'; break;
+                          case 'ECHARTS-DDJZBAR': type = 'ECHARTS-DDJZBAR'; break;
+                          case 'ECHARTS-HUAN': type = 'ECHARTS-HUAN'; break;
+                          case 'ECHARTS-RADAR': type = 'ECHARTS-RADAR'; break;
+                          case 'ECHARTS-PROCESS': type = 'ECHARTS-PROCESS'; break;
+                          
+                         
                           default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");
@@ -429,6 +435,21 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>玫瑰图</p>
                               </Radio>
                             </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-PROCESS" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-process.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>过程图</p>
+                              </Radio>
+                            </Col>
                           </Row>
 
                           <Divider style={{ margin: ' 0' }} />
@@ -493,7 +514,51 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>阶段仪表</p>
                               </Radio>
                             </Col>
-
+                            {/* datavis-echarts-ddjzbbar.png 堆叠极坐标柱状图 */}
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-DDJZBAR" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-ddjzbbar.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>极坐标柱状图</p>
+                              </Radio>
+                            </Col>
+                            {/* datavis-echarts-huan.png 环百分比图 */}
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-HUAN" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-huan.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>环比图</p>
+                              </Radio>
+                            </Col>
+                            {/* datavis-echarts-radar.png  雷达图 */}
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-RADAR" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-radar.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>雷达图</p>
+                              </Radio>
+                            </Col>
                             <Col
                               style={{ paddingBottom: '6px' }}
                               span={8}

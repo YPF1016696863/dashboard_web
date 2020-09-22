@@ -35,9 +35,9 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                         const xDataValue = [];
                         const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
 
-                        const xData = _.get($scope.options, "form.xAxisColumn", "::"); 
+                        const xData = _.get($scope.options, "form.xAxisColumn", "::");
                         let xNewData = xData;
-                      
+
                         _.forEach(searchColumns, function (rowXValue, rowXKey) {
                             const everyXColumn = rowXValue; // everyColumn为一个对象，包含某列的新列名和元列名
                             // console.log(everyXColumn);
@@ -50,27 +50,27 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                         // 对y轴选择的列名进行处理，转化为原列名查找
                         const yData = _.get($scope.options, "form.yAxisColumn", "::"); // 前端页面选择的新列名
                         let yNewData = yData;
-                     
+
                         _.forEach(searchColumns, function (rowYValue, rowYKey) {
 
-                            const everyYColumn = rowYValue;                       
+                            const everyYColumn = rowYValue;
                             if (yData === everyYColumn.friendly_name) {
                                 yNewData = everyYColumn.name;
                             }
 
                         });
 
-                          // name string 这一列  AGENT_NAME
-                          _.forEach(data, function (value, key) {
+                        // name string 这一列  AGENT_NAME
+                        _.forEach(data, function (value, key) {
                             // [{0},{1}...] 筛选出每一个{0} {1} ...
                             const onesValue = value;
-                           
+
                             _.forEach(onesValue, function (oneXvalue, oneXkey) {
                                 // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                                 if (oneXkey === xNewData) { // x
                                     const xValue = oneXvalue;
                                     xDataValue.push(xValue);
-                                   
+
                                     _.forEach(onesValue, function (oneYvalue, oneYkey) {
                                         // {0}=>{n:v,n:v...} 筛选出每一个 name和对应的value
                                         if (oneYkey === yNewData) {
@@ -116,12 +116,12 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
 
                         // 设置环形分割区域的间隔颜色
                         _.set($scope.options, "radiusAxis.splitArea.areaStyle.color", [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),
-                            _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')
+                        _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')
                         ]);
 
                         // 设置扇形分割区域的间隔颜色
                         _.set($scope.options, "angleAxis.splitArea.areaStyle.color", [_.get($scope.options, "angleAxis.splitArea.areaStyle.color1", 'transparent'),
-                            _.get($scope.options, "angleAxis.splitArea.areaStyle.color2", 'transparent')
+                        _.get($scope.options, "angleAxis.splitArea.areaStyle.color2", 'transparent')
                         ]);
 
                         //  提示框文字格式
@@ -160,13 +160,13 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                         if (_.get($scope.options, "size.responsive", false)) {
                             // let height ='100%';
                             // let width ='100%';
-                            
+
                             let height = "100%";
                             let width = "100%";
-              
+
                             if ($("#preview").length !== 0) {
-                              height = $element.parent().parent()["0"].clientHeight;
-                              width = $element.parent().parent()["0"].clientWidth;
+                                height = $element.parent().parent()["0"].clientHeight;
+                                width = $element.parent().parent()["0"].clientWidth;
                             }
 
                             if ($("#Preview").length !== 0) {
@@ -184,6 +184,21 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                                 width,
                                 height
                             });
+
+                            _.set($scope.options, "sizeBg", {
+                                // responsive: true,
+                                'width': '100%',
+                                'height': '100%',
+                                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
+                                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                                    + _.get($scope.options, "bgY", "0px"),
+                                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                                'border-color': _.get($scope.options, "borderColor", "blue"),
+
+                            });
                         }
                         myChart.resize($scope.options.size.width, $scope.options.size.height);
                     }
@@ -193,7 +208,7 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
             };
 
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
@@ -223,6 +238,13 @@ function EchartsPolarEditor() {
                 $scope.options = defaultPolarChartOptions();
             }
             $scope.selectedChartType = getChartType($scope.options);
+
+
+            // 组件背景
+            $scope.getImageUrlCb = (a) => {
+                _.set($scope.options, "images", a);
+                $scope.$apply();
+            }
 
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {
@@ -329,7 +351,7 @@ function EchartsPolarEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }

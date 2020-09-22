@@ -1,4 +1,4 @@
-import { find, filter, map, each } from 'lodash';
+import { find, filter, map, each, set, get } from 'lodash';
 import template from './dynamic-table.html';
 import './dynamic-table.less';
 
@@ -148,6 +148,12 @@ function DynamicTableController($scope, $compile) {
     // 4. get columns for search
     // 5. update row rendering template
     // 6. prepare rows
+    console.log(columns);
+
+    // this.styleBgColor = {
+    //   // 'background-color': columns[0].color,
+    //   'background-color':columns[0].color
+    // }
 
     this.columns = columns;
     updateOrderByColumnsInfo();
@@ -217,6 +223,7 @@ function DynamicTableController($scope, $compile) {
   };
 
   this.$onChanges = (changes) => {
+    console.log(changes.columns);
     if (changes.columns) {
       if (changes.rows) {
         // if rows also changed - temporarily set if to empty array - to avoid

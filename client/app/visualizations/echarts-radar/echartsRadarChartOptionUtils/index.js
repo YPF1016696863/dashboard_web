@@ -1,0 +1,187 @@
+import * as _ from 'lodash';
+import UUIDv4 from 'uuid/v4';
+
+export function defaultRadarChartOptions() {
+    return {
+        id: UUIDv4(),
+        chartType: "RadarChart",
+        backgroundColor: 'transparent',
+        form: {
+            xAxisColumn: "",
+            maxAxisColumn: "",
+            minAxisColumn: "",
+        },
+        toolbox: {
+            show: false,
+            feature: {
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+
+        title: {
+            text: '雷达图',
+            left: 0,
+            subtext: '',
+            x: 'center',
+            backgroundColor: 'transparent',
+            textStyle: {
+                color: '#fff',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 25,
+            },
+            subtextStyle: {
+                color: '#fff',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 18,
+            },
+        },
+        tooltip: {            
+        },
+        legend: {
+            data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）'],
+            textStyle:{
+                color:"#fff"
+            } 
+        },
+        radar: {
+            // shape: 'circle',
+            name: {
+                textStyle: {
+                    color: '#fff',
+                    backgroundColor: '#999',
+                    borderRadius: 3,
+                    padding: [3, 5]
+                }
+            },
+            indicator: [
+                { name: '销售（sales）', max: 6500},
+                { name: '管理（Administration）', max: 16000},
+                { name: '信息技术（Information Techology）', max: 30000},
+                { name: '客服（Customer Support）', max: 38000},
+                { name: '研发（Development）', max: 52000},
+                { name: '市场（Marketing）', max: 25000}
+            ]
+        },
+        series: [{
+            name: '预算 vs 开销（Budget vs spending）',
+            type: 'radar',
+            // areaStyle: {normal: {}},
+            data: [
+                {
+                    value: [4300, 10000, 28000, 35000, 50000, 19000],
+                    name: '预算分配（Allocated Budget）'
+                },
+                {
+                    value: [5000, 14000, 28000, 31000, 42000, 21000],
+                    name: '实际开销（Actual Spending）'
+                }
+            ]
+        }],
+
+        size: {
+            responsive: true,
+            width: "600px",
+            height: "400px"
+        },
+    };
+
+
+};
+
+export function setChartType(options, type) {
+    switch (type) {
+        case "area": {
+            _.each(options.series, (series) => {
+                _.set(series, 'type', 'line');
+                _.set(series, 'areaStyle', {});
+            });
+            break;
+        }
+        default: {
+            _.each(options.series, (series) => {
+                _.set(series, 'type', type);
+                delete series.areaStyle;
+            });
+        }
+    }
+};
+
+export function parseChartType(type) {
+    switch (type) {
+        case undefined: {
+            return "trajectory";
+        }
+
+        default: {
+            return type;
+        }
+    }
+};
+
+
+export function getChartTypeForSeries(options, name) {
+    // console.log(_.find(options.series, {name}));
+    if (undefined !== _.find(options.series, { name })) {
+        return _.get(_.find(options.series, { name }), "type", "graph");
+    }
+    return parseChartType(name, _.get(options, "form.chartType", "graph"));
+}
+
+export function getChartType(options) {
+    return _.get(options, ['series', '0', 'type'], null);
+}
+
+export function returnDataVisColors() {
+    return {
+        "DataVis-红色": "#ed4d50",
+        "DataVis-绿色": "#6eb37a",
+        "DataVis-蓝色": "#5290e9",
+        "DataVis-橘色": "#ee941b",
+        "DataVis-紫色": "#985896",
+        "深蓝色": '#003f5c',
+        "灰蓝色": '#2f4b7c',
+        "深紫色": '#665191',
+        "紫红色": '#a05195',
+        "玫红色": '#d45087',
+        "桃红色": '#f95d6a',
+        "橙色": '#ff7c43',
+        "橘黄色": '#ffa600',
+        "绿色": '#53aa46'
+    };
+}
+
+export function setThemeColor(options, theme) {
+    if (theme === "light") {
+
+        //  亮色背景下如果是白色文字。则切换成黑色
+        if (_.get(options, "title.textStyle.color", "") === "#ccc") {
+            _.set(options, "title.textStyle.color", "#333");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#ccc") {
+            _.set(options, "title.subtextStyle.color", "#333");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#ccc") {
+            _.set(options, "legend.textStyle.color", "#333");
+        }
+
+
+    }
+
+    else if (theme !== "light") {
+        // 暗色背景下如果是黑色文字。则切换成白色    
+        if (_.get(options, "title.textStyle.color", "") === "#333") {
+            _.set(options, "title.textStyle.color", "#ccc");
+        }
+        if (_.get(options, "title.subtextStyle.color", "") === "#333") {
+            _.set(options, "title.subtextStyle.color", "#ccc");
+        }
+        if (_.get(options, "legend.textStyle.color", "") === "#333") {
+            _.set(options, "legend.textStyle.color", "#ccc");
+        }
+    }
+}

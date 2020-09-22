@@ -39,6 +39,7 @@ export function defaultPieChartOptions() {
         },
         legend: {
             show: true,
+            left: '90%',
             type: 'scroll',
             orient: 'horizontal',
             // x: 'left'
@@ -51,6 +52,10 @@ export function defaultPieChartOptions() {
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
         grid: {
+            left:"10%",
+            right:"10%",
+            top:"10%",
+            bottom:"10%"
         },
         toolbox: {
             show: false,

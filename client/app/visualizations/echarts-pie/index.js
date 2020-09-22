@@ -82,7 +82,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 }
               });
 
-           
+
 
 
               _.forEach(data, function (value, key) {
@@ -111,24 +111,24 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
               // 输入为小数0.2以百分比显示的时候，需要创建另外一行数据
               const pieNewData = [...pieData]
-              if(_.get($scope.options, "percentage.show", false)){   // 打开的百分比显示按钮
-                 console.log(pieData.length);
-                 if(pieData.length ===1){       // 只有一个数且为小数的情况 0-1之间才能另外一条数据
+              if (_.get($scope.options, "percentage.show", false)) {   // 打开的百分比显示按钮
+                console.log(pieData.length);
+                if (pieData.length === 1) {       // 只有一个数且为小数的情况 0-1之间才能另外一条数据
                   pieNewData.push({
                     name: '其他',
-                    value: 1-pieNewData[0].value,
+                    value: 1 - pieNewData[0].value,
                     itemStyle: { color: '#C3DDEB' }
                   });
                   seriesData.push(pieNewData);
 
-                 }
-                 else{  
+                }
+                else {
                   seriesData.push(pieData);  // 否则push原来的数据
-                 }
-               
-              }else{     // 不打开百分比显示按钮
+                }
+
+              } else {     // 不打开百分比显示按钮
                 seriesData.push(pieData); // 否则push原来的数据
-              }          
+              }
 
 
 
@@ -242,7 +242,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 height = $element.parent().parent()["0"].clientHeight;
                 width = $element.parent().parent()["0"].clientWidth;
               }
-              
+
               if ($("#Preview").length !== 0) {
                 height = $("#Preview")["0"].clientHeight;
                 width = $("#Preview")["0"].clientWidth;
@@ -258,6 +258,22 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 width,
                 height
               });
+
+
+              _.set($scope.options, "sizeBg", {
+                // responsive: true,
+                'width': '100%',
+                'height': '100%',
+                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                'background-size': "100% 100%",
+                'background-repeat': "no-repeat",
+                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                    + _.get($scope.options, "bgY", "0px"),
+                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                'border-color': _.get($scope.options, "borderColor", "blue"),
+
+            });
             }
             //  myChart.setOption(defaultPieChartOptions(), true);
             myChart.resize($scope.options.size.width, $scope.options.size.height);
@@ -346,6 +362,15 @@ function EchartsPieEditor() {
       } catch (e) {
         console.log("some error");
       }
+
+      // 组件背景
+      $scope.getImageUrlCb = (a) => {
+        _.set($scope.options, "images", a);
+        $scope.$apply();
+      }
+
+
+
       // Set default options for new vis// 20191203 bug fix 
       if (_.isEmpty($scope.options) || $scope.options.chartType !== "PieChart") {
         $scope.options = defaultPieChartOptions();

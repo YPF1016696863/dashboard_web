@@ -244,6 +244,22 @@ function EchartsGraphRenderer($rootScope) {
                                 width,
                                 height
                             });
+
+                            _.set($scope.options, "sizeBg", {
+                                // responsive: true,
+                                'width': '100%',
+                                'height': '100%',
+                                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
+                                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                                    + _.get($scope.options, "bgY", "0px"),
+                                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                                'border-color': _.get($scope.options, "borderColor", "blue"),
+
+                            });
+
                         }
                         myChart.resize($scope.options.size.width, $scope.options.size.height);
                     }
@@ -283,6 +299,13 @@ function EchartsGraphEditor() {
                 $scope.options = defaultGraphChartOptions();
             }
             $scope.selectedChartType = getChartType($scope.options);
+
+              // 组件背景
+              $scope.getImageUrlCb = (a) => {
+                _.set($scope.options, "images", a);
+                $scope.$apply();
+            }
+
 
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {

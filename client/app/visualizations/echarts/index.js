@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 // import echarts2 from 'echarts2'; // 多版本 npm install echarts2@npm:echarts@2
+
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 import './index.css';
@@ -20,7 +21,7 @@ import {
     getFullCanvasDataURL,
     setThemeColor,
 } from './echartsBasicChartOptionUtils';
-
+import color16to10 from '../colorChange';
 
 
 function EchartsRenderer($timeout, $rootScope, $window) {
@@ -32,7 +33,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
         },
         template: echartsTemplate,
         link($scope, $element, $route) {
-
 
             $scope.chartSeries = [];
             // 20191211 linaer bug fix 
@@ -49,6 +49,69 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 return b - a
             }
 
+            const conditionFunction = (data) => {
+                const parameter1 = {};
+                const parameter2 = {};
+                const parameter3 = {};
+
+                // 条件1
+                if (_.get($scope.options, 'condition1.col', "") !== "") {
+                    // 条件1下 该列所有字段
+                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition1.col', "")));
+                    // console.log(colList);
+                    _.set($scope.options, 'conditionColList1', colList);
+                    // 选择到的 筛选的列名1
+                    const col = _.get($scope.options, 'condition1.col', "");
+                    parameter1[col] = _.get($scope.options, 'condition1.where', "");
+                }
+
+                // 条件2
+                if (_.get($scope.options, 'condition2.col', "") !== "") {
+                    // 条件2下 该列所有字段
+                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition2.col', "")));
+                    _.set($scope.options, 'conditionColList2', colList);
+                    // 选择到的 筛选的列名2
+                    const col = _.get($scope.options, 'condition2.col', "");
+                    parameter2[col] = _.get($scope.options, 'condition2.where', "");
+                }
+
+                // 条件3
+                if (_.get($scope.options, 'condition3.col', "") !== "") {
+                    // 条件3下 该列所有字段
+                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition3.col', "")));
+                    _.set($scope.options, 'conditionColList3', colList);
+                    // 选择到的 筛选的列名3
+                    const col = _.get($scope.options, 'condition3.col', "");
+                    parameter3[col] = _.get($scope.options, 'condition3.where', "");
+                }
+
+
+                let data1 = data;
+                let data2 = data;
+                let data3 = data;
+                for (const key in parameter1) {
+                    if (key !== '不筛选') {
+                        data1 = _.filter(data, parameter1);
+                    }
+                }
+
+                for (const key in parameter2) {
+                    if (key !== '不筛选') {
+                        data2 = _.filter(data, parameter2);
+                    }
+                }
+
+                for (const key in parameter3) {
+                    if (key !== '不筛选') {
+                        data3 = _.filter(data, parameter3);
+                    }
+                }
+
+
+                data = _.intersection(data1, data2, data3);
+                return data;
+            }
+
 
             const refreshData = () => {
                 // 找到选中serise的下标        
@@ -57,15 +120,28 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.get($scope.options, "mapList", []),
                         function (o) { return o === _.get($scope.options, 'useSerie', ''); }
                     ));
-                
-                // 修改筛选框的颜色
+
+
+                /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+                _.set($scope.options, "backgroundColor", 
+                color16to10(_.get($scope.options, "backgroundColorTemp", "#000"), 
+                _.get($scope.options, "backgroundColorOpacity", 0)
+                ));
+
+
+
+
+
+
+                // 修改筛选框的样式
                 _.set($scope.options, "form.span.style", {
-                    'background-color':_.get($scope.options, "form.filterColumnCol.backgroundColor", "white"),
-                    'color':_.get($scope.options, "form.filterColumnCol.color", "black"),
-                    'border-color':_.get($scope.options, "form.filterColumnCol.borderColor", "white"),
-                    'font-size':_.get($scope.options, "form.filterColumnCol.fontSize", "14")+"px",  
-                    'margin-left':_.get($scope.options, "form.filterColumnCol.positionX", "0%"),        
-                    'margin-top':_.get($scope.options, "form.filterColumnCol.positionY", "0%"),                        
+                    'background-color': color16to10(_.get($scope.options, "form.filterColumnCol.backgroundColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol.backgroundColorOpacity", 0)),
+                    'color': _.get($scope.options, "form.filterColumnCol.color", "black"),
+                    'border-color': _.get($scope.options, "form.filterColumnCol.borderColor", "white"),
+                    'font-size': _.get($scope.options, "form.filterColumnCol.fontSize", "14") + "px",
+                    'margin-left': _.get($scope.options, "form.filterColumnCol.positionX", "0%"),
+                    'margin-top': _.get($scope.options, "form.filterColumnCol.positionY", "0%"),
                 });
 
                 // _.set($scope.options, "size", {
@@ -89,6 +165,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         let data = $scope.queryResult.getData();
+
+
+                        console.log(color16to10(_.get($scope.options, 'selectColor', ''),
+                            _.get($scope.options, 'selectColorOpacity', 0)));
                         // console.log(data);
                         // 全局变量
                         const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
@@ -112,10 +192,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                         // 初始化为不筛选
                         if (_.get($scope.options, "form.zAxisColumn", []).length === 0) {
-                            _.set($scope.options, "form.zAxisColumn", "不筛选");
+                            _.set($scope.options, "form.zAxisColumn", "无系列");
                         }
                         if (_.get($scope.options, "form.filterColumn", []).length === 0) {
-                            _.set($scope.options, "form.filterColumn", "不筛选");
+                            _.set($scope.options, "form.filterColumn", "无系列");
                         }
 
                         // z筛选列名转换
@@ -140,7 +220,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         let seriesYData = [];// 情况2 二维数组，一个下标对于一个系列完整（补齐）的数据
                         let mapList = []; // 用作扫描系列的列表
                         let zData = [];
-                        if (_.get($scope.options, "form.zAxisColumn", '') !== "不筛选") {// 筛选处理
+                        if (_.get($scope.options, "form.zAxisColumn", '') !== "无系列") {// 筛选处理
                             // **筛选下拉框处理
                             // **获取z列数据  
                             zData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
@@ -151,132 +231,47 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             $scope.options.filtersNames.push("不筛选");
                             // **筛选下拉框处理 end
 
-                            // 筛选条件
-                            // 筛选的数据名称          
-                            // const zSelectedName = _.get($scope.options, "form.filterColumn", '不筛选');
-                            const zSelectedName ="不筛选";
-                            if (zSelectedName === "不筛选") {// 数据分组处理     情况2  ok
-                                // 根据z列获得条件的全集 -- zData
-                                // 用全集遍历数据总计集合 生成相应数量的分组数组
-                                const parameters = [];
-                                const parameter1 = {};
-                                const parameter2 = {};
-                                const parameter3 = {};
-
-                                // 条件1
-                                if (_.get($scope.options, 'condition1.col', "") !== "") {
-                                    // 条件1下 该列所有字段
-                                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition1.col', "")));
-                                    console.log(colList);
-                                    _.set($scope.options, 'conditionColList1', colList);
-                                    // 选择到的 筛选的列名1
-                                    const col = _.get($scope.options, 'condition1.col', "");
-                                    parameter1[col] = _.get($scope.options, 'condition1.where', "");
-                                }
-
-                                // 条件2
-                                if (_.get($scope.options, 'condition2.col', "") !== "") {
-                                    // 条件2下 该列所有字段
-                                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition2.col', "")));
-                                    _.set($scope.options, 'conditionColList2', colList);
-                                    // 选择到的 筛选的列名2
-                                    const col = _.get($scope.options, 'condition2.col', "");
-                                    parameter2[col] = _.get($scope.options, 'condition2.where', "");
-                                }
-
-                                // 条件3
-                                if (_.get($scope.options, 'condition3.col', "") !== "") {
-                                    // 条件3下 该列所有字段
-                                    const colList = _.uniq(_.map(data, _.get($scope.options, 'condition3.col', "")));
-                                    _.set($scope.options, 'conditionColList3', colList);
-                                    // 选择到的 筛选的列名3
-                                    const col = _.get($scope.options, 'condition3.col', "");
-                                    parameter3[col] = _.get($scope.options, 'condition3.where', "");
-                                }
+                            // 条件过滤函数
+                            data = conditionFunction(data);
+                            // console.log(data);
+                            zData = _.uniq(_.map(data, _.get($scope.options, "form.zAxisColumn", [])));
+                            const groupDataTemp = _.map(zData, (row) => {
+                                return _.filter(data, [zAxisColumnName, row])
+                            })
 
 
-                                let data1 = data;
-                                let data2 = data;
-                                let data3 = data;
-                                for (const key in parameter1) {
-                                    if (key !== '不筛选') {
-                                        data1 = _.filter(data, parameter1);
-                                    }
-                                }
-
-                                for (const key in parameter2) {
-                                    if (key !== '不筛选') {
-                                        data2 = _.filter(data, parameter2);
-                                    }
-                                }
-
-                                for (const key in parameter3) {
-                                    if (key !== '不筛选') {
-                                        data3 = _.filter(data, parameter3);
-                                    }
-                                }
-
-
-                                data = _.intersection(data1, data2, data3);
-                                // console.log(data);
-                                zData = _.uniq(_.map(data, _.get($scope.options, "form.zAxisColumn", [])));
-                                const groupDataTemp = _.map(zData, (row) => {
-                                    return _.filter(data, [zAxisColumnName, row])
-                                })
-
-
-                                const groupData = [];
-                                // 此处长度-1是为了去除不筛选这一列 有问题
-                                for (let i = 0; i < groupDataTemp.length; i += 1) {
-                                    groupData[i] = groupDataTemp[i];
-                                }
-
-                                // 对于x列 需要合并一个并集
-                                // 筛选后的X 数据数组 全集且有序的x数组 Sort desSort noSort                                
-                                if (_.get($scope.options, 'sortRule', 'Sort') === 'Sort') {
-                                    filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(sortNumber);
-                                } else if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
-                                    filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(deSortNumber);
-                                } else {
-                                    filterXData = _.uniq(_.map(data, xAxisColumnName));
-                                }
-
-                                // filterXData = _.orderBy(_.uniq(_.map(data, xAxisColumnName)));
-
-                                seriesYData = []; // y系列数组
-
-                                for (let i = 0; i < groupData.length; i += 1) { // 遍历有多少组
-                                    // eslint-disable-next-line no-array-constructor
-                                    seriesYData.push([]);
-                                    // 用全集x去映射回组数组 找到对应的y 找不到就为 "" 
-                                    for (let j = 0; j < filterXData.length; j += 1) {
-                                        // 需要加一步 字符化 json字段才可读
-                                        const yTempUse = yAxisColumnsName + "";
-                                        seriesYData[i].push(
-                                            _.filter(groupData[i], [xAxisColumnName, filterXData[j]])[0] === undefined ?
-                                                "" : _.filter(groupData[i], [xAxisColumnName, filterXData[j]])[0][yTempUse]);
-                                    }
-                                }
-                                mapList = _.uniq(_.map(data, _.get($scope.options, "form.zAxisColumn", [])));
-                                // mapList = _.get($scope.options, "filtersNames", []);// 系列组
-
-                            } else {//  情况3  ok  这一个情况不会出现了
-                                const condition = {};
-                                condition[zAxisColumnName] = zSelectedName;
-                                filterData = _.filter(data, condition);
-
-                                if (_.get($scope.options, 'sortRule', 'Sort') === 'Sort') {
-                                    filterXData = _.map(filterData, xAxisColumnName).sort(sortNumber);
-                                } else if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
-                                    filterXData = _.map(filterData, xAxisColumnName).sort(deSortNumber);
-                                } else {
-                                    filterXData = _.map(filterData, xAxisColumnName);
-                                }
-                                // filterXData = _.map(filterData, xAxisColumnName); // 筛选后的X 数据数组 
-                                seriesYData = [];
-                                seriesYData.push(_.map(filterData, yAxisColumnsName));
-                                mapList.push(zSelectedName);
+                            const groupData = [];
+                            // 此处长度-1是为了去除不筛选这一列 有问题
+                            for (let i = 0; i < groupDataTemp.length; i += 1) {
+                                groupData[i] = groupDataTemp[i];
                             }
+
+                            // 对于x列 需要合并一个并集
+                            // 筛选后的X 数据数组 全集且有序的x数组 Sort desSort noSort                                
+                            if (_.get($scope.options, 'sortRule', 'Sort') === 'Sort') {
+                                filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(sortNumber);
+                            } else if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
+                                filterXData = _.uniq(_.map(data, xAxisColumnName)).sort(deSortNumber);
+                            } else {
+                                filterXData = _.uniq(_.map(data, xAxisColumnName));
+                            }
+
+
+                            seriesYData = []; // y系列数组
+
+                            for (let i = 0; i < groupData.length; i += 1) { // 遍历有多少组
+                                // eslint-disable-next-line no-array-constructor
+                                seriesYData.push([]);
+                                // 用全集x去映射回组数组 找到对应的y 找不到就为 "" 
+                                for (let j = 0; j < filterXData.length; j += 1) {
+                                    // 需要加一步 字符化 json字段才可读
+                                    const yTempUse = yAxisColumnsName + "";
+                                    seriesYData[i].push(
+                                        _.filter(groupData[i], [xAxisColumnName, filterXData[j]])[0] === undefined ?
+                                            "" : _.filter(groupData[i], [xAxisColumnName, filterXData[j]])[0][yTempUse]);
+                                }
+                            }
+                            mapList = _.uniq(_.map(data, _.get($scope.options, "form.zAxisColumn", [])));
 
                         } else {                                         // 不筛选处理 情况1 纯xy
                             filterData = data;
@@ -293,6 +288,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             }
 
 
+                            filterData = conditionFunction(filterData);
+                            // console.log(filterData);
                             // 求出 x对应的Y list 
                             let XY = [];
                             XY = [];
@@ -359,7 +356,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.each(mapList, (yAxisColumn) => { // yAxisColumn
                             // console.log(yAxisColumn);
 
-                            if (yAxisColumn !== "不筛选") {
+                            if (yAxisColumn !== "无系列") {
                                 // y列数据
                                 const yData = seriesYData;
                                 // y列 系列 数据最大值
@@ -573,11 +570,14 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 // responsive: true,
                                 'width': '100%',
                                 'height': '100%',
-                                'background': "url(" + _.get($scope.options, "images", "url111") + ")",
-                                'background-size': _.get($scope.options, "bgW", "100%") + " "
-                                    + _.get($scope.options, "bgH", " 100%"),
+                                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
                                 'background-position': _.get($scope.options, "bgX", "0px") + " "
                                     + _.get($scope.options, "bgY", "0px"),
+                                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                                'border-color': _.get($scope.options, "borderColor", "blue"),
 
                             });
                         }
@@ -608,6 +608,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     _.set($scope.options, "yAxis.type", 'value');
                 });
             };
+
+
 
 
 
@@ -726,6 +728,9 @@ function EchartsEditor() {
                 // $scope.columnNames = _.map($scope.columns, i => i.name);
                 $scope.columnNames = _.map($scope.columns, i => i.friendly_name);
                 $scope.columnNames.push("不筛选")
+
+                $scope.conNames = _.map($scope.columns, i => i.friendly_name);
+                $scope.conNames.push("无系列")
                 // console.log($scope.columnNames);
             } catch (e) {
                 console.log("some error");
@@ -734,28 +739,7 @@ function EchartsEditor() {
             $scope.downloadOption = function () {
                 console.log(BrowseFolder());
             }
-
-            $scope.addCondition = () => {
-                if ($scope.conditionArray === undefined || $scope.conditionArray.length === 0) {
-                    $scope.conditionArray = [1];
-                } else {
-                    const tailNum = $scope.conditionArray[$scope.conditionArray.length - 1];
-                    $scope.conditionArray.push(tailNum + 1);
-                }
-                console.log($scope.conditionArray);
-            }
-
-            $scope.deleteCondition = () => {
-                const id = $(event.target).attr('id');
-                // const index = _.indexOf($scope.conditionArray, id);
-                _.remove($scope.conditionArray, function (n) {
-                    return n + "" === id;
-                });
-
-                console.log($scope.conditionArray);
-            }
-
-
+ 
 
             // 组件背景
             $scope.getImageUrlCb = (a) => {
@@ -949,6 +933,9 @@ function EchartsEditor() {
         },
     };
 }
+
+
+
 
 export default function init(ngModule) {
     ngModule.directive('echartsEditor', EchartsEditor);

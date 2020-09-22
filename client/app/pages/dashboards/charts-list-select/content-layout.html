@@ -1,7 +1,7 @@
 <div class="dashboard-content-wrapper">
   <main class="dashboard-fullscreen">
     <!-- r-directions="['right']" -->
-    <nav
+    <!-- <nav
       resizable
 
       r-flex="true"
@@ -13,66 +13,47 @@
           class="d-flex flex-column p-absolute"
           style="left: 20px; top: 0; right: 0; bottom: 0;"
         >
-          <div class="scrollbox" style="height: 100% !important;margin-right:5px;">
-            <charts-list-search query-search-cb="querySearchCb" simple-mode="true"></charts-list-search>
-          </div>
+          <div class="scrollbox" style="height: 100% !important;margin-right:5px;"> -->
+    <div >
+      <charts-list-search query-search-cb="querySearchCb" simple-mode="true"></charts-list-search>
+    </div>
+
+    <!-- </div>
         </div>
       </div>
-    </nav>
+    </nav> -->
 
-<!-- r-directions="['right']" -->
-    <nav
-      resizable
-      
-      r-flex="true"
-      resizable-toggle
-      style="min-width: 350px;height: 36%;
+    <!-- r-directions="['right']" -->
+    <!-- <nav resizable r-flex="true" resizable-toggle style="min-width: 350px;height: 36%;
       position: absolute; 
-      top: 54%;"
-    >
+      top: 54%;">
       <div class="editor__left__schema">
-        <div
-          class="d-flex flex-column p-absolute"
-          style="left: 20px; top: 0; right: 0; bottom: 0;"
-        >
+        <div class="d-flex flex-column p-absolute" style="left: 20px; top: 0; right: 0; bottom: 0;">
           <div class="scrollbox" style="height: 100% !important;margin-right:5px;">
             已选组件列表：
             <list-used-widgets></list-used-widgets>
           </div>
         </div>
       </div>
-    </nav>
+    </nav> -->
 
     <div class="content">
       <div class="flex-fill p-relative">
-        <div
-          class="p-absolute d-flex flex-column "
-          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto"
-        >
-          <section
-            class="flex-fill p-relative t-body query-visualizations-wrapper"
-          >
-            <div
-              class="d-flex flex-column p-absolute static-position__mobile"
-              style="left: 0; top: 0; right: 0; bottom: 0;"
-            >
+        <div class="p-absolute d-flex flex-column " style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto">
+          <section class="flex-fill p-relative t-body query-visualizations-wrapper">
+            <div class="d-flex flex-column p-absolute static-position__mobile"
+              style="left: 0; top: 0; right: 0; bottom: 0;">
               <!-- Query Execution Status -->
 
               <!-- End of Query Execution Status -->
 
               <!-- tabs and data -->
               <div class="flex-fill p-relative">
-                <div
-                  class="d-flex flex-column p-absolute static-position__mobile"
-                  style="left: 0; top: 0; right: 0; bottom: 0;"
-                >
+                <div class="d-flex flex-column p-absolute static-position__mobile"
+                  style="left: 0; top: 0; right: 0; bottom: 0;">
                   <div class="query__vis scrollbox">
-                    <charts-select-tabs
-                      dashboard="dashboard"
-                      display-id="displayId"
-                      display-type="displayType"
-                      get-vis-cb="getVisCb"
-                    ></charts-select-tabs>
+                    <charts-select-tabs dashboard="dashboard" display-id="displayId" display-type="displayType"
+                      get-vis-cb="getVisCb"></charts-select-tabs>
                   </div>
                 </div>
               </div>

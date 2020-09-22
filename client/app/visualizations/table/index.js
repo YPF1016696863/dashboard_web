@@ -4,6 +4,7 @@ import { createFormatter } from '@/lib/value-format';
 import template from './table.html';
 import editorTemplate from './table-editor.html';
 import './table-editor.less';
+import color16to10 from '../colorChange';
 
 const ALLOWED_ITEM_PER_PAGE = [5, 10, 15, 20, 25, 50, 100, 150, 200, 250];
 
@@ -37,7 +38,7 @@ function getDefaultColumnsOptions(columns) {
     date: 'datetime',
     datetime: 'datetime',
   };
-  
+
   return _.map(columns, (col, index) => ({
     name: col.friendly_name,
     type: col.type,
@@ -45,13 +46,13 @@ function getDefaultColumnsOptions(columns) {
     visible: true,
     order: 100000 + index,
     // title: getColumnCleanName(col.friendly_name),   // title为表格的标题
-    title: col.friendly_name,    
+    title: col.friendly_name,
     allowSearch: false,
     alignContent: getColumnContentAlignment(col.type),
     // `string` cell options
     allowHTML: true,
     highlightLinks: false,
-    friendly_name:col.friendly_name,
+    friendly_name: col.friendly_name,
   }));
 }
 
@@ -85,7 +86,7 @@ function wereColumnsReordered(queryColumns, visualizationColumns) {
   queryColumns = _.map(queryColumns, col => col.friendly_name);
   visualizationColumns = _.map(visualizationColumns, col => col.friendly_name);
 
- 
+
 
   // Some columns may be removed - so skip them (but keep original order)
   visualizationColumns = _.filter(visualizationColumns, col => _.includes(queryColumns, col));
@@ -162,12 +163,31 @@ function GridRenderer(clientConfig) {
           const columns = $scope.queryResult.getColumns();
           const columnsOptions = getColumnsOptions(columns, _.extend({}, $scope.options).columns);
           $scope.gridColumns = getColumnsToDisplay(columns, columnsOptions, clientConfig);
-      
-
+console.log($scope.gridColumns);
         }
       }
 
+      const refreshData = () => {
 
+
+        _.set($scope.options, "sizeBg", {
+          // responsive: true,
+          'width': '100%',
+          'height': '100%',
+          'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+          'background-size': "100% 100%",
+          'background-repeat': "no-repeat",
+          'background-position': _.get($scope.options, "bgX", "0px") + " "
+            + _.get($scope.options, "bgY", "0px"),
+          'border-style': _.get($scope.options, "borderStyle", "solid"),
+          'border-width': _.get($scope.options, "borderWidth", "0px"),
+          'border-color': _.get($scope.options, "borderColor", "blue"),
+          'background-color': color16to10(_.get($scope.options, "column.color", ""),_.get($scope.options, "column.colorA", 1)),
+          // visualization.options.column.color
+        });
+
+
+      }
 
       $scope.$watch('queryResult && queryResult.getData()', (queryResult) => {
         if (queryResult) {
@@ -176,6 +196,7 @@ function GridRenderer(clientConfig) {
       });
 
       $scope.$watch('options', (newValue, oldValue) => {
+        refreshData();
         if (newValue !== oldValue) {
           update();
         }
@@ -204,6 +225,13 @@ function GridEditor(clientConfig) {
         }
       });
 
+
+      // 组件背景
+      $scope.getImageUrlCb = (a) => {
+        _.set($scope.visualization.options, "images", a);
+        $scope.$apply();
+      }
+
       $scope.$watch('queryResult && queryResult.getData()', (queryResult) => {
         if (queryResult) {
           const columns = $scope.queryResult.getData() !== null ? $scope.queryResult.getColumns() : [];
@@ -211,8 +239,8 @@ function GridEditor(clientConfig) {
             getColumnsOptions(columns, $scope.visualization.options.columns),
             col => _.extend(getDefaultFormatOptions(col, clientConfig), col),
           );
-        
-         
+
+
         }
       });
 
