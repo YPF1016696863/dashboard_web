@@ -159,7 +159,7 @@ function DashboardPreviewCtrl(
     },
     function (data) {
       // console.log(vm.rateData);
-      imageAndrefreshRate[1] = vm.rateData+"";
+      imageAndrefreshRate[1] = vm.rateData + "";
       updateDashboard({ background_image: imageAndrefreshRate }, true);
 
     }
@@ -176,7 +176,7 @@ function DashboardPreviewCtrl(
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
-  
+
   // 自动布局时的每行组件数
   $scope.$watch(
     function () {
@@ -184,7 +184,7 @@ function DashboardPreviewCtrl(
     },
     function (data) {
       // console.log(vm.gridData);
-      imageAndrefreshRate[3] = vm.gridData+"";
+      imageAndrefreshRate[3] = vm.gridData + "";
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
@@ -230,8 +230,6 @@ function DashboardPreviewCtrl(
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
-
-  
 
   this.openParamDraw = false;
   this.openParameterDialog = () => {
@@ -438,26 +436,26 @@ function DashboardPreviewCtrl(
         console.log(dashboard);
         let arr = [];
         let image = "/static/images/themeBackgroundImages/empty-overview.png";
-        let rate = 2+"";
+        let rate = 2 + "";
         let LSwitch = "true";
         let imgType = "tianchong";
         let edit = "true";
-        if(dashboard.background_image!==null){
+        if (dashboard.background_image !== null) {
           // console.log("1");
-           arr = dashboard.background_image.slice(1, -1).split(",");
-           image = arr[0];
-           rate = arr[1];
-           LSwitch = arr[2];
-           imgType = arr[4];
-           edit=arr[5];
+          arr = dashboard.background_image.slice(1, -1).split(",");
+          image = arr[0];
+          rate = arr[1];
+          LSwitch = arr[2];
+          imgType = arr[4];
+          edit = arr[5];
           // console.log(imgType);
           imageAndrefreshRate[0] = image;
           imageAndrefreshRate[1] = rate;
           imageAndrefreshRate[2] = LSwitch;
-          imageAndrefreshRate[3] = arr[3]+"";
+          imageAndrefreshRate[3] = arr[3] + "";
           imageAndrefreshRate[4] = arr[4];
           imageAndrefreshRate[5] = arr[5];
-        }       
+        }
         // console.log(image);
         if (imgType === "tianchong" || imgType === "lasheng") {
           // Get dashboard style
@@ -467,7 +465,7 @@ function DashboardPreviewCtrl(
             'background-repeat': 'no-repeat',
             'background-size': 'cover'
           };
-        }else if(imgType==="pingpu"){
+        } else if (imgType === "pingpu") {
           this.dashboardStyle = {
             'background-image': 'url("' + image + '")',
             'background-position': 'center',

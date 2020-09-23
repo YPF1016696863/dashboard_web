@@ -402,8 +402,8 @@ export class ParameterValueInput extends React.Component {
         }
       )
     }
-    
-     console.log("enumOptionsArrayForQuery",enumOptionsArrayForQuery);
+
+    // console.log(this.state.enumOptionsArrayState);
     return (
         this.props.parameter.global !== undefined&& 
         !this.state.loader&&!(enumOptionsArrayForQuery === [] ||

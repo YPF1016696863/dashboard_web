@@ -25,7 +25,7 @@ export function defaultBasicChartOptions() {
         },
         title: {
             text: '',
-            left:0,
+            left:"50%",
             subtext: '',
             x: 'center',
             backgroundColor: 'transparent',
@@ -54,10 +54,14 @@ export function defaultBasicChartOptions() {
             }
         },
         grid: {
+            left:"10%",
+            right:"10%",
+            top:"10%",
+            bottom:"10%"
         },
         legend: {
             show: true,
-            // x: 'left'
+            left: '90%',
             textStyle: {
                 color: '#333',
             }

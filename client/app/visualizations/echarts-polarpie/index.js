@@ -60,7 +60,7 @@ function EchartsPolarpieRenderer($rootScope) {
                             startAngle: fangwei, // 90开始 顺时针减(方位)
                             itemStyle: {
                                 normal: {
-                                    color: function(params) {
+                                    color: function (params) {
                                         const colorList = [
                                             _.get($scope.options, 'series_ItemStyle_Color', 'rgba(255,0,0,0.5)'), 'rgba(0,0,0,0)'
                                         ];
@@ -72,12 +72,12 @@ function EchartsPolarpieRenderer($rootScope) {
                         });
                         // 设置环形分割区域的间隔颜色
                         _.set($scope.options, "radiusAxis.splitArea.areaStyle.color", [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),
-                            _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')
+                        _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')
                         ]);
 
                         // 设置扇形分割区域的间隔颜色
                         _.set($scope.options, "angleAxis.splitArea.areaStyle.color", [_.get($scope.options, "angleAxis.splitArea.areaStyle.color1", 'transparent'),
-                            _.get($scope.options, "angleAxis.splitArea.areaStyle.color2", 'transparent')
+                        _.get($scope.options, "angleAxis.splitArea.areaStyle.color2", 'transparent')
                         ]);
                         // //  提示框文字格式
                         // const formatterString = `${_.get($scope.options, "Text_a", "")}
@@ -111,12 +111,12 @@ function EchartsPolarpieRenderer($rootScope) {
                             // let width ='100%';
                             let height = "100%";
                             let width = "100%";
-              
+
                             if ($("#preview").length !== 0) {
-                              height = $element.parent().parent()["0"].clientHeight;
-                              width = $element.parent().parent()["0"].clientWidth;
+                                height = $element.parent().parent()["0"].clientHeight;
+                                width = $element.parent().parent()["0"].clientWidth;
                             }
-                            
+
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -132,6 +132,22 @@ function EchartsPolarpieRenderer($rootScope) {
                                 width,
                                 height
                             });
+
+                            _.set($scope.options, "sizeBg", {
+                                // responsive: true,
+                                'width': '100%',
+                                'height': '100%',
+                                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
+                                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                                    + _.get($scope.options, "bgY", "0px"),
+                                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                                'border-color': _.get($scope.options, "borderColor", "blue"),
+
+                            });
+
                         }
                         myChart.resize($scope.options.size.width, $scope.options.size.height);
                     }
@@ -141,9 +157,9 @@ function EchartsPolarpieRenderer($rootScope) {
             };
 
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
-            
+
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);
@@ -172,6 +188,12 @@ function EchartsPolarpieEditor() {
                 $scope.options = defaultPolarpieChartOptions();
             }
             $scope.selectedChartType = getChartType($scope.options);
+
+            // 组件背景
+            $scope.getImageUrlCb = (a) => {
+                _.set($scope.options, "images", a);
+                $scope.$apply();
+            }
 
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {
@@ -258,7 +280,7 @@ function EchartsPolarpieEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];
@@ -304,7 +326,7 @@ function EchartsPolarpieEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }

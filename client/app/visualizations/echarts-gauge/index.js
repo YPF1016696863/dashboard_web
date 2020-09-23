@@ -58,8 +58,8 @@ function EchartsGaugeRenderer($rootScope) {
                         _.set($scope.options, "series", []); // 清空设置  
 
                         // 仪表盘小数数据转为百分比 02显示成20 
-                        const newValue = dataGauge<=1 ? (100.0*dataGauge).toFixed(2) :100;
-                    
+                        const newValue = dataGauge <= 1 ? (100.0 * dataGauge).toFixed(2) : 100;
+
 
                         $scope.options.series.push({
                             name: _.get($scope.options, "series_Name", ''),
@@ -68,8 +68,8 @@ function EchartsGaugeRenderer($rootScope) {
                             max: _.get($scope.options, "maxValue", 100),
                             detail: {
                                 color: _.get($scope.options, "zbColor", 'auto'),
-                                formatter: _.get($scope.options, "defValue", true) ? 
-                                '{value}' + _.get($scope.options, "format.text", '%') : '{value}',
+                                formatter: _.get($scope.options, "defValue", true) ?
+                                    '{value}' + _.get($scope.options, "format.text", '%') : '{value}',
                             },
                             splitNumber: _.get($scope.options, "splitNumber", 10), // 仪表盘刻度的分割段数。
                             itemStyle: {
@@ -141,6 +141,22 @@ function EchartsGaugeRenderer($rootScope) {
                                 width,
                                 height
                             });
+
+                            _.set($scope.options, "sizeBg", {
+                                // responsive: true,
+                                'width': '100%',
+                                'height': '100%',
+                                'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
+                                'background-position': _.get($scope.options, "bgX", "0px") + " "
+                                    + _.get($scope.options, "bgY", "0px"),
+                                'border-style': _.get($scope.options, "borderStyle", "solid"),
+                                'border-width': _.get($scope.options, "borderWidth", "0px"),
+                                'border-color': _.get($scope.options, "borderColor", "blue"),
+
+                            });
+                            
                         }
                         myChart.resize($scope.options.size.width, $scope.options.size.height);
                     }
@@ -181,6 +197,13 @@ function EchartsGaugeEditor() {
                 $scope.options = defaultGaugeChartOptions();
             }
             $scope.selectedChartType = getChartType($scope.options);
+
+
+            // 组件背景
+            $scope.getImageUrlCb = (a) => {
+                _.set($scope.options, "images", a);
+                $scope.$apply();
+            }
 
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {

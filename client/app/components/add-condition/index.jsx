@@ -152,14 +152,18 @@ export class AddCondition extends React.Component {
               .toPromise()
               .then(queryRes => {
                 fatherParameter = queryRes.query_result.data.rows;// 后执行
+                console.log("errfatherParameter",fatherParameter);
                 if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
                   row = Object.keys(fatherParameter[0]);
+                   console.log("row",row);
                    // 给下拉框一个默认初值传入（父传子 props传>
                   const resTemp = _.filter(fatherParameter, this.props.selectedcondiRes.global[0][0]);
                   const keyNameTemp = this.props.selectedcondiRes.global[1][0];
                   const xialaNameTemp = this.props.selectedcondiRes.global[2][0];
                   const keyListTemp = _.map(resTemp, keyNameTemp);
                   const xialaListTemp = _.map(resTemp, xialaNameTemp);
+                  console.log("keyListTemp",keyListTemp);
+                  console.log("xialaListTemp",xialaListTemp);
                   enumOptionsArray = [];
                   for (let i = 0; i < xialaListTemp.length; i += 1) {
                     enumOptionsArray.push(
@@ -169,7 +173,6 @@ export class AddCondition extends React.Component {
                       }
                     )
                   }
-
                 }
               })
               .catch(ex => {
@@ -308,7 +311,6 @@ export class AddCondition extends React.Component {
     if (flag === false){
         xialaName = "";
     }
-
     this.setState({
       switchState:switcharray,
       xialaState:xialaName
@@ -318,6 +320,11 @@ export class AddCondition extends React.Component {
 
 
   render() {
+    console.log("this.prorps",this.props);
+    console.log("this.state",this.state);
+    console.log("targetkeyvalue",this.props.selectedcondiRes.$$value);
+    console.log("parameter",conditionNum,conditionKey,conditionValue);
+    console.log("switch",this.state.switchState);
     this.whereUpdata();
     return (
       <div>        
@@ -343,7 +350,6 @@ export class AddCondition extends React.Component {
                     ?"":this.state.conditionValueState[item]}
                 onChange={(e)=>this.whereVaule(item,e.target.value)}
               />
-
               <Switch
                 checkedChildren=""
                 unCheckedChildren=""

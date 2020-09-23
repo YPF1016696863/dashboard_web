@@ -39,9 +39,9 @@ class TextboxDialog extends React.Component {
       saveInProgress: false,
       text,
       preview: markdown.toHTML(text),
+      // editorState: BraftEditor.createEditorState(null)
     };
   }
-
 
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
@@ -103,6 +103,12 @@ class TextboxDialog extends React.Component {
               <Tooltip title="Markdown guide opens in new window">Markdown</Tooltip>
             </a>.
           </small>
+          {/*
+          <BraftEditor
+            value={this.state.editorState}
+            onChange={this.handleEditorChange}
+          />
+          */}
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />
