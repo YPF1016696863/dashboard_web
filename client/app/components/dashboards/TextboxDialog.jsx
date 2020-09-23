@@ -39,24 +39,9 @@ class TextboxDialog extends React.Component {
       saveInProgress: false,
       text,
       preview: markdown.toHTML(text),
-      // editorState: BraftEditor.createEditorState(null)
     };
   }
 
-  // async componentDidMount() {
-  //   this.setState({
-  //       editorState: BraftEditor.createEditorState(this.state.preview)
-  //   })
-  // }
-
-  // submitContent = async () => {
-  //       const htmlContent = this.state.editorState.toHTML()
-  //     const result = await saveEditorContent(htmlContent)
-  // }
-
-  // handleEditorChange = (editorState) =>{
-  //   this.setState({editorState})
-  // }
 
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
@@ -118,12 +103,6 @@ class TextboxDialog extends React.Component {
               <Tooltip title="Markdown guide opens in new window">Markdown</Tooltip>
             </a>.
           </small>
-          {/*
-          <BraftEditor
-            value={this.state.editorState}
-            onChange={this.handleEditorChange}
-          />
-          */}
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />
