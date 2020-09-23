@@ -54,7 +54,6 @@ function QueryViewCtrl(
 
     $scope.showLog = false;
     // if ($scope.isDirty) { // 未保存时执行
-    console.log("selectedQueryText",selectedQueryText);
       $scope.queryResult = $scope.query.getQueryResultByText(
         maxAge,
         selectedQueryText
@@ -248,9 +247,8 @@ function QueryViewCtrl(
     );
 
   $scope.saveQuery = (customOptions, data) => {
-    // console.log("saveQuery");
-    let request = data;
 
+    let request = data;
     if (request) {
       // Don't save new query with partial data
       if ($scope.query.isNew()) {
@@ -269,7 +267,8 @@ function QueryViewCtrl(
         'options',
         'latest_query_data_id',
         'version',
-        'is_draft'
+        'is_draft',
+        'folder_id'
       ]);
     }
 

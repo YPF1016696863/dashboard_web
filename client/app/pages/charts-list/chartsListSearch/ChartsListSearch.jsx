@@ -542,7 +542,7 @@ class ChartsListSearch extends React.Component {
                     type="link"
                     style={{ color: '#3d4d66' }}
                     onClick={e => {
-                      navigateToWithSearch('/query/unset/charts/new');
+                      navigateToWithSearch('/query/unset/charts/new','folder_id='+this.state.selected,true);
                     }}
                   >
                     <Icon type="plus-square" style={{ color: '#13cd66' }} />

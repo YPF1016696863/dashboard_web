@@ -21,7 +21,7 @@ let keyName = "";
 let keyList = [];
 let xialaName = "";
 let xialaList = [];
-let condition={};
+const condition={};
 let enumOptionsArrayForQuery = [];
 
 export class ParameterValueInput extends React.Component {
@@ -81,7 +81,6 @@ export class ParameterValueInput extends React.Component {
               if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
                 
                 this.whereUpdata();
-                // console.log(fatherParameter);
                 if(enumOptionsArrayForQuery.length===0){
                   enumOptionsArrayForQuery.push(
                     {
@@ -112,7 +111,6 @@ export class ParameterValueInput extends React.Component {
                 .toPromise()
                 .then(queryRes => {
                   fatherParameter = queryRes.query_result.data.rows;// 后执行
-                  // console.log(fatherParameter);
                   if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
                     this.whereUpdata();
                   }
@@ -145,7 +143,6 @@ export class ParameterValueInput extends React.Component {
             .then(queryRes => {
               fatherParameter = queryRes.query_result.data.rows;// 后执行
               if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
-                // console.log(fatherParameter);
                 this.whereUpdata();
                 // console.log(keyList);
                 // console.log(xialaName);
@@ -169,8 +166,6 @@ export class ParameterValueInput extends React.Component {
                   xialaNameState: xialaName,
                   enumOptionsArrayState:enumOptionsArrayForQuery
                 });
-
-
               }
             }
             )
@@ -180,7 +175,7 @@ export class ParameterValueInput extends React.Component {
                 .toPromise()
                 .then(queryRes => {
                   fatherParameter = queryRes.query_result.data.rows;// 后执行
-                  // console.log(fatherParameter);
+                     console.log("father",fatherParameter);
                   if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
                     this.whereUpdata();
                   }
@@ -201,18 +196,26 @@ export class ParameterValueInput extends React.Component {
 
   whereUpdata = () => {
     if (this.props.parameter.conditionvalue !== null && this.props.parameter.conditionvalue !== undefined) {
-      // console.log("1");
-      condition=this.props.parameter.conditionvalue;
-      const res = _.filter(fatherParameter, this.props.parameter.conditionvalue);
+      let conditiontemp = {};
+      conditiontemp = this.props.parameter.conditionvalue
+      Object.keys(conditiontemp).forEach(function(key){
+          if (conditiontemp[key] != null && conditiontemp[key] !== ""){
+                condition[key]=conditiontemp[key];
+          }      });
+      const res = _.filter(fatherParameter, condition);
       keyName = this.props.parameter.keyname;
       xialaName = this.props.parameter.xialaname;
       keyList = _.map(res, keyName);
       xialaList = _.map(res, xialaName);
       
     } else {
-      // console.log("2");
-      condition=this.props.parameter.global[0][0];
-      const res = _.filter(fatherParameter, this.props.parameter.global[0][0]);
+        let conditiontemp ={};
+      conditiontemp=this.props.parameter.global[0][0];
+        Object.keys(conditiontemp).forEach(function(key){
+            if (conditiontemp[key] != null && conditiontemp[key] !== ""){
+                condition[key]=conditiontemp[key];
+            }      })
+      const res = _.filter(fatherParameter, condition);
       keyName = this.props.parameter.global[1][0];
       xialaName = this.props.parameter.global[2][0];
       keyList = _.map(res, keyName);
@@ -401,7 +404,6 @@ export class ParameterValueInput extends React.Component {
     }
     
      console.log("enumOptionsArrayForQuery",enumOptionsArrayForQuery);
-    // console.log(this.state.enumOptionsArrayState);
     return (
         this.props.parameter.global !== undefined&& 
         !this.state.loader&&!(enumOptionsArrayForQuery === [] ||

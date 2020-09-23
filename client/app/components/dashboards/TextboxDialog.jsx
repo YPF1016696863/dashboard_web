@@ -8,8 +8,7 @@ import Tooltip from 'antd/lib/tooltip';
 import Divider from 'antd/lib/divider';
 import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
 import notification from '@/services/notification';
-// import BraftEditor from 'braft-editor';
-// import 'braft-editor/dist/index.css';
+import {RichTextEditor} from '@/components/RichTextEditor';
 
 import './TextboxDialog.less';
 
@@ -33,8 +32,6 @@ class TextboxDialog extends React.Component {
     text: '',
   };
 
-
-
     constructor(props) {
     super(props);
     const { text } = props;
@@ -42,24 +39,9 @@ class TextboxDialog extends React.Component {
       saveInProgress: false,
       text,
       preview: markdown.toHTML(text),
-      // editorState: BraftEditor.createEditorState(null)
     };
   }
 
-  // async componentDidMount() {
-  //   this.setState({
-  //       editorState: BraftEditor.createEditorState(this.state.preview)
-  //   })
-  // }
-
-  // submitContent = async () => {
-  //       const htmlContent = this.state.editorState.toHTML()
-  //     const result = await saveEditorContent(htmlContent)
-  // }
-
-  // handleEditorChange = (editorState) =>{
-  //   this.setState({editorState})
-  // }
 
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
@@ -100,6 +82,8 @@ class TextboxDialog extends React.Component {
         width={500}
         wrapProps={{ 'data-test': 'TextboxDialog' }}
       >
+        <RichTextEditor />
+
         <div className="textbox-dialog">
           <Input.TextArea
             className="resize-vertical"
@@ -119,12 +103,6 @@ class TextboxDialog extends React.Component {
               <Tooltip title="Markdown guide opens in new window">Markdown</Tooltip>
             </a>.
           </small>
-          {/*
-          <BraftEditor
-            value={this.state.editorState}
-            onChange={this.handleEditorChange}
-          />
-          */}
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />
@@ -140,5 +118,6 @@ class TextboxDialog extends React.Component {
     );
   }
 }
+
 
 export default wrapDialog(TextboxDialog);

@@ -56,12 +56,10 @@ export class AddCondition extends React.Component {
   }
 
   componentDidMount() {
-    
-    console.log(this.props);
+
     if(this.props.selectedcondiRes.global!==undefined&&this.props.selectedcondiRes.global!==null){
       id = this.props.selectedcondiRes.queryId;
       this.whereUpdata();
-      console.log("selectedcondiResglobal",this.props.selectedcondiRes.global);
       const values = Object.values(this.props.selectedcondiRes.global[0][0]);
       conditionValue=[];
       for(let i=0;i<values.length;i+=1){
@@ -75,7 +73,7 @@ export class AddCondition extends React.Component {
         conditionKey[i]=keys[i];
       }
       // keys=_.concat([0],keys);
-      cont=keys===undefined?0:keys.length;
+      cont=keys===undefined?-1:keys.length-1;
       // console.log(keys);
       conditionNum = [];
       for(let i=0;i<keys.length;i+=1){
@@ -154,18 +152,14 @@ export class AddCondition extends React.Component {
               .toPromise()
               .then(queryRes => {
                 fatherParameter = queryRes.query_result.data.rows;// 后执行
-                console.log("errfatherParameter",fatherParameter);
                 if (fatherParameter !== [] && fatherParameter !== undefined && fatherParameter !== null) {
                   row = Object.keys(fatherParameter[0]);
-                   console.log("row",row);
                    // 给下拉框一个默认初值传入（父传子 props传>
                   const resTemp = _.filter(fatherParameter, this.props.selectedcondiRes.global[0][0]);
                   const keyNameTemp = this.props.selectedcondiRes.global[1][0];
                   const xialaNameTemp = this.props.selectedcondiRes.global[2][0];
                   const keyListTemp = _.map(resTemp, keyNameTemp);
                   const xialaListTemp = _.map(resTemp, xialaNameTemp);
-                  console.log("keyListTemp",keyListTemp);
-                  console.log("xialaListTemp",xialaListTemp);
                   enumOptionsArray = [];
                   for (let i = 0; i < xialaListTemp.length; i += 1) {
                     enumOptionsArray.push(
@@ -175,7 +169,6 @@ export class AddCondition extends React.Component {
                       }
                     )
                   }
-                  console.log("enumOptionsArray",enumOptionsArray);
 
                 }
               })
@@ -199,20 +192,14 @@ export class AddCondition extends React.Component {
     this.setState({
       conditionNumState: conditionNum
     });
-    //  }
-
-    // console.log(this.state.conditionNumState);
   }
 
   deleteCondition = (e) => {
-    // console.log(e.currentTarget.id);
-    console.log("before",conditionNum,conditionKey,conditionValue);
     cont -= 1;
     switcharray.splice(parseInt(e.currentTarget.id, 10),1);
     _.pull(conditionNum, parseInt(e.currentTarget.id, 10));
     conditionKey.splice(parseInt(e.currentTarget.id, 10),1);
     conditionValue.splice(parseInt(e.currentTarget.id, 10),1);
-    console.log("after",conditionNum,conditionKey,conditionValue);
     this.setState({
       conditionNumState: conditionNum,
       conditionKeyState:conditionKey,
@@ -227,7 +214,6 @@ export class AddCondition extends React.Component {
     // conditionZiduanKV[parseInt(e.currentTarget.id, 10)] = " ";
     // fuhaoKV[parseInt(e.currentTarget.id, 10)] = " ";
     // andorKV[1] = " ";
-
   };
 
   // 筛选的列名
@@ -276,11 +262,7 @@ export class AddCondition extends React.Component {
       const index = this.state.conditionNumState[i]
       if (this.state.conditionKeyState[index] !== null && 
         this.state.conditionKeyState[index] !== undefined && 
-        this.state.conditionKeyState[index] !== ''&&
-        
-        this.state.conditionValueState[index]!==null&&
-        this.state.conditionValueState[index]!==undefined&&
-        this.state.conditionValueState[index]!==""
+        this.state.conditionKeyState[index] !== ''
         ) {
         conditionRes[this.state.conditionKeyState[index]] = this.state.conditionValueState[index];
       }
@@ -297,25 +279,45 @@ export class AddCondition extends React.Component {
   // 别名开关
   switchChange=(item)=>{
 
-    if(this.state.switchState ===null || this.state.switchState === undefined ||
-        this.state.switchState[item]===null||this.state.switchState[item]===undefined){
-      this.state.switchState[item]=true;
+    if(switcharray ===null || switcharray === undefined ||
+        switcharray[item]===null||switcharray[item]===undefined){
+        switcharray[item]=true;
+      for (let i=0;i<switcharray.length;i+=1){
+        if (i!==item && switcharray[i]===true){
+            switcharray[i] = false;
+        }
+      }
     }else{
-      this.state.switchState[item]=!this.state.switchState[item];
+        switcharray[item]=!switcharray[item];
+        if(switcharray[item] === true){
+            for (let i=0;i<switcharray.length;i+=1){
+                if (i!==item && switcharray[i]===true){
+                    console.log("i",i,item);
+                    switcharray[i] = false;
+                }
+            }
+        }
     };
+
+    let flag = false;
+
+    for(let i=0; i<switcharray.length;i+=1){
+    flag = switcharray[i] && flag
+    }
+
+    if (flag === false){
+        xialaName = "";
+    }
+
     this.setState({
-      switchState:this.state.switchState
+      switchState:switcharray,
+      xialaState:xialaName
     });
     this.merage();
   };
 
 
   render() {
-    console.log("this.prorps",this.props);
-    console.log("this.state",this.state);
-    console.log("targetkeyvalue",this.props.selectedcondiRes.$$value);
-    console.log("parameter",conditionNum,conditionKey,conditionValue);
-    console.log("switch",this.state.switchState);
     this.whereUpdata();
     return (
       <div>        
@@ -337,11 +339,18 @@ export class AddCondition extends React.Component {
               <Input 
                 style={{width:'20%'}} 
                 placeholder="列值"  
-                value={this.state.conditionValueState[item]===undefined?"":this.state.conditionValueState[item]}
+                value={this.state.conditionValueState[item]===undefined || this.state.conditionValueState[item] === ""
+                    ?"":this.state.conditionValueState[item]}
                 onChange={(e)=>this.whereVaule(item,e.target.value)}
               />
 
-              <Switch checkedChildren="" unCheckedChildren="" checked={this.state.switchState[item]} size="small" onChange={()=>this.switchChange(item)} />
+              <Switch
+                checkedChildren=""
+                unCheckedChildren=""
+                checked={this.state.switchState[item]}
+                size="small"
+                onChange={()=>this.switchChange(item)}
+              />
               {this.state.switchState[item]&&(                 
                 <Select
                   defaultValue={"别名"+item}

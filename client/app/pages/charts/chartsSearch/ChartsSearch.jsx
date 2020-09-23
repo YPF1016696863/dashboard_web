@@ -288,6 +288,7 @@ class ChartsSearch extends React.Component {
                           case 'COUNTER': type = 'COUNTER'; break;
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
                           case 'ECHARTS-GAUGE-STAGE': type = 'ECHARTS-GAUGE-STAGE'; break;
+                          case 'ECHARTS-TEXT':type = 'ECHARTS-TEXT'; break;
                           default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");
@@ -881,6 +882,21 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-icons/datavis-icons.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>Icon</p>
+                              </Radio>
+                            </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-TEXT" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-charts-text.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>文本</p>
                               </Radio>
                             </Col>
 
