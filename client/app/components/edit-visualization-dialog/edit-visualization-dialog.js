@@ -98,7 +98,15 @@ export const EditVisualizationDialog = {
     };
 
     this.submit = () => {
-      this.visualization.query_id = this.query.id;
+    let folderId = null;
+    const query = window.location.search.substring(1);
+    const vars = query.split("&");
+    for (let i=0;i<vars.length;i+=1){
+      const pair = vars[i].split("=");
+      if(pair[0] === "folder_id")
+      {folderId = pair[1]}};
+     this.visualization.folder_id = folderId;
+     this.visualization.query_id = this.query.id;
 // console.log(this.visualization);
       Visualization.save(
         this.visualization,

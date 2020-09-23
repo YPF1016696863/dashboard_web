@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'antd/lib/tooltip';
 import { react2angular } from 'react2angular';
-
 import AceEditor from 'react-ace';
 import ace from 'brace';
 import * as _ from 'lodash';
@@ -56,9 +55,6 @@ let friendlyName = '';   // 新修改的列名
 let allRedisName = [];  // 获取所有的原列名
 
 const aliasTextJson ={}; // 存放初始化的列名和别名对象
-
-
-
 
 
 
@@ -544,13 +540,11 @@ class QueryEditor extends React.Component {
     };
     this.updateQuery(JSON.stringify(queryTextDemo,null, 2));  // JSON对象转字符串,缩进
   }
-
-
+  
   render() {
     const modKey = KeyboardShortcuts.modKey;
     const isExecuteDisabled = this.props.queryExecuting || !this.props.canExecuteQuery();
     const queryText = this.props.fileUpload ? this.props.queryText : this.state.queryText;
-
     return (
       // 简单 高级切换
       this.props.isSimple ? (
@@ -626,7 +620,7 @@ class QueryEditor extends React.Component {
                     <button
                       type="button"
                       className="btn btn-default m-l-5"
-                      onClick={this.props.saveQuery}
+                      onClick={()=>this.props.saveQuery()}
                       data-test="SaveButton"
                       title="Save"
                     >
@@ -882,7 +876,7 @@ class QueryEditor extends React.Component {
                     <button
                       type="button"
                       className="btn btn-default m-l-5"
-                      onClick={this.props.saveQuery}
+                      onClick={()=> this.props.saveQuery()}
                       data-test="SaveButton"
                       title="Save"
                     >

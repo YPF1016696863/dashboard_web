@@ -145,8 +145,8 @@ function DashboardPreviewCtrl(
         'background-repeat': 'no-repeat',
         'background-size': 'cover'
       };
-      // console.log(vm.dashboardStyle);
       imageAndrefreshRate[0] = vm.dashboardBgImg;
+      console.log("imageAndrefreshRate",imageAndrefreshRate);
       updateDashboard({ background_image: imageAndrefreshRate }, true);
       // updateDashboard({ background_image:vm.dashboardBgImg},true);
     }
@@ -226,6 +226,7 @@ function DashboardPreviewCtrl(
     function (data) {
       // console.log(vm.editSwitch);
       imageAndrefreshRate[5] = vm.editSwitch + "";
+      console.log("imageAndrefreshRate",imageAndrefreshRate);
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
@@ -369,6 +370,7 @@ function DashboardPreviewCtrl(
 
   $scope.$on('dashboard.update-parameters', () => {
     this.extractGlobalParameters();
+    console.log("globalparameter",this.globalParameters);
   });
 
   const collectFilters = (dashboard, forceRefresh) => {

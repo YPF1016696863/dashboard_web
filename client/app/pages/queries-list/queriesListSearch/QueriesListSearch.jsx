@@ -430,7 +430,6 @@ class QueriesListSearch extends React.Component {
     
 
   render() {
-    console.log("rename",this.state.selectedtitle);
     return (
       <>
         {this.state.loading && <LoadingState />}
@@ -517,7 +516,7 @@ class QueriesListSearch extends React.Component {
                   style={{ color: '#3d4d66' }}
                   onClick={() => {
                     if (policy.isCreateQueryEnabled()) {
-                      navigateToWithSearch('/queries/new',{},true);
+                      navigateToWithSearch('/queries/new',"folder_id="+this.state.selected,true);
                     } else {
                       this.showModal();
                     }
