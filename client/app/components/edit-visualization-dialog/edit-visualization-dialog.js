@@ -103,7 +103,7 @@ export const EditVisualizationDialog = {
     const vars = query.split("&");
     for (let i=0;i<vars.length;i+=1){
       const pair = vars[i].split("=");
-      if(pair[0] === "folder_id")
+      if(pair[0] === "folder_id" && pair[1] !== "null")
       {folderId = pair[1]}};
      this.visualization.folder_id = folderId;
      this.visualization.query_id = this.query.id;
