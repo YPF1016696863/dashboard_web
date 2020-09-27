@@ -148,7 +148,7 @@ function DynamicTableController($scope, $compile) {
     // 4. get columns for search
     // 5. update row rendering template
     // 6. prepare rows
-    console.log(columns);
+    
 
     // this.styleBgColor = {
     //   // 'background-color': columns[0].color,
@@ -223,7 +223,8 @@ function DynamicTableController($scope, $compile) {
   };
 
   this.$onChanges = (changes) => {
-    console.log(changes.columns);
+    console.log("changes",changes);
+    // console.log(changes.options);
     if (changes.columns) {
       if (changes.rows) {
         // if rows also changed - temporarily set if to empty array - to avoid
@@ -252,6 +253,7 @@ export const DynamicTable = {
     rows: '<',
     columns: '<',
     itemsPerPage: '<',
+    options: '<',
   },
   controller: DynamicTableController
 };

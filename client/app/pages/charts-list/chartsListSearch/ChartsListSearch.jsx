@@ -282,7 +282,6 @@ class ChartsListSearch extends React.Component {
                   onDoubleClick={event => {
                     this.setState({ editMode: true });
                   }}
-
                   onContextMenu={(e)=>{
                     e.preventDefault();
                     console.log(query.id + ':' + visualization.id);

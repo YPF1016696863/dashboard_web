@@ -6,7 +6,7 @@ import { react2angular } from 'react2angular';
 import AceEditor from 'react-ace';
 import ace from 'brace';
 import * as _ from 'lodash';
-import { Form, Input, Button, Select, TreeSelect, InputNumber, Checkbox } from 'antd';
+import { Form, Dropdown, Menu, Input, Button, Select, TreeSelect, InputNumber, Checkbox } from 'antd';
 import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import notification from '@/services/notification';
 
@@ -615,6 +615,10 @@ class QueryEditor extends React.Component {
                     </option>
                   ))}
                 </select>
+                <Select defaultValue="mode1" style={{ width: 120 }}>
+                  <Option value="mode1">格式1</Option>
+                  <Option value="mode2">格式2</Option>
+                </Select>
                 {this.props.canEdit ? (
                   <Tooltip placement="top" title={modKey + ' + S'}>
                     <button
@@ -871,6 +875,10 @@ class QueryEditor extends React.Component {
                     </option>
                     ))}
                 </select>
+                <Select defaultValue="mode1" style={{ width: 120 }}>
+                  <Option value="mode1">格式1</Option>
+                  <Option value="mode2">格式2</Option>
+                </Select>
                 {this.props.canEdit ? (
                   <Tooltip placement="top" title={modKey + ' + S'}>
                     <button
