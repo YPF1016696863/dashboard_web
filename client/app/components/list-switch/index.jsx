@@ -91,9 +91,10 @@ class ListSwitch extends React.Component {
         swicthStateTemp = true;
         editStateTemp = true;
         break;
-      default:  
-      swicthStateTemp = false;
-      editStateTemp = false;
+      default:
+        swicthStateTemp = true;
+        editStateTemp = true;
+        break;
     }
     // console.log(swicthStateTemp);
     // console.log(editStateTemp);
@@ -131,11 +132,11 @@ class ListSwitch extends React.Component {
       <span>
         <Radio.Group
           onChange={this.onChange}
-          defaultValue={(function(){ 
-             console.log(checked);
-             return checked;
-         })()
-        }
+          defaultValue={(function () {
+            console.log(checked);
+            return checked;
+          })()
+          }
         >
           <Radio style={{ color: '#fff' }} value={1}>手动布局</Radio>
           <Radio style={{ color: '#fff' }} value={2}>自动布局</Radio>
