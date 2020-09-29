@@ -31,6 +31,8 @@ function QueryViewCtrl(
   $routeParams,
   $location,
   $window,
+  $timeout,
+  $interval,
   $q,
   KeyboardShortcuts,
   Title,
@@ -91,6 +93,7 @@ function QueryViewCtrl(
   function getSchema(refresh = undefined) {
     // TODO: is it possible this will be called before dataSource is set?
     $scope.schema = [];
+   
     $scope.dataSource.getSchema(refresh).then(data => {
       if (data.schema) {
         $scope.schema = data.schema;
@@ -105,9 +108,43 @@ function QueryViewCtrl(
         notification.error('Schema refresh failed.', 'Please try again later.');
       }
     });
+    
   }
 
-  $scope.refreshSchema = () => getSchema(true);
+
+  function checkSchema(refresh = undefined) {
+    // TODO: is it possible this will be called before dataSource is set?
+    const preLen = $scope.checkSchema === undefined ? 0 : $scope.checkSchema.length;
+    $scope.changeFlag = false;
+    // console.log("preLen:", preLen);
+    $scope.checkSchema = [];
+
+    $scope.dataSource.getSchema(refresh).then(data => {
+      // console.log("data:", data);
+      if (data.schema) {
+        $scope.checkSchema = data.schema;
+        const currLen = $scope.checkSchema === undefined ? 0 : $scope.checkSchema.length;
+        if (preLen !== currLen) {
+          $scope.changeFlag = true;
+          console.log("修改了:",$scope.changeFlag);
+        }
+
+      } else {
+        $scope.changeFlag = true;
+      }
+    });
+
+  }
+
+
+  this.autoRefresh = () => {
+    $timeout(() => {
+      console.log("定时");
+      checkSchema(true);
+    }, 10 * 1000).then(() => this.autoRefresh());
+  };
+
+  $scope.refreshSchema = () => {getSchema(true);this.autoRefresh();}
 
   function updateDataSources(dataSources) {
     // Filter out data sources the user can't query (or used by current query):

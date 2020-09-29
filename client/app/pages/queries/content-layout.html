@@ -43,10 +43,11 @@
         <schema-browser
           class="schema-container"
           schema="schema"
+          change-flag="changeFlag"
           on-refresh="refreshSchema()"
           ng-if="sourceMode && getQueryType() !== 'excelupload'"
         ></schema-browser>
-
+        
         <file-uploader
           fileurl="query.query"
           disabled="!isQueryOwner || !sourceMode"
