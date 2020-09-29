@@ -186,7 +186,12 @@ console.log($scope.gridColumns);
           // visualization.options.column.color
         });
 
-
+        _.set($scope.options, "fontColor", 
+        {'color':color16to10(_.get($scope.options, "column.colorFont", "#fff"), 
+        _.get($scope.options, "column.colorAFont", 1))});
+// !important
+        console.log($scope.options.fontColor);
+        console.log($scope.options.sizeBg);
       }
 
       $scope.$watch('queryResult && queryResult.getData()', (queryResult) => {

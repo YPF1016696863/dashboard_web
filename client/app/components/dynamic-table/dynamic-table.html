@@ -3,7 +3,9 @@
     <thead ng-class="$root.theme.widgetBackgroundColor">
       <tr ng-class="$root.theme.dashboardTableTextColor">
         <th ng-repeat="column in $ctrl.columns" ng-click="$ctrl.onColumnHeaderClick($event, column)"
-          class="sortable-column" ng-class="['content-align-' + column.alignContent + ' display-as-' + column.displayAs, $root.theme.dashboardTableHeaderTextColor]">
+          class="sortable-column" 
+          ng-style="$ctrl.options.fontColor"
+          ng-class="['content-align-' + column.alignContent + ' display-as-' + column.displayAs, $root.theme.dashboardTableHeaderTextColor]">
           <span ng-if="($ctrl.orderBy.length > 1) && ($ctrl.orderByColumnsIndex[column.name] > 0)"
             class="sort-order-indicator">{{ $ctrl.orderByColumnsIndex[column.name] }}</span>
           <span>{{column.title}}</span>
@@ -27,14 +29,11 @@
    
     <tbody>
       
-      <!-- <div ng-style="$ctrl.styleBgColor">222</div>
-      {{$ctrl.columns[0].color}} -->
-      
       <tr ng-repeat="row in $ctrl.rowsToDisplay"
         dynamic-table-row columns="$ctrl.columns" row="row"
         render="$ctrl.renderSingleRow"
         ng-class="$root.theme.dashboardTableTextColor"
-        ng-style="$ctrl.styleBgColor"
+        ng-style="$ctrl.options.fontColor"
       ></tr>
     </tbody>
   </table>

@@ -46,6 +46,7 @@ const SchemaBrowser = {
   bindings: {
     schema: '<',
     onRefresh: '&',
+    changeFlag:'<'
   },
   controller: SchemaBrowserCtrl,
   template,
