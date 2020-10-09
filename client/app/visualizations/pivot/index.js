@@ -1,10 +1,12 @@
 import angular from 'angular';
 import $ from 'jquery';
+import * as _ from 'lodash';
 import 'pivottable';
 import 'pivottable/dist/pivot.css';
 
 import editorTemplate from './pivottable-editor.html';
 import './pivot.less';
+import color16to10 from '../colorChange';
 
 function pivotTableRenderer() {
   return {
@@ -16,6 +18,52 @@ function pivotTableRenderer() {
     template: '',
     replace: false,
     link($scope, element) {
+
+
+      function refreshOption() {
+
+        // console.log(element[0].querySelectorAll('.pvtRendererArea'));
+        element[0].querySelectorAll('.pvtRendererArea').forEach((control) => {
+          // console.log("111111");
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "bgcolor", '#fff'),
+              _.get($scope.visualization.options, "bgcolorOpacity", 1)
+            );
+        });
+        // element[0].querySelectorAll('.pvtUi').forEach((control) => {
+        //   control.style.backgroundColor =
+        // })
+        // console.log(element[0]);
+        // console.log(element[0].getElementsByClassName('pvtTable'));
+        // element[0].getElementsByClassName('pvtTable').style.backgroundColor="red"
+        // pvtTable 表头
+        element[0].querySelectorAll('.pvtTable').forEach((control) => {
+          // console.log("222222");
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "tableHeadBgColor", '#fff'),
+              _.get($scope.visualization.options, "tableHeadBgColorOpacity", 1)
+            );
+
+          control.style.color = _.get($scope.visualization.options, "tableHeadColor", '#fff');
+        })
+
+        element[0].querySelectorAll('.pvtTable tbody tr td').forEach((control) => {
+          // console.log("333333");
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "tablebgcolor", '#fff'),
+              _.get($scope.visualization.options, "tablebgcolorOpacity", 1)
+            );
+
+          control.style.color = _.get($scope.visualization.options, "tableColor", '#fff');
+        })
+
+      }
+
+      
+      
       function removeControls() {
         const hideControls = $scope.visualization.options.controls && $scope.visualization.options.controls.enabled;
 
@@ -26,6 +74,8 @@ function pivotTableRenderer() {
             control.style.display = '';
           }
         });
+        refreshOption();
+       
       }
 
       function updatePivot() {
@@ -63,11 +113,14 @@ function pivotTableRenderer() {
             $(element).pivotUI(data, options, true);
             removeControls();
           }
+          refreshOption();
         });
       }
 
       $scope.$watch('queryResult && queryResult.getData()', updatePivot);
       $scope.$watch('visualization.options.controls.enabled', removeControls);
+      $scope.$watch('visualization.options', refreshOption, true);
+      $scope.$watch('visualization.options', refreshOption);
     },
   };
 }

@@ -35,7 +35,7 @@ class FileUploader extends React.Component {
     const props = {
       disabled,
       showUploadList: { showPreviewIcon: !!disabled === false, showRemoveIcon: false, showDownloadIcon: false },
-      accept: ".xlsx,.xlsm,.xlsb,.xltx,.xltm,.xls,.xlt,.xml",
+      accept: ".xlsx,.xlsm,.xlsb,.xltx,.xltm,.xls,.xlt,.xml,.csv",
       name: 'file',
       listType: 'picture',
       className: 'upload-list-inline',

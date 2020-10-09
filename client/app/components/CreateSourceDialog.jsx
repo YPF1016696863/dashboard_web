@@ -75,6 +75,7 @@ class CreateSourceDialog extends React.Component {
     const { searchText } = this.state;
     const filteredTypes = types.filter(type => isEmpty(searchText) ||
       includes(type.name.toLowerCase(), searchText.toLowerCase()));
+      console.log(this.props);
     return (
       <div className="m-t-10">
         <Search
