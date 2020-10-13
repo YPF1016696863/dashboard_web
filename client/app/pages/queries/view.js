@@ -179,6 +179,7 @@ function QueryViewCtrl(
   };
 
   $scope.executeQuery = () => {
+    console.log("executeQuery");
     if (!$scope.canExecuteQuery()) {
       return;
     }
