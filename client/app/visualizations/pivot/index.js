@@ -31,12 +31,7 @@ function pivotTableRenderer() {
               _.get($scope.visualization.options, "bgcolorOpacity", 1)
             );
         });
-        // element[0].querySelectorAll('.pvtUi').forEach((control) => {
-        //   control.style.backgroundColor =
-        // })
-        // console.log(element[0]);
-        // console.log(element[0].getElementsByClassName('pvtTable'));
-        // element[0].getElementsByClassName('pvtTable').style.backgroundColor="red"
+        
         // pvtTable 表头
         element[0].querySelectorAll('.pvtTable').forEach((control) => {
           // console.log("222222");

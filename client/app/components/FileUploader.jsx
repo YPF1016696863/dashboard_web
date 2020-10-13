@@ -23,7 +23,7 @@ class FileUploader extends React.Component {
             uid: '-1',
             name: this.props.fileurl,
             url: this.props.fileurl,
-            thumbUrl: '/static/images/db-logos/excelupload.png'
+            thumbUrl: '/static/images/db-logos/upload.png'
           }
         ]
       });
@@ -60,7 +60,7 @@ class FileUploader extends React.Component {
                   uid: '-1',
                   name: info.file.response.url,
                   url: info.file.response.url,
-                  thumbUrl: '/static/images/db-logos/excelupload.png'
+                  thumbUrl: '/static/images/db-logos/upload.png'
                 }
               ]
             });
@@ -76,9 +76,9 @@ class FileUploader extends React.Component {
         <p className="ant-upload-drag-icon">
           <Icon type="inbox" />
         </p>
-        <p className="ant-upload-text">单击或拖动Excel文件到该区域以上传至服务器</p>
+        <p className="ant-upload-text">单击或拖动文件到该区域以上传至服务器</p>
         <p className="ant-upload-hint">
-          支持单文件上传.该文件上传后将由DataVis自动转为数据源并可直接使用,创建QueryResults并添加该Excel文件数据源后,
+          支持单文件上传.该文件上传后将由DataVis自动转为数据源并可直接使用,创建QueryResults并添加该文件数据源后,
           可执行基于SQL的复杂查询.
         </p>
       </Dragger>

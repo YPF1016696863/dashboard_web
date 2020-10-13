@@ -45,13 +45,13 @@
           schema="schema"
           change-flag="changeFlag"
           on-refresh="refreshSchema()"
-          ng-if="sourceMode && getQueryType() !== 'excelupload'"
+          ng-if="sourceMode && getQueryType() !== 'excelupload'&& getQueryType() !== 'csvupload'"
         ></schema-browser>
         
         <file-uploader
           fileurl="query.query"
           disabled="!isQueryOwner || !sourceMode"
-          ng-if="getQueryType() === 'excelupload'"
+          ng-if="getQueryType() === 'excelupload'||getQueryType() == 'csvupload'"
           update-url="updateQuery"
         />
       </div>
