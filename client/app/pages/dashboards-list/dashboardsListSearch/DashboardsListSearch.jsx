@@ -417,7 +417,9 @@ class DashboardsListSearch extends React.Component {
         };
         $http
             .post(FOLDER_STRUCTURE_URL,data)
-            .success(() => {this.reload(); console.log("folder-created")})
+            .success(() => {this.reload(); 
+              // console.log("folder-created")
+            })
             .error(() => alert("创建失败"))
     }
 
@@ -427,7 +429,9 @@ class DashboardsListSearch extends React.Component {
         }
         $http
             .post(appSettingsConfig.server.backendUrl+'/api/dashboards/'+selected+'/folder',data)
-            .success(() => {this.reload(); console.log("move done")})
+            .success(() => {this.reload(); 
+              // console.log("move done")
+            })
             .error(() => alert("移动失败,请选择一个仪表盘"))
 
     }
@@ -436,7 +440,9 @@ class DashboardsListSearch extends React.Component {
     if (selected && selected.substr(0,1)==="s"){
       $http
           .delete(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+selected.substring(1))
-          .success(() => {this.reload();console.log("delete complete")})
+          .success(() => {this.reload();
+            // console.log("delete complete")
+          })
           .error(() => alert("删除失败"))
 
     } else {
@@ -449,7 +455,9 @@ class DashboardsListSearch extends React.Component {
         if(this.state.selected && this.state.selected.substr(0,1)==="s")
             $http
                 .post(appSettingsConfig.server.backendUrl+'/api/folder_structures/'+this.state.selected.substring(1),data)
-                .success(()=>{this.reload();console.log('rename complete')})
+                .success(()=>{this.reload();
+                  // console.log('rename complete')
+                })
                 .error(() => alert("改名失败"))
     }
 
@@ -473,6 +481,7 @@ class DashboardsListSearch extends React.Component {
                   delete value.visualization;
               });
               const postdata = response;
+              postdata.name+="(copy)"
               delete postdata.slug;
               delete postdata.id;
               delete postdata.created_at;
@@ -491,10 +500,12 @@ class DashboardsListSearch extends React.Component {
                           .success(()=>{this.reload()});
                       _.forEach(widgets,(value)=>{
                       value.dashboard_id = newresponse.id;
-                      console.log("post value",value);
+                      // console.log("post value",value);
                       $http
                           .post(this.props.appSettings.server.backendUrl + '/api/widgets',value)
-                          .success(()=>{ this.reload();console.log("successvalue",value.visualization_id)})
+                          .success(()=>{ this.reload();
+                            // console.log("successvalue",value.visualization_id)
+                          })
                           .error(e => console.log("widget errorlala",e));
                       })
                       this.reload();
@@ -506,8 +517,8 @@ class DashboardsListSearch extends React.Component {
     }
 
   render() {
-    console.log("state dashboard ",this.state.dashboard);
-    console.log("all",this.state.all);
+    // console.log("state dashboard ",this.state.dashboard);
+    // console.log("all",this.state.all);
     const { appSettings } = this.props;
     return (
       <>

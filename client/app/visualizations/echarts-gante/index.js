@@ -43,23 +43,26 @@ function EchartsGanteRenderer($rootScope) {
                             _.forEach(value, function(valueChildren, keyChildren) {
                                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
                                     startDatatemp.push(valueChildren)
-                                }
+                                }                                
                                 if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
                                     endDatatemp.push(valueChildren);
-                                }
+                                }                               
                                 if (keyChildren === _.get($scope.options, "form.nameAxisColumn", '')) {
                                     nameData.push(valueChildren);
                                 }
 
                             });
                         });
-                        _.forEach(startDatatemp, function(v, k) {
-                            // eslint-disable-next-line func-names
-                            startData.push(v._i);
-                        });
+                        // _.forEach(startDatatemp, function(v, k) {
+                        //     // eslint-disable-next-line func-names
+                        //     startData.push(v._i);
+
+                        // });
+                        let i=0;
                         _.forEach(endDatatemp, function(v, k) {
                             // eslint-disable-next-line func-names
-                            endData.push(v._i);
+                            endData.push(v-startDatatemp[i]);
+                            i+=1;
                         });
 
                         _.set($scope.options, "yAxis.data", nameData);
@@ -72,7 +75,7 @@ function EchartsGanteRenderer($rootScope) {
                         });
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
-
+                        
                         _.set($scope.options, "series", []); // 清空设置           
                         $scope.options.series.push(
 
@@ -85,7 +88,7 @@ function EchartsGanteRenderer($rootScope) {
                                     color: _.get($scope.options, 'backgroundColor'), // transparent
                                     borderColor: 'transparent'
                                 },
-                                data: startData
+                                data: startDatatemp
 
                             }, {
                                 name: '结束时间',

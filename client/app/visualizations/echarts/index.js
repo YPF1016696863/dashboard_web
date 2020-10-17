@@ -114,6 +114,24 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
 
             const refreshData = () => {
+                /**
+                 * 一些图标布局等参数的默认值
+                 * 这部分暂时需要手动默认值     
+                 */
+                _.set($scope.options, "grid.left", _.get($scope.options, "grid.left", '').length === 0 ?
+                    '10%' : _.get($scope.options, "grid.left"));
+                _.set($scope.options, "grid.top", _.get($scope.options, "grid.top", '').length === 0 ?
+                    '10%' : _.get($scope.options, "grid.top"));
+                _.set($scope.options, "grid.right", _.get($scope.options, "grid.right", '').length === 0 ?
+                    '10%' : _.get($scope.options, "grid.right"));
+                _.set($scope.options, "grid.bottom", _.get($scope.options, "grid.bottom", '').length === 0 ?
+                    '10%' : _.get($scope.options, "grid.bottom"));
+
+
+
+
+
+
                 // 找到选中serise的下标        
                 _.set($scope.options, 'useSerie_Index',
                     _.findIndex(
@@ -128,7 +146,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.get($scope.options, "backgroundColorOpacity", 0)
                     ));
 
-
+                _.set($scope.options, "tooltip.backgroundColor",
+                    color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                        _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                    ));
 
 
 
@@ -158,7 +179,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
 
                 // 文字单独的自适应调整*($element.parent()[0].clientHeight/789)
-                const fontSize = _.get($scope.options, 'title.textStyle.fontSizeT', 12) * ($element.parent()[0].clientWidth / 1115);
+                const fontSize = _.get($scope.options, 'title.textStyle.fontSizeT', 40) * ($element.parent()[0].clientWidth / 1115);
                 _.set($scope.options, 'title.textStyle.fontSize', fontSize.toFixed(2));
 
 
@@ -167,8 +188,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         let data = $scope.queryResult.getData();
 
 
-                        console.log(color16to10(_.get($scope.options, 'selectColor', ''),
-                            _.get($scope.options, 'selectColorOpacity', 0)));
+                        // console.log(color16to10(_.get($scope.options, 'selectColor', ''),
+                        //     _.get($scope.options, 'selectColorOpacity', 0)));
                         // console.log(data);
                         // 全局变量
                         const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
@@ -206,10 +227,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 "不筛选" :
                                 _.filter(searchColumns,
                                     { 'friendly_name': _.get($scope.options, "form.zAxisColumn", '') })[0].name;
-
-
-
-
                         // ***************************别名to原名 转换 end
 
 
@@ -329,6 +346,33 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
 
 
+                        /**
+                         * 前 N 后 N seriesYData
+                        */
+                        if (_.get($scope.options, "preOrTail", 'noPT') === 'pre') {
+                            const N = _.get($scope.options, "preOrTailN", seriesYData.length);
+                            for (let i = 0; i < seriesYData.length; i += 1) {
+                                seriesYData[i] = _.slice(seriesYData[i], 0, N);
+                            }
+                            filterXData = _.slice(filterXData, 0, N);
+                        } else if (_.get($scope.options, "preOrTail", 'noPT') === 'tail') {
+                            let N = _.get($scope.options, "preOrTailN", filterXData.length) >= filterXData.length ?
+                                filterXData.length : _.get($scope.options, "preOrTailN", 0);
+
+                            if (_.get($scope.options, "preOrTailN", 0).length === 0) N = filterXData.length;
+
+                            for (let i = 0; i < seriesYData.length; i += 1) {
+                                seriesYData[i] =
+                                 _.slice(seriesYData[i], 
+                                    seriesYData[i].length - N, seriesYData[i].length);
+                            }
+                            filterXData = _.slice(filterXData, filterXData.length - N, filterXData.length);
+                        }
+
+
+
+
+
                         // 一旦选中了横向柱状图 x 为value y 为字符类型 下拉框的分组代替
                         _.each(mapList, (yAxisColumn) => {
                             if (_.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === 'bar2') { // 横向柱状图
@@ -377,7 +421,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     smooth: _.get($scope.options, "series_Smooth", false), //   series_Smooth 折线与曲线切换
                                     data: yData[seriesNameIndex],
                                     // 下标传入配置数组找到相应的配置
-                                    areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
+                                    areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn, _.get($scope.options, "defaultType")) === "area" ? {} : undefined,
 
                                     symbolSize: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "scatter2" ?
                                         // eslint-disable-next-line no-shadow
@@ -610,9 +654,6 @@ function EchartsRenderer($timeout, $rootScope, $window) {
             };
 
 
-
-
-
             // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
             const selectChartType = () => {
                 // console.log("selectChartType刷新");
@@ -719,6 +760,7 @@ function EchartsEditor() {
             // 20191203 feature add 
             $scope.selectChartTypeCb = (serie, type) => { // 图表类型选择的转换
                 const stringTemp = "form.yAxisColumnTypes[" + serie + "]"; // 按照原先的输入格式进行配置 （现在的类型输入转换）
+                console.log(stringTemp);
                 _.set($scope.options, stringTemp, type);
                 // console.log($scope.options.form.yAxisColumnTypes);
                 $scope.$apply();
@@ -827,6 +869,12 @@ function EchartsEditor() {
                 scatter2: { name: 'Echarts气泡图', icon: 'area-chart' }
 
             };
+
+            $scope.preOrTails = [
+                { label: '无', value: 'noPT' },
+                { label: '前N', value: 'pre' },
+                { label: '后N', value: 'tail' },
+            ];
 
             $scope.xAxisScales = [
                 { label: '类目轴(类目轴，适用于离散的类目数据)', value: 'category' },
