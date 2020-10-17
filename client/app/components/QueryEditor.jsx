@@ -616,8 +616,16 @@ class QueryEditor extends React.Component {
                   ))}
                 </select>
                 <Select defaultValue="mode1" style={{ width: 120 }}>
-                  <Option value="mode1">格式1</Option>
-                  <Option value="mode2">格式2</Option>
+                  <Option value="mode1">
+                    <Tooltip placement="leftTop" title="data:[{A:a,B:b}]">
+                      格式1
+                    </Tooltip>
+                  </Option>
+                  <Option value="mode2">
+                    <Tooltip placement="leftTop" title="target:[{A:a,B:b}]">
+                      格式2
+                    </Tooltip>
+                  </Option>
                 </Select>
                 {this.props.canEdit ? (
                   <Tooltip placement="top" title={modKey + ' + S'}>
@@ -876,8 +884,16 @@ class QueryEditor extends React.Component {
                     ))}
                 </select>
                 <Select defaultValue="mode1" style={{ width: 120 }}>
-                  <Option value="mode1">格式1</Option>
-                  <Option value="mode2">格式2</Option>
+                  <Option value="mode1">
+                    <Tooltip placement="leftTop" title="data:[{A:a,B:b}]">
+                      格式1
+                    </Tooltip>
+                  </Option>
+                  <Option value="mode2">
+                    <Tooltip placement="leftTop" title="target:[{A:a,B:b}]">
+                      格式2
+                    </Tooltip>
+                  </Option>
                 </Select>
                 {this.props.canEdit ? (
                   <Tooltip placement="top" title={modKey + ' + S'}>

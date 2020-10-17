@@ -170,6 +170,7 @@ class ChartsListSearch extends React.Component {
             alert("请选择一个可视化组件")
         } else {
           const data = this.state.visualization;
+          data.name+="(copy)";
           delete data.id;
           delete data.created_at;
           delete data.updated_at;

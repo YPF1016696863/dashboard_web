@@ -48,7 +48,7 @@ export function defaultGanteChartOptions() {
             containLabel: true
         },
         xAxis: {
-            type: 'time',
+            type: 'value',
 
         },
         yAxis: {
