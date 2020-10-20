@@ -40,26 +40,50 @@
 
 
         <div class="form-group" style="width:49%;float:right">
-            <label class="control-label">指标X数据</label>
-            <ui-select name="xAxisColumn" required ng-model="options.form.xAxisColumn">
-                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
 
-            <label class="control-label">指标Y数据</label>
-            <ui-select name="yAxisColumn" required ng-model="options.form.yAxisColumn">
-                <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
+            <div class="form-group" style="width:45%;float:left">
+                <label class="control-label">指标X数据</label>
+                <ui-select name="xAxisColumn" required ng-model="options.form.xAxisColumn">
+                    <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="column in columnNames">
+                        <span ng-bind-html="column | highlight: $select.search"></span>
+                        <span> </span>
+                        <small class="text-muted" ng-bind="columns[column].type"></small>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group" style="width:45%;float:right">
+                <label class="control-label">排序X</label>
+                <ui-select ng-model="options.sortRuleX" ng-init="options.sortRuleX='noSort'">
+                    <ui-select-match placeholder="选择排序...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="sr.value as sr in SortRule">
+                        <div ng-bind-html="sr.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
 
+            <div class="form-group" style="width:45%;float:left">
+                <label class="control-label">指标Y数据</label>
+                <ui-select name="yAxisColumn" required ng-model="options.form.yAxisColumn">
+                    <ui-select-match placeholder="选择数据...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="column in columnNames">
+                        <span ng-bind-html="column | highlight: $select.search"></span>
+                        <span> </span>
+                        <small class="text-muted" ng-bind="columns[column].type"></small>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group" style="width:45%;float:right">
+                <div class="form-group">
+                    <label class="control-label">排序Y</label>
+                    <ui-select ng-model="options.sortRuleY" ng-init="options.sortRuleY='noSort'">
+                        <ui-select-match placeholder="选择排序...">{{$select.selected.label}}</ui-select-match>
+                        <ui-select-choices repeat="sr.value as sr in SortRule">
+                            <div ng-bind-html="sr.label | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
 
             <label class="control-label">Z轴数据</label>
             <ui-select name="yAxisColumn" required ng-model="options.form.zAxisColumn">
@@ -214,6 +238,10 @@
                 <label class="control-label">图表最大宽度</label>
                 <input style="width:100%" ng-model="options.grid3D.boxWidth" type="text" class="form-control"
                     placeholder="200">
+
+                <label class="control-label">图表最大值</label>
+                <input style="width:100%" ng-model="options.visualMap.max" type="text" class="form-control"
+                    placeholder="20">
 
             </div>
 

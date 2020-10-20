@@ -293,6 +293,7 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-HUAN': type = 'ECHARTS-HUAN'; break;
                           case 'ECHARTS-RADAR': type = 'ECHARTS-RADAR'; break;
                           case 'ECHARTS-PROCESS': type = 'ECHARTS-PROCESS'; break;
+                          case 'ECHARTS-VIDEO': type = 'ECHARTS-VIDEO'; break;                          
                           default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");
@@ -719,7 +720,7 @@ class ChartsSearch extends React.Component {
                                   size="large"
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-table.png`}
                                 />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>交叉表</p>
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>明细表</p>
                               </Radio>
                             </Col>
                             <Col
@@ -733,7 +734,7 @@ class ChartsSearch extends React.Component {
                                   size="large"
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-pivot.png`}
                                 />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>透视表</p>
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>交叉表</p>
                               </Radio>
                             </Col>
                             <Col
@@ -839,6 +840,21 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/picture.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>图片</p>
+                              </Radio>
+                            </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-VIDEO" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/video.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>视频</p>
                               </Radio>
                             </Col>
 

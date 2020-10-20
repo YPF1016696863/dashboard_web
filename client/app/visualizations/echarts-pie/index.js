@@ -84,6 +84,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
 
 
+              let sum = 0;
 
               _.forEach(data, function (value, key) {
                 // [{0},{1}...] 筛选出每一个{0} {1} ...
@@ -102,6 +103,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                           value: oneYvalue,
                           itemStyle: { color: '' }
                         });
+                        sum += oneYvalue;
                       }
                     });
 
@@ -130,6 +132,64 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 seriesData.push(pieData); // 否则push原来的数据
               }
 
+              if (_.get($scope.options, "halfCircle", "0") === "180") {
+                seriesData[0].push({
+                  name: '',
+                  value: sum,
+                  itemStyle: {
+                    color: 'transparent'
+                  },
+                  label: {
+                    show: false
+                  },
+                  labelLine: {
+                    show: false
+                  },
+                  emphasis: {
+                    label: {
+                      show: false
+                    },
+                    labelLine: {
+                      show: false
+                    },
+                  },
+                  tooltip: {
+                    backgroundColor: 'transparent',
+                    textStyle: {
+                      color: 'transparent'
+                    }
+                  }
+
+                })
+              } else if (_.get($scope.options, "halfCircle", "0") === "270") {
+                seriesData[0].push({
+                  name: '',
+                  value: sum / 3,
+                  itemStyle: {
+                    color: 'transparent'
+                  },
+                  label: {
+                    show: false
+                  },
+                  labelLine: {
+                    show: false
+                  },
+                  emphasis: {
+                    label: {
+                      show: false
+                    },
+                    labelLine: {
+                      show: false
+                    },
+                  },
+                  tooltip: {
+                    backgroundColor: 'transparent',
+                    textStyle: {
+                      color: 'transparent'
+                    }
+                  }
+                })
+              }
 
 
               // seriesData.push(pieData); // 否则push一条数据
@@ -138,11 +198,13 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               // _.set($scope.options, 'fanFlag', false);
             });
 
-
+            console.log(seriesData);
 
             let seriesIndex = 0;
             _.set($scope.options, "series", []); // 清空设置
+
             _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+
 
               $scope.options.series.push({
                 name: _.get($scope.options, "series_Name", ''),
@@ -154,7 +216,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 center: [_.get($scope.options, "series_CenterX", "50%"),
                 _.get($scope.options, "series_CenterY", "50%")
                 ],
-
+                startAngle: _.get($scope.options, "startAngle", 180),
                 data: seriesData[seriesIndex].sort(function (a, b) { return a.value - b.value; }), // 多系列需动态
                 // 判断是玫瑰图
                 roseType: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
@@ -268,12 +330,12 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 'background-size': "100% 100%",
                 'background-repeat': "no-repeat",
                 'background-position': _.get($scope.options, "bgX", "0px") + " "
-                    + _.get($scope.options, "bgY", "0px"),
+                  + _.get($scope.options, "bgY", "0px"),
                 'border-style': _.get($scope.options, "borderStyle", "solid"),
                 'border-width': _.get($scope.options, "borderWidth", "0px"),
                 'border-color': _.get($scope.options, "borderColor", "blue"),
 
-            });
+              });
             }
             //  myChart.setOption(defaultPieChartOptions(), true);
             myChart.resize($scope.options.size.width, $scope.options.size.height);
@@ -479,6 +541,12 @@ function EchartsPieEditor() {
         { label: '左对齐', value: '5%' },
         { label: '居中', value: '35%' },
         { label: '右对齐', value: '65%' }
+      ];
+
+      $scope.halfCircles = [
+        { label: '180度', value: '180' },
+        { label: '270度', value: '270' },
+        { label: '无', value: '0' }
       ];
 
 

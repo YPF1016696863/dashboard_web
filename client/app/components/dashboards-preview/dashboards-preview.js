@@ -123,7 +123,15 @@ function DashboardPreviewCtrl(
     }
   );
 
-  // 背景地址、刷新率、组件列表开启（手动布局）、自动布局时 的一行多少块组件、背景是平铺还是填充等、开启发布后组件可移动
+  /**
+   * 背景地址、
+   * 刷新率
+   * 组件列表开启（手动布局）
+   * 自动布局时 的一行多少块组件
+   * 背景是平铺还是填充等
+   * 开启发布后组件可移动
+   * 大屏背景色
+   *  */
   const imageAndrefreshRate = [];
   // 大屏背景地址
   $scope.$watch(
@@ -143,10 +151,11 @@ function DashboardPreviewCtrl(
         'background-image': 'url("' + vm.dashboardBgImg + '")',
         'background-position': 'center',
         'background-repeat': 'no-repeat',
-        'background-size': 'cover'
+        'background-size': 'cover',
+        // 'background-color': vm.dashboardColor+' !important',
       };
       imageAndrefreshRate[0] = vm.dashboardBgImg;
-      console.log("imageAndrefreshRate",imageAndrefreshRate);
+      console.log("imageAndrefreshRate", imageAndrefreshRate);
       updateDashboard({ background_image: imageAndrefreshRate }, true);
       // updateDashboard({ background_image:vm.dashboardBgImg},true);
     }
@@ -189,6 +198,29 @@ function DashboardPreviewCtrl(
     }
   );
 
+  // 大屏背景色
+  $scope.$watch(
+    function () {
+      return vm.dashboardColor;
+    },
+    function (data) {     
+      imageAndrefreshRate[6] = vm.dashboardColor + "";
+      vm.dashboardColorCtr ={
+        'background-color': vm.dashboardColor
+      }
+      vm.dashboardStyle = {
+        'background-image': 'url("' + vm.dashboardBgImg + '")',
+        'background-position': 'center',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover',    
+        // 'background-color': vm.dashboardColor+' !important',
+      };
+      console.log(vm.dashboardStyle);
+      updateDashboard({ background_image: imageAndrefreshRate }, true);
+    }
+  );
+
+
   // 大屏背景
   $scope.$watch(
     function () {
@@ -198,22 +230,27 @@ function DashboardPreviewCtrl(
       // console.log(vm.dashboardBgImgType);
       imageAndrefreshRate[4] = vm.dashboardBgImgType;
       const imgType = vm.dashboardBgImgType;
-      // console.log(dashboard.background_image);
+      vm.dashboardColorCtr ={
+        'background-color': vm.dashboardColor
+      }
       if (imgType === "tianchong" || imgType === "lasheng") {
         // Get dashboard style
         vm.dashboardStyle = {
           'background-image': 'url("' + vm.dashboardBgImg + '")',
           'background-position': 'center',
           'background-repeat': 'no-repeat',
-          'background-size': 'cover'
+          'background-size': 'cover',    
+          // 'background-color': vm.dashboardColor+' !important',    
         };
       } else if (imgType === "pingpu") {
         vm.dashboardStyle = {
           'background-image': 'url("' + vm.dashboardBgImg + '")',
           'background-position': 'center',
-          'background-repeat': 'repeat',
+          'background-repeat': 'repeat',    
+          // 'background-color': vm.dashboardColor+' !important',    
         };
       }
+      console.log(vm.dashboardStyle);
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
@@ -226,10 +263,13 @@ function DashboardPreviewCtrl(
     function (data) {
       // console.log(vm.editSwitch);
       imageAndrefreshRate[5] = vm.editSwitch + "";
-      console.log("imageAndrefreshRate",imageAndrefreshRate);
+      console.log("imageAndrefreshRate", imageAndrefreshRate);
       updateDashboard({ background_image: imageAndrefreshRate }, true);
     }
   );
+
+
+
 
   this.openParamDraw = false;
   this.openParameterDialog = () => {
@@ -370,7 +410,7 @@ function DashboardPreviewCtrl(
 
   $scope.$on('dashboard.update-parameters', () => {
     this.extractGlobalParameters();
-    console.log("globalparameter",this.globalParameters);
+    console.log("globalparameter", this.globalParameters);
   });
 
   const collectFilters = (dashboard, forceRefresh) => {
@@ -433,21 +473,23 @@ function DashboardPreviewCtrl(
       dashboard => {
         this.dashboard = dashboard;
 
-        console.log(dashboard);
+        // console.log(dashboard);
         let arr = [];
         let image = "/static/images/themeBackgroundImages/empty-overview.png";
         let rate = 2 + "";
         let LSwitch = "true";
         let imgType = "tianchong";
         let edit = "true";
+        let color = "#ffffff !important";
         if (dashboard.background_image !== null) {
-          // console.log("1");
+          console.log("1");
           arr = dashboard.background_image.slice(1, -1).split(",");
           image = arr[0];
           rate = arr[1];
           LSwitch = arr[2];
           imgType = arr[4];
           edit = arr[5];
+          color = arr[6]
           // console.log(imgType);
           imageAndrefreshRate[0] = image;
           imageAndrefreshRate[1] = rate;
@@ -455,24 +497,29 @@ function DashboardPreviewCtrl(
           imageAndrefreshRate[3] = arr[3] + "";
           imageAndrefreshRate[4] = arr[4];
           imageAndrefreshRate[5] = arr[5];
+          imageAndrefreshRate[6] = arr[6];
         }
-        // console.log(image);
+        vm.dashboardColorCtr ={
+          'background-color': color
+        }
         if (imgType === "tianchong" || imgType === "lasheng") {
           // Get dashboard style
           this.dashboardStyle = {
             'background-image': 'url("' + image + '")',
             'background-position': 'center',
             'background-repeat': 'no-repeat',
-            'background-size': 'cover'
+            'background-size': 'cover',
+            // 'background-color': color + ' !important'
           };
         } else if (imgType === "pingpu") {
           this.dashboardStyle = {
             'background-image': 'url("' + image + '")',
             'background-position': 'center',
             'background-repeat': 'repeat',
+            // 'background-color': color + ' !important'
           };
         }
-
+        console.log(this.dashboardColorCtr);
         // 
 
         this.isDashboardOwner =
@@ -488,7 +535,7 @@ function DashboardPreviewCtrl(
 
         const refreshRate = Math.max(
           1,
-          30
+          3000
         );
 
         this.setRefreshRate(
@@ -754,7 +801,8 @@ export const DashboardsPreview = {
     listSwitch: '<',
     editSwitch: '<',
     gridData: '<',
-    dashboardBgImgType: '<'
+    dashboardBgImgType: '<',
+    dashboardColor: '<',
   },
   controller: DashboardPreviewCtrl
 };

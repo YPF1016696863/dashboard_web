@@ -248,6 +248,13 @@
                         <div ng-bind-html="LegendAliNumb.label | highlight: $select.search"></div>
                     </ui-select-choices>
                 </ui-select>
+                <label class="control-label">半圆</label>
+                <ui-select ng-model="options.halfCircle" ng-init="options.halfCircle='0'">
+                    <ui-select-match placeholder="对齐方式...">{{$select.selected.label}}</ui-select-match>
+                    <ui-select-choices repeat="halfCircle.value as halfCircle in halfCircles">
+                        <div ng-bind-html="halfCircle.label | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="form-group" style="width:49%;float:right" ng-if="options.legend.show">
                 <label class="control-label">图例文字颜色</label>
@@ -259,6 +266,8 @@
                 </ui-select>
                 <label class="control-label">图例顶部距离(单位:百分比，如50%)</label>
                 <input name="name" type="text" class="form-control" ng-model="options.legend.top" placeholder="" />
+                <label class="control-label">角度</label>
+                <input style="width:100%" ng-model="options.startAngle" type="text" class="form-control" placeholder="180">
             </div>
 
         </div>

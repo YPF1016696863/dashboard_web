@@ -128,7 +128,7 @@ class DashboardsTabs extends React.Component {
   render() {
     const { slugId,widgetData,
       dashboardBgImg,rateData,
-      listSwitch ,gridData,dashboardBgImgType,
+      listSwitch ,gridData,dashboardBgImgType,dashboardColor,
       editSwitch} = this.props;
  
     // console.log(editSwitch);
@@ -159,6 +159,7 @@ class DashboardsTabs extends React.Component {
             editSwitch={editSwitch} 
             gridData={gridData}
             dashboardBgImgType={dashboardBgImgType}
+            dashboardColor={dashboardColor}
             editing 
           />
         )}
@@ -176,6 +177,7 @@ DashboardsTabs.propTypes = {
   listSwitch:PropTypes.string,
   editSwitch:PropTypes.string,
   dashboardBgImgType: PropTypes.string,
+  dashboardColor: PropTypes.string,
 };
 
 DashboardsTabs.defaultProps = {
@@ -187,6 +189,7 @@ DashboardsTabs.defaultProps = {
   listSwitch:true,
   editSwitch:true,
   dashboardBgImgType:null,
+  dashboardColor:"",
 };
 
 export default function init(ngModule) {

@@ -1,0 +1,53 @@
+<div>
+    <ul class="tab-nav">
+        <li ng-class="{active: currentTab == 'general'}">
+            <a ng-click="changeTab('general')">数据设置</a>
+        </li>
+        <li ng-class="{active: currentTab == 'style'}">
+            <a ng-click="changeTab('style')">样式设置</a>
+        </li>
+        <li ng-class="{active: currentTab == 'others'}">
+            <a ng-click="changeTab('others')">其他设置</a>
+        </li>
+
+    </ul>
+    <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
+       
+    </div>
+
+    <div ng-if="currentTab == 'style'" class="m-t-10 m-b-10">
+       
+    </div>
+
+    <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
+        <label class="control-label">背景图片</label>
+        <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
+        <input ng-show="false" name="name" type="text" class="form-control" ng-model="options.images"
+            placeholder="url" />
+        <div class="form-group" style="width:49%;float:left">
+            <label class="control-label">背景位置X</label>
+            <input name="name" type="text" class="form-control" ng-model="options.bgX" placeholder="" />
+        </div>
+        <div class="form-group" style="width:49%;float:right">
+            <label class="control-label">背景位置Y</label>
+            <input name="name" type="text" class="form-control" ng-model="options.bgY" placeholder="" />
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" ng-model="options.size.responsive">
+                图表尺寸自适应
+            </label>
+        </div>
+        <div class="form-group" style="width:49%;float:left" ng-if="!options.size.responsive">
+            <label class="control-label">图表宽度(单位:px)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.size.width" placeholder="600" />
+        </div>
+        <div class="form-group" style="width:49%;float:right" ng-if="!options.size.responsive">
+            <label class="control-label">图表高度(单位:px)</label>
+            <input name="name" type="text" class="form-control" ng-model="options.size.height" placeholder="400" />
+        </div>
+        
+        
+    </div>
+</div>
