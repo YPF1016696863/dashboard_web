@@ -55,7 +55,7 @@ class ParameterDrawer extends React.Component {
   };
 
   render() {
-    console.log("para",this.props);
+    // console.log("para",this.props);
     return (
       <div>
         <Drawer

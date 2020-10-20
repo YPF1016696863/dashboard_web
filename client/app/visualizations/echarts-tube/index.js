@@ -26,22 +26,9 @@ function EchartsTubeRenderer($rootScope) {
 
             let mercuryColor = '#fd4d49';
             let borderColor = '#fd4d49';
-            // 刻度使用柱状图模拟，短设置3，长的设置5；构造一个数据
-            const kd = [];
-            for (let i = 0, len = 160; i <= len; i += 1) {
-                if (i > 130 || i < 30) {
-                    kd.push('0')
-                } else {
-                    if (i % 5 === 0) {
-                        kd.push('5');
-                    } else {
-                        kd.push('3');
-                    }
-                }
 
-            }
 
-            
+
 
             // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
 
@@ -50,6 +37,21 @@ function EchartsTubeRenderer($rootScope) {
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+
+                        // 刻度使用柱状图模拟，短设置3，长的设置5；构造一个数据
+                        const kd = [];
+                        for (let i = 0, len = 160; i <= len; i += 1) {
+                            if (i > _.get($scope.options, "preLen", 130) || i < _.get($scope.options, "tailLen", 30)) {
+                                kd.push('0')
+                            } else {
+                                if (i % 5 === 0) {
+                                    kd.push('5');
+                                } else {
+                                    kd.push('3');
+                                }
+                            }
+                        }
+
                         const data = $scope.queryResult.getData();
                         echartsData = [];
 
@@ -79,7 +81,7 @@ function EchartsTubeRenderer($rootScope) {
                         mercuryColor = _.get($scope.options, "inColor", '#fd4d49');
                         borderColor = _.get($scope.options, "outColor", '#fd4d49');
 
-                        // console.log(echartsData);
+                        console.log(echartsData[echartsData.length - 1]);
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
@@ -90,7 +92,7 @@ function EchartsTubeRenderer($rootScope) {
                             type: 'bar',
                             // 对应上面XAxis的第一个对象配置
                             xAxisIndex: 0,
-                            data: echartsData,
+                            data: [echartsData[echartsData.length - 1]],
                             barWidth: 18,
                             itemStyle: {
                                 normal: {
@@ -102,9 +104,9 @@ function EchartsTubeRenderer($rootScope) {
                                 normal: {
                                     show: true,
                                     position: 'top',
-                                    formatter: function(param) {
+                                    formatter: function (param) {
                                         // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
-                                        return param.value - 30 + '°C';
+                                        return param.value - 30 + _.get($scope.options, "tail", '°C');
                                     },
                                     textStyle: {
                                         color: _.get($scope.options, "textColor", '#000'),
@@ -118,7 +120,7 @@ function EchartsTubeRenderer($rootScope) {
                             type: 'bar',
                             xAxisIndex: 1,
                             barGap: '-100%',
-                            data: [139],
+                            data: [_.get($scope.options, "preKuangLen", 140) - 1],
                             barWidth: 28,
                             itemStyle: {
                                 normal: {
@@ -132,7 +134,7 @@ function EchartsTubeRenderer($rootScope) {
                             type: 'bar',
                             xAxisIndex: 2,
                             barGap: '-100%',
-                            data: [140],
+                            data: [_.get($scope.options, "preKuangLen", 140)],
                             barWidth: 38,
                             itemStyle: {
                                 normal: {
@@ -195,9 +197,10 @@ function EchartsTubeRenderer($rootScope) {
                                     distance: 5,
                                     color: _.get($scope.options, "kdColor", '#525252'),
                                     fontSize: 10,
-                                    formatter: function(params) {
+                                    formatter: function (params) {
                                         // 因为柱状初始化为0，温度存在负值，所以，原本的0-100，改为0-130，0-30用于表示负值
-                                        if (params.dataIndex > 130 || params.dataIndex < 30) {
+                                        if (params.dataIndex > _.get($scope.options, "preLen", 130)
+                                            || params.dataIndex < _.get($scope.options, "tailLen", 30)) {
                                             return '';
                                         } else {
                                             if (params.dataIndex % 5 === 0) {
@@ -242,7 +245,7 @@ function EchartsTubeRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            
+
                             // let height ='100%';
                             // let width ='100%';
                             let height = "100%";
@@ -292,9 +295,9 @@ function EchartsTubeRenderer($rootScope) {
 
 
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
-            
+
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);
@@ -330,7 +333,7 @@ function EchartsTubeEditor() {
                 _.set($scope.options, "images", a);
                 $scope.$apply();
             }
-            
+
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
@@ -416,7 +419,7 @@ function EchartsTubeEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];
@@ -462,7 +465,7 @@ function EchartsTubeEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }

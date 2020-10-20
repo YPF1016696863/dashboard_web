@@ -21,6 +21,15 @@ function EchartsThreedbarRenderer($rootScope) {
             if (_.isEmpty($scope.options) || $scope.options.chartType !== "ThreedbarChart") {
                 $scope.options = defaultThreedbarChartOptions();
             }
+
+            function sortNumber(a, b) {
+                return a - b
+            }
+
+            function deSortNumber(a, b) {
+                return b - a
+            }
+            
             let echartsData = [];
             let dataX = [];
             let dataY = [];
@@ -30,14 +39,45 @@ function EchartsThreedbarRenderer($rootScope) {
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
-                        const data = $scope.queryResult.getData();
+                        let data = $scope.queryResult.getData();
                         echartsData = [];
                         dataXname = [];
                         dataYname = [];
                         dataX = [];
                         dataY = [];
                         dataZ = [];
+
+                        
+                        // x排序
+                        if(_.get($scope.options,"sortRuleX","noSort")!=="noSort"&&
+                        _.get($scope.options,"sortRuleY","noSort")==="noSort"){
+                            data=_.orderBy(data,_.get($scope.options, "form.xAxisColumn", ''),
+                            _.get($scope.options, "sortRuleX", 'noSort')
+                            );                        
+                            // y排序      
+                        }else if(_.get($scope.options,"sortRuleX","noSort")==="noSort"&&
+                        _.get($scope.options,"sortRuleY","noSort")!=="noSort"){
+                            data=_.orderBy(data,_.get($scope.options, "form.yAxisColumn", ''),
+                            _.get($scope.options, "sortRuleY", 'noSort')
+                            );
+                        }else{
+                            data=_.orderBy(data,
+                                [
+                                    _.get($scope.options, "form.xAxisColumn", ''),
+                                    _.get($scope.options, "form.yAxisColumn", '')
+                                ],
+                                [
+                                    _.get($scope.options, "sortRuleX", 'noSort'),
+                                    _.get($scope.options, "sortRuleY", 'noSort')
+                                ]                           
+                            );
+                        }
+                                          
+                      
+
+
                         _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        // console.log(value);
                             // eslint-disable-next-line func-names
                             _.forEach(value, function(valueChildren, keyChildren) {
                                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
@@ -62,11 +102,38 @@ function EchartsThreedbarRenderer($rootScope) {
                                         dataYname.push(valueChildren);
                                     }
                                 }
-
-
                             });
                         });
+                        // console.log(dataX,dataY,dataZ);
+                        let dataXNameX=[]
+                        let dataYNameY=[]
+                        for(let i=0;i<dataX.length;i+=1){
+                            dataXNameX.push({
+                                num:dataX[i],
+                                name:dataXname[i]
+                            })
+                            // dataXNameX[dataX[i]]=dataXname[i]          
+                        }
+                        dataXNameX=_.uniqBy(dataXNameX,"num")
+                        for(let i=0;i<dataY.length;i+=1){
+                            dataYNameY.push({
+                                num:dataY[i],
+                                name:dataYname[i]
+                            })
+                            // dataYNameY[dataY[i]]=dataYname[i]                      
+                        }
+                        dataYNameY=_.uniqBy(dataYNameY,"num");
+                        // console.log(dataXNameX,dataYNameY);
+                        dataXname=[];                      
+                        for(let i=0;i<dataXNameX.length;i+=1){
+                            dataXname.push(dataXNameX[i].name)
+                        }
+                        dataYname=[];                      
+                        for(let i=0;i<dataYNameY.length;i+=1){
+                            dataYname.push(dataYNameY[i].name)
+                        }
 
+                        
                         for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
                             echartsData.push([
                                 dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
@@ -74,7 +141,15 @@ function EchartsThreedbarRenderer($rootScope) {
                                 dataZ[i] === null || dataZ[i] === undefined ? 0 : dataZ[i]
                             ]);
                         }
-                        // console.log(dataXname);
+                        // console.log(echartsData);
+                        // const arrayZ=[];
+                        // for(let i=0;i<echartsData.length;i+=1){
+                        //     const x=echartsData[i][0];
+                        //     const y=echartsData[i][1];
+                        //     console.log(x,y);
+                        //     arrayZ[   x   ][  y  ]  =  echartsData[i][2]
+                        // }
+                        // console.log(arrayZ);
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
@@ -346,6 +421,12 @@ function EchartsThreedbarEditor() {
                 { label: '顶部', value: 'top' },
                 { label: '底部', value: 'bottom' },
                 { label: '居中', value: 'middle' }
+            ];
+
+            $scope.SortRule = [
+                { label: '顺序', value: 'asc' },
+                { label: '逆序', value: 'desc' },
+                { label: '保持', value: 'noSort' }
             ];
 
 

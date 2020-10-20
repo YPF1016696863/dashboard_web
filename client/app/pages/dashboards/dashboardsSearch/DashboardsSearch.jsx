@@ -130,7 +130,7 @@ class DashboardsSearch extends React.Component {
     ],
 
     imgTypeState: "tianchong",
-
+    dashboardColor : "#ffffff !important",
 
     // 上传背景
     previewVisible: false,
@@ -209,7 +209,8 @@ class DashboardsSearch extends React.Component {
           isDashboardOwner:
             currentUser.id === dashboard.user.id ||
             currentUser.hasPermission('admin'),
-          imgTypeState: arr[4]
+          imgTypeState: arr[4],
+          dashboardColor:arr[6],
         });
 
         // This is a really bad workaround, need to be changed after the dwmo
@@ -248,6 +249,13 @@ class DashboardsSearch extends React.Component {
     this.props.typeDashboardBgImgCb(e.target.value);
   }
 
+  onChangeColor= (e) => {
+    console.log('e', e.target.value);// 大屏背景颜色设置
+    // this.setState({
+    //   value: e.target.value,
+    // });
+    this.props.typeDashboardColorCb(e.target.value);
+  }
 
 
   // 上传图片
@@ -402,6 +410,18 @@ class DashboardsSearch extends React.Component {
                         <Radio value="pingpu">平铺</Radio>
                         <Radio value="lasheng">拉伸</Radio>
                       </Radio.Group>
+                      <input
+                        type="color"
+                        style={{ width:"100%" }}
+                        defaultValue={this.state.dashboardColor} 
+                        onChange={this.onChangeColor}
+                      />
+                      {/* <input
+                        type="number"
+                        style={{ width:"100%" }}
+                        defaultValue={this.state.dashboardColor} 
+                        onChange={this.onChangeColor}
+                      /> */}
                       <Carousel
                         afterChange={this.onChange}
                         ref={node => {
@@ -536,12 +556,14 @@ DashboardsSearch.propTypes = {
   slugId: PropTypes.string,
   updateDashboardBgImgCb: PropTypes.func,
   typeDashboardBgImgCb: PropTypes.func,
+  typeDashboardColorCb: PropTypes.func,
 };
 
 DashboardsSearch.defaultProps = {
   slugId: null,
   updateDashboardBgImgCb: a => { },
-  typeDashboardBgImgCb: a => { }
+  typeDashboardBgImgCb: a => { },
+  typeDashboardColorCb: a => { },
 };
 
 export default function init(ngModule) {

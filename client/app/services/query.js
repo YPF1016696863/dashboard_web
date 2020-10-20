@@ -578,7 +578,7 @@ function QueryResource(
 
   QueryService.prototype.getQueryResultByText = function getQueryResultByText(maxAge, selectedQueryText) {
     const queryText = selectedQueryText || this.query;
-    console.log("querytext",queryText);
+    // console.log("querytext",queryText);
     const parameters = this.getParameters().getValues();
     const execute = () => QueryResult.get(this.data_source_id, queryText, parameters, maxAge, this.id);
     return this.prepareQueryResultExecution(execute, maxAge);

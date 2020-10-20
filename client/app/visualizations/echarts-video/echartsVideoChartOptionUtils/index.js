@@ -1,109 +1,13 @@
 import * as _ from 'lodash';
 import UUIDv4 from 'uuid/v4';
- 
- 
-export function defaultThreedbarChartOptions() {
+
+export function defaultVideoChartOptions() { 
     return {
         id: UUIDv4(),
-        chartType: "ThreedbarChart",
+        chartType: "VideoChart",
         backgroundColor: 'transparent',
-        form: {
-            xName:"",
-            yName:"",
-            xAxisColumn: "",
-            yAxisColumn: "",
-            zAxisColumn: ""
-        },
-        title: {
-            text: 'Threedbar 简单示例',
-            textStyle: {
-                color: '#fff'
-            }
-        },
-        tooltip: {
-            show: true,
-            formatter: "{b} {c}",
-            textStyle: {
-                color: '#fff',
-            }
-        },
-        toolbox: {
-            show: false,
-            feature: {
-                restore: {},
-                saveAsImage: {}
-            }
-        },
-        animationDurationUpdate: 1500,
-        animationEasingUpdate: 'quinticInOut',
-        sortRuleX:"noSort",
-        sortRuleY:"noSort",
-        visualMap: {
-            max: 20,
-            inRange: {
-                color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
-            }
-        },
-        xAxis3D: {
-            type: 'category',
-            data: [],
-            axisLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                }
-            },
-            axisLabel: {
-                show: true,
-                color: '#fff',
-            }
-        },
-        yAxis3D: {
-            type: 'category',
-            data: [],
-            axisLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                }
-            },
-            axisLabel: {
-                show: true,
-                color: '#fff',
-            }
-        },
-        zAxis3D: {
-            type: 'value',
-            axisLine: {
-                show: true,
-                lineStyle: {
-                    color: '#fff',
-                }
-            },
-            axisLabel: {
-                show: true,
-                color: '#fff',
-            }
-        },
-        grid3D: {
-            boxWidth: 200,
-            boxDepth: 80,
-            viewControl: {
-                // projection: 'orthographic'
-            },
-            light: {
-                main: {
-                    intensity: 1.2,
-                    shadow: true
-                },
-                ambient: {
-                    intensity: 0.3
-                }
-            }
-        },
-        series: [{
-             
-        }],
+       
+        
         size: {
             responsive: true,
             width: "600px",
@@ -135,7 +39,7 @@ export function setChartType(options, type) {
 export function parseChartType(type) {
     switch (type) {
         case undefined: {
-            return "threedbar";
+            return "trajectory";
         }
 
         default: {
@@ -148,9 +52,9 @@ export function parseChartType(type) {
 export function getChartTypeForSeries(options, name) {
     // console.log(_.find(options.series, {name}));
     if (undefined !== _.find(options.series, { name })) {
-        return _.get(_.find(options.series, { name }), "type", "threedbar");
+        return _.get(_.find(options.series, { name }), "type", "graph");
     }
-    return parseChartType(name, _.get(options, "form.chartType", "threedbar"));
+    return parseChartType(name, _.get(options, "form.chartType", "graph"));
 }
 
 export function getChartType(options) {

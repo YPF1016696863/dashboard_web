@@ -67,7 +67,11 @@ function DashboardsViewCtrl(
     $scope.$applyAsync();
   };
 
-
+  $scope.typeDashboardColorCb = (color) => {
+    // console.log(type);
+    $scope.dashboardColor = color;
+    $scope.$applyAsync();
+  };
 
   $scope.addWidgetCb = (widgetData) => {
     $scope.widgetData = widgetData;

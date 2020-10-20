@@ -7,7 +7,8 @@
         <div class="d-flex flex-column p-absolute" style="left: 0; top: 0; right: 0; bottom: 0;">
           <div class="scrollbox" style="height: 100% !important;background-color: #20263B">
             <dashboards-search slug-id="slugId" dashboard-search-cb="dashboardSearchCb"
-              update-dashboard-bg-img-cb="updateDashboardBgImgCb" type-dashboard-bg-img-cb="typeDashboardBgImgCb">
+              update-dashboard-bg-img-cb="updateDashboardBgImgCb" type-dashboard-bg-img-cb="typeDashboardBgImgCb"
+              type-dashboard-color-cb="typeDashboardColorCb">
             </dashboards-search>
 
             <md-button aria-label="基础设置" style="color: #fff;width: 48%;" ng-click="baseOption=!baseOption">
@@ -61,7 +62,9 @@
                     <dashboards-tabs slug-id="slugId" widget-data="widgetData" dashboard-bg-img="dashboardBgImg"
                       rate-data="rateData" list-switch="listSwitch" grid-data="gridData"
                       edit-switch="editSwitch"
-                      dashboard-bg-img-type="dashboardBgImgType">
+                      dashboard-bg-img-type="dashboardBgImgType"
+                      dashboard-color="dashboardColor"
+                      >
                     </dashboards-tabs>
                   </div>
                   <!-- <div class="FAB">
