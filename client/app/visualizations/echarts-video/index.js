@@ -60,7 +60,18 @@ function EchartsVideoRenderer($rootScope) {
                         height,
                         'background-image': "url(" + _.get($scope.options, "images", "url111") + ")"
                     });
-                    // console.log($scope.options.size);
+                    
+                    
+                    _.set($scope.options, "sizeBg", {
+                        // responsive: true,
+                        'width': '100%',
+                        'height': '100%',
+                        'border-style': _.get($scope.options, "borderStyle", "solid"),
+                        'border-width': _.get($scope.options, "borderWidth", "0px"),
+                        'border-color': _.get($scope.options, "borderColor", "blue"),
+                    });
+
+                    
                 }
                 // myChart.resize($scope.options.size.width, $scope.options.size.height);
 
@@ -98,9 +109,10 @@ function EchartsVideoEditor() {
             }
             $scope.selectedChartType = getChartType($scope.options);
 
-            // 组件背景
-            $scope.getImageUrlCb = (a) => {
-                _.set($scope.options, "images", a);
+            //  get-video-url-cb
+            $scope.getVideoUrlCb = (a) => {
+                console.log(a);
+                _.set($scope.options, "video", a);
                 $scope.$apply();
             }
 

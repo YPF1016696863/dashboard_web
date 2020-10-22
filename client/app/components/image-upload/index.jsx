@@ -43,7 +43,7 @@ class ImageUpload extends React.Component {
         }),
       );
       if (info.file.response.status === 'OK') {
-        // console.log(UPLOAD_URL + info.file.response.url);
+        console.log(UPLOAD_URL + info.file.response.url);
         this.props.getImageUrlCb(appSettingsConfig.server.backendUrl+"/static/" + info.file.response.url);
       }
     }

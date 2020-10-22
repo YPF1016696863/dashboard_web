@@ -118,14 +118,14 @@ function EchartsZoneRenderer($rootScope) {
                             myChart.setOption($scope.options, true);
                         }
                         if (_.get($scope.options, "size.responsive", false)) {
-                            // let height = $element.parent().parent()["0"].clientHeight; // + 50
-                            // let width = $element.parent().parent()["0"].clientWidth;
+                            let height = $element.parent().parent()["0"].clientHeight; // + 50
+                            let width = $element.parent().parent()["0"].clientWidth;
 
                             // let height =  $element.closest('.t-body').outerHeight(true);
                             // let width = $element.closest('.t-body').outerWidth(true);
 
-                            let height = '100%';
-                            let width = '100%';
+                            // let height = '100%';
+                            // let width = '100%';
 
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
