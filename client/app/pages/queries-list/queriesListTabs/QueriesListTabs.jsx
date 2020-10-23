@@ -469,8 +469,8 @@ console.log("QueriesListTabs");
                 showIcon
               />
             </Modal>
-            <div style={{ padding: '10px' }}>
-              <div style={{ width: '50%', float: 'left' }}>
+            <div style={{ bottom:'10px' }}>
+              <div style={{ width: '50%', float: 'left',padding: '5px' }}>
                 <Descriptions title="数据集信息">
                   <Descriptions.Item label="数据集创建时间">
                     {this.state.query.created_at}
@@ -499,6 +499,36 @@ console.log("QueriesListTabs");
                       : '无法显示'}
                   </Descriptions.Item>
                 </Descriptions>
+                <b style={{ fontSize: '14px' }}>数据集描述:</b>
+                <div>
+                  <TextArea
+                    disabled={this.state.query.readOnly()}
+                    placeholder="数据集描述"
+                    rows={4}
+                    value={this.state.query.description}
+                    onChange={e => {
+                      this.setState({
+                        query: _.extend(this.state.query, {
+                          description: e.target.value
+                        })
+                      });
+                    }}
+                  />
+                </div>
+                <div align="right" style={{ paddingTop: '10px' }}>
+                  <Button
+                    type="primary"
+                    disabled={this.state.query.readOnly()}
+                    onClick={() => {
+                      this.saveQuery(null, {
+                        description: this.state.query.description
+                      });
+                    }}
+                  >
+                    <Icon type="save" />
+                    保存
+                  </Button>
+                </div>
                 <b style={{ fontSize: '14px' }}>数据集共享设置:</b>
                 <div style={{ paddingRight: '10px' }}>
                   <Form>
@@ -624,36 +654,8 @@ console.log("QueriesListTabs");
               </div>
             
               <div style={{ width: '50%', float: 'right' }}>
-                <b style={{ fontSize: '14px' }}>数据集描述:</b>
-                <div>
-                  <TextArea
-                    disabled={this.state.query.readOnly()}
-                    placeholder="数据集描述"
-                    rows={4}
-                    value={this.state.query.description}
-                    onChange={e => {
-                      this.setState({
-                        query: _.extend(this.state.query, {
-                          description: e.target.value
-                        })
-                      });
-                    }}
-                  />
-                </div>
-                <div align="right" style={{ paddingTop: '10px' }}>
-                  <Button
-                    type="primary"
-                    disabled={this.state.query.readOnly()}
-                    onClick={() => {
-                      this.saveQuery(null, {
-                        description: this.state.query.description
-                      });
-                    }}
-                  >
-                    <Icon type="save" />
-                    保存
-                  </Button>
-                </div>
+               
+              
                 <b style={{ fontSize: '14px' }}>新建可视化组件:</b>
                 <div align="right" style={{ paddingTop: '10px' }}>
                   <Button
@@ -668,7 +670,7 @@ console.log("QueriesListTabs");
                     新建可视化组件
                   </Button>
                 </div>
-                <hr />
+              
                 <b style={{ fontSize: '14px' }}>其他设置:</b>
                 <br />
                 {
@@ -706,9 +708,7 @@ console.log("QueriesListTabs");
                     </>
                   ) : null
                 }
-              </div>
-             
-              <div style={{ width: '100%', float: 'left' }}>
+                <hr />
                 <b style={{ fontSize: '14px' }}>数据集参数配置:</b>
                 {this.state.query.getParametersDefs().length <= 0 ? (
                   <Row>
@@ -804,8 +804,6 @@ console.log("QueriesListTabs");
                     </Col>
                   </Row>
                   )}
-              </div>
-              <div style={{ width: '100%', float: 'left' }}>
                 <b style={{ fontSize: '14px' }}>数据集数据预览:</b>
                 {this.state.queryResult == null ? (
                   <Empty description="该数据集暂无数据" />
@@ -815,7 +813,9 @@ console.log("QueriesListTabs");
                       style={{
                           width: '100%',
                           height: '100%',
-                          backgroundColor: '#25374C'
+                          bottom:0,
+                          backgroundColor: '#fff',
+
                         }}
                       id="Preview"
                     >
@@ -831,6 +831,7 @@ console.log("QueriesListTabs");
                   </>
                   )}
               </div>
+                       
             </div>
           </>
         )}

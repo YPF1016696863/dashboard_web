@@ -1,5 +1,4 @@
-<span ng-style="options.sizeBg" 
-style="position: absolute;
+<span ng-style="options.sizeBg" style="position: absolute;
 background-repeat: no-repeat;
 background-size: 100% 100%;">
     <!-- ng-style="options.sizeBg" style="position: absolute;background-repeat: no-repeat;
@@ -58,14 +57,16 @@ background-size: 100% 100%;"  -->
 
 
 
-<div style="width: 20%; z-index: 999;" ng-if="options.showCondition1">
+<div style="width: 20%;z-index: 999;" ng-if="options.showCondition1">
     <ui-select name="yAxisColumns" required ng-model="options.condition1.where">
         <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled"
             ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}" placeholder="选择条件..."
             aria-hidden="false" aria-disabled="false">
-            <span ng-model="options.span" tabindex="-1" class="btn btn-default2 form-control ui-select-toggle"
-                aria-label="Select box activate" ng-disabled="$select.disabled" ng-click="$select.activate()"
-                ng-style="options.form.span.style" style="outline: 0;" role="button" aria-disabled="false">
+            <span tabindex="-1" class="btn btn-default2 form-control ui-select-toggle" aria-label="Select box activate"
+                ng-disabled="$select.disabled" ng-click="$select.activate()" ng-style="options.form.span.style"
+                style="outline: 0;" role="button" aria-disabled="false">
+                <span style="background-color: aquamarine;z-index: 999;" ng-show="$select.isEmpty()"
+                    aria-hidden="false">选择列...</span>
                 <span>{{$select.selected}}</span>
             </span>
 
@@ -77,15 +78,14 @@ background-size: 100% 100%;"  -->
             </a>
             </span>
         </div>
-
         <span ng-show="$select.open &amp;&amp; $select.refreshing &amp;&amp; $select.spinnerEnabled"
-            class="ui-select-refreshing glyphicon glyphicon-refresh ui-select-spin ng-hide" aria-hidden="true">
-        </span>
+            class="ui-select-refreshing glyphicon glyphicon-refresh ui-select-spin ng-hide" aria-hidden="true"></span>
         <input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Select box"
-            aria-owns="ui-select-choices-22"
-            class="form-control ui-select-search ng-pristine ng-valid ng-empty ng-touched ng-hide"
-            ng-class="{ 'ui-select-search-hidden' : !$select.searchEnabled }" placeholder="选择数据..."
-            ng-model="$select.search" ng-show="$select.open" aria-hidden="false" aria-invalid="false" style="">
+            aria-owns="ui-select-choices-29"
+            class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-empty ng-hide"
+            ng-class="{ 'ui-select-search-hidden' : !$select.searchEnabled }" placeholder="选择列..."
+            ng-model="$select.search" ng-show="$select.open" aria-hidden="false" aria-invalid="false"
+            style="background-color: aquamarine;z-index: 999;" >
 
         <ui-select-choices repeat="column in options.conditionColList1">
             <span ng-bind-html="column | highlight: $select.search"></span>
@@ -95,6 +95,46 @@ background-size: 100% 100%;"  -->
     </ui-select>
 </div>
 
+<!-- <div style="width: 20%;z-index: 999;" ng-if="options.showCondition2">
+    <div class="ui-select-container ui-select-bootstrap dropdown ng-valid ng-not-empty ng-valid-required ng-touched ng-dirty ng-valid-parse open"
+        ng-class="{open: $select.open}" name="yAxisColumns" required="required" ng-model="options.condition2.where"
+        aria-required="true" aria-invalid="false" style="">
+        <div class="ui-select-match ng-hide" ng-hide="$select.open &amp;&amp; $select.searchEnabled"
+            ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}" placeholder="选择条件..."
+            aria-hidden="false" aria-disabled="false" style="">
+            <span tabindex="-1" class="btn btn-default2 form-control ui-select-toggle" aria-label="Select box activate"
+                ng-disabled="$select.disabled" ng-click="$select.activate()" ng-style="options.form.span.style"
+                style="outline: 0px; background-color: rgb(214, 31, 31); color: rgb(58, 177, 207); border-color: rgb(69, 76, 95); font-size: 20px; margin-left: 0%; margin-top: 0%;"
+                role="button" aria-disabled="false">
+                <span style="background-color: aquamarine;z-index: 999;" ng-show="$select.isEmpty()"
+                    class="ui-select-placeholder text-muted ng-hide" aria-hidden="false">选择列...</span>
+                <span>{{$select.selected}}</span>
+            </span>
+
+            <i class="caret pull-right" ng-click="$select.toggle($event)" role="button" tabindex="0"></i>
+            <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)"
+                aria-label="Select box clear" style="margin-right: 10px" ng-click="$select.clear($event)"
+                class="btn btn-xs btn-link pull-right ng-hide" aria-hidden="true">
+                <i class="fa fa-remove" aria-hidden="true"></i>
+            </a>
+
+        </div>
+        <span ng-show="$select.open &amp;&amp; $select.refreshing &amp;&amp; $select.spinnerEnabled"
+            class="ui-select-refreshing glyphicon glyphicon-refresh ui-select-spin ng-hide" aria-hidden="true">
+        </span>
+        <input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Select box"
+            aria-owns="ui-select-choices-29"
+            class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-empty ng-hide"
+            ng-class="{ 'ui-select-search-hidden' : !$select.searchEnabled }" placeholder="选择列..."
+            ng-model="$select.search" ng-show="$select.open" aria-hidden="true" aria-invalid="false"
+            style="width: 10px;">
+        <ui-select-choices repeat="column in options.conditionColList2">
+            <span ng-bind-html="column | highlight: $select.search"></span>
+            <span> </span>
+            <small class="text-muted" ng-bind="columns[column].type"></small>
+        </ui-select-choices>
+    </div>
+</div> -->
 
 <div style="width: 20%; z-index: 999;" ng-if="options.showCondition2">
     <ui-select name="yAxisColumns" required ng-model="options.condition2.where">

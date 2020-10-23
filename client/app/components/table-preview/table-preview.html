@@ -1,9 +1,20 @@
 <main style="background-color: #25374C">
-  <div class="query__vis m-t-15 scrollbox flex-fill">
+  <div class="query__vis m-t-15 scrollbox p-b-15 flex-fill" 
+  style=" height: 350px;">
     <visualization-renderer
             visualization="$ctrl.visualization"
             query-result="$ctrl.queryResult"
     >
     </visualization-renderer>
-  </div>
+  </div> 
 </main>
+
+<!-- <main style="background-color: #25374C">
+  <div class="d-flex flex-column  static-position__mobile"
+    style=" bottom: 0;background-color: #25374C">
+    <div class="query__vis m-t-15 p-b-15 scrollbox">
+      <visualization-renderer visualization="$ctrl.visualization" query-result="$ctrl.queryResult">
+      </visualization-renderer>
+    </div>
+  </div>
+</main> -->

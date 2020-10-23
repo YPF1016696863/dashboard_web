@@ -198,10 +198,16 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
               // _.set($scope.options, 'fanFlag', false);
             });
 
-            console.log(seriesData);
+            // console.log(seriesData);
 
             let seriesIndex = 0;
-            _.set($scope.options, "series", []); // 清空设置
+            // _.set($scope.options, "series", []); // 清空设置
+
+            // 选择x数据后刷新图表
+            const chooseData = _.get($scope.options, "form.xAxisColumn", "::");
+            if (chooseData) {
+              _.set($scope.options, "series", []);
+            }
 
             _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
 
@@ -443,6 +449,27 @@ function EchartsPieEditor() {
       $scope.changeTab = (tab) => {
         $scope.currentTab = tab;
       };
+      // 样式设置二级标签
+      $scope.currentTab2 = 'title';
+      $scope.changeTab2 = (tab2) => {
+        $scope.currentTab2 = tab2;
+      };
+
+      // 系列设置二级标签
+      $scope.currentTab3 = 'series';
+      $scope.changeTab3 = (tab3) => {
+        $scope.currentTab3 = tab3;
+      };
+
+      // 主标题折叠
+      $scope.isCollapsedMain = true;
+      // 副标题
+      $scope.isCollapsedSub = true;
+      // 颜色折叠
+      $scope.isCollapsedColor = true;
+      // 容器的距离
+      $scope.isCollapsedDistance = true;
+
       $scope.chartTypes = {
         pie: { name: 'Echarts饼图', icon: 'pie-chart' },
         rose: { name: 'Echarts玫瑰图', icon: 'pie-chart' },

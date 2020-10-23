@@ -52,15 +52,15 @@ export function defaultPieChartOptions() {
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
         grid: {
-            left:"10%",
-            right:"10%",
-            top:"10%",
-            bottom:"10%"
+            left: "10%",
+            right: "10%",
+            top: "10%",
+            bottom: "10%"
         },
         toolbox: {
             show: false,
-            feature: {  
-                restore: {},             
+            feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },
@@ -73,8 +73,28 @@ export function defaultPieChartOptions() {
         //     }
         // },
         // 默认饼图主题颜色配置
-        color : [ '#63b2ee', '#76da91 ','#f8cb7f ','#f89588', '#7cd6cf ','#9192ab ','#7898e1  ', '#efa666','#eddd86 ','#9987ce '],
+        color: ['#63b2ee', '#76da91 ', '#f8cb7f ', '#f89588', '#7cd6cf ', '#9192ab ', '#7898e1  ', '#efa666', '#eddd86 ', '#9987ce '],
         series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: [
+                    { value: 335, name: '直接访问' },
+                    { value: 310, name: '邮件营销' },
+                    { value: 234, name: '联盟广告' },
+                    { value: 135, name: '视频广告' },
+                    { value: 1548, name: '搜索引擎' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
         ]
     };
 };

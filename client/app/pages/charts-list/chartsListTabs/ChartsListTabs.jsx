@@ -113,7 +113,7 @@ class ChartsListTabs extends React.Component {
           saving: false
         }
       },
-      refashValue:5
+      refashValue: 5
     });
     ChartsPreviewDOM = angular2react(
       'chartsPreview',
@@ -295,7 +295,7 @@ class ChartsListTabs extends React.Component {
                   share: {
                     public: visualization.publicAccessEnabled
                       ? this.generateIframeCode(VISUALIZATION_SHARE_URL + visualization.api_key
-                        +"?refresh="+this.state.refashValue)
+                        + "?refresh=" + this.state.refashValue)
                       : '打开可视化面板共享按钮以获取url链接',
                     api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                     saving: false
@@ -351,7 +351,7 @@ class ChartsListTabs extends React.Component {
                       share: {
                         public: visualization.publicAccessEnabled
                           ? this.generateIframeCode(VISUALIZATION_SHARE_URL +
-                             visualization.api_key+"?refresh="+this.state.refashValue)
+                            visualization.api_key + "?refresh=" + this.state.refashValue)
                           : '打开可视化面板共享按钮以获取url链接',
                         api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                         saving: false
@@ -461,12 +461,12 @@ class ChartsListTabs extends React.Component {
     }
   };
 
-  onChangeFreash=(value) =>{
+  onChangeFreash = (value) => {
     console.log('changed', value);
     this.setState({
-      refashValue:value
+      refashValue: value
     });
-    
+
   }
 
   enableAccess = () => {
@@ -487,8 +487,8 @@ class ChartsListTabs extends React.Component {
           this.setState({
             runtime: {
               share: {
-                public: 
-                this.generateIframeCode(VISUALIZATION_SHARE_URL + data.api_key+"?refresh="+this.state.refashValue),
+                public:
+                  this.generateIframeCode(VISUALIZATION_SHARE_URL + data.api_key + "?refresh=" + this.state.refashValue),
                 api: _.replace(API_SHARE_URL, '{id}', visualization.id),
                 saving: false
               }
@@ -622,7 +622,7 @@ class ChartsListTabs extends React.Component {
                 'V' ? (
                   // eslint-disable-next-line react/jsx-indent
                   <div style={{ paddingRight: '10px', paddingTop: '10px' }}>
-                    <div style={{ width: '50%', float: 'left' }}>
+                    <div style={{ width: '50%', float: 'left', padding: '5px' }}>
                       <Descriptions title="可视化组件信息" style={{ paddingRight: '10px' }}>
                         <Descriptions.Item label="更新时间">
                           {this.state.visualization.updated_at}
@@ -647,8 +647,34 @@ class ChartsListTabs extends React.Component {
                         title="该可视化组件由以下数据集创建:"
                         value={this.state.query.name}
                       /> */}
+                      <b style={{ fontSize: '14px' }}>可视化组件描述:</b>
+                      <TextArea
+                        placeholder="可视化组件描述"
+                        rows={4}
+                        value={this.state.visualization.description}
+                        onChange={e => {
+                          this.setState({
+                            visualization: _.extend(this.state.visualization, {
+                              description: e.target.value
+                            })
+                          });
+                        }}
+                      />
+                      <div align="right" style={{ paddingTop: '10px' }}>
+                        <Button
+                          type="primary"
+                          onClick={e => {
+                            this.updateVisualization({
+                              description: this.state.visualization.description
+                            });
+                          }}
+                        >
+                          <Icon type="save" />
+                          保存
+                        </Button>
+                      </div>
                       <b style={{ fontSize: '14px' }}>可视化组件共享设置:</b>
-                      <div style={{ paddingRight: '10px',margin: '0' }}>
+                      <div style={{ paddingRight: '10px', margin: '0' }}>
                         <Form>
                           <Form.Item
                             label="共享可视化组件"
@@ -684,62 +710,29 @@ class ChartsListTabs extends React.Component {
                         </Form>
                       </div>
 
-                      <b style={{ fontSize: '14px' }}>可视化组件预览:</b>
-                      <Row>
-                        <Col span={12} style={{ width: "30vw", height: "35vh" }} id="Preview">
-                          <ChartsPreviewDOM
-                            visualization={this.state.visualization}
-                            queryResult={this.state.queryResult}
-                          />
-                        </Col>
-                      </Row>
+
                     </div>
                     <div style={{ width: '50%', float: 'right' }}>
-                      <b style={{ fontSize: '14px' }}>可视化组件描述:</b>
-                      <TextArea
-                        placeholder="可视化组件描述"
-                        rows={6}
-                        value={this.state.visualization.description}
-                        onChange={e => {
-                          this.setState({
-                            visualization: _.extend(this.state.visualization, {
-                              description: e.target.value
-                            })
-                          });
-                        }}
-                      />
-                      <div align="right">
-                        <Button
-                          type="primary"
-                          onClick={e => {
-                            this.updateVisualization({
-                              description: this.state.visualization.description
-                            });
-                          }}
-                        >
-                          <Icon type="save" />
-                          保存
-                        </Button>
-                      </div>
+
                       <b style={{ fontSize: '14px' }}>其他设置:</b>
                       <br />
                       <Button
                         type="primary"
                         onClick={e => {
                           if (e.ctrlKey) {
-                            window.open(window.location.origin + 
+                            window.open(window.location.origin +
                               '/query/' +
-                            this.getQueryId() +
-                            '/charts/' +
-                            this.getChartId());
-                          }else{
+                              this.getQueryId() +
+                              '/charts/' +
+                              this.getChartId());
+                          } else {
                             navigateToWithSearch(
                               'query/' +
                               this.getQueryId() +
                               '/charts/' +
                               this.getChartId()
                             );
-                          }                          
+                          }
                         }}
                       >
                         <i className="fa fa-edit m-r-5" />
@@ -758,9 +751,7 @@ class ChartsListTabs extends React.Component {
                           删除可视化组件
                         </Button>
                       </Popconfirm>
-                      <br />
-                      <br />
-                      <Divider />
+                      <hr />
                       <b style={{ fontSize: '14px' }}>可视化组件仪表板设置:</b>
                       <Table
                         pagination={{
@@ -769,12 +760,23 @@ class ChartsListTabs extends React.Component {
                         columns={this.columns}
                         dataSource={this.state.dashboards.referenced}
                       />
-                      <DashboardsList
+                      <br />
+                      <DashboardsList 
                         visualization={this.state.visualization}
                         onSuccess={() => {
                           this.getDashboardOverview(this.props.displayId);
                         }}
                       />
+                      <br />
+                      <b style={{ fontSize: '14px' }}>可视化组件预览:</b>
+                      <Row>
+                        <Col span={12} style={{ width: "30vw", height: "35vh" }} id="Preview">
+                          <ChartsPreviewDOM
+                            visualization={this.state.visualization}
+                            queryResult={this.state.queryResult}
+                          />
+                        </Col>
+                      </Row>
                     </div>
                   </div>
                 ) : null}
