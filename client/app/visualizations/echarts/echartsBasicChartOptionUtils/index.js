@@ -12,7 +12,7 @@ export function defaultBasicChartOptions() {
         useSerie: '',           // 选中的系列名称
         useSerie_Index: -1,     // 选中的系列下标
         bar2Flag: false,
-        sortRule:"Sort",
+        sortRule: "Sort",
 
         form: {
             xAxisColumn: "",
@@ -25,7 +25,7 @@ export function defaultBasicChartOptions() {
         },
         title: {
             text: '',
-            left:"50%",
+            left: "50%",
             subtext: '',
             x: 'center',
             backgroundColor: 'transparent',
@@ -54,10 +54,10 @@ export function defaultBasicChartOptions() {
             }
         },
         grid: {
-            left:"10%",
-            right:"10%",
-            top:"10%",
-            bottom:"10%"
+            left: "10%",
+            right: "10%",
+            top: "10%",
+            bottom: "10%"
         },
         legend: {
             show: true,
@@ -110,8 +110,8 @@ export function defaultBasicChartOptions() {
         },
         xAxis: {
             type: 'category',
-            boundaryGap: false,
-            data: ["-"],
+            boundaryGap: true,
+           
             nameLocation: "end",
             axisLine: {
                 show: true,
@@ -132,7 +132,8 @@ export function defaultBasicChartOptions() {
                     width: 1,
                     type: 'dashed'
                 }
-            }
+            },
+            // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
 
         yAxis: {
@@ -168,6 +169,10 @@ export function defaultBasicChartOptions() {
         }],
         color: ['#63b2ee', '#76da91 ', '#f8cb7f ', '#f89588', '#7cd6cf ', '#9192ab ', '#7898e1  ', '#efa666', '#eddd86 ', '#9987ce '],
         series: [
+            // {
+            //     data: [820, 932, 901, 934, 1290, 1330, 1320],
+            //     type: 'line'
+            // }
         ]
     };
 };

@@ -21,6 +21,8 @@ function EchartsTrajectoryRenderer($rootScope) {
             if (_.isEmpty($scope.options) || $scope.options.chartType !== "TrajectoryChart") {
                 $scope.options = defaultTrajectoryChartOptions();
             }
+
+            console.log(defaultTrajectoryChartOptions)
             let echartsData = [];
             let dataX = [];
             let dataY = [];
@@ -102,7 +104,10 @@ function EchartsTrajectoryRenderer($rootScope) {
                             echartsData.push(tempData);
                         }
 
-                        // console.log(echartsData);  
+
+                        // 放入data的数据
+                        // var echartsData3 = [[10, 10], [20, 20], [30, 30], [40, 40]];
+                        // console.log(echartsData3);
 
                         dataX = [];
                         dataY = [];
@@ -123,10 +128,17 @@ function EchartsTrajectoryRenderer($rootScope) {
                         // 切换主题颜色
                         let seriesIndex = 0;
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
-                        _.set($scope.options, "series", []); // 清空设置           
+
+                        _.set($scope.options, "series", []); // 清空设置 
+                        // const chooseData = _.get($scope.options, "form.xAxisColumn", "::");
+                        // if (chooseData) {
+                        //     _.set($scope.options, "series", []);
+                        // }
+
                         _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
                             $scope.options.series.push({
                                 data: echartsData[seriesIndex],
+                                // data: echartsData3,
                                 type: 'line',
                                 // _.get($scope.options, "series_Label_Position", '')[seriesIndex]
                                 symbol: _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === null ||
@@ -264,10 +276,42 @@ function EchartsTrajectoryEditor() {
                 _.set($scope.options, "images", a);
                 $scope.$apply();
             }
+
+
+
+
+            // 大的一级标签
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
+            // 样式设置二级标签
+            $scope.currentTab2 = 'title';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+            // 系列设置二级标签
+            $scope.currentTab3 = 'series';
+            $scope.changeTab3 = (tab3) => {
+                $scope.currentTab3 = tab3;
+            };
+            
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+            // 纬度轴
+            $scope.isCollapsedXAxisOption = true;
+
+            // 指标轴
+            $scope.isCollapsedYAxisOption = true;
+
+            // 横向网格线
+
             $scope.xAxisLocations = [
                 { label: '数据轴起始位置', value: 'start' },
                 { label: '数据轴居中位置', value: 'center' },

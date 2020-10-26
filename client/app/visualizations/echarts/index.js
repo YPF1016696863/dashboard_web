@@ -165,6 +165,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     'margin-top': _.get($scope.options, "form.filterColumnCol.positionY", "0%"),
                 });
 
+                
                 // _.set($scope.options, "size", {
                 //     responsive: true,
                 //     width,
@@ -363,8 +364,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                             for (let i = 0; i < seriesYData.length; i += 1) {
                                 seriesYData[i] =
-                                 _.slice(seriesYData[i], 
-                                    seriesYData[i].length - N, seriesYData[i].length);
+                                    _.slice(seriesYData[i],
+                                        seriesYData[i].length - N, seriesYData[i].length);
                             }
                             filterXData = _.slice(filterXData, filterXData.length - N, filterXData.length);
                         }
@@ -392,6 +393,12 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
 
                         _.set($scope.options, "series", []); // 清空设置
+
+                        // const chooseData = _.get($scope.options, "form.xAxisColumn", "::");
+                        // if (chooseData) {
+                        //     _.set($scope.options, "series", []);
+                        // }
+
                         // series下的
                         let seriesNameIndex = 0;
                         // setChartType($scope.options, selected);
@@ -776,6 +783,7 @@ function EchartsEditor() {
                 // console.log($scope.columnNames);
             } catch (e) {
                 console.log("some error");
+                console.log(e);
             }
 
             $scope.downloadOption = function () {
