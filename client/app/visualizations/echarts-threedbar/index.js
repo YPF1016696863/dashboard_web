@@ -217,7 +217,7 @@ function EchartsThreedbarRenderer($rootScope) {
                          * xy排序方法 end
                          * 
                          *  */ 
-                        console.log(echartsData);
+                        // console.log(echartsData);
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
