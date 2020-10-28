@@ -157,126 +157,229 @@
         <div ng-repeat="index in conditionArray"> -->
         <!-- <button id={{index}} ng-click="deleteCondition($event)">-</button>
         </div> -->
-        <div class="form-group" style="width:49%;float:left">
-            <label class="control-label">筛选列1</label>
-            <ui-select name="yAxisColumns" required ng-model="options.condition1.col">
-                <ui-select-match placeholder="选择列...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
+        <div class="form-group">
+            <div class="table-name" ng-click="isFilterColumn1 = !isFilterColumn1">
+                <div class="form-group" style="float:left">
+                    <i class="fa fa-table"></i>
+                    <strong>
+                        <span>筛选1</span>
+                    </strong>
+                </div>
+            </div>
+            <div uib-collapse="isFilterColumn1">
+                <div class="form-group" style="float:left;width:100%">
+                    <div class="form-group" style="width:49%;float:left">
+                        <label class="control-label">筛选列1</label>
+                        <ui-select name="yAxisColumns" required ng-model="options.condition1.col">
+                            <ui-select-match placeholder="选择列...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="column in columnNames">
+                                <span ng-bind-html="column | highlight: $select.search"></span>
+                                <span> </span>
+                                <small class="text-muted" ng-bind="columns[column].type"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                        <div class="form-group" style="width:100%;float:right">
+                            <label class="control-label" style="width:100%;float: left">背景</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_1.backgroundColor" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_1.backgroundColorOpacity " placeholder="0" />
+                        </div>
+                        <label class="control-label">筛选框的边框颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol_1.borderColor" />
+                        <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%;">
+                            <label class="control-label">位置X(百分比)</label>
+                            <input name="name" type="text" class="form-control"
+                                ng-model="options.form.filterColumnCol_1.positionX" placeholder="" />
+                        </div>
+                    </div>
+                    <div class="form-group" style="width:49%;float:right">
+                        <label class="control-label">筛选条件1
+                            <input type="checkbox" ng-model="options.showCondition1">
+                        </label>
+                        <ui-select name="yAxisColumns" required ng-model="options.condition1.where">
+                            <ui-select-match placeholder="选择条件...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="column in options.conditionColList1">
+                                <span ng-bind-html="column | highlight: $select.search"></span>
+                                <span> </span>
+                                <small class="text-muted" ng-bind="columns[column].type"></small>
+                            </ui-select-choices>
+                        </ui-select>
 
-            <label class="control-label">筛选列2</label>
-            <ui-select name="yAxisColumns" required ng-model="options.condition2.col">
-                <ui-select-match placeholder="选择列...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
+                        <label class="control-label">筛选框的文字颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol_1.color" />
+                        <!-- <ui-select class="mini" ng-model="options.form.filterColumnCol_1.color">
+                            <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                            <ui-select-choices repeat="Color.value as Color in Colors">
+                                <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select> -->
+                        <label class="control-label">筛选框的文字大小</label>
+                        <input name="name" type="text" class="form-control"
+                            ng-model="options.form.filterColumnCol_1.fontSize" placeholder="" />
+                        <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%">
+                            <label class="control-label">位置Y(百分比)</label>
+                            <input name="name" type="text" class="form-control"
+                                ng-model="options.form.filterColumnCol_1.positionY" placeholder="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <label class="control-label">筛选列3</label>
-            <ui-select name="yAxisColumns" required ng-model="options.condition3.col">
-                <ui-select-match placeholder="选择列...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in columnNames">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
 
-            <div class="form-group" style="width:100%;float:right">
-                <label class="control-label" style="width:100%;float: left">背景</label>
-                <input type="color" style="width:50%;float: left" class="form-control"
-                    ng-model="options.form.filterColumnCol.backgroundColor" />
-                <input type="text" style="width:50%;float: left" class="form-control"
-                    ng-model="options.form.filterColumnCol.backgroundColorOpacity " placeholder="0" />
+            <div class="table-name" ng-click="isFilterColumn2 = !isFilterColumn2">
+                <div class="form-group" style="float:left">
+                    <i class="fa fa-table"></i>
+                    <strong>
+                        <span>筛选2</span>
+                    </strong>
+                </div>
+            </div>
 
+            <div uib-collapse="isFilterColumn2">
+                <div class="form-group" style="float:left;width:100%">
+                    <div class="form-group" style="width:49%;float:left">
+                        <label class="control-label">筛选列2</label>
+                        <ui-select name="yAxisColumns" required ng-model="options.condition2.col">
+                            <ui-select-match placeholder="选择列...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="column in columnNames">
+                                <span ng-bind-html="column | highlight: $select.search"></span>
+                                <span> </span>
+                                <small class="text-muted" ng-bind="columns[column].type"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                        <div class="form-group" style="width:100%;float:right">
+                            <label class="control-label" style="width:100%;float: left">背景</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_2.backgroundColor" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_2.backgroundColorOpacity " placeholder="0" />
+                        </div>
+                        <label class="control-label">筛选框的边框颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol_2.borderColor" />
+                        <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%;">
+                            <label class="control-label">位置X(百分比)</label>
+                            <input name="name" type="text" class="form-control"
+                                ng-model="options.form.filterColumnCol_2.positionX" placeholder="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="width:49%;float:right">
+                        <label class="control-label">筛选条件2
+                            <input type="checkbox" ng-model="options.showCondition2">
+                        </label>
+                        <ui-select name="yAxisColumns" required ng-model="options.condition2.where">
+                            <ui-select-match placeholder="选择条件...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="column in options.conditionColList2">
+                                <span ng-bind-html="column | highlight: $select.search"></span>
+                                <span> </span>
+                                <small class="text-muted" ng-bind="columns[column].type"></small>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <label class="control-label">筛选框的文字颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol_2.color" />
+                        <!-- <ui-select class="mini" ng-model="options.form.filterColumnCol.color">
+                            <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                            <ui-select-choices repeat="Color.value as Color in Colors">
+                                <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select> -->
+                        <label class="control-label">筛选框的文字大小</label>
+                        <input name="name" type="text" class="form-control"
+                            ng-model="options.form.filterColumnCol_2.fontSize" placeholder="" />
+                        <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%">
+                            <label class="control-label">位置Y(百分比)</label>
+                            <input name="name" type="text" class="form-control"
+                                ng-model="options.form.filterColumnCol_2.positionY" placeholder="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="table-name" ng-click="isFilterColumn3 = !isFilterColumn3">
+                <div class="form-group" style="float:left">
+                    <i class="fa fa-table"></i>
+                    <strong>
+                        <span>筛选3</span>
+                    </strong>
+                </div>
             </div>
 
 
 
-            <label class="control-label">筛选框的边框颜色</label>
-            <input type="color" style="width:100%" class="form-control"
-                ng-model="options.form.filterColumnCol.borderColor" />
-        </div>
+            <div uib-collapse="isFilterColumn3">
+                <div class="form-group" style="float:left;width:100%">
+                    <div class="form-group" style="width:49%;float:left">
+                        <label class="control-label">筛选列3</label>
+                        <ui-select name="yAxisColumns" required ng-model="options.condition3.col">
+                            <ui-select-match placeholder="选择列...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="column in columnNames">
+                                <span ng-bind-html="column | highlight: $select.search"></span>
+                                <span> </span>
+                                <small class="text-muted" ng-bind="columns[column].type"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                        <div class="form-group" style="width:100%;float:right">
+                            <label class="control-label" style="width:100%;float: left">背景</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_3.backgroundColor" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_3.backgroundColorOpacity " placeholder="0" />
+                        </div>
+                        <label class="control-label">筛选框的边框颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol_3.borderColor" />
+                        <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%;">
+                            <label class="control-label">位置X(百分比)</label>
+                            <input name="name" type="text" class="form-control"
+                                ng-model="options.form.filterColumnCol_3.positionX" placeholder="" />
+                        </div>
+                    </div>
 
+                    <div class="form-group" style="width:49%;float:right">
+                        <label class="control-label">筛选条件3
+                            <input type="checkbox" ng-model="options.showCondition3">
+                        </label>
+                        <ui-select name="yAxisColumns" required ng-model="options.condition3.where">
+                            <ui-select-match placeholder="选择条件...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="column in options.conditionColList3">
+                                <span ng-bind-html="column | highlight: $select.search"></span>
+                                <span> </span>
+                                <small class="text-muted" ng-bind="columns[column].type"></small>
+                            </ui-select-choices>
+                        </ui-select>
 
-        <div class="form-group" style="width:49%;float: right;">
-
-            <label class="control-label">筛选条件1
-                <input type="checkbox" ng-model="options.showCondition1">
-            </label>
-            <ui-select name="yAxisColumns" required ng-model="options.condition1.where">
-                <ui-select-match placeholder="选择条件...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in options.conditionColList1">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
-
-
-            <label class="control-label">筛选条件2
-                <input type="checkbox" ng-model="options.showCondition2">
-            </label>
-            <ui-select name="yAxisColumns" required ng-model="options.condition2.where">
-                <ui-select-match placeholder="选择条件...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in options.conditionColList2">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
-
-            <label class="control-label">筛选条件3
-                <input type="checkbox" ng-model="options.showCondition3">
-            </label>
-            <ui-select name="yAxisColumns" required ng-model="options.condition3.where">
-                <ui-select-match placeholder="选择条件...">{{$select.selected}}</ui-select-match>
-                <ui-select-choices repeat="column in options.conditionColList3">
-                    <span ng-bind-html="column | highlight: $select.search"></span>
-                    <span> </span>
-                    <small class="text-muted" ng-bind="columns[column].type"></small>
-                </ui-select-choices>
-            </ui-select>
-
-            <label class="control-label">筛选框的文字颜色</label>
-            <input type="color" style="width:100%" class="form-control" ng-model="options.form.filterColumnCol.color" />
-            <!-- <ui-select class="mini" ng-model="options.form.filterColumnCol.color">
-                <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                <ui-select-choices repeat="Color.value as Color in Colors">
-                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                </ui-select-choices>
-            </ui-select> -->
-
-            <label class="control-label">筛选框的文字大小</label>
-            <input name="name" type="text" class="form-control" ng-model="options.form.filterColumnCol.fontSize"
-                placeholder="" />
-
-        </div>
-
-
-        <div class="form-group" style="width:100%;float:left">
-            <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:49%;float:left">
-                <label class="control-label">位置X(百分比)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.form.filterColumnCol.positionX"
-                    placeholder="" />
+                        <label class="control-label">筛选框的文字颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol_3.color" />
+                        <!-- <ui-select class="mini" ng-model="options.form.filterColumnCol_3.color">
+                            <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
+                            <ui-select-choices repeat="Color.value as Color in Colors">
+                                <div ng-bind-html="Color.label | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select> -->
+                        <label class="control-label">筛选框的文字大小</label>
+                        <input name="name" type="text" class="form-control"
+                            ng-model="options.form.filterColumnCol_3.fontSize" placeholder="" />
+                        <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%">
+                            <label class="control-label">位置Y(百分比)</label>
+                            <input name="name" type="text" class="form-control"
+                                ng-model="options.form.filterColumnCol_3.positionY" placeholder="" />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:49%;float:right">
-                <label class="control-label">位置Y(百分比)</label>
-                <input name="name" type="text" class="form-control" ng-model="options.form.filterColumnCol.positionY"
-                    placeholder="" />
-            </div>
+
+
         </div>
-
-
 
     </div>
-
     <div ng-if="currentTab == 'style'" class="m-t-10 m-b-10">
         <div>
             <ul class="tab-nav">
@@ -303,6 +406,7 @@
 
             <div ng-if="currentTab2 == 'title'" class="m-t-10 m-b-10">
                 <div class="form-group">
+
                     <div class="table-name" ng-click="isCollapsedMain = !isCollapsedMain">
                         <div class="form-group" style="float:left">
                             <i class="fa fa-table"></i>
@@ -341,7 +445,8 @@
 
                                 <label class="control-label">对齐</label>
                                 <ui-select ng-model="options.title.textAlign">
-                                    <ui-select-match placeholder="对齐方式...">{{$select.selected.label}}</ui-select-match>
+                                    <ui-select-match placeholder="对齐方式...">{{$select.selected.label}}
+                                    </ui-select-match>
                                     <ui-select-choices repeat="TextAlign.value as TextAlign in TextAligns">
                                         <div ng-bind-html="TextAlign.label | highlight: $select.search"></div>
                                     </ui-select-choices>
@@ -360,7 +465,8 @@
                                     <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                                     <ui-select-choices
                                         repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
-                                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
+                                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search">
+                                        </div>
                                     </ui-select-choices>
                                 </ui-select>
                                 <label class="control-label">系列</label>
@@ -368,7 +474,8 @@
                                     <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                                     <ui-select-choices
                                         repeat="LabelFontFamily.value as LabelFontFamily in LabelFontFamilys">
-                                        <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
+                                        <div ng-bind-html="LabelFontFamily.label | highlight: $select.search">
+                                        </div>
                                     </ui-select-choices>
                                 </ui-select>
                                 <label class="control-label">垂直位置</label>
@@ -413,7 +520,8 @@
                                     <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                                     <ui-select-choices
                                         repeat="LabelFontWeight.value as LabelFontWeight in LabelFontWeights">
-                                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search"></div>
+                                        <div ng-bind-html="LabelFontWeight.label | highlight: $select.search">
+                                        </div>
                                     </ui-select-choices>
                                 </ui-select>
                                 <label class="control-label">系列</label>
@@ -421,7 +529,8 @@
                                     <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                                     <ui-select-choices
                                         repeat="LabelFontFamily.value as LabelFontFamily in LabelFontFamilys">
-                                        <div ng-bind-html="LabelFontFamily.label | highlight: $select.search"></div>
+                                        <div ng-bind-html="LabelFontFamily.label | highlight: $select.search">
+                                        </div>
                                     </ui-select-choices>
                                 </ui-select>
 
@@ -610,7 +719,8 @@
                                     <ui-select-match placeholder="坐标轴名称显示位置...">{{$select.selected.label}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="locationType.value as locationType in xAxisLocations">
-                                        <div ng-bind-html="locationType.label | highlight: $select.search"></div>
+                                        <div ng-bind-html="locationType.label | highlight: $select.search">
+                                        </div>
                                     </ui-select-choices>
                                 </ui-select>
                                 <label>
@@ -650,7 +760,8 @@
                                     </ui-select> -->
                                 <label class="control-label">轴标题字体风格</label>
                                 <ui-select ng-model="options.xAxis.nameTextStyle.fontStyle">
-                                    <ui-select-match placeholder="字体风格...">{{$select.selected.label}}</ui-select-match>
+                                    <ui-select-match placeholder="字体风格...">{{$select.selected.label}}
+                                    </ui-select-match>
                                     <ui-select-choices repeat="FontStyle.value as FontStyle in FontStyles">
                                         <div ng-bind-html="FontStyle.label | highlight: $select.search"></div>
                                     </ui-select-choices>
@@ -697,7 +808,8 @@
                                     <ui-select-match placeholder="坐标轴名称显示位置...">{{$select.selected.label}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="locationType.value as locationType in xAxisLocations">
-                                        <div ng-bind-html="locationType.label | highlight: $select.search"></div>
+                                        <div ng-bind-html="locationType.label | highlight: $select.search">
+                                        </div>
                                     </ui-select-choices>
                                 </ui-select>
                                 <label>
@@ -732,7 +844,8 @@
 
                                 <label class="control-label">轴标题字体风格</label>
                                 <ui-select ng-model="options.yAxis.nameTextStyle.fontStyle">
-                                    <ui-select-match placeholder="字体风格...">{{$select.selected.label}}</ui-select-match>
+                                    <ui-select-match placeholder="字体风格...">{{$select.selected.label}}
+                                    </ui-select-match>
                                     <ui-select-choices repeat="FontStyle.value as FontStyle in FontStyles">
                                         <div ng-bind-html="FontStyle.label | highlight: $select.search"></div>
                                     </ui-select-choices>
