@@ -49,6 +49,16 @@ const { Search } = Input;
 let selectName = '';
 let selectId = '';
 class QueriesListNomodal extends React.Component {
+  state = {
+    visible: false,
+    selected: null,
+    all: null,
+    filtered: null,
+    loading: true,
+    selectedName: selectName,
+    nameState: false,
+  };
+
   // 初始化方法 获取url中的id 得到对应 数据集名称  (如何及时更新)
   constructor(props) {
     super(props);
@@ -62,29 +72,25 @@ class QueriesListNomodal extends React.Component {
         selectId += url[i];
       }
     }
-
     Query.allQueries().$promise.then(res => {
       _.forEach(res, function (value, key) {
         if (value.id + "" === selectId) {
           // console.log(value.id+"::"+value.name);
-          selectName = value.name; 
+          selectName = value.name;
           localStorage.setItem('lastSelectedDataSourceName', selectName);
         }
 
       });
+      this.setState({
+        selectedName: selectName,
+        nameState: true,
+      })
     })
-    
+
   }
 
-  state = {
-    visible: false,
-    selected: null,
-    all: null,
-    filtered: null,
-    loading: true,
-    selectedName: selectName
-  };
-  
+
+
   componentDidUpdate(prevProps) {
     if (!_.isEqual(this.props.reload, prevProps.reload)) {
       this.reload(true);
@@ -103,12 +109,11 @@ class QueriesListNomodal extends React.Component {
         all: res,
         filtered: res,
         loading: false,
-        selectedName: selectName
       });
     });
   };
 
-  
+
   handleOk = (e, $scope) => {
     if (this.state.selected === null) {
       message.warning('请选择一个数据集.');
@@ -125,37 +130,18 @@ class QueriesListNomodal extends React.Component {
     localStorage.setItem('lastSelectedDataSourceId', this.state.selected);
 
     localStorage.setItem('lastSelectedDataSourceName', selectName);
-    // // 修改url不跳转页面
-    // let start = '';
-    // let newURL = '';
-    // const url = window.location.href; // http://localhost:8080/query/unset/charts/new
-    // // eslint-disable-next-line no-plusplus
-    // for (let i = 0; i < url.length; i++) {
-    //   if (
-    //     url.charAt(i) === 'q' &&
-    //     url.charAt(i + 1) === 'u' &&
-    //     url.charAt(i + 2) === 'e' &&
-    //     url.charAt(i + 3) === 'r' &&
-    //     url.charAt(i + 4) === 'y'
-    //   ) {
-    //     start = url.substring(0, i + 6);
-    //     newURL = start + this.state.selected + '/charts/new?type=ECHARTS'; // null导致刷新？
-    //   }
-    // }
 
-    // window.history.pushState({}, 0, url);
-    // window.history.replaceState({}, 0, newURL);
-      let folderId = null;
-      const query = window.location.search.substring(1);
-      const vars = query.split("&");
-      for (let i=0;i<vars.length;i+=1){
-          const pair = vars[i].split("=");
-          if(pair[0] === "folder_id" && pair[1].substr(0,1) === 's')
-          {folderId = pair[1].substring(1)}}
+    let folderId = null;
+    const query = window.location.search.substring(1);
+    const vars = query.split("&");
+    for (let i = 0; i < vars.length; i += 1) {
+      const pair = vars[i].split("=");
+      if (pair[0] === "folder_id" && pair[1].substr(0, 1) === 's') { folderId = pair[1].substring(1) }
+    }
 
     // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + 
     // this.props.chartType + "&folder_id=" +  folderId);
-    navigateTo("/query/" + this.state.selected + "/charts/new?type=ECHARTS&folder_id=" +  folderId);
+    navigateTo("/query/" + this.state.selected + "/charts/new?type=ECHARTS&folder_id=" + folderId);
 
     this.setState({
       visible: false,
@@ -209,19 +195,16 @@ class QueriesListNomodal extends React.Component {
   }
 
 
+
   render() {
     const { appSettings } = this.props;
-    const { selectedName } = this.state;
-
-    
-  selectName= localStorage.getItem('lastSelectedDataSourceName');
 
     return (
       <>
-        <Input
-          placeholder={selectName}
+        {this.state.nameState && <Input
+          placeholder={this.state.selectedName}
           onClick={this.showModal}
-        />
+        />}
         <Modal
           destroyOnClose
           title="选择数据集"

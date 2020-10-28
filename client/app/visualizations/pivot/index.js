@@ -2,6 +2,7 @@ import angular from 'angular';
 import $ from 'jquery';
 import * as _ from 'lodash';
 import 'pivottable';
+import '../../../../node_modules/pivottable/dist/pivot.zh';
 import 'pivottable/dist/pivot.css';
 
 import editorTemplate from './pivottable-editor.html';
@@ -22,43 +23,99 @@ function pivotTableRenderer() {
 
       function refreshOption() {
 
-        // console.log(element[0].querySelectorAll('.pvtRendererArea'));
+        console.log("refreshOption");
         element[0].querySelectorAll('.pvtRendererArea').forEach((control) => {
-          // console.log("111111");
           control.style.backgroundColor =
             color16to10(
               _.get($scope.visualization.options, "bgcolor", '#fff'),
               _.get($scope.visualization.options, "bgcolorOpacity", 1)
             );
         });
-        
-        // pvtTable 表头
-        element[0].querySelectorAll('.pvtTable').forEach((control) => {
-          // console.log("222222");
+
+        console.log("pvtTable", element[0].querySelectorAll(".pvtTable"));
+        // pvtTable 表头        
+        element[0].querySelectorAll(".pvtTable").forEach((control) => {
           control.style.backgroundColor =
             color16to10(
               _.get($scope.visualization.options, "tableHeadBgColor", '#fff'),
               _.get($scope.visualization.options, "tableHeadBgColorOpacity", 1)
             );
 
-          control.style.color = _.get($scope.visualization.options, "tableHeadColor", '#fff');
+          control.style.color = _.get($scope.visualization.options, "tableHeadColor", '#000');
         })
 
         element[0].querySelectorAll('.pvtTable tbody tr td').forEach((control) => {
-          // console.log("333333");
           control.style.backgroundColor =
             color16to10(
               _.get($scope.visualization.options, "tablebgcolor", '#fff'),
               _.get($scope.visualization.options, "tablebgcolorOpacity", 1)
             );
 
-          control.style.color = _.get($scope.visualization.options, "tableColor", '#fff');
+          control.style.color = _.get($scope.visualization.options, "tableColor", '#000');
+        })
+
+        element[0].querySelectorAll('.pvtAxisContainer').forEach((control) => {
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "tableRowsbgcolor", '#fff'),
+              _.get($scope.visualization.options, "tableRowsbgcolorOpacity", 1)
+            );
+
+          control.style.color = _.get($scope.visualization.options, "tableRowColor", '#000');
+        })
+
+
+
+        element[0].querySelectorAll('.pvtUi tr td')[0].style.backgroundColor = color16to10(
+          _.get($scope.visualization.options, "tableRowsbgcolor", '#fff'),
+          _.get($scope.visualization.options, "tableRowsbgcolorOpacity", 1)
+        );
+        element[0].querySelectorAll('.pvtUi tr td')[2].style.backgroundColor = color16to10(
+          _.get($scope.visualization.options, "tableRowsbgcolor", '#fff'),
+          _.get($scope.visualization.options, "tableRowsbgcolorOpacity", 1)
+        );
+        // 选择框
+        // pvtRenderer
+        // pvtAggregator
+        // pvtAttrDropdown
+        // pvtAttr
+        element[0].querySelectorAll('.pvtRenderer').forEach((control) => {
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "selectbgcolor", '#fff'),
+              _.get($scope.visualization.options, "selectbgcolorOpacity", 1)
+            );
+          control.style.color = _.get($scope.visualization.options, "selectRowColor", '#000');
+        })
+        element[0].querySelectorAll('.pvtAggregator').forEach((control) => {
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "selectbgcolor", '#fff'),
+              _.get($scope.visualization.options, "selectbgcolorOpacity", 1)
+            );
+          control.style.color = _.get($scope.visualization.options, "selectRowColor", '#000');
+        })
+        element[0].querySelectorAll('.pvtAttrDropdown').forEach((control) => {
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "selectbgcolor", '#fff'),
+              _.get($scope.visualization.options, "selectbgcolorOpacity", 1)
+            );
+          control.style.color = _.get($scope.visualization.options, "selectRowColor", '#000');
+        })
+        element[0].querySelectorAll('.pvtAttr').forEach((control) => {
+          control.style.backgroundColor =
+            color16to10(
+              _.get($scope.visualization.options, "selectbgcolor", '#fff'),
+              _.get($scope.visualization.options, "selectbgcolorOpacity", 1)
+            );
+          control.style.color = _.get($scope.visualization.options, "selectRowColor", '#000');
         })
 
       }
 
-      
-      
+
+
       function removeControls() {
         const hideControls = $scope.visualization.options.controls && $scope.visualization.options.controls.enabled;
 
@@ -70,7 +127,7 @@ function pivotTableRenderer() {
           }
         });
         refreshOption();
-       
+
       }
 
       function updatePivot() {
@@ -83,24 +140,31 @@ function pivotTableRenderer() {
             // We need to give the pivot table its own copy of the data, because it changes
             // it which interferes with other visualizations.
             data = angular.copy($scope.queryResult.getData());
+            console.log($.pivotUtilities.locales.zh);
+            
             const options = {
-              renderers: $.pivotUtilities.renderers,
-              onRefresh(config) {
+              renderers: $.pivotUtilities.locales.zh.renderers,
+              aggregators:$.pivotUtilities.locales.zh.aggregators,
+              localeStrings:$.pivotUtilities.locales.zh.localeStrings,
+              onRefresh(config) {                
                 const configCopy = Object.assign({}, config);
+                console.log("configCopy pre",configCopy);
                 // delete some values which are functions
-                delete configCopy.aggregators;
-                delete configCopy.renderers;
-                delete configCopy.onRefresh;
+                // delete configCopy.aggregators;
+                // delete configCopy.renderers;
+                // delete configCopy.onRefresh;
                 // delete some bulky default values
-                delete configCopy.rendererOptions;
-                delete configCopy.localeStrings;
+                // delete configCopy.rendererOptions;
+                // delete configCopy.localeStrings;
+                
 
+                console.log("configCopy",configCopy);
+                refreshOption();
                 if ($scope.visualization) {
                   $scope.visualization.options = configCopy;
                 }
               },
             };
-
             if ($scope.visualization) {
               Object.assign(options, $scope.visualization.options);
             }
@@ -108,9 +172,13 @@ function pivotTableRenderer() {
             $(element).pivotUI(data, options, true);
             removeControls();
           }
-          refreshOption();
+         
         });
       }
+
+      setTimeout(function () {
+        refreshOption()
+      }, 100);
 
       $scope.$watch('queryResult && queryResult.getData()', updatePivot);
       $scope.$watch('visualization.options.controls.enabled', removeControls);
@@ -119,6 +187,8 @@ function pivotTableRenderer() {
     },
   };
 }
+
+
 
 function pivotTableEditor() {
   return {
@@ -141,7 +211,7 @@ export default function init(ngModule) {
 
     VisualizationProvider.registerVisualization({
       type: 'PIVOT',
-      name: '透视表',
+      name: '交叉表',
       renderTemplate:
         '<pivot-table-renderer visualization="visualization" query-result="queryResult"></pivot-table-renderer>',
       editorTemplate: editTemplate,
