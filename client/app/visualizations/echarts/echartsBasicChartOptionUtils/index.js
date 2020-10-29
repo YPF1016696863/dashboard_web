@@ -133,7 +133,7 @@ export function defaultBasicChartOptions() {
                     type: 'dashed'
                 }
             },
-            // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
 
         yAxis: {
@@ -169,10 +169,10 @@ export function defaultBasicChartOptions() {
         }],
         color: ['#63b2ee', '#76da91 ', '#f8cb7f ', '#f89588', '#7cd6cf ', '#9192ab ', '#7898e1  ', '#efa666', '#eddd86 ', '#9987ce '],
         series: [
-            // {
-            //     data: [820, 932, 901, 934, 1290, 1330, 1320],
-            //     type: 'line'
-            // }
+            {
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line'
+            }
         ]
     };
 };

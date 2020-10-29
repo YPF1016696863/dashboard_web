@@ -420,6 +420,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         // if (chooseData) {
                         //     _.set($scope.options, "series", []);
                         // }
+                     
+                       
 
                         // series下的
                         let seriesNameIndex = 0;
@@ -439,6 +441,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 // console.log(maxData);
                                 // 传入参数
                                 // yData y列数据 多系列为多个数组
+                                console.log(yData[0]);
 
                                 $scope.options.series.push({
                                     name: yAxisColumn,
