@@ -9,6 +9,10 @@ import { currentUser } from '@/services/auth';
 
 
 export default class UserGroupPermissionDialog extends React.Component {
+  // state = {
+  //   checked: true,
+  //   // disabled: false,
+  // };
 
   constructor(props) {
     super(props);
@@ -154,10 +158,16 @@ export default class UserGroupPermissionDialog extends React.Component {
                       <span>
                         <Checkbox
                           defaultChecked={record.checked}
+                          // checked={this.state.checked}
                           onChange={
                             e => {
-                              console.log("trggiert");
-                              console.log(this.props);
+                              // console.log("trggiert");
+                              // console.log(this.props);
+                              // console.log(record.checked);
+                              // console.log(e.target.checked);
+                              // this.setState({
+                              //   checked: e.target.checked,
+                              // });
                               if (this.props.component && this.props.component.id) {
                                 let addFunc;
                                 let removeFunc;

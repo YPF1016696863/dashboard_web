@@ -194,7 +194,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
               // seriesData.push(pieData); // 否则push一条数据
 
-
               // _.set($scope.options, 'fanFlag', false);
             });
 
@@ -469,6 +468,11 @@ function EchartsPieEditor() {
       $scope.isCollapsedColor = true;
       // 容器的距离
       $scope.isCollapsedDistance = true;
+
+      // 筛选1
+      $scope.isFilterColumn1 = true; 
+      $scope.isFilterColumn2 = true; 
+      $scope.isFilterColumn3 = true;
 
       $scope.chartTypes = {
         pie: { name: 'Echarts饼图', icon: 'pie-chart' },

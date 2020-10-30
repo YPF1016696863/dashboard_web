@@ -155,17 +155,39 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
 
                 // 修改筛选框的样式
-                _.set($scope.options, "form.span.style", {
-                    'background-color': color16to10(_.get($scope.options, "form.filterColumnCol.backgroundColor", "#fff"),
-                        _.get($scope.options, "form.filterColumnCol.backgroundColorOpacity", 0)),
-                    'color': _.get($scope.options, "form.filterColumnCol.color", "black"),
-                    'border-color': _.get($scope.options, "form.filterColumnCol.borderColor", "white"),
-                    'font-size': _.get($scope.options, "form.filterColumnCol.fontSize", "14") + "px",
-                    'margin-left': _.get($scope.options, "form.filterColumnCol.positionX", "0%"),
-                    'margin-top': _.get($scope.options, "form.filterColumnCol.positionY", "0%"),
+                _.set($scope.options, "form.span1.style", {
+                    'background-color': color16to10(_.get($scope.options, "form.filterColumnCol_1.backgroundColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol_1.backgroundColorOpacity", 0)),
+                    'color': _.get($scope.options, "form.filterColumnCol_1.color", "black"),
+                    'border-color': _.get($scope.options, "form.filterColumnCol_1.borderColor", "white"),
+                    'font-size': _.get($scope.options, "form.filterColumnCol_1.fontSize", "14") + "px",
+                    'margin-left': _.get($scope.options, "form.filterColumnCol_1.positionX", "0%"),
+                    'margin-top': _.get($scope.options, "form.filterColumnCol_1.positionY", "0%"),
+                });
+                // 修改筛选框的样式
+                _.set($scope.options, "form.span2.style", {
+                    'background-color': color16to10(_.get($scope.options, "form.filterColumnCol_2.backgroundColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol_2.backgroundColorOpacity", 0)),
+                    'color': _.get($scope.options, "form.filterColumnCol_2.color", "black"),
+                    'border-color': _.get($scope.options, "form.filterColumnCol_2.borderColor", "white"),
+                    'font-size': _.get($scope.options, "form.filterColumnCol_2.fontSize", "14") + "px",
+                    'margin-left': _.get($scope.options, "form.filterColumnCol_2.positionX", "0%"),
+                    'margin-top': _.get($scope.options, "form.filterColumnCol_2.positionY", "0%"),
                 });
 
-                
+                // 修改筛选框的样式
+                _.set($scope.options, "form.span3.style", {
+                    'background-color': color16to10(_.get($scope.options, "form.filterColumnCol_3.backgroundColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol_3.backgroundColorOpacity", 0)),
+                    'color': _.get($scope.options, "form.filterColumnCol_3.color", "black"),
+                    'border-color': _.get($scope.options, "form.filterColumnCol_3.borderColor", "white"),
+                    'font-size': _.get($scope.options, "form.filterColumnCol_3.fontSize", "14") + "px",
+                    'margin-left': _.get($scope.options, "form.filterColumnCol_3.positionX", "0%"),
+                    'margin-top': _.get($scope.options, "form.filterColumnCol_3.positionY", "0%"),
+                });
+
+
+
                 // _.set($scope.options, "size", {
                 //     responsive: true,
                 //     width,
@@ -398,6 +420,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         // if (chooseData) {
                         //     _.set($scope.options, "series", []);
                         // }
+                     
+                       
 
                         // series下的
                         let seriesNameIndex = 0;
@@ -417,6 +441,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 // console.log(maxData);
                                 // 传入参数
                                 // yData y列数据 多系列为多个数组
+                                console.log(yData[0]);
 
                                 $scope.options.series.push({
                                     name: yAxisColumn,
