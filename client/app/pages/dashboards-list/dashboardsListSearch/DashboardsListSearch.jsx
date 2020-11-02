@@ -37,6 +37,7 @@ import ItemsTable, {
 } from '@/components/items-list/components/ItemsTable';
 
 import { Dashboard } from '@/services/dashboard';
+import { Group } from '@/services/group';
 import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
@@ -199,6 +200,7 @@ class DashboardsListSearch extends React.Component {
         return;
       }
 
+      
       this.props.$http
         .post(this.props.appSettings.server.backendUrl + '/api/dashboards', {
           name: this.state.dashboardName,
@@ -211,6 +213,21 @@ class DashboardsListSearch extends React.Component {
             .path(`/dashboards/${response.slug}`)
             .search('edit')
             .replace();
+            // console.log(response.id); // 大屏的id      
+            const allGroupsP = Group.query({ filter: true }).$promise;  // 获取所有分组记录
+            
+            Promise.all([allGroupsP])
+            .then(result => {
+              const allGroups = result[0];
+              _.forEach(allGroups, group => {
+                // console.log(group);             // 每一个分组集合，group.id
+                Group.addDashboard({ id: group.id, dashboard_id: response.id });
+              });
+            })
+            .catch((error) => {
+              message.error('无法添加用户分组权限');
+            });
+      
         });
     }
   };

@@ -163,7 +163,7 @@ function GridRenderer(clientConfig) {
           const columns = $scope.queryResult.getColumns();
           const columnsOptions = getColumnsOptions(columns, _.extend({}, $scope.options).columns);
           $scope.gridColumns = getColumnsToDisplay(columns, columnsOptions, clientConfig);
-console.log($scope.gridColumns);
+// console.log($scope.gridColumns);
         }
       }
 
@@ -190,8 +190,8 @@ console.log($scope.gridColumns);
         {'color':color16to10(_.get($scope.options, "column.colorFont", "#fff"), 
         _.get($scope.options, "column.colorAFont", 1))});
 // !important
-        console.log($scope.options.fontColor);
-        console.log($scope.options.sizeBg);
+        // console.log($scope.options.fontColor);
+        // console.log($scope.options.sizeBg);
       }
 
       $scope.$watch('queryResult && queryResult.getData()', (queryResult) => {

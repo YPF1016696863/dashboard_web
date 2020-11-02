@@ -104,9 +104,12 @@ class DashboardsListTabs extends React.Component {
     if (slugId) {
       this.getDashboard(slugId);
     }
-
+    
+   
     notification.destroy();
   }
+  
+ 
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.slugId !== this.props.slugId) {
@@ -344,6 +347,7 @@ class DashboardsListTabs extends React.Component {
           })
         }
       });
+      // console.log(this.state.permissions.groups);  // 有权限的分组
     }, err => {
       message.warning('无法获取该仪表板分组权限设置.');
       this.setState({
@@ -353,6 +357,8 @@ class DashboardsListTabs extends React.Component {
         }
       });
     });
+
+   
   }
 
   render() {

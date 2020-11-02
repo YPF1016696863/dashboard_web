@@ -50,10 +50,14 @@ function QuerySourceCtrl(
 
   $scope.canForkQuery = () => currentUser.hasPermission('edit_query') && !$scope.dataSource.view_only;
 
-  $scope.updateQuery = newQueryText => defer(() => $scope.$apply(() => { $scope.query.query = newQueryText; }));
+  $scope.updateQuery = newQueryText => defer(() => $scope.$apply(() => {
+    $scope.query.query = newQueryText;
+    // console.log(newQueryText);  // 传入的查询数据querytext
+  }));
 
   // @override
   $scope.saveQuery = (options, data) => {
+  
     const savePromise = saveQuery(options, data);
 
     savePromise.then((savedQuery) => {
@@ -64,8 +68,12 @@ function QuerySourceCtrl(
 
       if (isNewQuery) {
         // redirect to new created query (keep hash)
+        
+        // 获取数据集查询的id
+        // console.log($scope.query);
         $location.path(savedQuery.getSourceLink());
       }
+     
     });
 
     return savePromise;
