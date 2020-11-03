@@ -234,15 +234,15 @@ function ViewDashboardCtrl(
 
                 let status = [];
                 status = _.map(originalWidget, "data.errorMessage");
-                const originalWidgetView = [];
+                let originalWidgetView = [];
 
-                for (let i = 0, j = 0; i < status.length; i += 1) {
-                    if (status[i] === undefined) {
-                        originalWidgetView[j] = originalWidget[i];// 滤出有效的组件
-                        j += 1;
-                    }
-                }
-
+                // for (let i = 0, j = 0; i < status.length; i += 1) {
+                //     if (status[i] === undefined) {
+                //         originalWidgetView[j] = originalWidget[i];// 滤出有效的组件
+                //         j += 1;
+                //     }
+                // }
+                originalWidgetView=originalWidget;
 
                 // 计算位置大小
                 const step = 6 / this.gridNum;

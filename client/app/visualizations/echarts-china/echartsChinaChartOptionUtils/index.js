@@ -27,12 +27,22 @@ export function defaultChinaChartOptions() {
 
         title: {
             text: '',
-            x: 'left',
-            top: "10",
+            left: "50%",
+            subtext: '',
+            x: 'center',
+            backgroundColor: 'transparent',
             textStyle: {
                 color: '#fff',
-                fontSize: 14
-            }
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 25,
+            },
+            subtextStyle: {
+                color: '#fff',
+                fontStyle: 'normal',
+                fontFamily: 'serif',
+                fontSize: 18,
+            },
         },
         tooltip: {
             show: true,
