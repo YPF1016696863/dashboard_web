@@ -552,7 +552,7 @@ class QueryEditor extends React.Component {
           <div className="container p-15 m-b-10" style={{ height: '100%' }}>
             <div data-executing={this.props.queryExecuting} style={{ height: 'calc(100% - 40px)', marginBottom: '0px' }} className="editor__container">
               <AceEditor
-                readOnly={this.props.fileUpload}
+               
                 ref={this.refEditor}
                 theme="textmate"
                 mode={this.props.dataSource.syntax || 'sql'}
@@ -843,7 +843,7 @@ class QueryEditor extends React.Component {
               }
               {/* 隐藏 */}
               <AceEditor
-                readOnly={this.props.fileUpload}
+               
                 ref={this.refEditor}
                 theme="textmate"
                 mode={this.props.dataSource.syntax || 'sql'}

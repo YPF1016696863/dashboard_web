@@ -54,6 +54,7 @@ export default class UserGroupPermissionDialog extends React.Component {
         break;
     }
 
+
     if (!enabledGroupsP) {
       message.error('无法打开用户分组权限管理组件');
       this.setState({
@@ -67,6 +68,7 @@ export default class UserGroupPermissionDialog extends React.Component {
     }
 
     const allGroupsP = Group.query({ filter: true }).$promise;
+    // console.log(allGroupsP); // 多了checked属性，保存着上次checked的记录
 
     Promise.all([enabledGroupsP, allGroupsP])
       .then(result => {
@@ -74,10 +76,12 @@ export default class UserGroupPermissionDialog extends React.Component {
         const allGroups = result[1];
         if (enabledGroups) {
           _.forEach(allGroups, group => {
-            group.checked = false;
+            // console.log(group);             // 每一个分组集合
+            group.checked = false;            // 初始化的时候每个分组的checked 
             _.forEach(enabledGroups, enabledGroup => {
+              // console.log(enabledGroup);        // 只显示添加了权限的分组
               if (enabledGroup.id === group.id) {
-                group.checked = true;
+                group.checked = true;              // 添加了权限的分组checked属性为true
               }
             });
           });
@@ -168,6 +172,7 @@ export default class UserGroupPermissionDialog extends React.Component {
                               // this.setState({
                               //   checked: e.target.checked,
                               // });
+
                               if (this.props.component && this.props.component.id) {
                                 let addFunc;
                                 let removeFunc;
@@ -175,6 +180,8 @@ export default class UserGroupPermissionDialog extends React.Component {
                                   case 'dashboard':
                                     if (e.target.checked) {
                                       Group.addDashboard({ id: record.id, dashboard_id: this.props.component.id });
+                                      // console.log(record.id);
+                                      // console.log(this.props.component.id);
                                     } else {
                                       Group.removeDashboard({ id: record.id, dashboard_id: this.props.component.id });
                                     }
@@ -182,6 +189,8 @@ export default class UserGroupPermissionDialog extends React.Component {
                                   case 'query':
                                     if (e.target.checked) {
                                       Group.addQuery({ id: record.id, query_id: this.props.component.id });
+                                      console.log(record.id);
+                                      console.log(this.props.component.id);
                                     } else {
                                       Group.removeQuery({ id: record.id, query_id: this.props.component.id });
                                     }

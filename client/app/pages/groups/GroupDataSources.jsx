@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filter, map, includes } from 'lodash';
+import { filter, map, includes, forEach } from 'lodash';
 
 import { react2angular } from 'react2angular';
+
 import Button from 'antd/lib/button';
 import Dropdown from 'antd/lib/dropdown';
 import Menu from 'antd/lib/menu';
 import Icon from 'antd/lib/icon';
-
+import message from 'antd';
 import { Paginator } from '@/components/Paginator';
 
 import { wrap as liveItemsList, ControllerType } from '@/components/items-list/ItemsList';
@@ -28,7 +29,7 @@ import notification from '@/services/notification';
 import { currentUser } from '@/services/auth';
 import { Group } from '@/services/group';
 import { DataSource } from '@/services/data-source';
-import {navigateTo} from '@/services/navigateTo';
+import { navigateTo } from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 class GroupDataSources extends React.Component {
@@ -69,7 +70,7 @@ class GroupDataSources extends React.Component {
           <Menu.Item key="viewonly">只读权限</Menu.Item>
         </Menu>
       );
-      
+
       if (this.group && this.group.permissions && this.group.permissions.includes('user')) {
         return null;
       }
@@ -138,6 +139,7 @@ class GroupDataSources extends React.Component {
 
   addDataSources = () => {
     const allDataSources = DataSource.query().$promise;
+
     const alreadyAddedDataSources = map(this.props.controller.allItems, ds => ds.id);
     SelectItemsDialog.showModal({
       dialogTitle: 'Add Data Sources',
@@ -168,6 +170,10 @@ class GroupDataSources extends React.Component {
       }),
       save: (items) => {
         const promises = map(items, ds => Group.addDataSource({ id: this.groupId, data_source_id: ds.id }).$promise);
+        // forEach(items, ds => {
+        //   console.log(ds.id);             // 选中数据源的id
+        // });
+    
         return Promise.all(promises);
       },
     }).result.finally(() => {
@@ -177,7 +183,7 @@ class GroupDataSources extends React.Component {
 
   render() {
     const { controller } = this.props;
-    const {$translate} = this.props;
+    const { $translate } = this.props;
     const translate = this.props.$translate ? this.props.$translate : null;
     return (
       <div data-test="Group">

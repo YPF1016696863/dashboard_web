@@ -1,7 +1,8 @@
 import React from 'react';
 import { react2angular } from 'react2angular';
-
+import { forEach } from 'lodash';
 import Button from 'antd/lib/button';
+import { message } from 'antd';
 import { Paginator } from '@/components/Paginator';
 
 import {
@@ -20,6 +21,7 @@ import ItemsTable, {
 import CreateGroupDialog from '@/components/groups/CreateGroupDialog';
 import DeleteGroupButton from '@/components/groups/DeleteGroupButton';
 
+import { DataSource } from '@/services/data-source';
 import { Group } from '@/services/group';
 import settingsMenu from '@/services/settingsMenu';
 import { currentUser } from '@/services/auth';
@@ -88,8 +90,28 @@ class GroupsList extends React.Component {
 
   createGroup = () => {
     CreateGroupDialog.showModal().result.then(group => {
-      group.$save().then(newGroup => navigateTo(`/groups/${newGroup.id}`));
+      console.log();
+      group.$save().then(newGroup => {
+        // console.log(newGroup.id);     // 新建分组的id
+        const allDataSources = DataSource.query().$promise;
+        // 获得所有的数据源id
+        Promise.all([allDataSources])
+          .then(result => {
+            const allDatas = result[0];
+            forEach(allDatas, datasource => {
+              // console.log(datasource.id);             // 每一个数据源的id
+              Group.addDataSource({ id: newGroup.id, data_source_id: datasource.id });
+            });
+          })
+          .catch((error) => {
+            message.error('无法添加用户分组权限');
+          });
+
+        navigateTo(`/groups/${newGroup.id}`)
+      });
+
     });
+
   };
 
   onGroupDeleted = () => {

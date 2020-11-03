@@ -64,8 +64,9 @@ class FileUploader extends React.Component {
                 }
               ]
             });
-            this.props.updateUrl(info.file.response.url);
+            this.props.updateUrl(info.file.response.url); // 传入后台的url
           }
+          // console.log(info.file.response.url); // 202010/655066__0618方案数据.xlsx
         } else if (status === 'error') {
           console.log(`${info.file.name} file upload failed.`);
         }
