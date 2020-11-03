@@ -102,6 +102,7 @@ class CreateSourceDialog extends React.Component {
     const { selectedType } = this.state;
     const fields = helper.getFields(selectedType);
     const helpTriggerType = `${helpTriggerPrefix}${toUpper(selectedType.type)}`;
+    // console.log(selectedType);
     return (
       <div className="p-5">
         <div className="d-flex justify-content-center align-items-center">

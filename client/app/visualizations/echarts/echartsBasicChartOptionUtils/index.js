@@ -30,13 +30,13 @@ export function defaultBasicChartOptions() {
             x: 'center',
             backgroundColor: 'transparent',
             textStyle: {
-                color: '#333',
+                color: '#fff',
                 fontStyle: 'normal',
                 fontFamily: 'serif',
                 fontSize: 25,
             },
             subtextStyle: {
-                color: '#333',
+                color: '#fff',
                 fontStyle: 'normal',
                 fontFamily: 'serif',
                 fontSize: 18,

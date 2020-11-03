@@ -94,10 +94,10 @@ class DashboardAddTextbox extends React.Component {
     const isNew = !this.props.text;
     return (
       <div>
-        <span onClick={this.showModal}>添加文本框</span>
+        <span onClick={this.showModal}>添加占位符</span>
         <Modal
           destroyOnClose
-          title="添加文本框"
+          title="添加占位符"
           visible={this.state.visible}
           onOk={this.handleOk}
           okButtonProps={{
@@ -115,7 +115,7 @@ class DashboardAddTextbox extends React.Component {
               value={this.state.text}
               onChange={this.onTextChanged}
               autoFocus
-              placeholder="在此输入文本"
+              placeholder="输入空格占位符"
             />
             {/* <small>
               Supports basic{' '}
@@ -130,7 +130,7 @@ class DashboardAddTextbox extends React.Component {
             {this.state.text && (
               <React.Fragment>
                 <Divider dashed />
-                <strong className="preview-title">文本框预览</strong>
+                {/* <strong className="preview-title">文本框预览</strong> */}
                 <p
                   dangerouslySetInnerHTML={{ __html: this.state.preview }} // eslint-disable-line react/no-danger
                   className="preview markdown"
