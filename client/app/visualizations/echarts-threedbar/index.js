@@ -81,7 +81,7 @@ function EchartsThreedbarRenderer($rootScope) {
                         /**
                          * xy排序方法
                          * 
-                         *  */ 
+                         *  */
                         // 原始 nameX nameY 赋予一个序号 
                         // 用于定位 z数组的行列用于交换 dataXNameX dataYNameY
                         let dataXNameX = []
@@ -112,11 +112,11 @@ function EchartsThreedbarRenderer($rootScope) {
                             dataYname.push(dataYNameY[i].name)
                         }
 
-                        let Xmax=0;
-                        let Ymax=0;
+                        let Xmax = 0;
+                        let Ymax = 0;
                         for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
-                            Xmax=Xmax>dataX[i]?Xmax:dataX[i];
-                            Ymax=Ymax>dataX[i]?Ymax:dataY[i];
+                            Xmax = Xmax > dataX[i] ? Xmax : dataX[i];
+                            Ymax = Ymax > dataX[i] ? Ymax : dataY[i];
                             echartsData.push([
                                 dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
                                 dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i],
@@ -127,7 +127,7 @@ function EchartsThreedbarRenderer($rootScope) {
                         // arrayZ原始二维数组映射关系（关于x的）生成
                         // console.log(echartsData);
                         const arrayZ = [];
-                        for (let i = 0; i <=Xmax; i += 1) {
+                        for (let i = 0; i <= Xmax; i += 1) {
                             arrayZ.push([]);
                             for (let j = 0; j <= Ymax; j += 1) {
                                 arrayZ[i].push(0);
@@ -163,31 +163,31 @@ function EchartsThreedbarRenderer($rootScope) {
                             arrayZChange.push(arrayZ[dataXNameXChange[i].num])
                         }
                         // 生成一个关于y为索引的数组 arrayZChange 的顺时针
-                        const arrayZChangeY=[];
-                        for (let i = 0; i <arrayZChange[0].length; i += 1) {
+                        const arrayZChangeY = [];
+                        for (let i = 0; i < arrayZChange[0].length; i += 1) {
                             arrayZChangeY.push([]);
                             for (let j = 0; j < arrayZChange.length; j += 1) {
                                 arrayZChangeY[i].push(0);
                             }
                         }
                         // 初始化
-                        for(let j=0;j<arrayZChange[0].length;j+=1){// 列                            
-                            for(let i=0;i<arrayZChange.length;i+=1){// 行
-                                arrayZChangeY[j][i]=arrayZChange[i][j]
+                        for (let j = 0; j < arrayZChange[0].length; j += 1) {// 列                            
+                            for (let i = 0; i < arrayZChange.length; i += 1) {// 行
+                                arrayZChangeY[j][i] = arrayZChange[i][j]
                             }
                         }
                         // console.log("arrayZChangeY",arrayZChangeY);
                         // todo Y的变化
-                        const arrayZChangeYTemp=[];
-                        for(let i=0;i<dataYNameYChange.length;i+=1){
+                        const arrayZChangeYTemp = [];
+                        for (let i = 0; i < dataYNameYChange.length; i += 1) {
                             arrayZChangeYTemp.push(arrayZChangeY[dataYNameYChange[i].num])
                         }
                         // console.log("arrayZChangeYTemp",arrayZChangeYTemp);
-                        
+
                         // 逆时针90度恢复数组 写回原数组
-                        for(let i=0;i<arrayZChangeYTemp.length;i+=1){
-                            for(let j=0;j<arrayZChangeYTemp[0].length;j+=1){
-                                arrayZChange[j][i]=arrayZChangeYTemp[i][j]
+                        for (let i = 0; i < arrayZChangeYTemp.length; i += 1) {
+                            for (let j = 0; j < arrayZChangeYTemp[0].length; j += 1) {
+                                arrayZChange[j][i] = arrayZChangeYTemp[i][j]
                             }
                         }
 
@@ -216,7 +216,7 @@ function EchartsThreedbarRenderer($rootScope) {
                         /**
                          * xy排序方法 end
                          * 
-                         *  */ 
+                         *  */
                         // console.log(echartsData);
 
                         // 切换主题颜色
@@ -366,6 +366,30 @@ function EchartsThreedbarEditor() {
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
+            // 样式设置二级标签
+            $scope.currentTab2 = 'title';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+            // 纬度轴
+            $scope.isCollapsedXAxisOption = true;
+
+            // 指标轴
+            $scope.isCollapsedYAxisOption = true;
+
+            // 横向网格线
+            $scope.isCollapsedXlineOption = true;
+            // 纵向网格线
+            $scope.isCollapsedYlineOption = true;
             $scope.xAxisLocations = [
                 { label: '数据轴起始位置', value: 'start' },
                 { label: '数据轴居中位置', value: 'center' },

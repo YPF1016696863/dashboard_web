@@ -98,18 +98,18 @@ function EchartsGraphRenderer($rootScope) {
                         for (let i = 0; i < startID.length; i += 1) {
                             iDName[startID[i]] = startName[i] === '' ? '' : startName[i];
                             iDValue[startID[i]] = startValue[i] === '' ? 10 : startValue[i];
-                            iDProperty[startID[i]] =startProperty[i]===''?'red':startProperty[i];
+                            iDProperty[startID[i]] = startProperty[i] === '' ? 'red' : startProperty[i];
                         };
                         for (let i = 0; i < endID.length; i += 1) {
                             iDName[endID[i]] = endName[i] === '' ? '' : endName[i];
                             iDValue[endID[i]] = endValue[i] === '' ? 10 : endValue[i];
-                            iDProperty[startID[i]] =endProperty[i]===''?'red':endProperty[i];
+                            iDProperty[startID[i]] = endProperty[i] === '' ? 'red' : endProperty[i];
                         };
 
                         _.set($scope.options, 'useNode_Index', _.get($scope.options, "useNode", 0));
 
                         _.forEach(uniqID, function (value) {
-                            
+
                             // eslint-disable-next-line func-names  
                             nameData.push({
                                 name: iDName[value],
@@ -128,10 +128,10 @@ function EchartsGraphRenderer($rootScope) {
                                 symbol: _.get($scope.options, "nodeSymbol", [])[value] === undefined ?
                                     "circle" : _.get($scope.options, "nodeSymbol", [])[value],
                                 itemStyle: {
-                                    color: 
-                                    _.get($scope.options, "nodeColor", [])[value] === undefined||
-                                    _.get($scope.options, "nodeColor", [])[value] === ''?
-                                    iDProperty[value] : _.get($scope.options, "nodeColor", [])[value], 
+                                    color:
+                                        _.get($scope.options, "nodeColor", [])[value] === undefined ||
+                                            _.get($scope.options, "nodeColor", [])[value] === '' ?
+                                            iDProperty[value] : _.get($scope.options, "nodeColor", [])[value],
                                 },
                                 label: {
                                     color: _.get($scope.options, "nodeLabColor", [])[value] === undefined ?
@@ -223,12 +223,12 @@ function EchartsGraphRenderer($rootScope) {
                             // let width = '100%';
                             let height = "100%";
                             let width = "100%";
-                            
+
                             if ($("#preview").length !== 0) {
                                 height = $element.parent().parent()["0"].clientHeight;
                                 width = $element.parent().parent()["0"].clientWidth;
                             }
-                            
+
                             if ($("#Preview").length !== 0) {
                                 height = $("#Preview")["0"].clientHeight;
                                 width = $("#Preview")["0"].clientWidth;
@@ -300,8 +300,8 @@ function EchartsGraphEditor() {
             }
             $scope.selectedChartType = getChartType($scope.options);
 
-              // 组件背景
-              $scope.getImageUrlCb = (a) => {
+            // 组件背景
+            $scope.getImageUrlCb = (a) => {
                 _.set($scope.options, "images", a);
                 $scope.$apply();
             }
@@ -311,6 +311,26 @@ function EchartsGraphEditor() {
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
+            // 样式设置二级标签
+            $scope.currentTab2 = 'start';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+             // 系列设置二级标签
+             $scope.currentTab3 = 'title';
+             $scope.changeTab3 = (tab3) => {
+                 $scope.currentTab3 = tab3;
+             };
+ 
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+
             $scope.chartTypes = {
                 graph: { name: 'Echarts拓扑图', icon: 'graph-chart' },
             };

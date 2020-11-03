@@ -944,7 +944,7 @@ class ChartsSearch extends React.Component {
                                   size="large"
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-threebar1.png`}
                                 />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>柱状图</p>
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>双轴柱状图</p>
                               </Radio>
                             </Col>
 

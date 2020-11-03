@@ -218,6 +218,24 @@ function EchartsGaugeStageEditor() {
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
+
+            
+            // 样式设置二级标签
+            $scope.currentTab2 = 'title';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+
+            $scope.isCollapsedScale = true;
             $scope.chartTypes = {
                 gauge: { name: 'Echarts仪表盘图', icon: 'gauge-chart' },
             };
