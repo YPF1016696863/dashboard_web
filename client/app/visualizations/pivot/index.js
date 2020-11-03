@@ -2,6 +2,7 @@ import angular from 'angular';
 import $ from 'jquery';
 import * as _ from 'lodash';
 import 'pivottable';
+import Plotly from 'plotly.js/lib/core';
 import '../../../../node_modules/pivottable/dist/pivot.zh';
 import 'pivottable/dist/pivot.css';
 
@@ -23,7 +24,6 @@ function pivotTableRenderer() {
 
       function refreshOption() {
 
-        console.log("refreshOption");
         element[0].querySelectorAll('.pvtRendererArea').forEach((control) => {
           control.style.backgroundColor =
             color16to10(
@@ -45,11 +45,13 @@ function pivotTableRenderer() {
         })
 
         element[0].querySelectorAll('.pvtTable tbody tr td').forEach((control) => {
-          control.style.backgroundColor =
-            color16to10(
-              _.get($scope.visualization.options, "tablebgcolor", '#fff'),
-              _.get($scope.visualization.options, "tablebgcolorOpacity", 1)
-            );
+          if (control.style.backgroundColor === "") {
+            control.style.backgroundColor =
+              color16to10(
+                _.get($scope.visualization.options, "tablebgcolor", '#fff'),
+                _.get($scope.visualization.options, "tablebgcolorOpacity", 1)
+              );
+          }
 
           control.style.color = _.get($scope.visualization.options, "tableColor", '#000');
         })
@@ -112,6 +114,7 @@ function pivotTableRenderer() {
           control.style.color = _.get($scope.visualization.options, "selectRowColor", '#000');
         })
 
+
       }
 
 
@@ -140,25 +143,40 @@ function pivotTableRenderer() {
             // We need to give the pivot table its own copy of the data, because it changes
             // it which interferes with other visualizations.
             data = angular.copy($scope.queryResult.getData());
-            console.log($.pivotUtilities.locales.zh);
-            
+
             const options = {
               renderers: $.pivotUtilities.locales.zh.renderers,
-              aggregators:$.pivotUtilities.locales.zh.aggregators,
-              localeStrings:$.pivotUtilities.locales.zh.localeStrings,
-              onRefresh(config) {                
+              aggregators: $.pivotUtilities.locales.zh.aggregators,
+              // localeStrings:$.pivotUtilities.locales.zh.localeStrings,
+              rendererOptions: {
+                heatmap: {
+                  colorScaleGenerator(values) {
+                    // Plotly happens to come with d3 on board
+                    return Plotly.d3.scale.linear()
+                      .domain([
+                        _.get($scope.visualization.options, "number1", 0)
+                        // , _.get($scope.visualization.options, "number2", 1000)
+                        , _.get($scope.visualization.options, "number3", 2900)
+                      ])
+                      .range([
+                        _.get($scope.visualization.options, "selectColor1", '#0f0')
+                        // , _.get($scope.visualization.options, "selectColor2", '#00f')
+                        , _.get($scope.visualization.options, "selectColor3", '#f00')
+                      ])
+                  }
+                }
+              },
+              onRefresh(config) {
                 const configCopy = Object.assign({}, config);
-                console.log("configCopy pre",configCopy);
-                // delete some values which are functions
-                // delete configCopy.aggregators;
-                // delete configCopy.renderers;
-                // delete configCopy.onRefresh;
-                // delete some bulky default values
-                // delete configCopy.rendererOptions;
-                // delete configCopy.localeStrings;
-                
 
-                console.log("configCopy",configCopy);
+                // delete some values which are functions
+                delete configCopy.aggregators;
+                delete configCopy.renderers;
+                delete configCopy.onRefresh;
+                // delete some bulky default values
+                delete configCopy.rendererOptions;
+                delete configCopy.localeStrings;
+
                 refreshOption();
                 if ($scope.visualization) {
                   $scope.visualization.options = configCopy;
@@ -172,7 +190,7 @@ function pivotTableRenderer() {
             $(element).pivotUI(data, options, true);
             removeControls();
           }
-         
+
         });
       }
 
@@ -182,6 +200,7 @@ function pivotTableRenderer() {
 
       $scope.$watch('queryResult && queryResult.getData()', updatePivot);
       $scope.$watch('visualization.options.controls.enabled', removeControls);
+      $scope.$watch('visualization.options', updatePivot, true);
       $scope.$watch('visualization.options', refreshOption, true);
       $scope.$watch('visualization.options', refreshOption);
     },

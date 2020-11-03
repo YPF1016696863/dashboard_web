@@ -14,13 +14,16 @@ import {
   SCHEMA_NOT_SUPPORTED,
   SCHEMA_LOAD_ERROR
 } from '@/services/data-source';
+import * as _ from 'lodash';
 import {navigateTo} from '@/services/navigateTo';
 import getTags from '@/services/getTags';
 import { policy } from '@/services/policy';
 import Notifications from '@/services/notifications';
 import ScheduleDialog from '@/components/queries/ScheduleDialog';
 import notification from '@/services/notification';
+import { Group } from '@/services/group';
 import template from './content-layout.html';
+
 
 const DEFAULT_TAB = 'table';
 
@@ -286,7 +289,7 @@ function QueryViewCtrl(
     );
 
   $scope.saveQuery = (customOptions, data) => {
-
+    // console.log(333333333333333);
     let request = data;
     if (request) {
       // Don't save new query with partial data
@@ -295,6 +298,7 @@ function QueryViewCtrl(
       }
       request.id = $scope.query.id;
       request.version = $scope.query.version;
+      
     } else {
       request = pick($scope.query, [
         'schedule',
@@ -309,6 +313,21 @@ function QueryViewCtrl(
         'is_draft',
         'folder_id'
       ]);
+
+      // console.log($scope.query.id); //获取数据集的id
+      const queryId =  $scope.query.id
+    
+      const allGroupsP = Group.query({ filter: true }).$promise;  // 获取所有分组记录
+            
+      Promise.all([allGroupsP])
+      .then(result => {
+        const allGroups = result[0];
+        _.forEach(allGroups, group => {
+          // console.log(group);             // 每一个分组集合，group.id
+          Group.addQuery({ id: group.id, query_id: queryId });
+        });
+      })
+
     }
 
     const options = Object.assign(
@@ -332,6 +351,7 @@ function QueryViewCtrl(
     return Query.save(
       request,
       updatedQuery => {
+
         notification.success(options.successMessage);
         $scope.query.version = updatedQuery.version;
       },
