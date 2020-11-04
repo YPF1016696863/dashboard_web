@@ -299,8 +299,8 @@ function EchartsHuanRenderer($rootScope) {
                                 'width': '100%',
                                 'height': '100%',
                                 'background-image': "url(" + _.get($scope.options, "images", "url111") + ")",
-                                'background-size':"100% 100%",
-                                'background-repeat':"no-repeat",
+                                'background-size': "100% 100%",
+                                'background-repeat': "no-repeat",
                                 'background-position': _.get($scope.options, "bgX", "0px") + " "
                                     + _.get($scope.options, "bgY", "0px"),
                                 'border-style': _.get($scope.options, "borderStyle", "solid"),
@@ -359,6 +359,22 @@ function EchartsHuanEditor() {
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
+            // 样式设置二级标签
+            $scope.currentTab2 = 'title';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+
+
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+
             $scope.xAxisLocations = [
                 { label: '数据轴起始位置', value: 'start' },
                 { label: '数据轴居中位置', value: 'center' },
