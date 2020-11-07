@@ -130,7 +130,7 @@ class DashboardsSearch extends React.Component {
     ],
 
     imgTypeState: "tianchong",
-    dashboardColor : "#ffffff !important",
+    dashboardColor: "#ffffff !important",
 
     // 上传背景
     previewVisible: false,
@@ -194,12 +194,12 @@ class DashboardsSearch extends React.Component {
       { slug: slugId },
       dashboard => {
 
-        let arr=[[],[],[],[],["/static/images/themeBackgroundImages/empty-overview.png"]];
-        if(dashboard.background_image!==null){
+        let arr = [[], [], [], [], ["/static/images/themeBackgroundImages/empty-overview.png"]];
+        if (dashboard.background_image !== null) {
           // console.log("1");
           arr = dashboard.background_image.slice(1, -1).split(",");
         }
-         
+
         // console.log(arr[4]);
         // /static/images/themeBackgroundImages/empty-overview.png
 
@@ -210,7 +210,7 @@ class DashboardsSearch extends React.Component {
             currentUser.id === dashboard.user.id ||
             currentUser.hasPermission('admin'),
           imgTypeState: arr[4],
-          dashboardColor:arr[6],
+          dashboardColor: arr[6],
         });
 
         // This is a really bad workaround, need to be changed after the dwmo
@@ -249,7 +249,7 @@ class DashboardsSearch extends React.Component {
     this.props.typeDashboardBgImgCb(e.target.value);
   }
 
-  onChangeColor= (e) => {
+  onChangeColor = (e) => {
     console.log('e', e.target.value);// 大屏背景颜色设置
     // this.setState({
     //   value: e.target.value,
@@ -321,7 +321,7 @@ class DashboardsSearch extends React.Component {
     // 查找背景列表的id有没有包含现在上传的 有就不添加 找不到返回undefine 添加
     // 同时判断 item.thumbUrl 这个值是不是 undefine 是就不添加
     fileList.map((item) => {
-		// console.log(item);
+      // console.log(item);
       if (
         _.find(tmp, function (o) { return o.meta === item.uid; }) === undefined &&
         item.thumbUrl !== undefined
@@ -330,7 +330,7 @@ class DashboardsSearch extends React.Component {
           // id 值需要获取最后一个元素的id+1
           id: parseInt(this.state.backgroundImages[len - 1].id, 10) + 1,
           meta: item.uid,
-          image: appSettingsConfig.server.backendUrl+'/static/'+item.response.url,
+          image: appSettingsConfig.server.backendUrl + '/static/' + item.response.url,
           overview: item.thumbUrl,
           name: item.uid
         });
@@ -344,7 +344,7 @@ class DashboardsSearch extends React.Component {
       backgroundImages: tmp
     });
   }
- 
+
 
 
   render() {
@@ -404,7 +404,9 @@ class DashboardsSearch extends React.Component {
                     >
                       <Radio.Group
                         onChange={this.onChangeImgType}
-                        defaultValue={this.state.imgTypeState===null?"tianchong":this.state.imgTypeState}
+                        defaultValue={this.state.imgTypeState === null ||
+                          this.state.imgTypeState === ""
+                          ? "tianchong" : this.state.imgTypeState}
                       >
                         <Radio value="tianchong">填充</Radio>
                         <Radio value="pingpu">平铺</Radio>
@@ -412,8 +414,8 @@ class DashboardsSearch extends React.Component {
                       </Radio.Group>
                       <input
                         type="color"
-                        style={{ width:"100%" }}
-                        defaultValue={this.state.dashboardColor} 
+                        style={{ width: "100%" }}
+                        defaultValue={this.state.dashboardColor}
                         onChange={this.onChangeColor}
                       />
                       {/* <input

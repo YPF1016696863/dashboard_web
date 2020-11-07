@@ -33,7 +33,10 @@ const PublicDashboardPage = {
         this.modifiedWidget = [];
         this.gridNum = 3;
         this.layoutEditing = true;
-
+        this.dashboardColorCtr= {
+            'background-color': '#25374C'
+        };
+        this.bgColor='#25374C';
         const vm = this;
 
         this.extractGlobalParameters = () => {
@@ -149,6 +152,11 @@ const PublicDashboardPage = {
             this.gridNum = parseInt(dashboard.background_image.slice(1, -1).split(",")[3],10);
             const imgType = dashboard.background_image.slice(1, -1).split(",")[4];
             this.layoutEditing = dashboard.background_image.slice(1, -1).split(",")[5] === "true";
+            this.bgColor=dashboard.background_image.slice(1, -1).split(",")[6];
+            this.dashboardColorCtr = {
+                'background-color': dashboard.background_image.slice(1, -1).split(",")[6]
+            }
+            console.log(this.dashboardColorCtr);
             // console.log(dashboard.background_image);
             if (imgType === "tianchong" || imgType === "lasheng") {
                 // Get dashboard style
