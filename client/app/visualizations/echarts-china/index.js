@@ -9,6 +9,7 @@ import './china';
 import './world';
 
 import { defaultChinaChartOptions, getChartType, setThemeColor } from './echartsChinaChartOptionUtils';
+import color16to10 from '../colorChange';
 
 function EchartsChinaRenderer($rootScope) {
     return {
@@ -308,6 +309,18 @@ function EchartsChinaRenderer($rootScope) {
                         nameLineData = [];
                         lineData = [];
                         lineEchartsData = [];
+
+                        /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+                        _.set($scope.options, "backgroundColor",
+                            color16to10(_.get($scope.options, "backgroundColorTemp", "#000"),
+                                _.get($scope.options, "backgroundColorOpacity", 0)
+                            ));
+
+
+                        // 文字单独的自适应调整*($element.parent()[0].clientHeight/789)
+                        const fontSize = _.get($scope.options, 'title.textStyle.fontSizeT', 40) * ($element.parent()[0].clientWidth / 1115);
+                        _.set($scope.options, 'title.textStyle.fontSize', fontSize.toFixed(2));
+
                         _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
                             _.forEach(value, function (valueChildren, keyChildren) {
@@ -371,7 +384,9 @@ function EchartsChinaRenderer($rootScope) {
                                 opacity: 0.8,
                                 bevelSize: 0.3,
                                 itemStyle: {
-                                    color: _.get($scope.options, 'barColor', '#C99BE8'),
+                                    color: color16to10(_.get($scope.options, 'barColor', '#C99BE8'),
+                                        _.get($scope.options, "barColorOpacity", 1)
+                                    )
                                 },
                                 label: {
                                     show: true,

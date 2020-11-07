@@ -94,6 +94,9 @@ function ViewDashboardCtrl(
     this.isLayoutDirty = false;
     this.widgetList = [];
     this.modifiedWidget = [];
+    this.dashboardColorCtr= {
+        'background-color': '#25374C'
+    };
 
     // Dashboard Header default style
 
@@ -242,7 +245,7 @@ function ViewDashboardCtrl(
                 //         j += 1;
                 //     }
                 // }
-                originalWidgetView=originalWidget;
+                originalWidgetView = originalWidget;
 
                 // 计算位置大小
                 const step = 6 / this.gridNum;
@@ -338,13 +341,16 @@ function ViewDashboardCtrl(
                 this.dashboard = dashboard;
                 // console.log(dashboard.background_image);
                 const image = dashboard.background_image.slice(1, -1).split(",")[0];
-                const rate = dashboard.background_image.slice(1, -1).split(",")[1]+"";
+                const rate = dashboard.background_image.slice(1, -1).split(",")[1] + "";
                 this.modeList = dashboard.background_image.slice(1, -1).split(",")[2] === "true";
                 // console.log(this.modeList);
-                this.gridNum = dashboard.background_image.slice(1, -1).split(",")[3]+"";
+                this.gridNum = dashboard.background_image.slice(1, -1).split(",")[3] + "";
                 const imgType = dashboard.background_image.slice(1, -1).split(",")[4];
                 this.layoutEditing = dashboard.background_image.slice(1, -1).split(",")[5] === "true";
-                // console.log(this.layoutEditing);
+                // console.log(dashboard.background_image.slice(1, -1).split(",")[6]);
+                this.dashboardColorCtr = {
+                    'background-color': dashboard.background_image.slice(1, -1).split(",")[6]
+                }
                 // console.log(dashboard.background_image);
                 if (imgType === "tianchong" || imgType === "lasheng") {
                     // Get dashboard style
@@ -352,7 +358,7 @@ function ViewDashboardCtrl(
                         'background-image': 'url("' + image + '")',
                         'background-position': 'center',
                         'background-repeat': 'no-repeat',
-                        'background-size': 'cover'
+                        'background-size': 'cover',
                     };
                 } else if (imgType === "pingpu") {
                     this.dashboardStyle = {
