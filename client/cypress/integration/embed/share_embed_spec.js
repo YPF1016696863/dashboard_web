@@ -19,7 +19,7 @@ describe('Embedded Queries', () => {
       SaveButton
     `);
     cy.getByTestId('ShowEmbedDialogButton').click({ force: true });
-    cy.getByTestId('EmbedIframe').invoke('text').then((iframe) => {
+    cy.getByTestId('EmbedIframe').invoke('text.css').then((iframe) => {
       const embedUrl = iframe.match(/"(.*?)"/)[1];
       cy.logout();
       cy.visit(embedUrl);
@@ -43,7 +43,7 @@ describe('Embedded Queries', () => {
       SaveButton
     `);
     cy.getByTestId('ShowEmbedDialogButton').click({ force: true });
-    cy.getByTestId('EmbedIframe').invoke('text').then((iframe) => {
+    cy.getByTestId('EmbedIframe').invoke('text.css').then((iframe) => {
       const embedUrl = iframe.match(/"(.*?)"/)[1];
       cy.logout();
       cy.visit(embedUrl, { failOnStatusCode: false }); // prevent 403 from failing test

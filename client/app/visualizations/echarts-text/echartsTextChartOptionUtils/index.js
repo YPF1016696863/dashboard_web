@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import UUIDv4 from 'uuid/v4';
 
-export function defaultTextChartOptions(){
+export function defaultTextChartOptions() {
     return {
         id: UUIDv4(),
         chartType: "TextChart",
@@ -13,7 +13,7 @@ export function defaultTextChartOptions(){
             height: "400px"
         },
     };
-}
+};
 
 export function setChartType(options, type) {
     switch (type) {
@@ -44,6 +44,7 @@ export function parseChartType(type) {
         }
     }
 };
+
 
 export function getChartTypeForSeries(options, name) {
     // console.log(_.find(options.series, {name}));
@@ -89,8 +90,6 @@ export function setThemeColor(options, theme) {
         if (_.get(options, "legend.textStyle.color", "") === "#ccc") {
             _.set(options, "legend.textStyle.color", "#333");
         }
-
-
     }
 
     else if (theme !== "light") {

@@ -15,7 +15,7 @@ import helper from './dynamicFormHelper';
 
 const fieldRules = ({ type, required, minLength }) => {
   const requiredRule = required;
-  const minLengthRule = minLength && includes(['text', 'email', 'password'], type);
+  const minLengthRule = minLength && includes(['text.css', 'email', 'password'], type);
   const emailTypeRule = type === 'email';
 
   return [

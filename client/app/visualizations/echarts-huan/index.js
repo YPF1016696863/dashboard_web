@@ -144,7 +144,7 @@ function EchartsHuanRenderer($rootScope) {
                                 }
                             },
                             {
-                                text: _.get($scope.options.title1, "text", '环比图'),
+                                text: _.get($scope.options.title1, "text.css", '环比图'),
                                 left: _.get($scope.options.title1, "left", 0),
                                 top: _.get($scope.options.title1, "top", 0),
                                 subtext: '',

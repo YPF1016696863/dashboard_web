@@ -111,7 +111,7 @@ function Sunburst(scope, element) {
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
   // create last breadcrumb element
-  const lastCrumb = breadcrumbs.append('text').classed('lastCrumb', true);
+  const lastCrumb = breadcrumbs.append('text.css').classed('lastCrumb', true);
 
   // Generate a string representation for drawing a breadcrumb polygon.
   function breadcrumbPoints(d, i) {
@@ -144,7 +144,7 @@ function Sunburst(scope, element) {
       .attr('fill', colorMap);
 
     breadcrumb
-      .append('text')
+      .append('text.css')
       .classed('breadcrumbs-text', true)
       .attr('x', (b.w + b.t) / 2)
       .attr('y', b.h / 2)

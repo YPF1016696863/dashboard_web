@@ -758,7 +758,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     async: false,    // 表示请求是否异步处理 
                     type: "POST",    // 请求类型
                     url: _.get($scope.options, "restfulURL", "http://localhost:8081/doBase64"),
-                    dataType: "text",// 返回的数据类型
+                    dataType: "text.css",// 返回的数据类型
                     data: {
                         image: imageBase64
                     },

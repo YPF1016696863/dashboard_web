@@ -92,11 +92,13 @@ function QueryViewCtrl(
     return dataSourceId;
   }
 
-  function getSchema(refresh = undefined) {
+  $scope.redisDataType = [{id:1,name:"data"},{id:2,name:"data2"}];
+  $scope.selectedDataType = {value:$scope.redisDataType[0]};
+
+  function getSchema(refresh = undefined, dataType) {
     // TODO: is it possible this will be called before dataSource is set?
     $scope.schema = [];
-   
-    $scope.dataSource.getSchema(refresh).then(data => {
+    $scope.dataSource.getSchema(refresh, dataType).then(data => {
       if (data.schema) {
         $scope.schema = data.schema;
         $scope.schema.forEach(table => {
@@ -138,7 +140,6 @@ function QueryViewCtrl(
 
   }
 
-
   this.autoRefresh = () => {
     $timeout(() => {
       console.log("定时");
@@ -146,7 +147,7 @@ function QueryViewCtrl(
     }, 10 * 1000).then(() => this.autoRefresh());
   };
 
-  $scope.refreshSchema = () => {getSchema(true);this.autoRefresh();}
+  $scope.refreshSchema = () => {getSchema(true, $scope.selectedDataType.value.name);this.autoRefresh();}
 
   function updateDataSources(dataSources) {
     // Filter out data sources the user can't query (or used by current query):
@@ -173,7 +174,7 @@ function QueryViewCtrl(
 
     $scope.canCreateQuery = some(dataSources, ds => !ds.view_only);
 
-    getSchema();
+    getSchema(false, $scope.selectedDataType.value.name);
   }
 
   $scope.updateSelectedQuery = selectedQueryText => {
@@ -235,7 +236,7 @@ function QueryViewCtrl(
     (currentUser.hasPermission('execute_query') &&
       !$scope.dataSource.view_only);
 
-  $scope.getQueryType = () => $scope.dataSource && $scope.dataSource.type;
+  $scope.getQueryType = () => {console.log("$scope.dataSource.type",$scope.dataSource.type); return $scope.dataSource && $scope.dataSource.type};
 
   $scope.canForkQuery = () => !$scope.dataSource.view_only;
 
@@ -459,9 +460,14 @@ function QueryViewCtrl(
       ds => ds.id === $scope.query.data_source_id
     );
 
-    getSchema();
+    getSchema( false,$scope.selectedDataType.value.name);
     $scope.executeQuery();
   };
+
+
+  $scope.changeDataType = () => {
+      console.log("selected",$scope.selectedDataType.value.name);
+  }
 
   $scope.setVisualizationTab = visualization => {
     $scope.selectedTab = visualization.id;

@@ -175,7 +175,7 @@ function box() {
 
       outlier
         .enter()
-        .insert('circle', 'text')
+        .insert('circle', 'text.css')
         .attr('class', 'outlier')
         .attr('r', 5)
         .attr('cx', width / 2)
@@ -204,11 +204,11 @@ function box() {
       const format = tickFormat || x1.tickFormat(8);
 
       // Update box ticks.
-      const boxTick = g.selectAll('text.box').data(quartileData);
+      const boxTick = g.selectAll('text.css.box').data(quartileData);
 
       boxTick
         .enter()
-        .append('text')
+        .append('text.css')
         .attr('class', 'box')
         .attr('dy', '.3em')
         .attr('dx', (d, i) => (i & 1 ? 6 : -6))
@@ -231,11 +231,11 @@ function box() {
       // Update whisker ticks. These are handled separately from the box
       // ticks because they may or may not exist, and we want don't want
       // to join box ticks pre-transition with whisker ticks post-.
-      const whiskerTick = g.selectAll('text.whisker').data(whiskerData || []);
+      const whiskerTick = g.selectAll('text.css.whisker').data(whiskerData || []);
 
       whiskerTick
         .enter()
-        .append('text')
+        .append('text.css')
         .attr('class', 'whisker')
         .attr('dy', '.3em')
         .attr('dx', 6)

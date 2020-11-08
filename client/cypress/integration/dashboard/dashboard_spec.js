@@ -20,7 +20,7 @@ function addTextboxByAPI(text, dashId, options = {}) {
     width: 1,
     dashboard_id: dashId,
     visualization_id: null,
-    text: 'text',
+    text: 'text.css',
     options: Object.assign({
       position: { col: 0, row: 0, sizeX: 3, sizeY: 3 },
     }, options),

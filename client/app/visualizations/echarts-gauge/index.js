@@ -69,7 +69,7 @@ function EchartsGaugeRenderer($rootScope) {
                             detail: {
                                 color: _.get($scope.options, "zbColor", 'auto'),
                                 formatter: _.get($scope.options, "defValue", true) ?
-                                    '{value}' + _.get($scope.options, "format.text", '%') : '{value}',
+                                    '{value}' + _.get($scope.options, "format.text.css", '%') : '{value}',
                             },
                             splitNumber: _.get($scope.options, "splitNumber", 10), // 仪表盘刻度的分割段数。
                             itemStyle: {

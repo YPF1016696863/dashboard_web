@@ -175,7 +175,7 @@ function WidgetFactory($http, $location, Query, Visualization, dashboardGridOpti
     }
 
     save() {
-      const data = pick(this, 'options', 'text', 'id', 'width', 'dashboard_id', 'visualization_id');
+      const data = pick(this, 'options', 'text.css', 'id', 'width', 'dashboard_id', 'visualization_id');
 
       let url = appSettings.server.backendUrl + '/api/widgets';
       if (this.id) {
