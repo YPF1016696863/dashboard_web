@@ -21,7 +21,27 @@
           <ui-select-choices repeat="ds.id as ds in dataSources | filter:$select.search">
             {{ds.name}}
           </ui-select-choices>
-        </ui-select>
+      </ui-select>
+      </div>
+      <div class = "editor__left__data-source" ng-if=" getQueryType() === 'redis29'"
+      >
+          <label >选择数据类型:</label>
+          <ui-select
+                  ng-model="selectedDataType.value"
+                  remove-selected="false"
+                  ng-disabled="!isQueryOwner || !sourceMode"
+                  on-select="updateDataSource()"
+          >
+              <ui-select-match placeholder="选择数据类型...">
+              <span ng-bind="$select.selected.name">
+            </span>
+              </ui-select-match>
+              <ui-select-choices
+                      repeat="item in redisDataType | filter:$select.search"
+              >
+                  <span ng-bind = "item.name"></span>
+              </ui-select-choices>
+          </ui-select>
       </div>
       <div class="editor__left__data-source" ng-if=" getQueryType() === 'redis29'">
         <label>选择数据类型:</label>
@@ -53,6 +73,7 @@
         频率
         <input type="number" style="width: 50%;" ng-model="options.rate"> </input>
       </div>
+
 
 
 

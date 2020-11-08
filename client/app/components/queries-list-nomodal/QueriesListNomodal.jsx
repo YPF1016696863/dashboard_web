@@ -124,6 +124,21 @@ class QueriesListNomodal extends React.Component {
   }
 
 
+    componentDidMount()
+      {
+      if(FOLDER_STRUCTURE_URL){
+          $http
+              .get(FOLDER_STRUCTURE_URL)
+              .success(data => this.setState(
+                  {
+                      treelist:this.convertToTreeData(
+                          data.filter(item => item.catalog === "query"),null)
+                  })
+              )
+      }
+  }
+
+
   showModal = () => {
     this.setState({
       loading: true,
@@ -139,7 +154,6 @@ class QueriesListNomodal extends React.Component {
       });
     });
   };
-
 
   handleOk = () => {
     if (this.state.selected === null) {
@@ -494,7 +508,7 @@ class QueriesListNomodal extends React.Component {
                       defaultExpandAll
                       onSelect={(value, node, extra) => {
                         this.setState({ selected: value[0] });
-                        // 传入id 
+                        // 传入id
                         this.props.querySearchCb(value);
                       }}
                       selectedKeys={[this.state.selected]}

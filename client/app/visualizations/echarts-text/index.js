@@ -26,10 +26,8 @@ function EchartsTextRenderer($rootScope) {
             }
 
             const refreshData = () => {
-                // _.set($scope.options,"text","");
-                if(_.get($scope.options,"text")) {
-                    document.getElementById('display').innerHTML = _.get($scope.options,"text");
-                }
+                _.set($scope.options,"text","");
+                document.getElementById('display').innerHTML = _.get($scope.options,"text");
                 const editor = new E('#div1');
                 document.getElementById('div1').innerHTML = _.get($scope.options,"text");
                 editor.config.onchange = function (newHtml) {
