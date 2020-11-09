@@ -410,7 +410,6 @@ function DashboardPreviewCtrl(
       _.extend(params, param.toUrlParams());
     });
     $location.search(params);
-    this.paramterFlag();
   };
 
   $scope.$on('dashboard.update-parameters', () => {
