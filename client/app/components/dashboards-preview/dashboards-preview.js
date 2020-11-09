@@ -409,7 +409,6 @@ function DashboardPreviewCtrl(
       _.extend(params, param.toUrlParams());
     });
     $location.search(params);
-    this.paramterFlag();
   };
 
   $scope.$on('dashboard.update-parameters', () => {
@@ -470,6 +469,22 @@ function DashboardPreviewCtrl(
     collectFilters(dashboard, force);
     console.log("globalparameter", this.globalParameters);
   };
+
+  const showParaFlag = () => {
+      let countp = 0;
+      if (this.globalParameters.length === 0){
+          return false
+      }
+      if (this.globalParameters.length > 0){
+          this.globalParameters.forEach((param)=>{
+              if(param.type === "query" && param.global[2][0] === ""){
+                  countp +=1;
+              }
+          });
+      }
+      if (countp === this.globalParameters.length){return false}
+      if (countp !== this.globalParameters.length){return true}
+  }
 
   this.loadDashboard = _.throttle(force => {
     Dashboard.get(
