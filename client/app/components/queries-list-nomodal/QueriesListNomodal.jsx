@@ -94,23 +94,6 @@ class QueriesListNomodal extends React.Component {
   }
 
 
-
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(this.props.reload, prevProps.reload)) {
-      this.reload(true);
-    }
-  state = {
-    visible: false,
-    selected: null,
-    all: null,
-    filtered: null,
-    loading: true,
-    treelist: null,
-    selectedName: selectName,
-    chartType:this.props.chartType
-  };
-
-
     componentDidMount()
       {
       if(FOLDER_STRUCTURE_URL){
@@ -125,12 +108,6 @@ class QueriesListNomodal extends React.Component {
       }
   }
 
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        this.setState(
-            {chartType : nextProps.chartType}
-        )
-    }
 
     componentDidUpdate(prevProps) {
         if (!_.isEqual(this.props.reload, prevProps.reload)) {
