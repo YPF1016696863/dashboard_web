@@ -124,21 +124,6 @@ class QueriesListNomodal extends React.Component {
   }
 
 
-    componentDidMount()
-      {
-      if(FOLDER_STRUCTURE_URL){
-          $http
-              .get(FOLDER_STRUCTURE_URL)
-              .success(data => this.setState(
-                  {
-                      treelist:this.convertToTreeData(
-                          data.filter(item => item.catalog === "query"),null)
-                  })
-              )
-      }
-  }
-
-
   showModal = () => {
     this.setState({
       loading: true,
