@@ -357,7 +357,7 @@ function DashboardPreviewCtrl(
               countpa += 1;
           }
       });
-      if(this.globalParameters.length() === countpa){
+      if(this.globalParameters.length() === countpa && this.globalParameters.length() > 0){
           this.showParameterinput = true;
       }  else {
           this.showParameterinput = false;
