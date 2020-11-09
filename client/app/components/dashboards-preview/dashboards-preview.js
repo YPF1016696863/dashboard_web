@@ -37,6 +37,8 @@ function getWidgetsWithChangedPositions(widgets) {
   });
 }
 
+
+
 function DashboardPreviewCtrl(
   $routeParams,
   $location,
@@ -344,8 +346,23 @@ function DashboardPreviewCtrl(
   this.globalParameters = [];
   this.isDashboardOwner = false;
   this.isLayoutDirty = false;
+  this.showParameterinput = false;
 
   // Dashboard Header default style
+
+  this.paramterFlag = () => {
+      let countpa =0;
+      this.globalParameters.forEach((param)=>{
+          if (param.type && param.type ==="query" && param.global[2][0] === ""){
+              countpa += 1;
+          }
+      });
+      if(this.globalParameters.length() === countpa){
+          this.showParameterinput = true;
+      }  else {
+          this.showParameterinput = false;
+      }
+  }
 
   const bodyBackgroundImage = $rootScope.theme.bodyBackgroundImage
     ? $rootScope.theme.bodyBackgroundImage
@@ -406,11 +423,11 @@ function DashboardPreviewCtrl(
       _.extend(params, param.toUrlParams());
     });
     $location.search(params);
+    this.paramterFlag();
   };
 
   $scope.$on('dashboard.update-parameters', () => {
     this.extractGlobalParameters();
-    console.log("globalparameter", this.globalParameters);
   });
 
   const collectFilters = (dashboard, forceRefresh) => {
@@ -465,6 +482,7 @@ function DashboardPreviewCtrl(
     Title.set(dashboard.name);
     this.extractGlobalParameters();
     collectFilters(dashboard, force);
+    console.log("globalparameter", this.globalParameters);
   };
 
   this.loadDashboard = _.throttle(force => {
@@ -732,6 +750,7 @@ function DashboardPreviewCtrl(
     }
     vm.refreshDashboard();
     $scope.$applyAsync();
+    console.log("globalparameter", this.globalParameters);
   };
 
   this.removeWidget = widgetId => {
