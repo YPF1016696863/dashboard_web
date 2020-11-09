@@ -22,8 +22,6 @@ function EchartsRadarRenderer($rootScope) {
                 $scope.options = defaultRadarChartOptions();
             }
 
-
-
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {

@@ -19,7 +19,6 @@ function EchartsIconsRenderer($rootScope) {
         },
         template: echartsTemplate,
         link($scope, $element) {
-
             if (_.isEmpty($scope.options) || $scope.options.chartType !== "IconChart") {
                 $scope.options = defaultIconChartOptions();
             }
@@ -85,6 +84,7 @@ function EchartsIconsEditor() {
             } catch (e) {
                 console.log("some error");
             }
+            console.log("$scope.options",$scope.options);
             // Set default options for new vis// 20191203 bug fix
             if (_.isEmpty($scope.options) || $scope.options.chartType !== "IconChart") {
                 $scope.options = defaultIconChartOptions();

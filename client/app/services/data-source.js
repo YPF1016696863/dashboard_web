@@ -6,15 +6,16 @@ export let DataSource = null; // eslint-disable-line import/no-mutable-exports
 
 
 function DataSourceService($q, $resource, $http, appSettings) {
-  function fetchSchema(dataSourceId, refresh = false) {
-    const params = {};
+  function fetchSchema(dataSourceId, refresh = false, dataType) {
+        const params = {};
 
-    if (refresh) {
-      params.refresh = true;
+        if (refresh && dataType) {
+            params.refresh = true;
+            params.dataType = dataType;
+        }
+
+        return $http.get(appSettings.server.backendUrl + `/api/data_sources/${dataSourceId}/schema`, { params });
     }
-
-    return $http.get(appSettings.server.backendUrl + `/api/data_sources/${dataSourceId}/schema`, { params });
-  }
 
   const actions = {
     get: { method: 'GET', cache: false, isArray: false },
@@ -36,19 +37,19 @@ function DataSourceService($q, $resource, $http, appSettings) {
 
   const DataSourceResource = $resource(appSettings.server.backendUrl + '/api/data_sources/:id', { id: '@id' }, actions);
 
-  DataSourceResource.prototype.getSchema = function getSchema(refresh = false) {
-    if (this._schema === undefined || refresh) {
-      return fetchSchema(this.id, refresh).then((response) => {
-        const data = response.data;
+  DataSourceResource.prototype.getSchema = function getSchema(refresh = false, dataType) {
+        if (this._schema === undefined || refresh) {
+            return fetchSchema(this.id, refresh, dataType).then((response) => {
+                const data = response.data;
 
-        this._schema = data;
+                this._schema = data;
 
-        return data;
-      });
-    }
+                return data;
+            });
+        }
 
-    return $q.resolve(this._schema);
-  };
+        return $q.resolve(this._schema);
+    };
 
   return DataSourceResource;
 }

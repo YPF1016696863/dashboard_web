@@ -116,8 +116,6 @@ class QueriesList extends React.Component {
 
     window.history.pushState({}, 0, url);
     window.history.replaceState({}, 0, newURL);
-    
-    // console.log(this.props.chartType);
 
     // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + this.props.chartType);
 

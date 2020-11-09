@@ -252,7 +252,7 @@ class Parameters {
         this.query.options.parameters.push(new Parameter({
           title: param,
           name: param,
-          type: 'text',
+          type: 'text.css',
           value: null,
           global: false,
         }));

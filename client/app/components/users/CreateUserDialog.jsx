@@ -38,8 +38,8 @@ class CreateUserDialog extends React.Component {
   render() {
     const { savingUser, errorMessage } = this.state;
     const formFields = [
-      { name: 'name', title: '名称', type: 'text', autoFocus: true },
-      { name: 'email', title: '用户名', type: 'text' },
+      { name: 'name', title: '名称', type: 'text.css', autoFocus: true },
+      { name: 'email', title: '用户名', type: 'text.css' },
     ].map(field => ({ required: true, props: { onPressEnter: this.createUser }, ...field }));
 
     return (

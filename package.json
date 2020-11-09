@@ -94,6 +94,7 @@
     "ui-select": "^0.19.8",
     "underscore.string": "^3.3.4",
     "uuid": "^3.3.3",
+    "wangeditor": "^4.1.0",
     "wysiwyg": "^2.0.0"
   },
   "devDependencies": {

@@ -36,7 +36,7 @@ export class ParameterValueInput extends React.Component {
   };
 
   static defaultProps = {
-    type: 'text',
+    type: 'text.css',
     value: null,
     enumOptions: '',
     queryId: null,

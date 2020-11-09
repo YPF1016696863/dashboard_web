@@ -38,7 +38,7 @@ function normalizeSchema(configurationSchema) {
     }
 
     if (prop.type === 'string') {
-      prop.type = 'text';
+      prop.type = 'text.css';
     }
 
     prop.required = includes(configurationSchema.required, name);
@@ -68,7 +68,7 @@ function getFields(type = {}, target = { options: {} }) {
     {
       name: 'name',
       title: 'Name',
-      type: 'text',
+      type: 'text.css',
       required: true,
       initialValue: target.name,
       contentAfter: React.createElement('hr'),

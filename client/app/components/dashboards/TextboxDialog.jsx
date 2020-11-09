@@ -8,7 +8,7 @@ import Tooltip from 'antd/lib/tooltip';
 import Divider from 'antd/lib/divider';
 import { wrap as wrapDialog, DialogPropType } from '@/components/DialogWrapper';
 import notification from '@/services/notification';
-import {RichTextEditor} from '@/components/RichTextEditor';
+import E from 'wangeditor';
 
 import './TextboxDialog.less';
 
@@ -39,9 +39,9 @@ class TextboxDialog extends React.Component {
       saveInProgress: false,
       text,
       preview: markdown.toHTML(text),
-      // editorState: BraftEditor.createEditorState(null)
     };
   }
+
 
   onTextChanged = (event) => {
     this.setState({ text: event.target.value });
@@ -68,7 +68,7 @@ class TextboxDialog extends React.Component {
     const isNew = !this.props.text;
     console.log("props",this.state.preview);
     console.log("editor",this.state.editorState);
-    console.log("text",this.state.text);
+    console.log("text.css",this.state.text);
     return (
       <Modal
         {...dialog.props}
@@ -82,7 +82,9 @@ class TextboxDialog extends React.Component {
         width={500}
         wrapProps={{ 'data-test': 'TextboxDialog' }}
       >
+        {/*
         <RichTextEditor />
+        */}
 
         <div className="textbox-dialog">
           <Input.TextArea
@@ -103,12 +105,6 @@ class TextboxDialog extends React.Component {
               <Tooltip title="Markdown guide opens in new window">Markdown</Tooltip>
             </a>.
           </small>
-          {/*
-          <BraftEditor
-            value={this.state.editorState}
-            onChange={this.handleEditorChange}
-          />
-          */}
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />

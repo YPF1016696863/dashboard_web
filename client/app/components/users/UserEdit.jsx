@@ -123,13 +123,13 @@ export default class UserEdit extends React.Component {
       {
         name: 'name',
         title: '名称',
-        type: 'text',
+        type: 'text.css',
         initialValue: user.name,
       },
       {
         name: 'email',
         title: '用户名',
-        type: 'text',
+        type: 'text.css',
         initialValue: user.email,
       },
       (!user.isDisabled && currentUser.id !== user.id) ? {

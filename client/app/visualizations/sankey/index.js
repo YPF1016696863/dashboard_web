@@ -227,7 +227,7 @@ function createSankey(element, data, _theme) {
 
   // add in the title for the nodes
   node
-    .append('text')
+    .append('text.css')
     .attr('x', -6)
     .attr('y', d => d.dy / 2)
     .attr('dy', '.35em')

@@ -293,7 +293,7 @@ class ChartsSearch extends React.Component {
                           case 'ECHARTS-HUAN': type = 'ECHARTS-HUAN'; break;
                           case 'ECHARTS-RADAR': type = 'ECHARTS-RADAR'; break;
                           case 'ECHARTS-PROCESS': type = 'ECHARTS-PROCESS'; break;
-                          case 'ECHARTS-VIDEO': type = 'ECHARTS-VIDEO'; break;                          
+                          case 'ECHARTS-VIDEO': type = 'ECHARTS-VIDEO'; break;
                           default: type = 'ECHARTS'; console.log("default(error)");
                         }
                         // console.log("改变了");

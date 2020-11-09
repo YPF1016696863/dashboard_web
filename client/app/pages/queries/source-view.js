@@ -24,6 +24,7 @@ function QuerySourceCtrl(
   $scope.base_url = `${$location.protocol()}://${$location.host()}:${$location.port()}`;
   $scope.modKey = KeyboardShortcuts.modKey;
 
+  $scope.selectType = { value: $scope.redisDataType[0] };
   // @override
   Object.defineProperty($scope, 'showDataset', {
     get() {
@@ -85,7 +86,7 @@ function QuerySourceCtrl(
         parameter: {
           title: null,
           name: '',
-          type: 'text',
+          type: 'text.css',
           value: null,
         },
         existingParams: map($scope.query.getParameters().get(), p => p.name),

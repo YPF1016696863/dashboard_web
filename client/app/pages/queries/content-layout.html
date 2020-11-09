@@ -22,22 +22,43 @@
           <label for="newQueryName">选择数据源:</label>
         </div>
         <ui-select
-          ng-model="query.data_source_id"
-          remove-selected="false"
-          ng-disabled="!isQueryOwner || !sourceMode"
-          on-select="updateDataSource()"
-          data-test="SelectDataSource"
-        >
+              ng-model="query.data_source_id"
+              remove-selected="false"
+              ng-disabled="!isQueryOwner || !sourceMode"
+              on-select="updateDataSource()"
+              data-test="SelectDataSource"
+      >
           <ui-select-match placeholder="选择数据源..."
-            >{{$select.selected.name}}</ui-select-match
+          >{{$select.selected.name}}</ui-select-match
           >
           <ui-select-choices
-            repeat="ds.id as ds in dataSources | filter:$select.search"
+                  repeat="ds.id as ds in dataSources | filter:$select.search"
           >
-            {{ds.name}}
+              {{ds.name}}
           </ui-select-choices>
-        </ui-select>
+      </ui-select>
       </div>
+      <div class = "editor__left__data-source" ng-if=" getQueryType() === 'redis29'"
+      >
+          <label >选择数据类型:</label>
+          <ui-select
+                  ng-model="selectedDataType.value"
+                  remove-selected="false"
+                  ng-disabled="!isQueryOwner || !sourceMode"
+                  on-select="updateDataSource()"
+          >
+              <ui-select-match placeholder="选择数据类型...">
+              <span ng-bind="$select.selected.name">
+            </span>
+              </ui-select-match>
+              <ui-select-choices
+                      repeat="item in redisDataType | filter:$select.search"
+              >
+                  <span ng-bind = "item.name"></span>
+              </ui-select-choices>
+          </ui-select>
+      </div>
+
 
       <div class="editor__left__schema">
         <schema-browser

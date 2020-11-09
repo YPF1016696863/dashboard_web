@@ -103,7 +103,7 @@ function getFontColor(bgcolor) {
 
 function getPieHoverInfoPattern(options) {
   const hasX = /{{\s*@@x\s*}}/.test(options.textFormat);
-  let result = 'text';
+  let result = 'text.css';
   if (!hasX) result += '+label';
   return result;
 }
@@ -111,7 +111,7 @@ function getPieHoverInfoPattern(options) {
 function getHoverInfoPattern(options) {
   const hasX = /{{\s*@@x\s*}}/.test(options.textFormat);
   const hasName = /{{\s*@@name\s*}}/.test(options.textFormat);
-  let result = 'text';
+  let result = 'text.css';
   if (!hasX) result += '+x';
   if (!hasName) result += '+name';
   return result;
@@ -376,7 +376,7 @@ function prepareHeatmapData(seriesList, options) {
     const dataLabels = {
       x: [],
       y: [],
-      mode: 'text',
+      mode: 'text.css',
       hoverinfo: 'skip',
       showlegend: false,
       text: [],
