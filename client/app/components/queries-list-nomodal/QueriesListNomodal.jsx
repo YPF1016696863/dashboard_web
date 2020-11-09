@@ -115,6 +115,19 @@ class QueriesListNomodal extends React.Component {
         }
     }
 
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.setState(
+            {chartType : nextProps.chartType}
+        )
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!_.isEqual(this.props.reload, prevProps.reload)) {
+            this.reload(true);
+        }
+    }
+
   showModal = () => {
     this.setState({
       loading: true,
