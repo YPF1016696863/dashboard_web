@@ -43,13 +43,13 @@ import { currentUser } from '@/services/auth';
 import { routesToAngularRoutes } from '@/lib/utils';
 
 import { policy } from '@/services/policy';
-import {$http} from "@/services/ng";
-import {appSettingsConfig} from "@/config/app-settings";
+import { $http } from "@/services/ng";
+import { appSettingsConfig } from "@/config/app-settings";
 
 const { TreeNode, DirectoryTree } = Tree;
 const { Search } = Input;
 const FOLDER_STRUCTURE_URL =
-    appSettingsConfig.server.backendUrl + '/api/folder_structures';
+  appSettingsConfig.server.backendUrl + '/api/folder_structures';
 let selectName = '';
 let selectId = '';
 class QueriesListNomodal extends React.Component {
@@ -94,39 +94,34 @@ class QueriesListNomodal extends React.Component {
   }
 
 
-    componentDidMount()
-      {
-      if(FOLDER_STRUCTURE_URL){
-          $http
-              .get(FOLDER_STRUCTURE_URL)
-              .success(data => this.setState(
-                  {
-                      treelist:this.convertToTreeData(
-                          data.filter(item => item.catalog === "query"),null)
-                  })
-              )
-      }
+  componentDidMount() {
+    if (FOLDER_STRUCTURE_URL) {
+      $http
+        .get(FOLDER_STRUCTURE_URL)
+        .success(data => this.setState(
+          {
+            treelist: this.convertToTreeData(
+              data.filter(item => item.catalog === "query"), null)
+          })
+        )
+    }
   }
 
 
-    componentDidUpdate(prevProps) {
-        if (!_.isEqual(this.props.reload, prevProps.reload)) {
-            this.reload(true);
-        }
-    }
 
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        this.setState(
-            {chartType : nextProps.chartType}
-        )
-    }
 
-    componentDidUpdate(prevProps) {
-        if (!_.isEqual(this.props.reload, prevProps.reload)) {
-            this.reload(true);
-        }
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.setState(
+      { chartType: nextProps.chartType }
+    )
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(this.props.reload, prevProps.reload)) {
+      this.reload(true);
     }
+  }
 
   showModal = () => {
     this.setState({
@@ -144,7 +139,7 @@ class QueriesListNomodal extends React.Component {
     });
   };
 
-  
+
   handleOk = () => {
     if (this.state.selected === null) {
       message.warning('请选择一个数据集.');
@@ -225,105 +220,32 @@ class QueriesListNomodal extends React.Component {
     });
   }
 
-    renderTree = (treelist,idx) => {
-        const allItems = _.cloneDeep(this.state.all);
-        const folderItem = _.filter(allItems, item3 => item3.folder_id != null)
-        return treelist.map(item => {
-            if (!item.children){
-                return (
-                  <TreeNode title={item.title} key={item.key}>
-                    {_.map(
-                            _.filter(
-                                folderItem, item1 =>
-                                    item1.folder_id.toString() === item.key.substring(1)),
-                            item2 => (
-                              <TreeNode
-                                icon={(
-                                  <Icon
-                                    type="file-search"
-                                    style={{ color: '#FAAA39' }}
-                                  />
-                                    )}
-                                title={(
-                                  <span
-                                    onDoubleClick={() => {
-                                                this.setState({ editMode: true });
-                                            }}
-                                  >
-                                    {this.state.editMode &&
-                                this.state.selected &&
-                                _.parseInt(this.state.selected) === item2.id &&
-                                !item2.readOnly() ? (
-                                  <Input
-                                    autoFocus
-                                    size="small"
-                                    value={this.state.rename}
-                                    onFocus={() => {
-                                            this.setState({ rename: item2.name });
-                                        }}
-                                    onChange={event => {
-                                            this.setState(
-                                                {
-                                                    rename: event.target.value
-                                                },
-                                                () => {}
-                                            );
-                                        }}
-                                    onBlur={() => {
-                                            this.setState({ editMode: false });
-                                            if (this.state.rename === item2.name) {
-                                                console.log('NO CHANGE');
-                                            } else {
-                                                this.setState({ loading: true });
-                                                this.saveQuery(item2, undefined, {
-                                                    name: this.state.rename
-                                                }).then(() => {
-                                                    this.reload(true);
-                                                });
-                                            }
-                                        }}
-                                    onPressEnter={() => {
-                                            this.setState({ editMode: false });
-                                            if (this.state.rename === item2.name) {
-                                                console.log('NO CHANGE');
-                                            } else {
-                                                this.setState({ loading: true });
-                                                this.saveQuery(item2, undefined, {
-                                                    name: this.state.rename
-                                                }).then(() => {
-                                                    this.reload(true);
-                                                });
-                                            }
-                                        }}
-                                  />
-                                ) : (
-                                    item2.name
-                                )}
-                                  </span>
-                                    )}
-                                key={item2.id}
-                                isLeaf
-                              />
-                            ))}
-                  </TreeNode>
-                )}
-            return(
-              <TreeNode title={item.title} key={item.key}>
-                {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
-                  <TreeNode
-                    icon={(
-                      <Icon
-                        type="file-search"
-                        style={{ color: '#FAAA39' }}
-                      />
-                            )}
-                    title={(
-                      <span
-                        onDoubleClick={() => {
-                                        this.setState({ editMode: true });
-                                    }}
-                      >
-                        {this.state.editMode &&
+  renderTree = (treelist, idx) => {
+    const allItems = _.cloneDeep(this.state.all);
+    const folderItem = _.filter(allItems, item3 => item3.folder_id != null)
+    return treelist.map(item => {
+      if (!item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key}>
+            {_.map(
+              _.filter(
+                folderItem, item1 =>
+                item1.folder_id.toString() === item.key.substring(1)),
+              item2 => (
+                <TreeNode
+                  icon={(
+                    <Icon
+                      type="file-search"
+                      style={{ color: '#FAAA39' }}
+                    />
+                  )}
+                  title={(
+                    <span
+                      onDoubleClick={() => {
+                        this.setState({ editMode: true });
+                      }}
+                    >
+                      {this.state.editMode &&
                         this.state.selected &&
                         _.parseInt(this.state.selected) === item2.id &&
                         !item2.readOnly() ? (
@@ -332,79 +254,152 @@ class QueriesListNomodal extends React.Component {
                             size="small"
                             value={this.state.rename}
                             onFocus={() => {
-                                    this.setState({ rename: item2.name });
-                                }}
+                              this.setState({ rename: item2.name });
+                            }}
                             onChange={event => {
-                                    this.setState(
-                                        {
-                                            rename: event.target.value
-                                        },
-                                        () => {}
-                                    );
-                                }}
+                              this.setState(
+                                {
+                                  rename: event.target.value
+                                },
+                                () => { }
+                              );
+                            }}
                             onBlur={() => {
-                                    this.setState({ editMode: false });
-                                    if (this.state.rename === item2.name) {
-                                        console.log('NO CHANGE');
-                                    } else {
-                                        this.setState({ loading: true });
-                                        this.saveQuery(item2, undefined, {
-                                            name: this.state.rename
-                                        }).then(() => {
-                                            this.reload(true);
-                                        });
-                                    }
-                                }}
+                              this.setState({ editMode: false });
+                              if (this.state.rename === item2.name) {
+                                console.log('NO CHANGE');
+                              } else {
+                                this.setState({ loading: true });
+                                this.saveQuery(item2, undefined, {
+                                  name: this.state.rename
+                                }).then(() => {
+                                  this.reload(true);
+                                });
+                              }
+                            }}
                             onPressEnter={() => {
-                                    this.setState({ editMode: false });
-                                    if (this.state.rename === item2.name) {
-                                        console.log('NO CHANGE');
-                                    } else {
-                                        this.setState({ loading: true });
-                                        this.saveQuery(item2, undefined, {
-                                            name: this.state.rename
-                                        }).then(() => {
-                                            this.reload(true);
-                                        });
-                                    }
-                                }}
+                              this.setState({ editMode: false });
+                              if (this.state.rename === item2.name) {
+                                console.log('NO CHANGE');
+                              } else {
+                                this.setState({ loading: true });
+                                this.saveQuery(item2, undefined, {
+                                  name: this.state.rename
+                                }).then(() => {
+                                  this.reload(true);
+                                });
+                              }
+                            }}
                           />
                         ) : (
-                            item2.name
+                          item2.name
                         )}
-                      </span>
-                            )}
-                    key={item2.id}
-                    isLeaf
-                  />
-                    ))}
-                {this.renderTree(item.children)}
-              </TreeNode>
-            )
-        })
-    };
+                    </span>
+                  )}
+                  key={item2.id}
+                  isLeaf
+                />
+              ))}
+          </TreeNode>
+        )
+      }
+      return (
+        <TreeNode title={item.title} key={item.key}>
+          {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
+            <TreeNode
+              icon={(
+                <Icon
+                  type="file-search"
+                  style={{ color: '#FAAA39' }}
+                />
+              )}
+              title={(
+                <span
+                  onDoubleClick={() => {
+                    this.setState({ editMode: true });
+                  }}
+                >
+                  {this.state.editMode &&
+                    this.state.selected &&
+                    _.parseInt(this.state.selected) === item2.id &&
+                    !item2.readOnly() ? (
+                      <Input
+                        autoFocus
+                        size="small"
+                        value={this.state.rename}
+                        onFocus={() => {
+                          this.setState({ rename: item2.name });
+                        }}
+                        onChange={event => {
+                          this.setState(
+                            {
+                              rename: event.target.value
+                            },
+                            () => { }
+                          );
+                        }}
+                        onBlur={() => {
+                          this.setState({ editMode: false });
+                          if (this.state.rename === item2.name) {
+                            console.log('NO CHANGE');
+                          } else {
+                            this.setState({ loading: true });
+                            this.saveQuery(item2, undefined, {
+                              name: this.state.rename
+                            }).then(() => {
+                              this.reload(true);
+                            });
+                          }
+                        }}
+                        onPressEnter={() => {
+                          this.setState({ editMode: false });
+                          if (this.state.rename === item2.name) {
+                            console.log('NO CHANGE');
+                          } else {
+                            this.setState({ loading: true });
+                            this.saveQuery(item2, undefined, {
+                              name: this.state.rename
+                            }).then(() => {
+                              this.reload(true);
+                            });
+                          }
+                        }}
+                      />
+                    ) : (
+                      item2.name
+                    )}
+                </span>
+              )}
+              key={item2.id}
+              isLeaf
+            />
+          ))}
+          {this.renderTree(item.children)}
+        </TreeNode>
+      )
+    })
+  };
 
-    convertToTreeData(data, pid){
-        const result = []
-        let temp = []
-        for (let i = 0; i < data.length; i+=1) {
-            if (data[i].parent_id === pid) {
-                const obj = { 'title': data[i].name, 'key': "s"+data[i].id }
-                temp = this.convertToTreeData(data, data[i].id)
-                if (temp.length > 0) {
-                    obj.children = temp
-                }
-                result.push(obj)
-            }
+  convertToTreeData(data, pid) {
+    const result = []
+    let temp = []
+    for (let i = 0; i < data.length; i += 1) {
+      if (data[i].parent_id === pid) {
+        const obj = { 'title': data[i].name, 'key': "s" + data[i].id }
+        temp = this.convertToTreeData(data, data[i].id)
+        if (temp.length > 0) {
+          obj.children = temp
         }
-        return result
+        result.push(obj)
+      }
     }
+    return result
+  }
 
-    render()
-      {
+  render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
-  selectName= localStorage.getItem('lastSelectedDataSourceName');
+    selectName = localStorage.getItem('lastSelectedDataSourceName');
 
     return (
       <>
@@ -416,7 +411,7 @@ class QueriesListNomodal extends React.Component {
           destroyOnClose
           title="选择数据集"
           visible={this.state.visible}
-          onOk={()=>this.handleOk(this.state.chartType)}
+          onOk={() => this.handleOk(this.state.chartType)}
           onCancel={this.handleCancel}
           width="25vw"
           cancelText="取消"
@@ -523,7 +518,7 @@ class QueriesListNomodal extends React.Component {
                           />
                         ))}
                       </TreeNode>
-                      {this.state.treelist? this.renderTree(this.state.treelist):<></>}
+                      {this.state.treelist ? this.renderTree(this.state.treelist) : <></>}
                     </DirectoryTree>
                   </div>
                 </Col>
