@@ -165,9 +165,8 @@ class QueriesListNomodal extends React.Component {
       if (pair[0] === "folder_id" && pair[1].substr(0, 1) === 's') { folderId = pair[1].substring(1) }
     }
 
-    // navigateTo("/query/" + this.state.selected + "/charts/new?type=" + 
-    // this.props.chartType + "&folder_id=" +  folderId);
-    navigateTo("/query/" + this.state.selected + "/charts/new?type=ECHARTS&folder_id=" + folderId);
+    navigateTo("/query/" + this.state.selected + "/charts/new?type=" +
+    this.props.chartType + "&folder_id=" +  folderId);
 
     this.setState({
       visible: false,
