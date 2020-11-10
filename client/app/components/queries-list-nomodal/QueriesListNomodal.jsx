@@ -123,6 +123,7 @@ class QueriesListNomodal extends React.Component {
     }
   }
 
+
   showModal = () => {
     this.setState({
       loading: true,
