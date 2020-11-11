@@ -15,13 +15,14 @@ import {
   SCHEMA_LOAD_ERROR
 } from '@/services/data-source';
 import * as _ from 'lodash';
-import {navigateTo} from '@/services/navigateTo';
+import { navigateTo } from '@/services/navigateTo';
 import getTags from '@/services/getTags';
 import { policy } from '@/services/policy';
 import Notifications from '@/services/notifications';
 import ScheduleDialog from '@/components/queries/ScheduleDialog';
 import notification from '@/services/notification';
 import { Group } from '@/services/group';
+import $ from 'jquery';
 import template from './content-layout.html';
 
 
@@ -59,10 +60,10 @@ function QueryViewCtrl(
 
     $scope.showLog = false;
     // if ($scope.isDirty) { // 未保存时执行
-      $scope.queryResult = $scope.query.getQueryResultByText(
-        maxAge,
-        selectedQueryText
-      );
+    $scope.queryResult = $scope.query.getQueryResultByText(
+      maxAge,
+      selectedQueryText
+    );
     // } else {
     //   $scope.queryResult = $scope.query.getQueryResult(maxAge);
     // }
@@ -92,8 +93,8 @@ function QueryViewCtrl(
     return dataSourceId;
   }
 
-  $scope.redisDataType = [{id:1,name:"data"},{id:2,name:"data2"}];
-  $scope.selectedDataType = {value:$scope.redisDataType[0]};
+  $scope.redisDataType = [{ id: 1, name: "data" }, { id: 2, name: "data2" }];
+  $scope.selectedDataType = { value: $scope.redisDataType[0] };
 
   function getSchema(refresh = undefined, dataType) {
     // TODO: is it possible this will be called before dataSource is set?
@@ -112,42 +113,59 @@ function QueryViewCtrl(
         notification.error('Schema refresh failed.', 'Please try again later.');
       }
     });
-    
+
   }
 
 
   function checkSchema(refresh = undefined) {
     // TODO: is it possible this will be called before dataSource is set?
     const preLen = $scope.checkSchema === undefined ? 0 : $scope.checkSchema.length;
+    // console.log("$scope:", $scope.selectType);
     $scope.changeFlag = false;
-    // console.log("preLen:", preLen);
+    // _.set($scope.options,'number',_.get($scope.selectType.value,'number',200));
+    
     $scope.checkSchema = [];
 
     $scope.dataSource.getSchema(refresh).then(data => {
-      // console.log("data:", data);
       if (data.schema) {
         $scope.checkSchema = data.schema;
         const currLen = $scope.checkSchema === undefined ? 0 : $scope.checkSchema.length;
-        if (preLen !== currLen) {
+        // console.log("preLen:", preLen,"currLen:", currLen);
+        if (preLen !== currLen && preLen !== 0 || _.get($scope.selectType.value,'number',200)<currLen) {
           $scope.changeFlag = true;
-          console.log("修改了:",$scope.changeFlag);
+          console.log("修改了:", $scope.changeFlag);
         }
 
       } else {
         $scope.changeFlag = true;
       }
+      $scope.$apply();
     });
-
   }
+
+  setTimeout(function () {
+    checkSchema(true);
+  }, 500);
+
 
   this.autoRefresh = () => {
     $timeout(() => {
-      console.log("定时");
+      // console.log("定时",_.get($scope.selectType.value,'rate',5));
       checkSchema(true);
-    }, 10 * 1000).then(() => this.autoRefresh());
+    }, _.get($scope.selectType.value,'rate',5) * 1000).then(() => this.autoRefresh());
   };
 
-  $scope.refreshSchema = () => {getSchema(true, $scope.selectedDataType.value.name);this.autoRefresh();}
+  $scope.refreshSchema = () => { getSchema(true, $scope.selectedDataType.value.name); this.autoRefresh(); }
+
+  function refreshNumber() {
+    _.set($scope.selectType.value,'number',$scope.options.number);
+  }
+  $scope.$watch('options.number', refreshNumber, true);
+
+  function refreshRate() {
+    _.set($scope.selectType.value,'rate',$scope.options.rate);
+  }
+  $scope.$watch('options.rate', refreshRate, true);
 
   function updateDataSources(dataSources) {
     // Filter out data sources the user can't query (or used by current query):
@@ -209,9 +227,9 @@ function QueryViewCtrl(
     'alt+enter': $scope.executeQuery
   };
 
-  if($scope.query.readOnly()) {
+  if ($scope.query.readOnly()) {
     notification.warning('只读权限的用户无法修改更新数据.');
-    navigateTo("/queries?queryid="+$scope.query.id);
+    navigateTo("/queries?queryid=" + $scope.query.id);
   }
 
   KeyboardShortcuts.bind(shortcuts);
@@ -236,7 +254,10 @@ function QueryViewCtrl(
     (currentUser.hasPermission('execute_query') &&
       !$scope.dataSource.view_only);
 
-  $scope.getQueryType = () => {console.log("$scope.dataSource.type",$scope.dataSource.type); return $scope.dataSource && $scope.dataSource.type};
+  $scope.getQueryType = () => {
+    // console.log("$scope.dataSource.type",$scope.dataSource.type);
+    return $scope.dataSource && $scope.dataSource.type
+  };
 
   $scope.canForkQuery = () => !$scope.dataSource.view_only;
 
@@ -298,7 +319,7 @@ function QueryViewCtrl(
       }
       request.id = $scope.query.id;
       request.version = $scope.query.version;
-      
+
     } else {
       request = pick($scope.query, [
         'schedule',
@@ -315,18 +336,18 @@ function QueryViewCtrl(
       ]);
 
       // console.log($scope.query.id); //获取数据集的id
-      const queryId =  $scope.query.id
-    
+      const queryId = $scope.query.id
+
       const allGroupsP = Group.query({ filter: true }).$promise;  // 获取所有分组记录
-            
+
       Promise.all([allGroupsP])
-      .then(result => {
-        const allGroups = result[0];
-        _.forEach(allGroups, group => {
-          // console.log(group);             // 每一个分组集合，group.id
-          Group.addQuery({ id: group.id, query_id: queryId });
-        });
-      })
+        .then(result => {
+          const allGroups = result[0];
+          _.forEach(allGroups, group => {
+            // console.log(group);             // 每一个分组集合，group.id
+            Group.addQuery({ id: group.id, query_id: queryId });
+          });
+        })
 
     }
 
@@ -460,13 +481,13 @@ function QueryViewCtrl(
       ds => ds.id === $scope.query.data_source_id
     );
 
-    getSchema( false,$scope.selectedDataType.value.name);
+    getSchema(false, $scope.selectedDataType.value.name);
     $scope.executeQuery();
   };
 
 
   $scope.changeDataType = () => {
-      console.log("selected",$scope.selectedDataType.value.name);
+    console.log("selected", $scope.selectedDataType.value.name);
   }
 
   $scope.setVisualizationTab = visualization => {
@@ -607,10 +628,10 @@ function QueryViewCtrl(
       $scope.showScheduleForm = false;
     });
   };
-  
+
   $scope.onSimpleQueryClick = (v) => {
     // console.log(v?'当前为简单模式':'当前为高级模式');
-    set($scope,'simpleQuery',!v); 
+    set($scope, 'simpleQuery', !v);
   }
 
 
