@@ -1,13 +1,7 @@
 <div class="layout-content-wrapper">
   <query-page-header query="query"></query-page-header>
   <main class="query-fullscreen">
-    <nav
-      resizable
-      r-directions="['right']"
-      r-flex="true"
-      resizable-toggle
-      toggle-shortcut="Alt+Shift+D, Alt+D"
-    >
+    <nav resizable r-directions="['right']" r-flex="true" resizable-toggle toggle-shortcut="Alt+Shift+D, Alt+D">
 
       <form style="padding-left: 15px;padding-right: 15px" ng-if="query.isNew()">
         <div class="form-group" style="margin-bottom:0px">
@@ -21,84 +15,73 @@
         <div class="form-group" style="margin-bottom:3px">
           <label for="newQueryName">选择数据源:</label>
         </div>
-        <ui-select
-              ng-model="query.data_source_id"
-              remove-selected="false"
-              ng-disabled="!isQueryOwner || !sourceMode"
-              on-select="updateDataSource()"
-              data-test="SelectDataSource"
-      >
-          <ui-select-match placeholder="选择数据源..."
-          >{{$select.selected.name}}</ui-select-match
-          >
-          <ui-select-choices
-                  repeat="ds.id as ds in dataSources | filter:$select.search"
-          >
-              {{ds.name}}
+        <ui-select ng-model="query.data_source_id" remove-selected="false" ng-disabled="!isQueryOwner || !sourceMode"
+          on-select="updateDataSource()" data-test="SelectDataSource">
+          <ui-select-match placeholder="选择数据源...">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="ds.id as ds in dataSources | filter:$select.search">
+            {{ds.name}}
           </ui-select-choices>
-      </ui-select>
+        </ui-select>
       </div>
-      <div class = "editor__left__data-source" ng-if=" getQueryType() === 'redis29'"
-      >
-          <label >选择数据类型:</label>
-          <ui-select
-                  ng-model="selectedDataType.value"
-                  remove-selected="false"
-                  ng-disabled="!isQueryOwner || !sourceMode"
-                  on-select="updateDataSource()"
-          >
-              <ui-select-match placeholder="选择数据类型...">
-              <span ng-bind="$select.selected.name">
+      <div class="editor__left__data-source" ng-if=" getQueryType() === 'redis29'">
+        <label>选择数据类型:</label>
+        <ui-select ng-model="selectedDataType.value" remove-selected="false" ng-disabled="!isQueryOwner || !sourceMode"
+          on-select="updateDataSource()">
+          <ui-select-match placeholder="选择数据类型...">
+            <span ng-bind="$select.selected.name">
             </span>
-              </ui-select-match>
-              <ui-select-choices
-                      repeat="item in redisDataType | filter:$select.search"
-              >
-                  <span ng-bind = "item.name"></span>
-              </ui-select-choices>
-          </ui-select>
+          </ui-select-match>
+          <ui-select-choices repeat="item in redisDataType | filter:$select.search">
+            <span ng-bind="item.name"></span>
+          </ui-select-choices>
+        </ui-select>
       </div>
+
+
+      <div class="table-name" ng-click="isFilterColumn1 = !isFilterColumn1">
+        <div class="form-group" style="float:left">
+          <i class="fa fa-table"></i>
+          <strong>
+            <span>预警配置{{$scope.selectType.value.number}}</span>
+          </strong>
+        </div>
+      </div>
+      <div uib-collapse="!isFilterColumn1" style="left: 10%;position: relative;">
+        条数
+        <input type="number" style="width: 50%;" ng-model="options.number" > </input>
+        <br />
+        频率
+        <input type="number" style="width: 50%;" ng-model="options.rate"> </input>
+      </div>
+
 
 
       <div class="editor__left__schema">
-        <schema-browser
-          class="schema-container"
-          schema="schema"
-          change-flag="changeFlag"
-          on-refresh="refreshSchema()"
-          ng-if="sourceMode && getQueryType() !== 'excelupload'&& getQueryType() !== 'csvupload'"
-        ></schema-browser>
-        
-        <file-uploader
-          fileurl="query.query"
-          disabled="!isQueryOwner || !sourceMode"
-          ng-if="getQueryType() === 'excelupload'||getQueryType() == 'csvupload'"
-          update-url="updateQuery"
-        />
+        <schema-browser class="schema-container" schema="schema" change-flag="changeFlag" on-refresh="refreshSchema()"
+          ng-if="sourceMode && getQueryType() !== 'excelupload'&& getQueryType() !== 'csvupload'"></schema-browser>
+
+
+        <file-uploader fileurl="query.query" disabled="!isQueryOwner || !sourceMode"
+          ng-if="getQueryType() === 'excelupload'||getQueryType() == 'csvupload'" update-url="updateQuery" />
       </div>
       <div ng-if="!sourceMode" style="flex-grow: 1;">&nbsp;</div>
 
       <div class="query-metadata ">
-        <button type="button" class="btn btn-primary btn-sm btn-block"   ng-if="simpleQuery" ng-model="simpleQuery" ng-click="onSimpleQueryClick(simpleQuery)">
+        <button type="button" class="btn btn-primary btn-sm btn-block" ng-if="simpleQuery" ng-model="simpleQuery"
+          ng-click="onSimpleQueryClick(simpleQuery)">
           <i class="fa fa-book"></i>&nbsp;&nbsp;切换为简单查询模式
         </button>
         <!-- ng-init="simpleQuery=false" -->
-        <button type="button" class="btn btn-primary btn-sm btn-block" ng-if="!simpleQuery" ng-model="simpleQuery" ng-click="onSimpleQueryClick(simpleQuery)">
+        <button type="button" class="btn btn-primary btn-sm btn-block" ng-if="!simpleQuery" ng-model="simpleQuery"
+          ng-click="onSimpleQueryClick(simpleQuery)">
           <i class="fa fa-book"></i>&nbsp;&nbsp;切换为高级查询模式
         </button>
       </div>
-      <div
-        class="query-metadata query-metadata--history"
-        ng-if="!query.isNew()"
-      >
+      <div class="query-metadata query-metadata--history" ng-if="!query.isNew()">
         <table>
           <tr>
             <td>
-              <strong
-                class="meta__name"
-                ng-class="{'text-muted': query.user.is_disabled}"
-                >{{query.user.name}}</strong
-              >
+              <strong class="meta__name" ng-class="{'text-muted': query.user.is_disabled}">{{query.user.name}}</strong>
             </td>
             <td class="text-right">
               创建于:
@@ -109,11 +92,8 @@
           </tr>
           <tr>
             <td>
-              <strong
-                class="meta__name"
-                ng-class="{'text-muted': query.last_modified_by.is_disabled}"
-                >{{query.last_modified_by.name}}</strong
-              >
+              <strong class="meta__name"
+                ng-class="{'text-muted': query.last_modified_by.is_disabled}">{{query.last_modified_by.name}}</strong>
             </td>
             <td class="text-right">
               最后更新:
@@ -127,12 +107,8 @@
               <span class="query-metadata__property">刷新目录:</span>
             </td>
             <td class="p-t-15 text-right">
-              <schedule-phrase
-                ng-click="editSchedule()"
-                is-link="true"
-                schedule="query.schedule"
-                is-new="query.isNew()"
-              />
+              <schedule-phrase ng-click="editSchedule()" is-link="true" schedule="query.schedule"
+                is-new="query.isNew()" />
             </td>
           </tr>
         </table>
@@ -141,144 +117,71 @@
 
     <div class="content">
       <div class="flex-fill p-relative">
-        <div
-          class="p-absolute d-flex flex-column p-l-15 p-r-15"
-          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto"
-        >
-          <div
-            class="row editor"
-            resizable
-            r-directions="['bottom']"
-            r-flex="true"
-            resizable-toggle
-            style="min-height: 11px; max-height: 70vh;"
-            ng-if="sourceMode"
-          >
-            <query-editor
-              style="width: 100%; height: 100%;"
-              file-upload="getQueryType() === 'excelupload'"
-              query-text="query.query"
-              schema="schema"
-              syntax="dataSource.syntax"
-              can-edit="canEdit"
-              is-dirty="isDirty"
-              is-query-owner="isQueryOwner"
-              update-data-source="updateDataSource"
-              execute-query="executeQuery"
-              query-executing="queryExecuting"
-              can-execute-query="canExecuteQuery"
-              listen-for-resize="listenForResize"
-              listen-for-editor-command="listenForEditorCommand"
-              save-query="saveQuery"
-              update-query="updateQuery"
-              update-selected-query="updateSelectedQuery"
-              add-new-parameter="addNewParameter"
-              data-data-source="dataSource"
-              data-data-sources="dataSources"
-              is-simple="simpleQuery"
-            ></query-editor>
+        <div class="p-absolute d-flex flex-column p-l-15 p-r-15"
+          style="left: 0; top: 0; right: 0; bottom: 0; overflow: auto">
+          <div class="row editor" resizable r-directions="['bottom']" r-flex="true" resizable-toggle
+            style="min-height: 11px; max-height: 70vh;" ng-if="sourceMode">
+            <query-editor style="width: 100%; height: 100%;" file-upload="getQueryType() === 'excelupload'"
+              query-text="query.query" schema="schema" syntax="dataSource.syntax" can-edit="canEdit" is-dirty="isDirty"
+              is-query-owner="isQueryOwner" update-data-source="updateDataSource" execute-query="executeQuery"
+              query-executing="queryExecuting" can-execute-query="canExecuteQuery" listen-for-resize="listenForResize"
+              listen-for-editor-command="listenForEditorCommand" save-query="saveQuery" update-query="updateQuery"
+              update-selected-query="updateSelectedQuery" add-new-parameter="addNewParameter"
+              data-data-source="dataSource" data-data-sources="dataSources" is-simple="simpleQuery"></query-editor>
           </div>
 
           <div class="row query-metadata__mobile">
-            <img
-              ng-src="{{ query.user.profile_image_url }}"
-              class="profile__image_thumb"
-            />
+            <img ng-src="{{ query.user.profile_image_url }}" class="profile__image_thumb" />
             <div class="flex-fill m-r-10">
-              <strong
-                class="meta__name"
-                ng-class="{'text-muted': query.user.is_disabled}"
-                >{{query.user.name}}</strong
-              >
+              <strong class="meta__name" ng-class="{'text-muted': query.user.is_disabled}">{{query.user.name}}</strong>
               created <rd-time-ago value="query.created_at"></rd-time-ago>
             </div>
 
-            <img
-              ng-src="{{ query.last_modified_by.profile_image_url }}"
-              class="profile__image_thumb"
-            />
+            <img ng-src="{{ query.last_modified_by.profile_image_url }}" class="profile__image_thumb" />
             <div class="flex-fill m-r-10">
-              <strong
-                class="meta__name"
-                ng-class="{'text-muted': query.last_modified_by.is_disabled}"
-                >{{query.last_modified_by.name}}</strong
-              >
+              <strong class="meta__name"
+                ng-class="{'text-muted': query.last_modified_by.is_disabled}">{{query.last_modified_by.name}}</strong>
               updated <rd-time-ago value="query.updated_at"></rd-time-ago>
             </div>
 
             <div>
               <span class="query-metadata__property">Refresh schedule:</span>
-              <schedule-phrase
-                ng-click="editSchedule()"
-                is-link="true"
-                schedule="query.schedule"
-                is-new="query.isNew()"
-              />
+              <schedule-phrase ng-click="editSchedule()" is-link="true" schedule="query.schedule"
+                is-new="query.isNew()" />
             </div>
           </div>
 
-          <section
-            class="flex-fill p-relative t-body query-visualizations-wrapper"
-          >
-            <div
-              class="d-flex flex-column p-b-15 p-absolute static-position__mobile"
-              style="left: 0; top: 0; right: 0; bottom: 0;"
-            >
-              <div
-                class="p-t-15 p-b-5"
-                ng-if="query.getParametersDefs().length > 0"
-              >
-                <parameters
-                  parameters="query.getParametersDefs()"
-                  sync-values="!query.isNew()"
-                  editable="sourceMode && canEdit"
-                  on-updated="onParametersUpdated"
-                ></parameters>
+          <section class="flex-fill p-relative t-body query-visualizations-wrapper">
+            <div class="d-flex flex-column p-b-15 p-absolute static-position__mobile"
+              style="left: 0; top: 0; right: 0; bottom: 0;">
+              <div class="p-t-15 p-b-5" ng-if="query.getParametersDefs().length > 0">
+                <parameters parameters="query.getParametersDefs()" sync-values="!query.isNew()"
+                  editable="sourceMode && canEdit" on-updated="onParametersUpdated"></parameters>
               </div>
               <!-- Query Execution Status -->
 
               <div class="query-alerts">
-                <div
-                  class="alert alert-info m-t-15"
-                  ng-if="queryResult.getStatus() == 'processing'"
-                >
+                <div class="alert alert-info m-t-15" ng-if="queryResult.getStatus() == 'processing'">
                   Executing query&hellip;
                   <rd-timer from="queryResult.getUpdatedAt()"></rd-timer>
-                  <button
-                    type="button"
-                    class="btn btn-warning btn-xs pull-right"
-                    ng-disabled="cancelling"
-                    ng-click="cancelExecution()"
-                  >
+                  <button type="button" class="btn btn-warning btn-xs pull-right" ng-disabled="cancelling"
+                    ng-click="cancelExecution()">
                     Cancel
                   </button>
                 </div>
-                <div
-                  class="alert alert-info m-t-15"
-                  ng-if="queryResult.getStatus() == 'loading-result'"
-                >
+                <div class="alert alert-info m-t-15" ng-if="queryResult.getStatus() == 'loading-result'">
                   Loading results&hellip;
                   <rd-timer from="queryResult.getUpdatedAt()"></rd-timer>
                 </div>
-                <div
-                  class="alert alert-info m-t-15"
-                  ng-if="queryResult.getStatus() == 'waiting'"
-                >
+                <div class="alert alert-info m-t-15" ng-if="queryResult.getStatus() == 'waiting'">
                   Query in queue&hellip;
                   <rd-timer from="queryResult.getUpdatedAt()"></rd-timer>
-                  <button
-                    type="button"
-                    class="btn btn-warning btn-xs pull-right"
-                    ng-disabled="cancelling"
-                    ng-click="cancelExecution()"
-                  >
+                  <button type="button" class="btn btn-warning btn-xs pull-right" ng-disabled="cancelling"
+                    ng-click="cancelExecution()">
                     Cancel
                   </button>
                 </div>
-                <div
-                  class="alert alert-danger m-t-15"
-                  ng-if="queryResult.getError()"
-                >
+                <div class="alert alert-danger m-t-15" ng-if="queryResult.getError()">
                   Error running query:
                   <strong>{{queryResult.getError()}}</strong>
                 </div>
@@ -287,20 +190,15 @@
 
               <!-- tabs and data -->
               <div ng-if="showDataset" class="flex-fill p-relative">
-                <div
-                  class="d-flex flex-column p-absolute static-position__mobile"
-                  style="left: 0; top: 0; right: 0; bottom: 0;background-color: #25374C"
-                >
+                <div class="d-flex flex-column p-absolute static-position__mobile"
+                  style="left: 0; top: 0; right: 0; bottom: 0;background-color: #25374C">
                   <div class="p-10" ng-show="showLog">
                     <p>Log Information:</p>
                     <p ng-repeat="l in queryResult.getLog()">{{l}}</p>
                   </div>
                   <div class="query__vis m-t-15 p-b-15 scrollbox">
                     <filters filters="filters"></filters>
-                    <grid-renderer
-                      query-result="queryResult"
-                      items-per-page="10"
-                    ></grid-renderer>
+                    <grid-renderer query-result="queryResult" items-per-page="10"></grid-renderer>
                   </div>
                 </div>
               </div>
@@ -347,44 +245,29 @@
           <span class="query-metadata__bottom" ng-if="queryResult.getData()">
             <span class="query-metadata__property">
               <strong>{{queryResult.getData().length}}</strong>
-              <ng-pluralize
-                count="queryResult.getData().length"
-                when="{'0': ' 行', 'one': ' 行', 'other': ' 行'}"
-              ></ng-pluralize>
+              <ng-pluralize count="queryResult.getData().length" when="{'0': ' 行', 'one': ' 行', 'other': ' 行'}">
+              </ng-pluralize>
             </span>
             <span class="query-metadata__property">
-              <strong ng-show="!queryExecuting"
-                >{{queryResult.getRuntime() | durationHumanize}}</strong
-              >
+              <strong ng-show="!queryExecuting">{{queryResult.getRuntime() | durationHumanize}}</strong>
               <span ng-show="queryExecuting">Running&hellip;</span>
               <span class="hidden-xs">运行时间</span>
             </span>
-            <span
-              class="query-metadata__property"
-              ng-if="queryResult.query_result.data.metadata.data_scanned"
-              >Data Scanned
-              <strong
-                >{{ queryResult.query_result.data.metadata.data_scanned |
-                prettySize}}</strong
-              >
+            <span class="query-metadata__property" ng-if="queryResult.query_result.data.metadata.data_scanned">Data
+              Scanned
+              <strong>{{ queryResult.query_result.data.metadata.data_scanned |
+                prettySize}}</strong>
             </span>
           </span>
 
           <div>
             <span class="query-metadata__property hidden-xs">
               <span class="hidden-xs">更新于: </span>
-              <rd-time-ago
-                value="queryResult.query_result.retrieved_at"
-              ></rd-time-ago>
+              <rd-time-ago value="queryResult.query_result.retrieved_at"></rd-time-ago>
             </span>
 
-            <button
-              class="m-l-5 btn btn-primary"
-              ng-click="executeQuery()"
-              ng-disabled="queryExecuting || !canExecuteQuery()"
-              title="Refresh Dataset"
-              ng-if="!sourceMode"
-            >
+            <button class="m-l-5 btn btn-primary" ng-click="executeQuery()"
+              ng-disabled="queryExecuting || !canExecuteQuery()" title="Refresh Dataset" ng-if="!sourceMode">
               <span class="zmdi zmdi-play"></span>
             </button>
           </div>

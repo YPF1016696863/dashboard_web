@@ -332,7 +332,7 @@ class ChartsListSearch extends React.Component {
                       }}
                     />
                   ) : (
-                    visualization.name
+                    visualization.name+"[id:"+visualization.id+"]"
                   )}
                 </span>
               )}

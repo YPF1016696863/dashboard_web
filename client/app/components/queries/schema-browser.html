@@ -6,12 +6,15 @@
     <button class="btn btn-default" title="刷新图表" ng-click="$ctrl.onRefresh()">
       <span class="zmdi zmdi-refresh"></span>
     </button>
-    <button class="btn btn-default" style="width: 30%;" title="预警监测" ng-click="$ctrl.onRefresh()">
-      <img ng-if="$ctrl.changeFlag" style="width: 140%;" src="/static/images/icon/change.png" alt="预警" />
-      <img ng-if="!$ctrl.changeFlag" style="width: 140%;" src="/static/images/icon/nochange.png" alt="无" />
+    <button class="btn btn-default" style="width: 5vh;" title="预警监测" ng-click="$ctrl.onRefresh()">
+      <img ng-if="$ctrl.changeFlag" style="width: 3vh;" src="/static/images/icon/change.png" alt="预警" />
+      <img ng-if="!$ctrl.changeFlag" style="width: 3vh;" src="/static/images/icon/nochange.png" alt="无" />
     </button>
   </div>
+  
+  <!-- <input type="number" ng-model="options.number" ng-change="$ctrl.onYujin()" ng-value="$ctrl.changeNumber"> </input>
 
+  <input type="number" value="$ctrl.changeNumber"> </input>  -->
 
 
 
