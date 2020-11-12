@@ -6,7 +6,7 @@ import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
-
+import color16to10 from '../colorChange';
 
 import { defaultGanteChartOptions, getChartType, setThemeColor } from './echartsGanteChartOptionUtils';
 
@@ -38,15 +38,15 @@ function EchartsGanteRenderer($rootScope) {
                         startDatatemp = [];
                         endDatatemp = [];
                         nameData = [];
-                        _.forEach(data, function(value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                        _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
-                            _.forEach(value, function(valueChildren, keyChildren) {
+                            _.forEach(value, function (valueChildren, keyChildren) {
                                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
                                     startDatatemp.push(valueChildren)
-                                }                                
+                                }
                                 if (keyChildren === _.get($scope.options, "form.yAxisColumn", '')) {
                                     endDatatemp.push(valueChildren);
-                                }                               
+                                }
                                 if (keyChildren === _.get($scope.options, "form.nameAxisColumn", '')) {
                                     nameData.push(valueChildren);
                                 }
@@ -58,15 +58,25 @@ function EchartsGanteRenderer($rootScope) {
                         //     startData.push(v._i);
 
                         // });
-                        let i=0;
-                        _.forEach(endDatatemp, function(v, k) {
+                        let i = 0;
+                        _.forEach(endDatatemp, function (v, k) {
                             // eslint-disable-next-line func-names
-                            endData.push(v-startDatatemp[i]);
-                            i+=1;
+                            endData.push(v - startDatatemp[i]);
+                            i += 1;
                         });
 
+
+
+                        _.set($scope.options, "tooltip.backgroundColor",
+                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+                            
+
+
                         _.set($scope.options, "yAxis.data", nameData);
-                        _.set($scope.options, "tooltip.formatter", function(params) {
+                        _.set($scope.options, "tooltip.formatter", function (params) {
                             const start = params[0];
                             const tar = params[1];
                             return tar.name + '<br/>' +
@@ -75,7 +85,7 @@ function EchartsGanteRenderer($rootScope) {
                         });
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
-                        
+
                         _.set($scope.options, "series", []); // 清空设置           
                         $scope.options.series.push(
 
@@ -91,27 +101,27 @@ function EchartsGanteRenderer($rootScope) {
                                 data: startDatatemp
 
                             }, {
-                                name: '结束时间',
-                                type: 'bar',
-                                label: {
-                                    show: true,
-                                    position: 'inside'
-                                },
-                                itemStyle: {
-                                    normal: {
-                                        color: function(params) {
-                                            // 给出颜色组                        
-                                            const colorList = ['#66FF66', '#cca272', '#74608f', '#FF1493', '#d7a02b',
-                                                '#4B0082', '#c8ba23', '#00BFFF', '#333399', '#228B22',
-                                                '#FF4500', '#CC0033', '#FFD700'
-                                            ];
-                                            return colorList[params.dataIndex]
-                                        },
-                                        borderColor: 'transparent',
-                                    }
-                                },
-                                data: endData
-                            }
+                            name: '结束时间',
+                            type: 'bar',
+                            label: {
+                                show: true,
+                                position: 'inside'
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: function (params) {
+                                        // 给出颜色组                        
+                                        const colorList = ['#66FF66', '#cca272', '#74608f', '#FF1493', '#d7a02b',
+                                            '#4B0082', '#c8ba23', '#00BFFF', '#333399', '#228B22',
+                                            '#FF4500', '#CC0033', '#FFD700'
+                                        ];
+                                        return colorList[params.dataIndex]
+                                    },
+                                    borderColor: 'transparent',
+                                }
+                            },
+                            data: endData
+                        }
 
                         );
 
@@ -137,7 +147,7 @@ function EchartsGanteRenderer($rootScope) {
                             // let width ='100%';
                             let height = "100%";
                             let width = "100%";
-                            
+
                             if ($("#preview").length !== 0) {
                                 height = $element.parent().parent()["0"].clientHeight;
                                 width = $element.parent().parent()["0"].clientWidth;
@@ -165,9 +175,9 @@ function EchartsGanteRenderer($rootScope) {
                 }
             };
             $scope.handleResize = _.debounce(() => {
-                refreshData(); 
+                refreshData();
             }, 50);
-            
+
             $scope.$watch('options', refreshData, true);
             $scope.$watch('queryResult && queryResult.getData()', refreshData);
             $rootScope.$watch('theme.theme', refreshData);
@@ -201,31 +211,31 @@ function EchartsGanteEditor() {
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
-              // 样式设置二级标签
-              $scope.currentTab2 = 'title';
-              $scope.changeTab2 = (tab2) => {
-                  $scope.currentTab2 = tab2;
-              };
-      
-  
-              // 主标题折叠
-              $scope.isCollapsedMain = true;
-              // 副标题
-              $scope.isCollapsedSub = true;
-              // 颜色设置
-              $scope.isCollapsedColor = true;
-              // 容器的距离
-              $scope.isCollapsedDistance = true;
-              // 纬度轴
-              $scope.isCollapsedXAxisOption = true;
-  
-              // 指标轴
-              $scope.isCollapsedYAxisOption = true;
-  
-              // 横向网格线
-              $scope.isCollapsedXlineOption = true;
-              // 纵向网格线
-              $scope.isCollapsedYlineOption = true;
+            // 样式设置二级标签
+            $scope.currentTab2 = 'title';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+
+
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+            // 纬度轴
+            $scope.isCollapsedXAxisOption = true;
+
+            // 指标轴
+            $scope.isCollapsedYAxisOption = true;
+
+            // 横向网格线
+            $scope.isCollapsedXlineOption = true;
+            // 纵向网格线
+            $scope.isCollapsedYlineOption = true;
             $scope.xAxisLocations = [
                 { label: '数据轴起始位置', value: 'start' },
                 { label: '数据轴居中位置', value: 'center' },
@@ -307,7 +317,7 @@ function EchartsGanteEditor() {
                 { label: '蓝色调渐变', value: ['#CCEBFF', '#AADDFF', '#88CFFF', '#66C2FF', '#44B4FF', '#22A7FF', '#0099FF', '#007ACC', '#0066AA', '#005288'] },
                 { label: '绿色调渐变', value: ['#d6f29b', '#b4d66b', '#a2d97e', '#9ebb1d', '#7acb14', '#7bc75a', '#33c563', '#008800', '#006600', '#344d00'] },
                 { label: '紫色调渐变', value: ['#F1DDFF', '#E4BBFF', '#D699FF', '#D699FF', '#C977FF', '#A722FF', '#9900FF', '#9900FF', '#8500DD', '#8500DD'] },
-                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00', ] },
+                { label: '黄色调渐变', value: ['#FFFFDD', '#FFFFBB', '#FFFF99', '#FFFF77', '#FFFF55', '#FFFF55', '#FFFF00', '#DDDD00', '#CCCC00', '##AAAA00',] },
                 { label: '红色调渐变', value: ['#FFDDEB', '#FFCCD6', '#FF99AD', '#FF7792', '#FF6685', '#FF4469', '#FF224E', '#EE0030', '#CC0029', '#99001F'] },
 
             ];
@@ -353,7 +363,7 @@ function EchartsGanteEditor() {
             ];
 
 
-            $scope.$watch('options', () => {}, true);
+            $scope.$watch('options', () => { }, true);
         },
     };
 }

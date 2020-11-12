@@ -59,7 +59,7 @@ class QueriesListNomodal extends React.Component {
     all: null,
     filtered: null,
     loading: true,
-    selectedName: selectName,
+    selectedName: '',
     nameState: false,
   };
 
@@ -399,7 +399,7 @@ class QueriesListNomodal extends React.Component {
   render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
-    selectName = localStorage.getItem('lastSelectedDataSourceName');
+    // selectName = localStorage.getItem('lastSelectedDataSourceName');
 
     return (
       <>

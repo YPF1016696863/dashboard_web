@@ -6,6 +6,7 @@ import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
 import { defaultPieChartOptions, parseChartType, getChartType, setThemeColor, getRadius, } from './echartsPieChartOptionUtils';
+import color16to10 from '../colorChange';
 
 function EchartsPieRenderer($timeout, $rootScope, $window) {
   return {
@@ -40,6 +41,29 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
                 _.get($scope.options, "form.yAxisColumns", []),
                 function (o) { return o === _.get($scope.options, 'useSerie', ''); }
               ));
+
+
+
+            /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+            _.set($scope.options, "backgroundColor",
+              color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                _.get($scope.options, "backgroundColorOpacity", 0)
+              ));
+
+            _.set($scope.options, "tooltip.backgroundColor",
+              color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+              ));
+
+            //  提示框文字格式
+            const formatterString = `${_.get($scope.options, "Text_a", "")}
+                    {a}${_.get($scope.options, "a_Text", "")}
+                    <br/>${_.get($scope.options, "Text_b", "")}
+                    {b}${_.get($scope.options, "b_Text", "")}:
+                    ${_.get($scope.options, "Text_c", "")}
+                    {c}${_.get($scope.options, "c_Text", "")}`;
+            _.set($scope.options, "tooltip.formatter", formatterString);
+
 
             // 当xy数据有修改才刷新
             const data = $scope.queryResult.getData();
@@ -470,8 +494,8 @@ function EchartsPieEditor() {
       $scope.isCollapsedDistance = true;
 
       // 筛选1
-      $scope.isFilterColumn1 = true; 
-      $scope.isFilterColumn2 = true; 
+      $scope.isFilterColumn1 = true;
+      $scope.isFilterColumn2 = true;
       $scope.isFilterColumn3 = true;
 
       $scope.chartTypes = {

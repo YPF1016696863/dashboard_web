@@ -111,7 +111,10 @@
         </div>
 
 
-
+        <label>
+            开启后台运算
+            <input type="checkbox" ng-model="options.calculate">
+        </label>
         <!-- <div class="form-group" ng-if="!options.bar2Flag">
             <label class="control-label">维度数据</label>
             <ui-select name="xAxisColumn" required ng-model="options.form.xAxisColumn">
@@ -185,9 +188,14 @@
                             <input type="text" style="width:50%;float: left" class="form-control"
                                 ng-model="options.form.filterColumnCol_1.backgroundColorOpacity " placeholder="0" />
                         </div>
-                        <label class="control-label">筛选框的边框颜色</label>
-                        <input type="color" style="width:100%" class="form-control"
-                            ng-model="options.form.filterColumnCol_1.borderColor" />
+                        <div class="form-group" style="width:100%;float:right">
+                            <label class="control-label" style="width:100%;float: left">筛选框的边框颜色</label>
+                            <input type="color" style="width:50%;float:left" class="form-control"
+                                ng-model="options.form.filterColumnCol_1.borderColor" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_1.borderColorOpacity" placeholder="1" />
+                        </div>
+
                         <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%;">
                             <label class="control-label">位置X(百分比)</label>
                             <input name="name" type="text" class="form-control"
@@ -210,12 +218,6 @@
                         <label class="control-label">筛选框的文字颜色</label>
                         <input type="color" style="width:100%" class="form-control"
                             ng-model="options.form.filterColumnCol_1.color" />
-                        <!-- <ui-select class="mini" ng-model="options.form.filterColumnCol_1.color">
-                            <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                            <ui-select-choices repeat="Color.value as Color in Colors">
-                                <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select> -->
                         <label class="control-label">筛选框的文字大小</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.form.filterColumnCol_1.fontSize" placeholder="" />
@@ -257,9 +259,15 @@
                             <input type="text" style="width:50%;float: left" class="form-control"
                                 ng-model="options.form.filterColumnCol_2.backgroundColorOpacity " placeholder="0" />
                         </div>
-                        <label class="control-label">筛选框的边框颜色</label>
-                        <input type="color" style="width:100%" class="form-control"
-                            ng-model="options.form.filterColumnCol_2.borderColor" />
+                        <div class="form-group" style="width:100%;float:right">
+                            <label class="control-label">筛选框的边框颜色</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_2.borderColor" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_2.borderColorOpacity" placeholder="1" />
+
+                        </div>
+
                         <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%;">
                             <label class="control-label">位置X(百分比)</label>
                             <input name="name" type="text" class="form-control"
@@ -283,12 +291,6 @@
                         <label class="control-label">筛选框的文字颜色</label>
                         <input type="color" style="width:100%" class="form-control"
                             ng-model="options.form.filterColumnCol_2.color" />
-                        <!-- <ui-select class="mini" ng-model="options.form.filterColumnCol.color">
-                            <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                            <ui-select-choices repeat="Color.value as Color in Colors">
-                                <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select> -->
                         <label class="control-label">筛选框的文字大小</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.form.filterColumnCol_2.fontSize" placeholder="" />
@@ -332,9 +334,15 @@
                             <input type="text" style="width:50%;float: left" class="form-control"
                                 ng-model="options.form.filterColumnCol_3.backgroundColorOpacity " placeholder="0" />
                         </div>
-                        <label class="control-label">筛选框的边框颜色</label>
-                        <input type="color" style="width:100%" class="form-control"
-                            ng-model="options.form.filterColumnCol_3.borderColor" />
+
+                        <div class="form-group" style="width:100%;float:right">
+                            <label class="control-label">筛选框的边框颜色</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_3.borderColor" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.form.filterColumnCol_3.borderColorOpacity" placeholder="1" />
+                        </div>
+
                         <div class="form-group" ng-if="options.form.zAxisColumn!=='不筛选'" style="width:100%;">
                             <label class="control-label">位置X(百分比)</label>
                             <input name="name" type="text" class="form-control"
@@ -635,7 +643,7 @@
                     <div class="form-group">
                         <label>
                             <input type="checkbox" ng-model="options.size.responsive">
-                            图表尺寸自适应
+                            图表自适应
                         </label>
                     </div>
                     <div class="form-group" style="width:49%;float:left" ng-if="!options.size.responsive">
@@ -648,6 +656,10 @@
                         <input name="name" type="text" class="form-control" ng-model="options.size.height"
                             placeholder="400" />
                     </div>
+                    <label>
+                        <input type="checkbox" ng-model="options.series_step">
+                        垂直线
+                    </label>
                     <div class="form-group">
                         <label>
                             <input type="checkbox" ng-model="options.legend.show">
@@ -689,7 +701,7 @@
                         <div class="form-group" style="float:left">
                             <i class="fa fa-table"></i>
                             <strong>
-                                <span>纬度轴</span>
+                                <span>维度轴</span>
                             </strong>
                         </div>
                     </div>
@@ -725,11 +737,11 @@
                                 </ui-select>
                                 <label>
                                     <input type="checkbox" ng-model="options.xAxis.axisLine.show">
-                                    显示轴线
+                                    轴线
                                 </label>
                                 <label>
                                     <input type="checkbox" ng-model="options.xAxis.axisTick.show">
-                                    显示轴刻度
+                                    轴刻度
                                 </label>
                             </div>
                             <div class="form-group" style="width:49%;float:right">
@@ -743,21 +755,9 @@
                                 <label class="control-label">维度轴颜色</label>
                                 <input type="color" style="width:100%" class="form-control"
                                     ng-model="options.xAxis.axisLine.lineStyle.color" />
-                                <!-- <ui-select ng-model="options.xAxis.axisLine.lineStyle.color">
-                                        <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                                        <ui-select-choices repeat="Color.value as Color in Colors">
-                                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select> -->
                                 <label class="control-label">轴标题颜色</label>
                                 <input type="color" style="width:100%" class="form-control"
                                     ng-model="options.xAxis.nameTextStyle.color" />
-                                <!-- <ui-select ng-model="options.xAxis.nameTextStyle.color">
-                                        <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
-                                        <ui-select-choices repeat="Color.value as Color in Colors">
-                                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select> -->
                                 <label class="control-label">轴标题字体风格</label>
                                 <ui-select ng-model="options.xAxis.nameTextStyle.fontStyle">
                                     <ui-select-match placeholder="字体风格...">{{$select.selected.label}}
@@ -768,7 +768,7 @@
                                 </ui-select>
                                 <label>
                                     <input type="checkbox" ng-model="options.xAxis.axisLabel.show">
-                                    显示轴标签
+                                    轴标签
                                 </label>
                             </div>
                         </div>
@@ -814,12 +814,18 @@
                                 </ui-select>
                                 <label>
                                     <input type="checkbox" ng-model="options.yAxis.axisLine.show">
-                                    显示轴线
+                                    轴线
                                 </label>
                                 <label>
                                     <input type="checkbox" ng-model="options.yAxis.axisTick.show">
-                                    显示轴刻度
+                                    刻度
                                 </label>
+                                <label>
+                                    最大
+                                    <input ng-model="options.yAxis.max" type="number" class="form-control"
+                                        placeholder="">
+                                </label>
+
                             </div>
                             <div class="form-group" style="width:49%;float:right">
                                 <label class="control-label">轴标题字体大小</label>
@@ -838,11 +844,11 @@
                                 <div ng-bind-html="Color.label | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select> -->
-                                <label class="control-label">轴标题颜色</label>
+                                <label class="control-label">标题颜色</label>
                                 <input type="color" style="width:100%" class="form-control"
                                     ng-model="options.yAxis.nameTextStyle.color" />
 
-                                <label class="control-label">轴标题字体风格</label>
+                                <label class="control-label">字体风格</label>
                                 <ui-select ng-model="options.yAxis.nameTextStyle.fontStyle">
                                     <ui-select-match placeholder="字体风格...">{{$select.selected.label}}
                                     </ui-select-match>
@@ -852,12 +858,17 @@
                                 </ui-select>
                                 <label>
                                     <input type="checkbox" ng-model="options.yAxis.axisLabel.show">
-                                    显示轴标签
+                                    标签
                                 </label>
 
                                 <label>
                                     <input type="checkbox" ng-model="options.yAxis.scale">
                                     聚焦
+                                </label>
+                                <label>
+                                    最小
+                                    <input ng-model="options.yAxis.min" type="number" class="form-control"
+                                        placeholder="">
                                 </label>
                             </div>
                         </div>
@@ -886,13 +897,8 @@
 
                                 <label class="control-label">线颜色</label>
                                 <input type="color" style="width:100%" class="form-control"
-                                    ng-model="options.yAxis.splitLine.lineStyle.color" />
-                                <!-- <ui-select class="mini" ng-model="options.yAxis.splitLine.lineStyle.color">
-                                        <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                                        <ui-select-choices repeat="Color.value as Color in Colors">
-                                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select> -->
+                                    ng-model="options.yAxis.splitLine.lineStyle.colorT" />
+
 
                             </div>
                             <div class="form-group" style="width:49%;float:right">
@@ -903,6 +909,8 @@
                                         <div ng-bind-html="LineStyle.label | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
+                                <input type="text" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.yAxis.splitLine.lineStyle.colorTOpacity" placeholder="1" />
                             </div>
                         </div>
                     </div>
@@ -923,13 +931,8 @@
                                     ng-model="options.xAxis.splitLine.lineStyle.width" placeholder="1" />
                                 <label class="control-label">线颜色</label>
                                 <input type="color" style="width:100%" class="form-control"
-                                    ng-model="options.xAxis.splitLine.lineStyle.color" />
-                                <!-- <ui-select class="mini" ng-model="options.xAxis.splitLine.lineStyle.color">
-                                                <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                                </ui-select-choices>
-                                            </ui-select> -->
+                                    ng-model="options.xAxis.splitLine.lineStyle.colorT" />
+
 
                             </div>
                             <div class="form-group" style="width:49%;float:right">
@@ -940,7 +943,8 @@
                                         <div ng-bind-html="LineStyle.label | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-
+                                <input type="text" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.xAxis.splitLine.lineStyle.colorTOpacity" placeholder="1" />
                             </div>
                         </div>
                     </div>
@@ -954,12 +958,7 @@
                         placeholder="0" />
                     <label class="control-label">颜色</label>
                     <input type="color" style="width:100%" class="form-control" ng-model="options.borderColor" />
-                    <!-- <ui-select class="mini" ng-model="options.borderColor">
-                        <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="Color.value as Color in Colors">
-                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select> -->
+
                 </div>
                 <div class="form-group" style="width:49%;float:right">
                     <label class="control-label">样式</label>
@@ -969,6 +968,8 @@
                             <div ng-bind-html="LineStyle.label | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
+                    <input type="text" style="width:50%;float: left" class="form-control"
+                        ng-model="options.borderColorOpacity" placeholder="1" />
                 </div>
 
             </div>
