@@ -5,6 +5,7 @@ import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
 import { defaultGaugeStageChartOptions, getChartType, setData, setThemeColor } from './echartsGaugeStageChartOptionUtils';
+import color16to10 from '../colorChange';
 
 function EchartsGaugeStageRenderer($rootScope) {
     return {
@@ -25,8 +26,32 @@ function EchartsGaugeStageRenderer($rootScope) {
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+
+
+                        /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+                        _.set($scope.options, "backgroundColor",
+                            color16to10(_.get($scope.options, "backgroundColorTemp", "#000"),
+                                _.get($scope.options, "backgroundColorOpacity", 0)
+                            ));
+
+                        _.set($scope.options, "tooltip.backgroundColor",
+                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+                        //  提示框文字格式
+                        const formatterString = `${_.get($scope.options, "Text_a", "")}
+                                {a}${_.get($scope.options, "a_Text", "")}
+                                <br/>${_.get($scope.options, "Text_b", "")}
+                                {b}${_.get($scope.options, "b_Text", "")}:
+                                ${_.get($scope.options, "Text_c", "")}
+                                {c}${_.get($scope.options, "c_Text", "")}`;
+                        _.set($scope.options, "tooltip.formatter", formatterString);
+
+
+
                         const data = $scope.queryResult.getData();
-                        const xDate=_.map(data,_.get($scope.options,"form.xAxisColumn",""))[0];
+                        const xDate = _.map(data, _.get($scope.options, "form.xAxisColumn", ""))[0];
                         // console.log(xDate);
 
                         const valueDuan = [
@@ -35,7 +60,7 @@ function EchartsGaugeStageRenderer($rootScope) {
                             _.get($scope.options, "duan3value", "6"),
                             _.get($scope.options, "duan4value", "9")
                         ];
-                        const dataIndex=_.indexOf(valueDuan,xDate+"")*3;
+                        const dataIndex = _.indexOf(valueDuan, xDate + "") * 3;
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
@@ -52,7 +77,7 @@ function EchartsGaugeStageRenderer($rootScope) {
                             splitNumber: 12,
                             detail: {
                                 formatter(e) {
-                                    const i=_.indexOf(valueDuan,e+"")*3;
+                                    const i = _.indexOf(valueDuan, e + "") * 3;
                                     switch (i + "") {
                                         case "0":
                                             return _.get($scope.options, 'duan1', "阶段1");
@@ -88,10 +113,10 @@ function EchartsGaugeStageRenderer($rootScope) {
                                 }
                             },
                             axisLabel: {
-                                fontSize: _.get($scope.options, 'axisLabel.fontSize', 12) * 
-                                ($element.parent()[0].clientWidth / 1115),
+                                fontSize: _.get($scope.options, 'axisLabel.fontSize', 12) *
+                                    ($element.parent()[0].clientWidth / 1115),
                                 formatter(e) {
-                                    switch (e + "") {                                       
+                                    switch (e + "") {
                                         case "0":
                                             return _.get($scope.options, 'duan1', "阶段1");
                                         case "3":
@@ -206,20 +231,20 @@ function EchartsGaugeStageEditor() {
             }
             $scope.selectedChartType = getChartType($scope.options);
 
-            
+
             // 组件背景
             $scope.getImageUrlCb = (a) => {
                 _.set($scope.options, "images", a);
                 $scope.$apply();
             }
 
-            
+
             $scope.currentTab = 'general';
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
 
-            
+
             // 样式设置二级标签
             $scope.currentTab2 = 'title';
             $scope.changeTab2 = (tab2) => {

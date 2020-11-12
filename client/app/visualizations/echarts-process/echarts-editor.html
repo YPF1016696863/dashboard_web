@@ -550,6 +550,63 @@
 
         </div>
     </div>
+
+    <div ng-if="currentTab == 'tooltip'" class="m-t-10 m-b-10">
+        <div class="form-group" style="width:100%;float: left;">
+            <label>
+                <input type="checkbox" ng-model="options.tooltip.show">
+                显示提示框
+            </label>
+        </div>
+
+        <div class="form-group" style="width:100%;float: left;" ng-if="options.tooltip.show">
+            <div class="form-group" style="width:49%;float: left;">
+                <label class="control-label" style="width:100%;float: left">背景</label>
+                <input type="color" class="form-control" style="width:50%;float: left"
+                    ng-model="options.tooltip.backgroundColorT" />
+                <input type="text" class="form-control" style="width:50%;float: left"
+                    ng-model="options.tooltip.backgroundColorOpacity " placeholder="0" />
+            </div>
+            <div class="form-group" style="width:49%;float: right;">
+                <label class="control-label">文本颜色</label>
+                <input type="color" class="form-control" ng-model="options.tooltip.textStyle.color" />
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group" ng-if="options.tooltip.show">
+            <label class="control-label">提示框格式</label>
+            <br>
+            <div class="form-group" style="width:100%;float: left;">
+                <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_a"
+                    placeholder="前缀..." />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称"
+                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.a_Text"
+                    placeholder="后缀..." />
+            </div>
+            <div class="form-group" style="width:100%;float: left;">
+                <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_b"
+                    placeholder="" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值"
+                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.b_Text"
+                    placeholder="" />
+            </div>
+            <div class="form-group" style="width:100%;float: left;">
+                <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_c"
+                    placeholder="" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值"
+                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.c_Text"
+                    placeholder="" />
+            </div>
+        </div>
+    </div>
+
+
     <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
         
         <div class="form-group" style="width:49%;float:left">

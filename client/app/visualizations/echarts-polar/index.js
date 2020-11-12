@@ -5,6 +5,7 @@ import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
 
 import { defaultPolarChartOptions, parseChartType, getChartType, setThemeColor } from './echartsPolarChartOptionUtils';
+import color16to10 from '../colorChange';
 
 function EchartsPolarRenderer($timeout, $rootScope, $window) {
     return {
@@ -25,6 +26,16 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
+
+                        /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+
+                        _.set($scope.options, "tooltip.backgroundColor",
+                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+                            
+
 
                         const data = $scope.queryResult.getData();
                         // 输入的数据格式转换  系列1
@@ -265,7 +276,7 @@ function EchartsPolarEditor() {
             $scope.isCollapsedColor = true;
             // 容器的距离
             $scope.isCollapsedDistance = true;
-    
+
             $scope.chartTypes = {
                 polar: { name: 'Echarts极坐标图', icon: 'line-chart' }
             };

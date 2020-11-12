@@ -5,6 +5,8 @@ import * as _ from 'lodash';
 import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 // import echarts2 from 'echarts2'; // 多版本 npm install echarts2@npm:echarts@2
+import { appSettingsConfig } from '@/config/app-settings';
+
 
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
@@ -151,6 +153,15 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
                     ));
 
+                _.set($scope.options, "yAxis.splitLine.lineStyle.color",
+                    color16to10(_.get($scope.options, "yAxis.splitLine.lineStyle.colorT", "#fff"),
+                        _.get($scope.options, "yAxis.splitLine.lineStyle.colorTOpacity", 1)
+                    ));
+
+                _.set($scope.options, "xAxis.splitLine.lineStyle.color",
+                    color16to10(_.get($scope.options, "xAxis.splitLine.lineStyle.colorT", "#fff"),
+                        _.get($scope.options, "xAxis.splitLine.lineStyle.colorTOpacity", 1)
+                    ));
 
 
 
@@ -159,7 +170,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     'background-color': color16to10(_.get($scope.options, "form.filterColumnCol_1.backgroundColor", "#fff"),
                         _.get($scope.options, "form.filterColumnCol_1.backgroundColorOpacity", 0)),
                     'color': _.get($scope.options, "form.filterColumnCol_1.color", "black"),
-                    'border-color': _.get($scope.options, "form.filterColumnCol_1.borderColor", "white"),
+                    'border-color': color16to10(
+                        _.get($scope.options, "form.filterColumnCol_1.borderColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol_1.borderColorOpacity", 1)
+                    ),
                     'font-size': _.get($scope.options, "form.filterColumnCol_1.fontSize", "14") + "px",
                     'margin-left': _.get($scope.options, "form.filterColumnCol_1.positionX", "0%"),
                     'margin-top': _.get($scope.options, "form.filterColumnCol_1.positionY", "0%"),
@@ -169,7 +183,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     'background-color': color16to10(_.get($scope.options, "form.filterColumnCol_2.backgroundColor", "#fff"),
                         _.get($scope.options, "form.filterColumnCol_2.backgroundColorOpacity", 0)),
                     'color': _.get($scope.options, "form.filterColumnCol_2.color", "black"),
-                    'border-color': _.get($scope.options, "form.filterColumnCol_2.borderColor", "white"),
+                    'border-color': color16to10(
+                        _.get($scope.options, "form.filterColumnCol_2.borderColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol_2.borderColorOpacity", 1)
+                    ),
                     'font-size': _.get($scope.options, "form.filterColumnCol_2.fontSize", "14") + "px",
                     'margin-left': _.get($scope.options, "form.filterColumnCol_2.positionX", "0%"),
                     'margin-top': _.get($scope.options, "form.filterColumnCol_2.positionY", "0%"),
@@ -180,7 +197,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                     'background-color': color16to10(_.get($scope.options, "form.filterColumnCol_3.backgroundColor", "#fff"),
                         _.get($scope.options, "form.filterColumnCol_3.backgroundColorOpacity", 0)),
                     'color': _.get($scope.options, "form.filterColumnCol_3.color", "black"),
-                    'border-color': _.get($scope.options, "form.filterColumnCol_3.borderColor", "white"),
+                    'border-color': color16to10(
+                        _.get($scope.options, "form.filterColumnCol_3.borderColor", "#fff"),
+                        _.get($scope.options, "form.filterColumnCol_3.borderColorOpacity", 1)
+                    ),
                     'font-size': _.get($scope.options, "form.filterColumnCol_3.fontSize", "14") + "px",
                     'margin-left': _.get($scope.options, "form.filterColumnCol_3.positionX", "0%"),
                     'margin-top': _.get($scope.options, "form.filterColumnCol_3.positionY", "0%"),
@@ -233,6 +253,34 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             "" :
                             _.filter(searchColumns,
                                 { 'friendly_name': _.get($scope.options, "form.yAxisColumns", '') })[0].name;
+
+
+                        // console.log(data);
+                        // 计算模块Demo
+                        if (_.get($scope.options, "calculate", false)) {
+                            const ajaxData = {};
+                            ajaxData.or_data = data;
+                            ajaxData.y_name = yAxisColumnsName;
+                            const UPLOAD_URL = appSettingsConfig.server.backendUrl + "/api/calculate";
+                            $.ajax({
+                                url: UPLOAD_URL,
+                                async: false,
+                                type: "post",
+                                contentType: "contentType:'application/json'",
+                                data: JSON.stringify(ajaxData),
+                                // eslint-disable-next-line object-shorthand
+                                success: function (s) {
+                                    data = s.after_data;
+                                },
+                                // eslint-disable-next-line object-shorthand
+                                error: function () {
+                                    console.log("error");
+                                }
+                            });
+                        }
+
+
+
 
                         // 初始化为不筛选
                         if (_.get($scope.options, "form.zAxisColumn", []).length === 0) {
@@ -420,8 +468,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         // if (chooseData) {
                         //     _.set($scope.options, "series", []);
                         // }
-                     
-                       
+
+
 
                         // series下的
                         let seriesNameIndex = 0;
@@ -451,6 +499,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     ), // 将每个系列的类型传进去判断和转换  _.get($scope.options, "defaultType") 
                                     // type这里加了默认值的话容易出现预览界面都为左侧选择的图表类型
                                     smooth: _.get($scope.options, "series_Smooth", false), //   series_Smooth 折线与曲线切换
+                                    step: _.get($scope.options, "series_step", false),
                                     data: yData[seriesNameIndex],
                                     // 下标传入配置数组找到相应的配置
                                     areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn, _.get($scope.options, "defaultType")) === "area" ? {} : undefined,
@@ -653,7 +702,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     + _.get($scope.options, "bgY", "0px"),
                                 'border-style': _.get($scope.options, "borderStyle", "solid"),
                                 'border-width': _.get($scope.options, "borderWidth", "0px"),
-                                'border-color': _.get($scope.options, "borderColor", "blue"),
+                                'border-color': color16to10(
+                                    _.get($scope.options, "borderColor", "#fff"),
+                                    _.get($scope.options, "borderColorOpacity", 1)
+                                ),
 
                             });
                         }

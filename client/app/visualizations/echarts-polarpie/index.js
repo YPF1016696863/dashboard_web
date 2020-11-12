@@ -8,6 +8,7 @@ import echartsEditorTemplate from './echarts-editor.html';
 
 
 import { defaultPolarpieChartOptions, getChartType, setThemeColor } from './echartsPolarpieChartOptionUtils';
+import color16to10 from '../colorChange';
 
 function EchartsPolarpieRenderer($rootScope) {
     return {
@@ -28,6 +29,20 @@ function EchartsPolarpieRenderer($rootScope) {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         const data = $scope.queryResult.getData();
 
+                        
+                        _.set($scope.options, "tooltip.backgroundColor",
+                        color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                          _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                        ));
+          
+                      //  提示框文字格式
+                      const formatterString = `${_.get($scope.options, "Text_a", "")}
+                              {a}${_.get($scope.options, "a_Text", "")}
+                              <br/>${_.get($scope.options, "Text_b", "")}
+                              {b}${_.get($scope.options, "b_Text", "")}:
+                              ${_.get($scope.options, "Text_c", "")}
+                              {c}${_.get($scope.options, "c_Text", "")}`;
+                      _.set($scope.options, "tooltip.formatter", formatterString);
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
