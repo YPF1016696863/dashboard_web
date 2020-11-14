@@ -32,6 +32,28 @@ function EchartsGanteRenderer($rootScope) {
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+
+
+                        /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+                        _.set($scope.options, "backgroundColor",
+                            color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
+                            ));
+
+                        _.set($scope.options, "tooltip.backgroundColor",
+                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+                        //  提示框文字格式
+                        // const formatterString = `${_.get($scope.options, "Text_a", "")}
+                        //      {a}${_.get($scope.options, "a_Text", "")}
+                        //      <br/>${_.get($scope.options, "Text_b", "")}
+                        //      {b}${_.get($scope.options, "b_Text", "")}:
+                        //      ${_.get($scope.options, "Text_c", "")}
+                        //      {c}${_.get($scope.options, "c_Text", "")}`;
+                        // _.set($scope.options, "tooltip.formatter", formatterString);
+
                         const data = $scope.queryResult.getData();
                         startData = [];
                         endData = [];
@@ -72,7 +94,7 @@ function EchartsGanteRenderer($rootScope) {
                                 _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
                             ));
 
-                            
+
 
 
                         _.set($scope.options, "yAxis.data", nameData);

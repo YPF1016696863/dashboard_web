@@ -30,8 +30,8 @@ function EchartsGaugeStageRenderer($rootScope) {
 
                         /* *********** 调色盘16位转10进制 加上 透明度 *********** */
                         _.set($scope.options, "backgroundColor",
-                            color16to10(_.get($scope.options, "backgroundColorTemp", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                            color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
 
                         _.set($scope.options, "tooltip.backgroundColor",

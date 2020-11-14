@@ -4,7 +4,7 @@ import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
-
+import color16to10 from '../colorChange';
 
 import { defaultDdjzbarChartOptions, getChartType, setThemeColor } from './echartsDdjzbarChartOptionUtils';
 
@@ -26,6 +26,21 @@ function EchartsDdjzbarRenderer($rootScope) {
             const refreshData = () => {
                 try {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
+
+
+
+                        _.set($scope.options, "backgroundColor",
+                            color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                                _.get($scope.options, "backgroundColorOpacity", 0)
+                            ));
+                        _.set($scope.options, "tooltip.backgroundColor",
+                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+
+
+
                         const data = $scope.queryResult.getData();
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
@@ -195,7 +210,7 @@ function EchartsDdjzbarEditor() {
             $scope.changeTab2 = (tab2) => {
                 $scope.currentTab2 = tab2;
             };
-       
+
             // 主标题折叠
             $scope.isCollapsedMain = true;
             // 副标题

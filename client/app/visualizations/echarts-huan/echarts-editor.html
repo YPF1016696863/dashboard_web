@@ -6,9 +6,9 @@
         <li ng-class="{active: currentTab == 'style'}">
             <a ng-click="changeTab('style')">样式设置</a>
         </li>
-        <li ng-class="{active: currentTab == 'condition'}">
+        <!-- <li ng-class="{active: currentTab == 'condition'}">
             <a ng-click="changeTab('condition')">条件设置</a>
-        </li>
+        </li> -->
         <li ng-class="{active: currentTab == 'tooltip'}">
             <a ng-click="changeTab('tooltip')"> 提示框</a>
         </li>
@@ -201,37 +201,24 @@
                     <div class="form-group" style="float:left;width:100% ">
                         <div class="form-group" style="width:49%;float:left">
                             <label class="control-label">起始颜色</label>
-                            <ui-select class="mini" ng-model="options.startCcolor">
-                                <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                            <label class="control-label">设置背景颜色</label>
-                            <ui-select ng-model="options.backgroundColor">
-                                <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in BackgroundColors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.startCcolor" />                            
                         </div>
-
+                        <div class="form-group" style="width:49%;float:right">
+                            <label class="control-label">设置背景颜色</label>
+                            <input type="color" style="width:100%" class="form-control"
+                                ng-model="options.backgroundColorT" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.backgroundColorTOpacity " placeholder="1" />
+                        </div>
                         <div class="form-group" style="width:49%;float:right">
 
-                            <label class="control-label">结束颜色</label>
-                            <ui-select class="mini" ng-model="options.endCcolor">
-                                <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <label class="control-label">结束颜色</label>.
+                            <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.endCcolor" />  
                             <label class="control-label">环比背景</label>
-                            <ui-select class="mini" ng-model="options.huanCcolor">
-                                <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.huanCcolor" /> 
 
                         </div>
                         <div class="form-group" style="width:100%;float:left">
@@ -393,14 +380,12 @@
             </ui-select>
 
             <label class="control-label">筛选框的背景颜色</label>
-            <ui-select class="mini" ng-model="options.form.filterColumnCol.backgroundColor">
-                <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
-                <ui-select-choices repeat="Color.value as Color in Colors">
-                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                </ui-select-choices>
-            </ui-select>
+            <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.form.filterColumnCol.backgroundColor" />  
 
             <label class="control-label">筛选框的边框颜色</label>
+            <input type="color" style="width:100%" class="form-control"
+            ng-model="options.form.filterColumnCol.borderColor" />  
             <ui-select class="mini" ng-model="options.form.filterColumnCol.borderColor">
                 <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                 <ui-select-choices repeat="Color.value as Color in Colors">
