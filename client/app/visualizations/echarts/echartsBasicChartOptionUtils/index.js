@@ -238,6 +238,27 @@ export function setyAxis(options, flag, seriesNameIndex) {
         -10000 : _.get(options, "series_MarkLine_Data_MarkValue", [])[seriesNameIndex];
 };
 
+export function setxAxis2(options, flag, seriesNameIndex) {// 获取类型 下标  bar2? 是：返回 设置相应的值  否：返回undefined 去禁用xy轴标记线
+    if (flag) {// 是横向柱状图 开启x
+        if (_.get(options, "series_MarkLine_Data_MarkValue2", [])[seriesNameIndex] === '') {// 数据线填了之后清空的判断，让数据线放到最下边隐藏
+            return -10000;
+        }
+        return _.get(options, "series_MarkLine_Data_MarkValue2", [])[seriesNameIndex] === undefined ?
+            -10000 : _.get(options, "series_MarkLine_Data_MarkValue2", [])[seriesNameIndex];
+    }
+    return undefined;
+};
+export function setyAxis2(options, flag, seriesNameIndex) {
+    if (flag) {// 不是横向柱状图 关闭x
+        return undefined;
+    }
+    if (_.get(options, "series_MarkLine_Data_MarkValue2", [])[seriesNameIndex] === '') {// 数据线填了之后清空的判断，让数据线放到最下边隐藏
+        return -10000;
+    }
+    return _.get(options, "series_MarkLine_Data_MarkValue2", [])[seriesNameIndex] === undefined ?
+        -10000 : _.get(options, "series_MarkLine_Data_MarkValue2", [])[seriesNameIndex];
+};
+
 
 export function setScatter(symbolSize) {
     if (symbolSize === undefined)

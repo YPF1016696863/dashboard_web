@@ -50,6 +50,7 @@ function QueryViewCtrl(
   appSettings
 ) {
   function getQueryResult(maxAge, selectedQueryText) {
+    console.log("getQueryResult");
     if (maxAge === undefined) {
       maxAge = $location.search().maxAge;
     }
@@ -118,6 +119,7 @@ function QueryViewCtrl(
 
 
   function checkSchema(refresh = undefined) {
+    console.log("a",$scope.query);
     // TODO: is it possible this will be called before dataSource is set?
     const preLen = $scope.checkSchema === undefined ? 0 : $scope.checkSchema.length;
     // console.log("$scope:", $scope.selectType);
@@ -131,7 +133,7 @@ function QueryViewCtrl(
         $scope.checkSchema = data.schema;
         const currLen = $scope.checkSchema === undefined ? 0 : $scope.checkSchema.length;
         // console.log("preLen:", preLen,"currLen:", currLen);
-        if (preLen !== currLen && preLen !== 0 || _.get($scope.selectType.value,'number',200)<currLen) {
+        if (preLen !== currLen && preLen !== 0 || _.get($scope.query,'tags[0]',200)<currLen) {
           $scope.changeFlag = true;
           console.log("修改了:", $scope.changeFlag);
         }
@@ -139,7 +141,7 @@ function QueryViewCtrl(
       } else {
         $scope.changeFlag = true;
       }
-      $scope.$apply();
+      // $scope.$apply();
     });
   }
 
@@ -158,7 +160,8 @@ function QueryViewCtrl(
   $scope.refreshSchema = () => { getSchema(true, $scope.selectedDataType.value.name); this.autoRefresh(); }
 
   function refreshNumber() {
-    _.set($scope.selectType.value,'number',$scope.options.number);
+    _.set($scope.query,'tags[0]',$scope.options.number);
+    
   }
   $scope.$watch('options.number', refreshNumber, true);
 

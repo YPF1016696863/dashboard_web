@@ -68,15 +68,7 @@ function EchartsContrastRenderer($rootScope) {
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
-
-                        //  提示框文字格式
-                        //   const formatterString = `${_.get($scope.options, "Text_a", "")}
-                        // {a}${_.get($scope.options, "a_Text", "")}
-                        // <br/>${_.get($scope.options, "Text_b", "")}
-                        // {b}${_.get($scope.options, "b_Text", "")}:
-                        // ${_.get($scope.options, "Text_c", "")}
-                        // {c}${_.get($scope.options, "c_Text", "")}`;
-                        //   _.set($scope.options, "tooltip.formatter", formatterString);
+                        
 
                         _.set($scope.options, "dataZoom", []); // 清空设置
                         $scope.options.dataZoom.push({
@@ -140,10 +132,19 @@ function EchartsContrastRenderer($rootScope) {
                                     oldYData = everyYColumn.name;   // oldData为原来的列名
                                 }
                             });
-                            const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                            let yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {                                
                                 return row[oldYData];
                             })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
-
+                            // console.log(yData,seriesNameIndex)
+                            if(seriesNameIndex%2===0){
+                                yData=_.map(yData,(d)=>{
+                                    return Math.abs(d);
+                                })
+                            }else{
+                                yData=_.map(yData,(d)=>{
+                                    return -Math.abs(d);
+                                })
+                            }
 
                             const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
                                 return row[yAxisColumn];
