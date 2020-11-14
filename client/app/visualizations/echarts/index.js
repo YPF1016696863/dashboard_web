@@ -19,6 +19,8 @@ import {
     getChartType,
     setxAxis,
     setyAxis,
+    setxAxis2,
+    setyAxis2,
     setScatter,
     getFullCanvasDataURL,
     setThemeColor,
@@ -528,7 +530,8 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                     // 数据标记线
 
                                     markLine: {
-                                        data: [{
+                                        data: [
+                                            {
                                             name: _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex] === undefined ?
                                                 '' : _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex],
 
@@ -545,10 +548,28 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
                                                 type: _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex] === undefined ?
                                                     'solid' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex],
-
                                             },
+                                        },
+                                        {
+                                            name: _.get($scope.options, "series_MarkLine_Data_MarkName2", [])[seriesNameIndex] === undefined ?
+                                                '' : _.get($scope.options, "series_MarkLine_Data_MarkName2", [])[seriesNameIndex],
 
-                                        }]
+                                            xAxis: setxAxis2($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
+
+                                            yAxis: setyAxis2($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
+
+                                            lineStyle: {
+                                                color: _.get($scope.options, "series_MarkLine_Data_LineStyle_Color2", [])[seriesNameIndex] === undefined ?
+                                                    '#ed4d50' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Color2", [])[seriesNameIndex],
+
+                                                width: _.get($scope.options, "series_MarkLine_Data_LineStyle_Width2", [])[seriesNameIndex] === undefined ?
+                                                    5 : _.get($scope.options, "series_MarkLine_Data_LineStyle_Width2", [])[seriesNameIndex],
+
+                                                type: _.get($scope.options, "series_MarkLine_Data_LineStyle_Type2", [])[seriesNameIndex] === undefined ?
+                                                    'solid' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Type2", [])[seriesNameIndex],
+                                            },
+                                        }
+                                    ]
                                     },
 
                                     // 数据标记点

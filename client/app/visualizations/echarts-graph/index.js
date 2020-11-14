@@ -58,6 +58,11 @@ function EchartsGraphRenderer($rootScope) {
                                 _.get($scope.options, "backgroundColorOpacity", 0)
                             ));
 
+                        _.set($scope.options, "tooltip.axisPointer.label.backgroundColor",
+                            color16to10(_.get($scope.options, "tooltip.axisPointer.label.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.axisPointer.label.backgroundColorTOpacity", 1)
+                            ));
+
                         _.set($scope.options, "tooltip.backgroundColor",
                             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
                                 _.get($scope.options, "tooltip.backgroundColorOpacity", 0)

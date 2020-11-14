@@ -201,35 +201,30 @@
                 <div uib-collapse="isCollapsedColor">
                     <div class="form-group" style="float:left;width:100% ">
                         <div class="form-group" style="width:49%;float:left">
-                            <!-- <label class="control-label">主标题</label>
-                            <input name="name" style="width:100%" type="text" class="form-control"
-                                ng-model="options.title.text" placeholder="" /> -->
-
-                            <label class="control-label">背景颜色</label>
-                            <ui-select ng-model="options.backgroundColor">
-                                <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in BackgroundColors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                            <label class="control-label">指针颜色</label>
-                            <ui-select ng-model="options.zColor">
-                                <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in BackgroundColors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <div class="form-group" style="width:100%;float:right">
+                                <label class="control-label">指针</label>
+                                <input type="color" style="width:100%" class="form-control" ng-model="options.zColor" />
+                            </div>
+                            <div class="form-group" style="width:100%;float:right">
+                                <label class="control-label" style="width:100%;float: left">背景</label>
+                                <input type="color" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.backgroundColorT" />
+                                <input type="text" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.backgroundColorTOpacity" placeholder="0" />
+                            </div>
+                            <div class="form-group" style="width:100%;float:right">
+                                <label class="control-label">仪表名称大小</label>
+                                <input type="text" style="width:100%" class="form-control" ng-model="options.gTitle.fontSize" />
+                            </div>
                         </div>
 
                         <div class="form-group" style="width:49%;float:right">
-
                             <label class="control-label">指标文字颜色</label>
-                            <ui-select ng-model="options.zbColor">
-                                <ui-select-match placeholder="选择颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in BackgroundColors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control" ng-model="options.zbColor" />
+                        </div>
+                        <div class="form-group" style="width:49%;float:right">
+                            <label class="control-label">仪表名称颜色</label>
+                            <input type="color" style="width:100%" class="form-control" ng-model="options.gTitle.color" />
                         </div>
                         <div class="form-group" style="width:100%;float:left">
                             <label class="control-label">背景图片</label>
@@ -315,12 +310,6 @@
                     <label class="control-label">文字颜色</label>
                     <input type="color" style="width:100%" class="form-control"
                         ng-model="options.legend.textStyle.color" />
-                    <!-- <ui-select ng-model="options.legend.textStyle.color">
-                    <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                    <ui-select-choices repeat="Color.value as Color in Colors">
-                        <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select> -->
                     <label class="control-label">顶部距离</label>
                     <input name="name" type="text" class="form-control" ng-model="options.legend.top"
                         placeholder="5%" />
@@ -345,7 +334,18 @@
 
                 <div uib-collapse="isCollapsedScale">
                     <div class="form-group" style="float:left;width:100% ">
+
                         <div class="form-group" style="width:49%;float:left">
+                            <label>
+                                <input type="checkbox" ng-init="options.axisLine.show=true"
+                                    ng-model="options.axisLine.show">
+                                轴线
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-init="options.axisTick.show=true"
+                                    ng-model="options.axisTick.show">
+                                刻度
+                            </label>
                             <label class="control-label">仪表盘最小值</label>
                             <input name="name" type="text" class="form-control" ng-model="options.minValue"
                                 placeholder="0" />
@@ -363,37 +363,34 @@
                                 placeholder="1" />
                         </div>
                         <div class="form-group" style="width:49%;float:right">
-                            <label class="control-label">仪表盘最大值</label>
+                            <label>
+                                <input type="checkbox" ng-init="options.splitLine.show=true"
+                                    ng-model="options.splitLine.show">
+                                分隔线
+                            </label>
+                            <label>
+                                <input type="checkbox" ng-init="options.axisLabel.show=true"
+                                    ng-model="options.axisLabel.show">
+                                刻度标签
+                            </label>
+                            <div class="form-group" style="float:right">
+                                <label class="control-label">仪表盘最大值</label>
+                                <input name="name" type="text" class="form-control" style="width:50%;float: left"
+                                    ng-model="options.maxValue" placeholder="100" />
+                                <input type="text" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.sum" placeholder="1" />
+                            </div>
+                            <!-- <label class="control-label">仪表盘最大值</label>
                             <input name="name" type="text" class="form-control" ng-model="options.maxValue"
-                                placeholder="100" />
+                                placeholder="100" /> -->
                             <label class="control-label">轴线分段1颜色</label>
-                            <ui-select ng-model="options.duan1Color">
-                                <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan1Color" />
                             <label class="control-label">轴线分段2颜色</label>
-                            <ui-select ng-model="options.duan2Color">
-                                <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan2Color" />
                             <label class="control-label">轴线分段3颜色</label>
-                            <ui-select ng-model="options.duan3Color">
-                                <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan3Color" />
                             <label class="control-label">轴线分段4颜色</label>
-                            <ui-select ng-model="options.duan4Color">
-                                <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in Colors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan4Color" />
 
                         </div>
                     </div>
@@ -436,24 +433,21 @@
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_a"
                     placeholder="前缀..." />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.a_Text"
                     placeholder="后缀..." />
             </div>
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_b"
                     placeholder="" />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.b_Text"
                     placeholder="" />
             </div>
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_c"
                     placeholder="" />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.c_Text"
                     placeholder="" />
             </div>
@@ -467,14 +461,6 @@
             <label>
                 <input type="checkbox" ng-model="options.toolbox.show">
                 显示工具栏
-            </label>
-        </div>
-
-        <!-- 开启小数以百分比显示,如果原来的value为0.2，则转换成20.如果超过1 则转换成100  -->
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-value=true ng-checked="true" ng-model="options.percentage.show">
-                开启小数以百分比显示
             </label>
         </div>
 
@@ -492,30 +478,6 @@
         </div>
 
 
-        <div class="form-group">
-            <label>
-                <input type="checkbox" checked ng-model="options.tooltip.show">
-                显示提示框
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.tooltip.show">
-            <label class="control-label">文本提示框背景颜色</label>
-            <ui-select ng-model="options.tooltip.axisPointer.label.backgroundColor">
-                <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                <ui-select-choices repeat="Color.value as Color in Colors">
-                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.form.isCodeEnabled">
-                使用用户自定义代码设置图表
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.form.isCodeEnabled">
-            <textarea rows="15" style="width:100%;resize: none;" ng-model="options.form.code"></textarea>
-        </div>
     </div>
 </div>
 

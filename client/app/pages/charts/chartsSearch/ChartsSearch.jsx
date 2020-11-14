@@ -287,6 +287,7 @@ class ChartsSearch extends React.Component {
                           case 'SANKEY': type = 'SANKEY'; break;
                           case 'COUNTER': type = 'COUNTER'; break;
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
+                          case 'ECHARTS-WORDCLOUD': type = 'ECHARTS-WORDCLOUD'; break;
                           case 'ECHARTS-GAUGE-STAGE': type = 'ECHARTS-GAUGE-STAGE'; break;
                           case 'ECHARTS-TEXT':type = 'ECHARTS-TEXT'; break;
                           case 'ECHARTS-DDJZBAR': type = 'ECHARTS-DDJZBAR'; break;
@@ -975,6 +976,21 @@ class ChartsSearch extends React.Component {
                                   src={`${CHART_IMG_ROOT}/datavis-charts/datavis-charts-text.png`}
                                 />
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>文本</p>
+                              </Radio>
+                            </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-WORDCLOUD" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-worldcloud.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>词云图</p>
                               </Radio>
                             </Col>
                           </Row>
