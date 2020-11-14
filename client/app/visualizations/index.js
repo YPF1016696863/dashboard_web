@@ -22,7 +22,7 @@ function VisualizationProvider() {
     ) {
       this.defaultVisualization = visualization;
     }
-    console.log("visualization",config.type);
+    // console.log("visualization",config.type);
     this.visualizations[config.type] = visualization;
 
     if (!config.skipTypes) {

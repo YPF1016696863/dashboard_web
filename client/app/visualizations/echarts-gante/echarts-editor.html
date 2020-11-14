@@ -232,15 +232,11 @@
                         </div>
 
                         <div class="form-group" style="width:49%;float:right">
-
                             <label class="control-label">设置背景颜色</label>
-                            <ui-select ng-model="options.backgroundColor">
-                                <ui-select-match placeholder="背景颜色...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices repeat="Color.value as Color in BackgroundColors">
-                                    <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
-
+                            <input type="color" style="width:100%" class="form-control"
+                                ng-model="options.backgroundColorT" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.backgroundColorTOpacity " placeholder="1" />
                         </div>
                         <div class="form-group" style="width:100%;float:left">
                             <label class="control-label">背景图片</label>
