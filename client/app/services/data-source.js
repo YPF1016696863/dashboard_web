@@ -11,7 +11,7 @@ function DataSourceService($q, $resource, $http, appSettings) {
 
         if (refresh && dataType) {
             params.refresh = true;
-            params.dataType = dataType;
+            params.datatype = dataType;
         }
 
         return $http.get(appSettings.server.backendUrl + `/api/data_sources/${dataSourceId}/schema`, { params });
