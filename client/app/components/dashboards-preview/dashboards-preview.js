@@ -346,7 +346,6 @@ function DashboardPreviewCtrl(
   this.globalParameters = [];
   this.isDashboardOwner = false;
   this.isLayoutDirty = false;
-  this.showParameterinput = false;
 
   // Dashboard Header default style
 
