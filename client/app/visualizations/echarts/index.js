@@ -240,10 +240,11 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                                 { 'friendly_name': _.get($scope.options, "form.yAxisColumns", '') })[0].name;
 
 
-                        // console.log(data);
+                        // console.log($scope.queryResult.query_result.id);
                         // 计算模块Demo
                         if (_.get($scope.options, "calculate", false)) {
                             const ajaxData = {};
+                            ajaxData.dataId = $scope.queryResult.query_result.id;
                             ajaxData.or_data = data;
                             ajaxData.y_name = yAxisColumnsName;
                             const UPLOAD_URL = appSettingsConfig.server.backendUrl + "/api/calculate";
@@ -265,7 +266,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         }
 
 
-                        debugger
+                        
 
                         // 初始化为不筛选
                         if (_.get($scope.options, "form.zAxisColumn", []).length === 0) {

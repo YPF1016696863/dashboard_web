@@ -65,7 +65,7 @@ class QueriesListSearch extends React.Component {
         all: res,
         filtered: res,
         loading: false
-      },()=>console.log("allquery",this.state.all));
+      },()=>{const temp=this.state.all;});
     });
       if(FOLDER_STRUCTURE_URL){
           $http
