@@ -23,7 +23,7 @@ function EchartsZoneRenderer($rootScope) {
                 $scope.options = defaultZoneChartOptions();
             }
 
-            console.log($scope.queryResult.getData());
+            // console.log($scope.queryResult.getData());
 
             let dataX = [];
             let dataMaxtemp = [];
@@ -35,12 +35,22 @@ function EchartsZoneRenderer($rootScope) {
                         /* *********** 调色盘16位转10进制 加上 透明度 *********** */
                         _.set($scope.options, "backgroundColor",
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
 
                         _.set($scope.options, "tooltip.backgroundColor",
                             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
                                 _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+                        _.set($scope.options, "colorMinBar",
+                            color16to10(_.get($scope.options, "colorMinBarT", "#000"),
+                                _.get($scope.options, "colorMinBarTOpacity", 0)
+                            ));
+
+                        _.set($scope.options, "colorBar",
+                            color16to10(_.get($scope.options, "colorBarT", "#f00"),
+                                _.get($scope.options, "colorBarTOpacity", 1)
                             ));
 
                         //  提示框文字格式
@@ -77,7 +87,7 @@ function EchartsZoneRenderer($rootScope) {
                             // eslint-disable-next-line operator-assignment
                             dataMaxtemp[i] = dataMaxtemp[i] - dataMin[i];
                         }
-                        _.set($scope.options, "xAxis.data", dataX);
+                        
                         // console.log(dataMaxtemp);
 
 
@@ -94,34 +104,41 @@ function EchartsZoneRenderer($rootScope) {
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        _.set($scope.options, "series", []); // 清空设置           
-                        $scope.options.series.push({
-                            name: '最小值',
-                            type: 'bar',
-                            itemStyle: {                    // 鼠标覆盖区间之前
-                                barBorderColor: 'rgba(0,0,0,0)',  // 下区间边框颜色'rgba(0,0,0,0)',
-                                // 
-                                color: _.get($scope.options, "colorMinBar", '') // 下区间颜色，默认红色
-                            },
-                            emphasis: {               // 鼠标覆盖区间后
+
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", "::");// 无数据选择
+
+                        if (chooseData) {
+                            _.set($scope.options, "xAxis.data", dataX);
+                            _.set($scope.options, "series", []); // 清空设置           
+                            $scope.options.series.push({
+                                name: '最小值',
+                                type: 'bar',
+                                itemStyle: {                    // 鼠标覆盖区间之前
+                                    barBorderColor: 'rgba(0,0,0,0)',  // 下区间边框颜色'rgba(0,0,0,0)',
+                                    // 
+                                    color: _.get($scope.options, "colorMinBar", '') // 下区间颜色，默认红色
+                                },
+                                emphasis: {               // 鼠标覆盖区间后
+                                    itemStyle: {
+                                        // barBorderColor:'rgba(0,0,0,0)', // 下区间边框颜色
+                                        // color: 'rgba(0,0,0,0)'  // 下区间颜色 '#00FFFF'
+                                    }
+                                },
+                                data: dataMin
+                            }, {
+                                name: '最大值',
+                                type: 'bar',
+                                // label: {
+                                //   show: true,
+                                //   position: 'inside'
+                                // },
                                 itemStyle: {
-                                    // barBorderColor:'rgba(0,0,0,0)', // 下区间边框颜色
-                                    // color: 'rgba(0,0,0,0)'  // 下区间颜色 '#00FFFF'
-                                }
-                            },
-                            data: dataMin
-                        }, {
-                            name: '最大值',
-                            type: 'bar',
-                            // label: {
-                            //   show: true,
-                            //   position: 'inside'
-                            // },
-                            itemStyle: {
-                                color: _.get($scope.options, "colorBar", ''),
-                            },
-                            data: dataMaxtemp
-                        });
+                                    color: _.get($scope.options, "colorBar", ''),
+                                },
+                                data: dataMaxtemp
+                            });
+
+                        }
 
 
                         let myChart = null;

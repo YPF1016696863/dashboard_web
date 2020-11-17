@@ -32,7 +32,7 @@ function EchartsProcessRenderer($rootScope) {
                         /* *********** 调色盘16位转10进制 加上 透明度 *********** */
                         _.set($scope.options, "backgroundColor",
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
 
                         _.set($scope.options, "tooltip.backgroundColor",
@@ -72,11 +72,7 @@ function EchartsProcessRenderer($rootScope) {
                             timeAndEven[time[i]] = res;
                         }
 
-                        _.set($scope.options, "tooltip.formatter",
-                            function (params) {
-                                return timeAndEven[params.data[0]];
-                            }
-                        );
+
 
                         // console.log(dataX);
                         // console.log(timeAndEven);
@@ -84,12 +80,43 @@ function EchartsProcessRenderer($rootScope) {
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        _.set($scope.options, "series", []); // 清空设置           
-                        $scope.options.series.push({
-                            symbolSize: 20,
-                            data: dataX,
-                            type: 'scatter'
-                        });
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", "::");// 无数据选择
+
+                        if (chooseData) {
+
+                            _.set($scope.options, "tooltip.formatter",
+                                function (params) {
+                                    return timeAndEven[params.data[0]];
+                                }
+                            );
+
+                            _.set($scope.options, "series", []); // 清空设置           
+                            $scope.options.series.push({
+                                symbolSize: 20,
+                                data: dataX,
+                                type: 'scatter'
+                            });
+                        } else {
+                            // eslint-disable-next-line no-sparse-arrays
+                            const initData = [, "中国:成都<br />美国:as市<br />"
+                                , "中国:成都<br />美国:as市<br />"
+                                , "中国:成都<br />"
+                                , "中国:成都<br />中国:绵阳<br />美国:bc市<br />"
+                                , "中国:成都<br />中国:绵阳<br />美国:bc市<br />"
+                                , "中国:成都<br />中国:绵阳<br />"
+                                , "中国:成都<br />中国:绵阳<br />中国:深圳<br />"
+                                , "中国:成都<br />中国:绵阳<br />中国:深圳<br />"
+                                , "中国:成都<br />中国:深圳<br />"
+                                , "中国:成都<br />中国:深圳<br />"
+                                , "中国:成都<br />中国:深圳<br />"
+                                , "中国:深圳<br />中国:xx<br />中国:xx<br />"];
+                            _.set($scope.options, "tooltip.formatter",
+                                function (params) {
+                                    return initData[params.data[0]];
+                                }
+                            );
+                        }
+
 
 
                         let myChart = null;

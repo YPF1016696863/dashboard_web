@@ -110,6 +110,9 @@ export function defaultDdjzbarChartOptions() {
         ],
         legend: {
             show: true,
+            textStyle: {
+                color: '#fff',
+            },
             data: ['A', 'B', 'C']
         },
 

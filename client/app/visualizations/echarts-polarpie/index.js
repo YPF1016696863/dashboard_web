@@ -29,28 +29,78 @@ function EchartsPolarpieRenderer($rootScope) {
                     if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
                         const data = $scope.queryResult.getData();
 
-                        
+
+                        let fangweiData = 0;
+                        let juliData = 0;
+                        let huduData = 0;
+                        // 此处把选择的（新）列名转换成原列名格式
+                        const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
+                        // 对x轴选择的列名进行处理，转化为原列名查找
+                        const newXData = _.get($scope.options, "fangweiColumn", '')
+                        const newYData = _.get($scope.options, "juliColumn", '')
+                        const newZData = _.get($scope.options, "huduColumn", '')
+                        let oldXData = newXData;
+                        let oldYData = newYData;
+                        let oldZData = newZData;
+                        _.forEach(searchColumns, function (rowXValue, rowXKey) {
+                            const everyXColumn = rowXValue;
+                            if (newXData === everyXColumn.friendly_name) {
+                                oldXData = everyXColumn.name; // oldXData为原来的横轴X列名
+                            }
+                            if (newYData === everyXColumn.friendly_name) {
+                                oldYData = everyXColumn.name; // oldXData为原来的横轴X列名
+                            }
+                            if (newZData === everyXColumn.friendly_name) {
+                                oldZData = everyXColumn.name; // oldXData为原来的横轴X列名
+                            }
+                        });
+                        // eslint-disable-next-line func-names
+                        _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
+                            // eslint-disable-next-line func-names
+                            _.forEach(value, function (valueChildren, keyChildren) {
+                                if (keyChildren === oldXData) {
+                                    fangweiData = valueChildren;
+                                }
+                                if (keyChildren === oldYData) {
+                                    juliData = valueChildren;
+                                }
+                                if (keyChildren === oldZData) {
+                                    huduData = valueChildren;
+                                }
+                            });
+                        });
+
+
+
+
+
+                        /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+                        _.set($scope.options, "backgroundColor",
+                            color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
+                            ));
+
+
                         _.set($scope.options, "tooltip.backgroundColor",
-                        color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
-                          _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
-                        ));
-          
-                      //  提示框文字格式
-                      const formatterString = `${_.get($scope.options, "Text_a", "")}
-                              {a}${_.get($scope.options, "a_Text", "")}
+                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                                _.get($scope.options, "tooltip.backgroundColorTOpacity", 0)
+                            ));
+
+                        //  提示框文字格式
+                        const formatterString = `${_.get($scope.options, "Text_a", "")}
+                              ${_.get($scope.options, "a_Text", "")}
                               <br/>${_.get($scope.options, "Text_b", "")}
                               {b}${_.get($scope.options, "b_Text", "")}:
                               ${_.get($scope.options, "Text_c", "")}
                               {c}${_.get($scope.options, "c_Text", "")}`;
-                      _.set($scope.options, "tooltip.formatter", formatterString);
+                        _.set($scope.options, "tooltip.formatter", formatterString);
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
 
-                        const fangwei = (parseFloat(90) - parseFloat(_.get($scope.options, 'fangwei', 0) === '' ? 0 :
-                            _.get($scope.options, 'fangwei', 0)));
-                        const huduD = (parseFloat(_.get($scope.options, 'hudu', 0)) / 360);
+                        const fangwei = (parseFloat(90) - parseFloat(fangweiData));
+                        const huduD = (parseFloat(huduData) / 360);
 
                         _.set($scope.options, 'dataset.source[0][1]', 120 * huduD);
                         _.set($scope.options, 'dataset.source[1][1]', 120 * (1 - huduD));
@@ -60,9 +110,10 @@ function EchartsPolarpieRenderer($rootScope) {
                         //       ['b', 60]
                         //   ]
                         // },
-                        let juliD = (0.008 * parseFloat(_.get($scope.options, 'juli', 0)) * 100 * 100 / 500.0).toFixed(2);
+                        let juliD = (0.008 * parseFloat(juliData) * 100 * 100 /
+                            _.get($scope.options, "radiusAxis.max", 500)).toFixed(2);
                         juliD += '%';
-                        // console.log(juliD);
+                        // console.log(fangwei,huduD,juliD);
                         // 0.08=0.8/100份 
                         _.set($scope.options, "series", []); // 清空设置           
                         $scope.options.series.push({
@@ -214,21 +265,21 @@ function EchartsPolarpieEditor() {
             $scope.changeTab = (tab) => {
                 $scope.currentTab = tab;
             };
-              // 样式设置二级标签
-              $scope.currentTab2 = 'title';
-              $scope.changeTab2 = (tab2) => {
-                  $scope.currentTab2 = tab2;
-              };
-         
-              // 主标题折叠
-              $scope.isCollapsedMain = true;
-              // 副标题
-              $scope.isCollapsedSub = true;
-              // 颜色设置
-              $scope.isCollapsedColor = true;
-              // 容器的距离
-              $scope.isCollapsedDistance = true;
-     
+            // 样式设置二级标签
+            $scope.currentTab2 = 'title';
+            $scope.changeTab2 = (tab2) => {
+                $scope.currentTab2 = tab2;
+            };
+
+            // 主标题折叠
+            $scope.isCollapsedMain = true;
+            // 副标题
+            $scope.isCollapsedSub = true;
+            // 颜色设置
+            $scope.isCollapsedColor = true;
+            // 容器的距离
+            $scope.isCollapsedDistance = true;
+
             $scope.xAxisLocations = [
                 { label: '数据轴起始位置', value: 'start' },
                 { label: '数据轴居中位置', value: 'center' },

@@ -25,7 +25,6 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
 
 
-
       const refreshData = () => {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
@@ -47,7 +46,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
             /* *********** 调色盘16位转10进制 加上 透明度 *********** */
             _.set($scope.options, "backgroundColor",
               color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                _.get($scope.options, "backgroundColorOpacity", 0)
+                _.get($scope.options, "backgroundColorTOpacity", 0)
               ));
 
             _.set($scope.options, "tooltip.backgroundColor",
@@ -228,6 +227,7 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
             // 选择x数据后刷新图表
             const chooseData = _.get($scope.options, "form.xAxisColumn", "::");
+
             if (chooseData) {
               _.set($scope.options, "series", []);
             }
@@ -380,6 +380,25 @@ function EchartsPieRenderer($timeout, $rootScope, $window) {
 
       // 20191211 new feature 左侧图表选择修改整个系列的图表类型 *** 同时为默认图表类型(在 type处加get的默认值)
       const selectChartType = () => {
+        const chooseData = _.get($scope.options, "form.xAxisColumn", "::");
+        if (!chooseData) {
+
+          const initalType = $rootScope.selectChartType === null ||
+            $rootScope.selectChartType === undefined ? "pie" : $rootScope.selectChartType;
+          if (initalType === "rose") {
+            _.set($scope.options, "series[0].roseType", 'radius');
+            _.set($scope.options, "series[0].radius", ['0%', '70%']);
+          } else if (initalType === "doughnut") {
+            _.set($scope.options, "series[0].roseType", '');
+            _.set($scope.options, "series[0].radius", ['50%', '70%']);
+          } else {
+            _.set($scope.options, "series[0].roseType", '');
+            _.set($scope.options, "series[0].radius", ['0%', '70%']);
+          }
+
+          // console.log($scope.options.series[0]);
+        }
+
         if (_.get($rootScope, 'selectDECharts', 'n') === 'ECHARTS-PIE-AND-RADAR') {
           // 选到这一组才刷新有效，防止修改其他组图表类型的时候，这里也刷新，导致类型出错
           // console.log("watch");
@@ -509,6 +528,11 @@ function EchartsPieEditor() {
         { label: '饼图扇区外侧', value: 'outside' },
         { label: '饼图扇区内部', value: 'inside' },
         { label: '饼图中心位置', value: 'center' }
+      ];
+
+      $scope.Orients = [
+        { label: '水平', value: 'horizontal' },
+        { label: '竖直', value: 'vertical' }
       ];
 
 

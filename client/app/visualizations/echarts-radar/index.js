@@ -31,7 +31,7 @@ function EchartsRadarRenderer($rootScope) {
                         /* *********** 调色盘16位转10进制 加上 透明度 *********** */
                         _.set($scope.options, "backgroundColor",
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
 
                         _.set($scope.options, "tooltip.backgroundColor",
@@ -84,46 +84,52 @@ function EchartsRadarRenderer($rootScope) {
                         // console.log(maxData);
                         // console.log(zhibiaoData);
 
-                        _.set($scope.options, "legend.data", seriesList);
+
 
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        _.set($scope.options, "series", []); // 清空设置    
 
-                        // seriesInData
-                        const seriesInData = [];
-                        _.each(seriesList, (oneSeries) => {
-                            seriesInData.push(
-                                {
-                                    value: resData[oneSeries],
-                                    name: oneSeries,
-                                    itemStyle: {
-                                        color: _.get($scope.options, "series_ItemStyle_Color", [])[oneSeries]
-                                    },
-                                    areaStyle: {
-                                        color: _.get($scope.options, "series_ItemStyle_Color", [])[oneSeries]
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", "::");// 无数据选择
+                        if (chooseData) {
+                            _.set($scope.options, "legend.data", seriesList);
+                            _.set($scope.options, "series", []); // 清空设置    
+
+                            // seriesInData
+                            const seriesInData = [];
+                            _.each(seriesList, (oneSeries) => {
+                                seriesInData.push(
+                                    {
+                                        value: resData[oneSeries],
+                                        name: oneSeries,
+                                        itemStyle: {
+                                            color: _.get($scope.options, "series_ItemStyle_Color", [])[oneSeries]
+                                        },
+                                        areaStyle: {
+                                            color: _.get($scope.options, "series_ItemStyle_Color", [])[oneSeries]
+                                        }
                                     }
-                                }
-                            )
-                        })
-                        // console.log(seriesInData);
-                        $scope.options.series = [{
-                            type: 'radar',
-                            data: seriesInData
-                        }];
-                        // max键值对
-                        const zhibiaoAndmax = [];
-                        for (let i = 0; i < zhibiaoData.length; i += 1) {
+                                )
+                            })
+                            // console.log(seriesInData);
+                            $scope.options.series = [{
+                                type: 'radar',
+                                data: seriesInData
+                            }];
+                            // max键值对
+                            const zhibiaoAndmax = [];
+                            for (let i = 0; i < zhibiaoData.length; i += 1) {
 
-                            zhibiaoAndmax.push({
-                                name: zhibiaoData[i],
-                                max: maxData[i]
-                            });
+                                zhibiaoAndmax.push({
+                                    name: zhibiaoData[i],
+                                    max: maxData[i]
+                                });
+                            }
+                            // console.log(zhibiaoAndmax);
+                            $scope.options.radar.indicator = zhibiaoAndmax;
                         }
-                        // console.log(zhibiaoAndmax);
-                        $scope.options.radar.indicator = zhibiaoAndmax;
+
 
                         let myChart = null;
 

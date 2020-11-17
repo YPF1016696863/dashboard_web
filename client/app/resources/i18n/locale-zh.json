@@ -21,7 +21,7 @@
     "HELP": "帮助"
   },
   "HOME": {
-    "WELCOME": "欢迎使用中科蜂巢DataVis BI数据可视化系统",
+    "WELCOME": "欢迎使用DataVis BI数据可视化系统",
     "DESCRIPTION": "连接到任何数据源，轻松可视化和共享您的数据",
     "FAVORITE_DASHBOARDS": "加星标的可视化面板",
     "FAVORITE_QUERIES": "加星标的查询",

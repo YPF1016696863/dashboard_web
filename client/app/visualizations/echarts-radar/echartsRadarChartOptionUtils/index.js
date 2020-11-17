@@ -70,7 +70,7 @@ export function defaultRadarChartOptions() {
         series: [{
             name: '预算 vs 开销（Budget vs spending）',
             type: 'radar',
-            // areaStyle: {normal: {}},
+            areaStyle: {normal: {}},
             data: [
                 {
                     value: [4300, 10000, 28000, 35000, 50000, 19000],

@@ -23,7 +23,7 @@ function EchartsTrajectoryRenderer($rootScope) {
                 $scope.options = defaultTrajectoryChartOptions();
             }
 
-            console.log(defaultTrajectoryChartOptions)
+            // console.log(defaultTrajectoryChartOptions)
             let echartsData = [];
             let dataX = [];
             let dataY = [];
@@ -34,7 +34,7 @@ function EchartsTrajectoryRenderer($rootScope) {
                         /* *********** 调色盘16位转10进制 加上 透明度 *********** */
                         _.set($scope.options, "backgroundColor",
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
 
                         _.set($scope.options, "tooltip.backgroundColor",
@@ -136,7 +136,7 @@ function EchartsTrajectoryRenderer($rootScope) {
                         dataY = [];
                         _.forEach(data, function (value) { // [{0},{1}...] 筛选出每一个{0} {1} ...
                             // eslint-disable-next-line func-names
-                            _.forEach(value, function (valueChildren, keyChildren) {
+                            _.forEach(value, function (valueChildren, keyChildren) {                                
                                 if (keyChildren === _.get($scope.options, "form.xAxisColumn", '')) {
                                     dataX.push(valueChildren);
                                 }
@@ -152,39 +152,43 @@ function EchartsTrajectoryRenderer($rootScope) {
                         let seriesIndex = 0;
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        _.set($scope.options, "series", []); // 清空设置 
-                        // const chooseData = _.get($scope.options, "form.xAxisColumn", "::");
-                        // if (chooseData) {
-                        //     _.set($scope.options, "series", []);
-                        // }
+                       
+                        // _.set($scope.options, "series", []); // 清空设置 
+                        const chooseData = _.get($scope.options, "form.xAxisColumns", '');
+                        console.log(chooseData)
+                        if (chooseData.length!==0) {
+                            console.log("asd")
+                            _.set($scope.options, "series", []);
+                            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+                                $scope.options.series.push({
+                                    data: echartsData[seriesIndex],
+                                    // data: echartsData3,
+                                    type: 'line',
+                                    // _.get($scope.options, "series_Label_Position", '')[seriesIndex]
+                                    symbol: _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === null ||
+                                        _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === '' ?
+                                        'circle' : _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex],
+                                    symbolSize: _.get($scope.options, 'pointSize', 15)[seriesIndex] === null ||
+                                        _.get($scope.options, 'pointSize', 15)[seriesIndex] === '' ?
+                                        15 : _.get($scope.options, 'pointSize', 15)[seriesIndex],
+                                    itemStyle: {
+                                        color: _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex] === null ||
+                                            _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex] === '' ?
+                                            '#ed4d50' : _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex]
+                                    },
+                                    lineStyle: {
+                                        color: _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex] === null ||
+                                            _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex] === '' ?
+                                            '#ed4d50' : _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex],
+                                    },
 
-                        _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
-                            $scope.options.series.push({
-                                data: echartsData[seriesIndex],
-                                // data: echartsData3,
-                                type: 'line',
-                                // _.get($scope.options, "series_Label_Position", '')[seriesIndex]
-                                symbol: _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === null ||
-                                    _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex] === '' ?
-                                    'circle' : _.get($scope.options, 'pointSymbols', 'circle')[seriesIndex],
-                                symbolSize: _.get($scope.options, 'pointSize', 15)[seriesIndex] === null ||
-                                    _.get($scope.options, 'pointSize', 15)[seriesIndex] === '' ?
-                                    15 : _.get($scope.options, 'pointSize', 15)[seriesIndex],
-                                itemStyle: {
-                                    color: _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex] === null ||
-                                        _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex] === '' ?
-                                        '#ed4d50' : _.get($scope.options, 'pointColor', '#ed4d50')[seriesIndex]
-                                },
-                                lineStyle: {
-                                    color: _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex] === null ||
-                                        _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex] === '' ?
-                                        '#ed4d50' : _.get($scope.options, 'lineColor', '#ed4d50')[seriesIndex],
-                                },
+                                });
 
+                                seriesIndex += 1;
                             });
 
-                            seriesIndex += 1;
-                        });
+                        }
+
 
 
 

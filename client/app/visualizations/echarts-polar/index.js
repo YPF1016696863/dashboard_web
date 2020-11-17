@@ -31,16 +31,16 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
 
                         _.set($scope.options, "tooltip.backgroundColor",
                             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
-                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                                _.get($scope.options, "tooltip.backgroundColorTOpacity", 0)
                             ));
 
-                            
+
 
 
                         const data = $scope.queryResult.getData();
                         // 输入的数据格式转换  系列1
                         const seriesData = [];
-                        _.set($scope.options, "series", []); // 清空设置
+
 
                         const polarData = [];
                         const xDataValue = [];
@@ -95,35 +95,42 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                                 }
                             });
                         });
+                        
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", []);// 无数据选择
+                        if (chooseData.length!==0) {
+                            console.log("123");
+                            _.set($scope.options, "series", []); // 清空设置
 
+                            // 自定义输入系列名称、样式等
+                            $scope.options.series.push({
 
-                        // 自定义输入系列名称、样式等
-                        $scope.options.series.push({
+                                coordinateSystem: 'polar',
+                                name: _.get($scope.options, "series_Name", ''), // 设置系列/图例的名称
+                                type: 'scatter',
+                                data: polarData,
 
-                            coordinateSystem: 'polar',
-                            name: _.get($scope.options, "series_Name", ''), // 设置系列/图例的名称
-                            type: 'scatter',
-                            data: polarData,
+                                // 设置标记点大小--默认设置为何现实很小
+                                symbolSize: _.get($scope.options, "series_SymbolSize", 16),
 
-                            // 设置标记点大小--默认设置为何现实很小
-                            symbolSize: _.get($scope.options, "series_SymbolSize", 16),
+                                // 设置标记点形状
+                                symbol: _.get($scope.options, "series_Symbol", 'circle'),
 
-                            // 设置标记点形状
-                            symbol: _.get($scope.options, "series_Symbol", 'circle'),
+                                // // 设置标记点旋转角度
+                                symbolRotate: _.get($scope.options, "series_SymbolRotate", ''),
 
-                            // // 设置标记点旋转角度
-                            symbolRotate: _.get($scope.options, "series_SymbolRotate", ''),
+                                markPoint: {
 
-                            markPoint: {
+                                },
+                                // 设置系列颜色
+                                itemStyle: {
+                                    color: _.get($scope.options, "series_ItemStyle_Color", '') === undefined ?
+                                        '' : _.get($scope.options, "series_ItemStyle_Color", ''),
+                                }
 
-                            },
-                            // 设置系列颜色
-                            itemStyle: {
-                                color: _.get($scope.options, "series_ItemStyle_Color", '') === undefined ?
-                                    '' : _.get($scope.options, "series_ItemStyle_Color", ''),
-                            }
+                            });
 
-                        });
+                        }
+
 
                         // 设置环形分割区域的间隔颜色
                         _.set($scope.options, "radiusAxis.splitArea.areaStyle.color", [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),

@@ -63,7 +63,7 @@ export function defaultZoneChartOptions() {
                 color: '#fff',
             },
             
-            data: [ ]
+            data: ['总费用', '房租', '水电费', '交通费', '伙食费', '日用品数']
         },
         yAxis: {
             type: 'value',
@@ -80,7 +80,24 @@ export function defaultZoneChartOptions() {
                 color: '#fff',
             }
         },
-        series: [],
+        series: [
+            {
+                name: '辅助',
+                type: 'bar',
+                stack: '总量',
+                itemStyle: {
+                    barBorderColor: 'rgba(0,0,0,0)',
+                    color: 'rgba(0,0,0,0)'
+                },
+                data: [0, 1700, 1400, 1200, 300, 0]
+            },
+            {
+                name: '生活费',
+                type: 'bar',
+                stack: '总量',
+                data: [2900, 1200, 300, 200, 900, 300]
+            }
+        ],
         size: {
             responsive: true,
             width: "600px",

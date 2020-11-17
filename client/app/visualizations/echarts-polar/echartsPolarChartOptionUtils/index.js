@@ -49,8 +49,8 @@ export function defaultPolarChartOptions() {
         },
         toolbox: {
             show: false,
-            feature: {  
-                restore: {},             
+            feature: {
+                restore: {},
                 saveAsImage: {}
             }
         },
@@ -106,7 +106,30 @@ export function defaultPolarChartOptions() {
                 },
             }
         },
-        series: []
+        series: [
+            {
+                coordinateSystem: 'polar',
+                type: 'scatter',
+                data: [[100, 3]
+                    , [110, 4]
+                    , [120, 5]
+                    , [130, 6]
+                    , [140, 7]
+                    , [150, 8]
+                    , [160, 9]
+                    , [170, 10]
+                    , [180, 11]
+                    , [190, 12]
+                    , [200, 13]
+                    , [400, 60]
+                    , [410, 70]
+                    , [420, 80]
+                    , [430, 90]
+                    , [440, 100]
+                    , [10, 400]
+                    , [50, 200]]
+            }
+        ]
     };
 };
 
