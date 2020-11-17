@@ -40,6 +40,10 @@ function EchartsLiquidRenderer($rootScope) {
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
                                 _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
+                        _.set($scope.options, "bollColor",
+                            color16to10(_.get($scope.options, "bollColorT", "#000"),
+                                _.get($scope.options, "bollColorTOpacity", 0)
+                            ));
 
                         _.set($scope.options, "tooltip.backgroundColor",
                             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
@@ -83,8 +87,9 @@ function EchartsLiquidRenderer($rootScope) {
 
                             });
                         });
+                        // console.log((getTemp / _.get($scope.options, "bili", 1)).toFixed(2));
                         for (let i = 0; i < 5; i += 1) {
-                            echartsData.push(getTemp);
+                            echartsData.push((getTemp / _.get($scope.options, "bili", 1)).toFixed(2));
                         }
 
 
@@ -92,7 +97,7 @@ function EchartsLiquidRenderer($rootScope) {
                         const fontSize = _.get($scope.options, 'title.textStyle.fontSizeT', 12) * ($element.parent()[0].clientWidth / 1115);
                         _.set($scope.options, 'title.textStyle.fontSize', fontSize);
 
-                        // console.log(echartsData);
+
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
@@ -109,7 +114,8 @@ function EchartsLiquidRenderer($rootScope) {
                             },
                             label: {
                                 normal: {
-                                    formatter: (getTemp * 100).toFixed(2) + '%',
+                                    formatter: ((getTemp / _.get($scope.options, "bili", 1)).toFixed(2)
+                                        * 100).toFixed(2) + _.get($scope.options, "danwei", '%'),
                                     textStyle: {
                                         fontSize: _.get($scope.options, "fontSize", 50) === '' ||
                                             _.get($scope.options, "fontSize", 50) === undefined ?

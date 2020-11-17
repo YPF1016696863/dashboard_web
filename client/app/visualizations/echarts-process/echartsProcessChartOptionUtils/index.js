@@ -22,12 +22,12 @@ export function defaultProcessChartOptions() {
         animationEasingUpdate: 'quinticInOut',
 
         title: {
-            text: '区间图',
-            left:"50%"
+            text: '过程图',
+            left: "50%"
         },
-        tooltip:{
-            alwaysShowContent:true
-        },        
+        tooltip: {
+            alwaysShowContent: true
+        },
 
         xAxis: {
             type: 'value',
@@ -67,12 +67,22 @@ export function defaultProcessChartOptions() {
                 color: '#fff',
             }
         },
-        
+
         series: [{
             symbolSize: 20,
             data: [
-                [1, 0],
-                [2, 0],
+                [1, 0]
+                , [2, 0]
+                , [3, 0]
+                , [4, 0]
+                , [5, 0]
+                , [6, 0]
+                , [7, 0]
+                , [8, 0]
+                , [9, 0]
+                , [10, 0]
+                , [11, 0]
+                , [12, 0]
             ],
             type: 'scatter'
         }],

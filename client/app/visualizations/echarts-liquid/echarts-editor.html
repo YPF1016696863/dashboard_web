@@ -28,6 +28,14 @@
             </ui-select>
         </div>
 
+        <label class="control-label">比例</label>
+        <input name="name" style="width:100%" type="text" class="form-control" ng-model="options.bili"
+            placeholder="1" />
+
+            <label class="control-label">单位</label>
+            <input name="name" style="width:100%" type="text" class="form-control" ng-model="options.danwei"
+                placeholder="%" />
+
     </div>
 
     <div ng-if="currentTab == 'style'" class="m-t-10 m-b-10">
@@ -46,7 +54,7 @@
 
                 <div class="table-name" ng-click="isCollapsedMain = !isCollapsedMain">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>主标题</span>
                         </strong>
@@ -124,7 +132,7 @@
 
                 <div class="table-name" ng-click="isCollapsedSub = !isCollapsedSub">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>副标题</span>
                         </strong>
@@ -183,7 +191,7 @@
             <div class="form-group">
                 <div class="table-name" ng-click="isCollapsedColor = !isCollapsedColor">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>主题设置</span>
                         </strong>
@@ -200,20 +208,26 @@
                             <label class="control-label">球半径(如:70%)</label>
                             <input style="width:100%" ng-model="options.radius" type="text" class="form-control"
                                 placeholder="70%">
-
                         </div>
+
+
                         <div class="form-group" style="width:49%;float:right">
-                            <label class="control-label">设置背景颜色</label>
-                            <input type="color" style="width:100%" class="form-control"
+                            <label class="control-label" style="width:100%;float: left">背景颜色</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
                                 ng-model="options.backgroundColorT" />
                             <input type="text" style="width:50%;float: left" class="form-control"
-                                ng-model="options.backgroundColorTOpacity " placeholder="1" />
+                                ng-model="options.backgroundColorTOpacity " placeholder="0" />
                         </div>
-                        <div class="form-group" style="width:49%;float:right">
-                            <label class="control-label">球内背景颜色</label>
-                            <input type="color" style="width:100%" class="form-control" ng-model="options.bollColor" />
 
+                        <div class="form-group" style="width:49%;float:right">
+                            <label class="control-label" style="width:100%;float: left">球内背景颜色</label>
+                            <input type="color" style="width:50%;float: left" class="form-control"
+                                ng-model="options.bollColorT" />
+                            <input type="text" style="width:50%;float: left" class="form-control"
+                                ng-model="options.bollColorTOpacity " placeholder="0" />
                         </div>
+
+
                         <div class="form-group" style="width:100%;float:left">
                             <label class="control-label">背景图片</label>
                             <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
@@ -248,7 +262,7 @@
                     <input name="name" type="text" class="form-control" ng-model="options.size.height"
                         placeholder="400" />
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>
                         <input type="checkbox" ng-model="options.legend.show">
                         显示图例设置
@@ -266,16 +280,10 @@
                     <label class="control-label">文字颜色</label>
                     <input type="color" style="width:100%" class="form-control"
                         ng-model="options.legend.textStyle.color" />
-                    <!-- <ui-select ng-model="options.legend.textStyle.color">
-                        <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="Color.value as Color in Colors">
-                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select> -->
                     <label class="control-label">顶部距离</label>
                     <input name="name" type="text" class="form-control" ng-model="options.legend.top"
                         placeholder="5%" />
-                </div>
+                </div> -->
 
 
             </div>
@@ -344,6 +352,6 @@
             </label>
         </div>
 
-       
+
     </div>
 </div>

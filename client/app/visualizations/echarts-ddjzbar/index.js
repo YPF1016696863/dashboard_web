@@ -54,7 +54,7 @@ function EchartsDdjzbarRenderer($rootScope) {
 
 
                         const xData = _.map(data, _.get($scope.options, "form.xAxisColumn"));
-                        _.set($scope.options, "xList", xData);
+                        
                         const yData = _.map(data, _.get($scope.options, "form.yAxisColumn"));
 
                         // 构造每一类的数据数组
@@ -73,33 +73,39 @@ function EchartsDdjzbarRenderer($rootScope) {
                             count += 1;
                         });
 
-                        // 传入每一类的配置
-                        count = 0;
-                        _.set($scope.options, "series", []); // 清空设置           
-                        _.each(xData, (column) => {
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", "::");// 无数据选择
+
+                        if (chooseData) {
+                            _.set($scope.options, "xList", xData);
+                            // 传入每一类的配置
+                            count = 0;
+                            _.set($scope.options, "series", []); // 清空设置           
+                            _.each(xData, (column) => {
+                                $scope.options.series.push(
+                                    {
+                                        type: 'bar',
+                                        data: test[count],
+                                        coordinateSystem: 'polar',
+                                        name: column,
+                                        itemStyle: {
+                                            color: _.get($scope.options, "series_ItemStyle_Color", [])[column]
+                                        }
+                                    });
+                                count += 1;
+                            });
+                            // 最后补充移位最大值 撑开整个圆
                             $scope.options.series.push(
                                 {
                                     type: 'bar',
-                                    data: test[count],
+                                    data: [_.get($scope.options, 'maxData', 100)],// 最大值
                                     coordinateSystem: 'polar',
-                                    name: column,
                                     itemStyle: {
-                                        color: _.get($scope.options, "series_ItemStyle_Color", [])[column]
+                                        color: 'rgba(0,0,0,0)'
                                     }
-                                });
-                            count += 1;
-                        });
-                        // 最后补充移位最大值 撑开整个圆
-                        $scope.options.series.push(
-                            {
-                                type: 'bar',
-                                data: [_.get($scope.options, 'maxData', 100)],// 最大值
-                                coordinateSystem: 'polar',
-                                itemStyle: {
-                                    color: 'rgba(0,0,0,0)'
-                                }
-                            },
-                        );
+                                },
+                            );
+                        }
+
 
 
                         let myChart = null;

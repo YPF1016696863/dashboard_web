@@ -131,7 +131,7 @@
 
                 <div class="table-name" ng-click="isCollapsedMain = !isCollapsedMain">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>主标题</span>
                         </strong>
@@ -209,7 +209,7 @@
 
                 <div class="table-name" ng-click="isCollapsedSub = !isCollapsedSub">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>副标题</span>
                         </strong>
@@ -268,7 +268,7 @@
             <div class="form-group">
                 <div class="table-name" ng-click="isCollapsedColor = !isCollapsedColor">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>主题设置</span>
                         </strong>
@@ -320,9 +320,9 @@
 
                 <div class="table-name" ng-click="isCollapsedDistance = !isCollapsedDistance">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
-                            <span>容器距离</span>
+                            <span>容器设置</span>
                         </strong>
                     </div>
                 </div>
@@ -345,54 +345,50 @@
                                 placeholder="10">
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-model="options.size.responsive">
+                            图表尺寸自适应
+                        </label>
+                    </div>
+                    <div class="form-group" style="width:49%;float:left" ng-if="!options.size.responsive">
+                        <label class="control-label">图表宽度(单位:px)</label>
+                        <input name="name" type="text" class="form-control" ng-model="options.size.width"
+                            placeholder="600" />
+                    </div>
+                    <div class="form-group" style="width:49%;float:right" ng-if="!options.size.responsive">
+                        <label class="control-label">图表高度(单位:px)</label>
+                        <input name="name" type="text" class="form-control" ng-model="options.size.height"
+                            placeholder="400" />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-model="options.legend.show">
+                            显示图例设置
+                        </label>
+                    </div>
+                    <div class="form-group" style="width:49%;float:left" ng-if="options.legend.show">
+                        <label class="control-label">宽度(单位:px)</label>
+                        <input name="name" type="text" class="form-control" ng-model="options.legend.width"
+                            placeholder="" />
+                        <label class="control-label">左侧距离</label>
+                        <input name="name" type="text" class="form-control" ng-model="options.legend.left"
+                            placeholder="90%" />
+                    </div>
+                    <div class="form-group" style="width:49%;float:right" ng-if="options.legend.show">
+                        <label class="control-label">文字颜色</label>
+                        <input type="color" style="width:100%" class="form-control"
+                            ng-model="options.legend.textStyle.color" />
+                        <label class="control-label">顶部距离</label>
+                        <input name="name" type="text" class="form-control" ng-model="options.legend.top"
+                            placeholder="5%" />
+                    </div>
+    
                 </div>
 
 
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" ng-model="options.size.responsive">
-                        图表尺寸自适应
-                    </label>
-                </div>
-                <div class="form-group" style="width:49%;float:left" ng-if="!options.size.responsive">
-                    <label class="control-label">图表宽度(单位:px)</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.size.width"
-                        placeholder="600" />
-                </div>
-                <div class="form-group" style="width:49%;float:right" ng-if="!options.size.responsive">
-                    <label class="control-label">图表高度(单位:px)</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.size.height"
-                        placeholder="400" />
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" ng-model="options.legend.show">
-                        显示图例设置
-                    </label>
-                </div>
-                <div class="form-group" style="width:49%;float:left" ng-if="options.legend.show">
-                    <label class="control-label">宽度(单位:px)</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.legend.width"
-                        placeholder="" />
-                    <label class="control-label">左侧距离</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.legend.left"
-                        placeholder="90%" />
-                </div>
-                <div class="form-group" style="width:49%;float:right" ng-if="options.legend.show">
-                    <label class="control-label">文字颜色</label>
-                    <input type="color" style="width:100%" class="form-control"
-                        ng-model="options.legend.textStyle.color" />
-                    <!-- <ui-select ng-model="options.legend.textStyle.color">
-                        <ui-select-match placeholder="颜色...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices repeat="Color.value as Color in Colors">
-                            <div ng-bind-html="Color.label | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select> -->
-                    <label class="control-label">顶部距离</label>
-                    <input name="name" type="text" class="form-control" ng-model="options.legend.top"
-                        placeholder="5%" />
-                </div>
-
+              
 
 
             </div>
@@ -403,7 +399,7 @@
 
                 <div class="table-name" ng-click="isCollapsedXAxisOption = !isCollapsedXAxisOption">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>纬度轴</span>
                         </strong>
@@ -478,7 +474,7 @@
 
                 <div class="table-name" ng-click="isCollapsedYAxisOption = !isCollapsedYAxisOption">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>指标轴</span>
                         </strong>
@@ -655,7 +651,7 @@
             <div class="form-group">
                 <div class="table-name" ng-click="isCollapsedMarkePoint = !isCollapsedMarkePoint">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>标记点设置</span>
                         </strong>
@@ -686,7 +682,7 @@
 
                 <div class="table-name" ng-click="isCollapsedMarkePointMax = !isCollapsedMarkePointMax">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>最大标记点设置</span>
                         </strong>
@@ -767,7 +763,7 @@
 
                 <div class="table-name" ng-click="isCollapsedMarkePointMin = !isCollapsedMarkePointMin">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>最小标记点设置</span>
                         </strong>
@@ -845,7 +841,7 @@
 
                 <div class="table-name" ng-click="isCollapsedMarkePointAve = !isCollapsedMarkePointAve">
                     <div class="form-group" style="float:left">
-                        <i class="fa fa-table"></i>
+                        <i class="fa fa-align-justify"></i>
                         <strong>
                             <span>平均标记点设置</span>
                         </strong>
@@ -1029,8 +1025,8 @@
                 显示工具栏
             </label>
             <label>
-                <input type="checkbox" ng-model="options.series_Smooth">
-                开启光滑曲线
+                <input type="checkbox" ng-model="options.dataZoom_Disabled">
+                关闭区域缩放
             </label>
         </div>
 
@@ -1040,48 +1036,12 @@
                 开启数据堆叠
             </label>
             <label>
-                <input type="checkbox" ng-model="options.dataZoom_Disabled">
-                关闭区域缩放
-            </label>
-        </div>
-        <div class="form-group">
-            <label>
                 <input type="checkbox" ng-model="options.xAxis.boundaryGap">
                 开启坐标轴两边留白策略
             </label>
         </div>
-        <!-- <div class="form-group" >
-            <label>
-                <input type="checkbox" ng-model="options.series_Stack">
-                是否显示堆叠
-            </label>
-        </div> -->
-        <div class="form-group">
-            <label>
-                <input type="checkbox" ng-model="options.tooltip.show">
-                显示提示框
-            </label>
-        </div>
-        <div class="form-group" ng-if="options.tooltip.show">
-            <label class="control-label">文本提示框背景颜色</label>
-            <input type="color" style="width:100%" class="form-control"
-            ng-model="options.tooltip.axisPointer.label.backgroundColor" />            
-            <input type="text" class="form-control" style="width:50%;float: left"
-                            ng-model="options.tooltip.backgroundColorOpacity " placeholder="0" />
-        </div>
-        <div class="form-group" ng-if="options.tooltip.show">
-            <label class="control-label">提示框格式</label>
-            <br>
-            <input name="name" type="text" style="width: 150px;" ng-model="options.Text_a" placeholder="" />
-            <input name="name" type="text" style="width: 150px;" placeholder="系列名称" disabled="true" />
-            <input name="name" type="text" style="width: 150px;" ng-model="options.a_Text" placeholder="" />
-            <input name="name" type="text" style="width: 150px;" ng-model="options.Text_b" placeholder="" />
-            <input name="name" type="text" style="width: 150px;" placeholder="类目值" disabled="true" />
-            <input name="name" type="text" style="width: 150px;" ng-model="options.b_Text" placeholder="" />
-            <input name="name" type="text" style="width: 150px;" ng-model="options.Text_c" placeholder="" />
-            <input name="name" type="text" style="width: 150px;" placeholder="数值" disabled="true" />
-            <input name="name" type="text" style="width: 150px;" ng-model="options.c_Text" placeholder="" />
-        </div>
+        
+        
         
     </div>
 

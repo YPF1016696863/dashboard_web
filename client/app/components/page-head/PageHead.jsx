@@ -39,7 +39,7 @@ class PageHead extends React.Component {
         >
           <Descriptions size="small" column={3}>
             <Descriptions.Item label="">
-              欢迎使用中科蜂巢DataVis BI数据可视化系统
+              欢迎使用DataVis BI数据可视化系统
             </Descriptions.Item>
           </Descriptions>
         </PageHeader>

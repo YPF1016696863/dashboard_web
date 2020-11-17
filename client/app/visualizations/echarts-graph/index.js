@@ -205,30 +205,35 @@ function EchartsGraphRenderer($rootScope) {
                         // console.log(linkData);
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
+                        
 
-                        _.set($scope.options, "series", []); // 清空设置           
-                        $scope.options.series.push({
-                            type: 'graph',
-                            layout: _.get($scope.options, "layout", 'none'),
-                            // symbolSize: 50,
-                            roam: true,
-                            label: {
-                                show: true
-                            },
-                            edgeSymbol: ['circle', 'arrow'],
-                            edgeSymbolSize: [4, 10],
-                            // edgeLabel: {
-                            //   fontSize: 20
-                            // },
-                            data: nameData,
-                            links: linkData,
-                            tooltip: {
-                                formatter: "{b}",
-                                textStyle: {
-                                    color: '#fff',
-                                }
-                            },
-                        });
+                        const chooseData = _.get($scope.options, "form.startIDAxisColumn", []);// 无数据选择
+                        if (chooseData.length !== 0) {
+                            _.set($scope.options, "series", []); // 清空设置       
+                            $scope.options.series.push({
+                                type: 'graph',
+                                layout: _.get($scope.options, "layout", 'none'),
+                                // symbolSize: 50,
+                                roam: true,
+                                label: {
+                                    show: true
+                                },
+                                edgeSymbol: ['circle', 'arrow'],
+                                edgeSymbolSize: [4, 10],
+                                // edgeLabel: {
+                                //   fontSize: 20
+                                // },
+                                data: nameData,
+                                links: linkData,
+                                tooltip: {
+                                    formatter: "{b}",
+                                    textStyle: {
+                                        color: '#fff',
+                                    }
+                                },
+                            });
+                        }
+
 
                         let myChart = null;
 

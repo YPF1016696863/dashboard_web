@@ -6,7 +6,7 @@ import $ from 'jquery';
 import UUIDv4 from 'uuid/v4';
 // import echarts2 from 'echarts2'; // 多版本 npm install echarts2@npm:echarts@2
 import { appSettingsConfig } from '@/config/app-settings';
-
+import { unshift } from 'core-js/fn/array';
 
 import echartsTemplate from './echarts.html';
 import echartsEditorTemplate from './echarts-editor.html';
@@ -26,6 +26,7 @@ import {
     setThemeColor,
 } from './echartsBasicChartOptionUtils';
 import color16to10 from '../colorChange';
+
 
 
 function EchartsRenderer($timeout, $rootScope, $window) {
@@ -266,7 +267,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                         }
 
 
-                        
+
 
                         // 初始化为不筛选
                         if (_.get($scope.options, "form.zAxisColumn", []).length === 0) {
@@ -360,35 +361,74 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             } else {
                                 filterXData = _.uniq(_.map(data, xAxisColumnName));
                             }
-
+                            // console.log(filterXData);
 
                             filterData = conditionFunction(filterData);
                             // console.log(filterData);
                             // 求出 x对应的Y list 
-                            let XY = [];
-                            XY = [];
+                            const XYObj = {};
                             _.each(filterData, (row) => {
                                 const x = row[xAxisColumnName];
                                 const y = row[yAxisColumnsName];
-                                if (XY[x] === undefined) {
-                                    XY[x] = [];
+                                if (XYObj[x] === undefined) {
+                                    XYObj[x] = [];
                                 }
-                                XY[x].push(y);
+                                XYObj[x].push(y);
                             })
-                            // XY = _.without(XY, undefined); // ?
-                            _.forEach(filterXData, function (value, key) {
-                                const child = XY[value]
-                                const len = child === undefined ? 0 : child.length;
-                                let sum = 0;
+                            // console.log(XYObj);
+                            // 
+                            for (const key in XYObj) {
+                                const child = XYObj[key]
+                                if (child !== undefined) {
+                                    const len = child.length === undefined ? 0 : child.length;
+                                    let sum = 0;
 
-                                for (let j = 0; j < len; j += 1) {
-                                    sum += child[j];
+                                    for (let j = 0; j < len; j += 1) {
+                                        sum += child[j];
+                                    }
+                                    if (len !== 0) {
+                                        sum = sum * 1.0 / len;
+                                        XYObj[key] = parseInt(sum.toFixed(2), 10);
+                                    }
                                 }
-                                sum = sum * 1.0 / len;
-                                XY[key] = parseInt(sum.toFixed(2), 10);
+                            }
+                            // console.log(XYObj);
+                            let XY = [];
+                            let i=0
+                            for (const key in XYObj) {
+                                if(isNaN(Number(key))){ // 不是数字
+                                    XY[i] = XYObj[key];
+                                    i+=1;                                    
+                                }else{
+                                    XY[key] = XYObj[key]
+                                }
+                            }
+                            // console.log(XY);
+                            // XY.shift();
+                            
+                            XY = _.without(XY, undefined); // ?
 
-                            })
+                            // _.forEach(XY, function (value, key) {
+                            //     console.log(value,key);
+                            // })
+                            // _.forEach(XY, function (value, key) {
 
+                            //     const child = XY[key]
+                            //     if (child !== undefined) {
+                            //         const len = child.length === undefined ? 0 : child.length;
+                            //         let sum = 0;
+
+                            //         for (let j = 0; j < len; j += 1) {
+                            //             sum += child[j];
+                            //         }
+                            //         if (len !== 0) {
+                            //             sum = sum * 1.0 / len;
+                            //             XY[key] = parseInt(sum.toFixed(2), 10);
+                            //         }
+                            //     }
+
+                            // })
+                            // XY = _.without(XY, undefined);
                             // x对应y list数据求平均
                             // for (let i = 0; i < XY.length; i += 1) {
                             //     const len = XY[i] === undefined ? 0 : XY[i].length;
@@ -403,10 +443,10 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             if (_.get($scope.options, 'sortRule', 'Sort') === 'desSort') {
                                 XY = XY.reverse();
                             }
-
+                            // console.log(XY);
                             seriesYData = [];
                             seriesYData.push(XY);
-                            // console.log(seriesYData); 
+                            // console.log(seriesYData);
                             mapList.push(yAxisColumnsName);
                         }
                         // ***************************筛选处理end 
@@ -438,15 +478,16 @@ function EchartsRenderer($timeout, $rootScope, $window) {
 
 
                         const chooseData = _.get($scope.options, "form.xAxisColumn", "::");// 无数据选择
+
                         const initalType = $rootScope.selectChartType === null ||
                             $rootScope.selectChartType === undefined ? "line" : $rootScope.selectChartType;
-                            if(initalType==="area"){
-                                _.set($scope.options, "series[0].type","line");
-                                _.set($scope.options, "series[0].areaStyle",{});
-                            }else{
-                                _.set($scope.options, "series[0].type",initalType);
-                            }
-                      
+                        if (initalType === "area") {
+                            _.set($scope.options, "series[0].type", "line");
+                            _.set($scope.options, "series[0].areaStyle", {});
+                        } else {
+                            _.set($scope.options, "series[0].type", initalType);
+                        }
+
 
                         // _.get($scope.options, "defaultType")));
                         if (chooseData) {

@@ -30,25 +30,30 @@ function EchartsScatterNumberRenderer($rootScope) {
         try {
           if (!_.isUndefined($scope.queryResult) && $scope.queryResult.getData()) {
 
-             /* *********** 调色盘16位转10进制 加上 透明度 *********** */
-             _.set($scope.options, "backgroundColor",
-             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-               _.get($scope.options, "backgroundColorOpacity", 0)
-             ));
+            /* *********** 调色盘16位转10进制 加上 透明度 *********** */
+            _.set($scope.options, "backgroundColor",
+              color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                _.get($scope.options, "backgroundColorTOpacity", 0)
+              ));
 
-           _.set($scope.options, "tooltip.backgroundColor",
-             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
-               _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
-             ));
+            _.set($scope.options, "tooltip.backgroundColor",
+              color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
+                _.get($scope.options, "tooltip.backgroundColorTOpacity", 0)
+              ));
 
-           //  提示框文字格式
-           const formatterString = `${_.get($scope.options, "Text_a", "")}
+              _.set($scope.options, "lineColor",
+              color16to10(_.get($scope.options, "lineColorT", "#000"),
+                _.get($scope.options, "lineColorTOpacity", 0)
+              ));
+
+            //  提示框文字格式
+            const formatterString = `${_.get($scope.options, "Text_a", "")}
                    {a}${_.get($scope.options, "a_Text", "")}
                    <br/>${_.get($scope.options, "Text_b", "")}
                    {b}${_.get($scope.options, "b_Text", "")}:
                    ${_.get($scope.options, "Text_c", "")}
                    {c}${_.get($scope.options, "c_Text", "")}`;
-           _.set($scope.options, "tooltip.formatter", formatterString);
+            _.set($scope.options, "tooltip.formatter", formatterString);
 
 
             const data = $scope.queryResult.getData();
@@ -256,6 +261,52 @@ function EchartsScatterNumberEditor() {
       $scope.changeTab = (tab) => {
         $scope.currentTab = tab;
       };
+
+      // 大的一级标签
+      $scope.currentTab = 'general';
+      $scope.changeTab = (tab) => {
+        $scope.currentTab = tab;
+      };
+      // 样式设置二级标签
+      $scope.currentTab2 = 'title';
+      $scope.changeTab2 = (tab2) => {
+        $scope.currentTab2 = tab2;
+      };
+      // 系列设置二级标签
+      $scope.currentTab3 = 'series';
+      $scope.changeTab3 = (tab3) => {
+        $scope.currentTab3 = tab3;
+      };
+
+      // 主标题折叠
+      $scope.isCollapsedMain = true;
+      // 副标题
+      $scope.isCollapsedSub = true;
+      // 颜色设置
+      $scope.isCollapsedColor = true;
+      // 容器的距离
+      $scope.isCollapsedDistance = true;
+      // 纬度轴
+      $scope.isCollapsedXAxisOption = true;
+
+      // 指标轴
+      $scope.isCollapsedYAxisOption = true;
+
+      // 横向网格线
+      $scope.isCollapsedXlineOption = true;
+      // 纵向网格线
+      $scope.isCollapsedYlineOption = true;
+
+      // 标记点
+      $scope.isCollapsedMarkePoint = true;
+      // 最大标记点
+      $scope.isCollapsedMarkePointMax = true;
+
+      // 最小标记点
+      $scope.isCollapsedMarkePointMin = true;
+      // 平均标记点
+      $scope.isCollapsedMarkePointAve = true;
+
       $scope.xAxisLocations = [
         { label: '数据轴起始位置', value: 'start' },
         { label: '数据轴居中位置', value: 'center' },

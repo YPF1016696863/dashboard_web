@@ -20,7 +20,7 @@ export function defaultTrajectoryChartOptions() {
         },
         legend: {
             type: 'scroll',
-            orient: 'horizontal', 
+            orient: 'horizontal',
         },
         tooltip: {
             show: true,
@@ -66,9 +66,10 @@ export function defaultTrajectoryChartOptions() {
             }
         },
         series: [
-            // {
-            //     data:[[10,10],[20,20],[30,30],[40,40]],
-            // }
+            {
+                type: 'line',
+                data: [[10, 10], [20, 20], [10, 30], [40, 40]],
+            }
         ],
         size: {
             responsive: true,
