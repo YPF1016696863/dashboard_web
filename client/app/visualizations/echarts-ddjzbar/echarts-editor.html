@@ -227,11 +227,11 @@
                             </div>
 
                             <div class="form-group" style="width:49%;float:right">
-                                <label class="control-label">设置背景颜色</label>
-                                <input type="color" style="width:50%" class="form-control"
+                                <label class="control-label" style="width:100%;float:left">设置背景颜色</label>
+                                <input type="color" style="width:50%;float: left" class="form-control"
                                     ng-model="options.backgroundColorT" />
                                 <input type="text" style="width:50%;float: left" class="form-control"
-                                    ng-model="options.backgroundColorTOpacity " placeholder="1" />
+                                    ng-model="options.backgroundColorTOpacity " placeholder="" />
                             </div>
                             <div class="form-group" style="width:100%;float:left">
                                 <label class="control-label">背景图片</label>
@@ -323,11 +323,6 @@
                         </div>
                     </div>
 
-
-                  
-
-
-
                 </div>
             </div>
 
@@ -345,7 +340,7 @@
                 <div class="form-group" style="width:49%;float:right">
                     <label class="control-label">类颜色</label>
                     <input type="color" style="width:100%" class="form-control"
-                    ng-model="options.series_ItemStyle_Color[options.useSerie]" />
+                        ng-model="options.series_ItemStyle_Color[options.useSerie]" />
                 </div>
             </div>
 
@@ -384,30 +379,27 @@
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_a"
                     placeholder="前缀..." />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.a_Text"
                     placeholder="后缀..." />
             </div>
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_b"
                     placeholder="" />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.b_Text"
                     placeholder="" />
             </div>
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_c"
                     placeholder="" />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.c_Text"
                     placeholder="" />
             </div>
         </div>
     </div>
-    
+
     <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
 
         <div class="form-group" style="width:49%;float:left">
