@@ -31,7 +31,7 @@ function EchartsDdjzbarRenderer($rootScope) {
 
                         _.set($scope.options, "backgroundColor",
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
                         _.set($scope.options, "tooltip.backgroundColor",
                             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
