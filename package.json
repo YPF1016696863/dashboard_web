@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --api-server=http://datavis-api-dev.chinambse.com",
     "clean": "rm -rf ./client/dist/",
     "build-dev": "npm run clean && cross-env NODE_ENV=production API_SERVER=http://datavis-api-dev.chinambse.com node --max-old-space-size=4096 node_modules/webpack/bin/webpack",
-    "build": "npm run clean && cross-env NODE_ENV=production API_SERVER=http://datavis-api.chinambse.com node --max-old-space-size=4096 node_modules/.bin/webpack",
+    "build": "npm run clean && cross-env NODE_ENV=production API_SERVER=API_SERVER_PLACEHOLDER node --max-old-space-size=4096 node_modules/.bin/webpack",
     "lint": "npm run lint:base  -- --ext .js --ext .jsx ./client",
     "lint:base": "eslint --config ./client/.eslintrc.js --ignore-path ./client/.eslintignore",
     "lint:ci": "npm run lint -- --format junit --output-file /tmp/test-results/eslint/results.xml"
