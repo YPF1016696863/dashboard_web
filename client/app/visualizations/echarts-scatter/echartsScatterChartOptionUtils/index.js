@@ -72,9 +72,9 @@ export function defaultScatterChartOptions() {
             }
         },
         xAxis: {
-            type: 'category',
+            // type: 'category',
             boundaryGap: false,
-            data: ["-"],
+            // data: ["-"],
             nameLocation: "end",
             axisLine: {
                 show: true,
@@ -92,7 +92,7 @@ export function defaultScatterChartOptions() {
 
         yAxis: {
             name: '',
-            type: 'value',
+            // type: 'value',
             nameLocation: "end",
             axisLabel: {
                 formatter: '{value}',
@@ -115,6 +115,23 @@ export function defaultScatterChartOptions() {
         }],
         color : [ '#63b2ee', '#76da91 ','#f8cb7f ','#f89588', '#7cd6cf ','#9192ab ','#7898e1  ', '#efa666','#eddd86 ','#9987ce '],
         series: [
+            {
+                data: [[1,1],[1,2],[5,3]],
+                type: 'line',
+                symbol: 'circle',
+    
+                // 选择数值后，不可自定义散点大小，散点大小自动根据数值大小变化
+                symbolSize: 15,
+    
+                itemStyle: {
+                    color:  '#ed4d50',
+                },
+                lineStyle: {
+                    color: 'transparent',
+                    type: 'none',
+                },
+    
+            }
         ],
         visualMap: {
             show: false,

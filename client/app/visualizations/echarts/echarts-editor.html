@@ -1109,7 +1109,8 @@
                     </ui-select>
                     <label class="control-label">系列名称</label>
                     <input name="name" type="text" class="form-control"
-                        ng-model="options.series_ReName[options.useSerie_Index]" placeholder="" />
+                        ng-model="options.series_ReName[options.useSerie_Index]" placeholder="" 
+                        autocomplete="off" />
                 </div>
 
                 <div class="form-group" style="width:49%;float:right">
@@ -1124,7 +1125,7 @@
                             </ui-select> -->
                     <label class="control-label">柱状图宽度</label>
                     <input name="name" type="text" class="form-control" ng-model="options.series_BarWidth"
-                         placeholder="25" />
+                         placeholder="25" autocomplete="off" />
                 </div>
             </div>
         </div>
@@ -1165,7 +1166,8 @@
                     <div class="form-group" style="width:49%;float:right">
                         <label class="control-label">标签文字大小</label>
                         <input name="name" type="text" class="form-control"
-                            ng-model="options.series_Label_FontSize[options.useSerie_Index]" placeholder="12" />
+                            ng-model="options.series_Label_FontSize[options.useSerie_Index]" placeholder="" 
+                            autocomplete="off"/>
 
                         <label class="control-label">标签文字字体</label>
                         <ui-select ng-model="options.series_Label_FontFamily[options.useSerie_Index]">
@@ -1196,7 +1198,8 @@
                         <div class="form-group" style="width:49%;float:left">
                             <label class="control-label">标记点大小(单位:px)</label>
                             <input name="name" type="text" class="form-control"
-                                ng-model="options.series_SymbolSize[options.useSerie_Index]" placeholder="9" />
+                                ng-model="options.series_SymbolSize[options.useSerie_Index]" placeholder="" 
+                                autocomplete="off"/>
                             <label class="control-label">标记点形状</label>
                             <ui-select ng-model="options.series_Symbol[options.useSerie_Index]">
                                 <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
@@ -1209,7 +1212,8 @@
                         <div class="form-group" style="width:49%;float:right">
                             <label class="control-label">标记点旋转角度</label>
                             <input name="name" type="text" class="form-control"
-                                ng-model="options.series_SymbolRotate[options.useSerie_Index]" placeholder="0" />
+                                ng-model="options.series_SymbolRotate[options.useSerie_Index]" placeholder="0" 
+                                autocomplete="off"/>
                         </div>
                     </div>
                 </div>

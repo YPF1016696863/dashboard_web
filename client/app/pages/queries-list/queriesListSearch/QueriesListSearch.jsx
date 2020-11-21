@@ -335,7 +335,10 @@ class QueriesListSearch extends React.Component {
                   </TreeNode>
                 )}
             return(
-              <TreeNode title={item.title} key={item.key}>
+              <TreeNode
+                title={item.title}
+                key={item.key}
+              >
                 {_.map(_.filter(folderItem, item1 => item1.folder_id.toString() === item.key.substring(1)), item2 => (
                   <TreeNode
                     icon={(
@@ -567,7 +570,13 @@ class QueriesListSearch extends React.Component {
                   selectedKeys={[this.state.selected]}
                 >
                   <TreeNode
-                    title="数据查询(无分组)"
+                    icon={(
+                      <Icon
+                        type="container"
+                        style={{ color: 'darkmagenta' }}
+                      />
+                        )}
+                    title="数据查询总集合(无分组)"
                     key="datavis-group#ungrouped"
                   >
                     {_.map(this.state.filtered, item => {

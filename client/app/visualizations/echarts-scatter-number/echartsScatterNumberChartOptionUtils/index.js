@@ -59,7 +59,25 @@ export function defaultScatterNumberChartOptions() {
                 color: '#fff',
             }
         },
-        series: [],
+        series: [
+            {
+                data: [[1,1,15],[2,2,30],[3,3,50]],
+                type: 'line',
+                symbol: 'circle',
+
+                // 选择数值后，不可自定义散点大小，散点大小自动根据数值大小变化
+                symbolSize: 15,
+
+                itemStyle: {
+                  color: '#ed4d50',
+                },
+                lineStyle: {
+                  color:'transparent',
+                  type: 'none',
+                },
+
+              }
+            ],
         size: {
             responsive: true,
             width: "600px",

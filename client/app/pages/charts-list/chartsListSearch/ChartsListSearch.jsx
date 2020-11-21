@@ -611,7 +611,13 @@ class ChartsListSearch extends React.Component {
                   selectedKeys={[this.state.selected]}
                 >
                   <TreeNode
-                    title="可视化组件(无分组)"
+                    icon={(
+                      <Icon
+                        type="container"
+                        style={{ color: 'darkmagenta' }}
+                      />
+                      )}
+                    title="可视化组件总集合(无分组)"
                     key="datavis-group#ungrouped"
                   >
                     {this.visualizationRender()}

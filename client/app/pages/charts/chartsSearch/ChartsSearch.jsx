@@ -104,35 +104,35 @@ class ChartsSearch extends React.Component {
             .getQueryResultPromise()
             .then(queryRes => {
               if (visualizationId) {
-                const visTemp=_.find(
+                const visTemp = _.find(
                   query.visualizations,
                   // eslint-disable-next-line eqeqeq
                   visualization => visualization.id == visualizationId
                 )
-                
-                let typeChange= "ECHARTS_line";
+
+                let typeChange = "ECHARTS_line";
                 switch (visTemp.type) {
                   case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
                   case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
                   case 'CHART': typeChange = 'CHART_line'; break;
-                  default: typeChange = this.props.chartType; 
+                  default: typeChange = this.props.chartType;
                 }
-                if(typeChange!==null&&typeChange.length!==0){
-                  visTemp.type=typeChange;
+                if (typeChange !== null && typeChange.length !== 0) {
+                  visTemp.type = typeChange;
                 }
-                
+
                 this.setState({
                   isLoaded: true,
                   visualization: visTemp
                 });
-                
+
               } else {
-                let typeChange= "ECHARTS_line";
+                let typeChange = "ECHARTS_line";
                 switch (this.props.chartType) {
                   case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
                   case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
                   case 'CHART': typeChange = 'CHART_line'; break;
-                  default: typeChange = this.props.chartType; 
+                  default: typeChange = this.props.chartType;
                 }
                 this.setState({
                   isLoaded: true,
@@ -148,33 +148,33 @@ class ChartsSearch extends React.Component {
                 .toPromise()
                 .then(queryRes => {
                   if (visualizationId) {
-                    const visTemp=_.find(
+                    const visTemp = _.find(
                       query.visualizations,
                       // eslint-disable-next-line eqeqeq
                       visualization => visualization.id == visualizationId
                     )
-                    
-                    let typeChange= "ECHARTS_line";
+
+                    let typeChange = "ECHARTS_line";
                     switch (visTemp.type) {
                       case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
                       case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
                       case 'CHART': typeChange = 'CHART_line'; break;
-                      default: typeChange = this.props.chartType; 
+                      default: typeChange = this.props.chartType;
                     }
-                    if(typeChange!==null&&typeChange.length!==0){
-                      visTemp.type=typeChange;
+                    if (typeChange !== null && typeChange.length !== 0) {
+                      visTemp.type = typeChange;
                     }
                     this.setState({
                       isLoaded: true,
                       visualization: visTemp
                     });
                   } else {
-                    let typeChange= "ECHARTS_line";
+                    let typeChange = "ECHARTS_line";
                     switch (this.props.chartType) {
                       case 'ECHARTS': typeChange = 'ECHARTS_line'; break;
                       case 'ECHARTS-PIE-AND-RADAR': typeChange = 'ECHARTS_pie'; break;
                       case 'CHART': typeChange = 'CHART_line'; break;
-                      default: typeChange = this.props.chartType; 
+                      default: typeChange = this.props.chartType;
                     }
                     this.setState({
                       isLoaded: true,
@@ -289,7 +289,7 @@ class ChartsSearch extends React.Component {
                           case 'WORD_CLOUD': type = 'WORD_CLOUD'; break;
                           case 'ECHARTS-WORDCLOUD': type = 'ECHARTS-WORDCLOUD'; break;
                           case 'ECHARTS-GAUGE-STAGE': type = 'ECHARTS-GAUGE-STAGE'; break;
-                          case 'ECHARTS-TEXT':type = 'ECHARTS-TEXT'; break;
+                          case 'ECHARTS-TEXT': type = 'ECHARTS-TEXT'; break;
                           case 'ECHARTS-DDJZBAR': type = 'ECHARTS-DDJZBAR'; break;
                           case 'ECHARTS-HUAN': type = 'ECHARTS-HUAN'; break;
                           case 'ECHARTS-RADAR': type = 'ECHARTS-RADAR'; break;
@@ -455,7 +455,7 @@ class ChartsSearch extends React.Component {
 
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
-                        <Panel header="E-charts仪表" id="p2" key="2">
+                        <Panel header="Echarts仪表" id="p2" key="2">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -593,212 +593,8 @@ class ChartsSearch extends React.Component {
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
-                        <Panel header="DataVis基础图组" id="p3" key="3">
 
-                          <Row gutter={[8, 8]}>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_line" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-line.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>折线图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_bar" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-bar.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>柱状图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_area" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-area.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>面积图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_pie" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-pie.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>饼图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_scatter" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-scatter.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_bubble" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-bubble.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>气泡图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_heatmap" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-heatmap.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>热度图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="CHART_box" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-box.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>箱型图</p>
-                              </Radio>
-                            </Col>
-
-
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="TABLE" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-table.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>明细表</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="PIVOT" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-pivot.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>交叉表</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="SUNBURST_SEQUENCE" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-sunburst.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>旭日图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="SANKEY" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-sankey.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>桑基图</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="COUNTER" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-counter.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>计数器</p>
-                              </Radio>
-                            </Col>
-                            <Col
-                              style={{ paddingBottom: '6px' }}
-                              span={8}
-                              align="center"
-                            >
-                              <Radio value="WORD_CLOUD" style={{ width: '95%' }}>
-                                <Avatar
-                                  shape="square"
-                                  size="large"
-                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-worldcloud.png`}
-                                />
-                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>字云图</p>
-                              </Radio>
-                            </Col>
-                          </Row>
-                          <Divider style={{ margin: ' 0' }} />
-                        </Panel>
-
-                        <Panel header="E-charts拓展图" id="p4" key="4">
+                        <Panel header="Echarts拓展图" id="p4" key="4">
                           <Row gutter={[8, 8]}>
                             <Col
                               style={{ paddingBottom: '6px' }}
@@ -993,13 +789,219 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>词云图</p>
                               </Radio>
                             </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="COUNTER" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-counter.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>计数器</p>
+                              </Radio>
+                            </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="TABLE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-table.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>明细表</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="PIVOT" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-pivot.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>交叉表</p>
+                              </Radio>
+                            </Col>
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
 
+
+                        <Panel header="DataVis基础图组" id="p3" key="3">
+
+                          <Row gutter={[8, 8]}>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_line" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-line.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>折线图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_bar" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-bar.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>柱状图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_area" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-area.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>面积图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_pie" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-pie.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>饼图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_scatter" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-scatter.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>散点图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_bubble" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-bubble.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>气泡图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_heatmap" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-heatmap.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>热度图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="CHART_box" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-box.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>箱型图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="SUNBURST_SEQUENCE" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-sunburst.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>旭日图</p>
+                              </Radio>
+                            </Col>
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="SANKEY" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-sankey.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>桑基图</p>
+                              </Radio>
+                            </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="WORD_CLOUD" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-worldcloud.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>字云图</p>
+                              </Radio>
+                            </Col>
+                          </Row>
+                          <Divider style={{ margin: ' 0' }} />
+                        </Panel>
                       </Collapse>
                     </Radio.Group>
-                   
+
                   </Row>
                 </Col>
               </Row>

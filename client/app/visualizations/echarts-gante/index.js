@@ -88,64 +88,58 @@ function EchartsGanteRenderer($rootScope) {
                         });
 
 
-
-                        _.set($scope.options, "tooltip.backgroundColor",
-                            color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
-                                _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
-                            ));
-
-
-
-
-                        _.set($scope.options, "yAxis.data", nameData);
-                        _.set($scope.options, "tooltip.formatter", function (params) {
-                            const start = params[0];
-                            const tar = params[1];
-                            return tar.name + '<br/>' +
-                                start.seriesName + ':' + start.value + '<br/>' +
-                                tar.seriesName + ' : ' + tar.value;
-                        });
+                        
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
-
-                        _.set($scope.options, "series", []); // 清空设置           
-                        $scope.options.series.push(
-
-                            {
-                                name: '开始时间',
-                                type: 'bar',
-                                zlevel: 1,
-                                z: 2,
-                                itemStyle: {
-                                    color: _.get($scope.options, 'backgroundColor'), // transparent
-                                    borderColor: 'transparent'
-                                },
-                                data: startDatatemp
-
-                            }, {
-                            name: '结束时间',
-                            type: 'bar',
-                            label: {
-                                show: true,
-                                position: 'inside'
-                            },
-                            itemStyle: {
-                                normal: {
-                                    color: function (params) {
-                                        // 给出颜色组                        
-                                        const colorList = ['#66FF66', '#cca272', '#74608f', '#FF1493', '#d7a02b',
-                                            '#4B0082', '#c8ba23', '#00BFFF', '#333399', '#228B22',
-                                            '#FF4500', '#CC0033', '#FFD700'
-                                        ];
-                                        return colorList[params.dataIndex]
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", []);// 无数据选择
+                        if (chooseData.length !== 0) {
+                            _.set($scope.options, "yAxis.data", nameData);
+                            _.set($scope.options, "tooltip.formatter", function (params) {
+                                const start = params[0];
+                                const tar = params[1];
+                                return tar.name + '<br/>' +
+                                    start.seriesName + ':' + start.value + '<br/>' +
+                                    tar.seriesName + ' : ' + tar.value;
+                            });
+                            _.set($scope.options, "series", []); // 清空设置           
+                            $scope.options.series.push(
+                                {
+                                    name: '开始时间',
+                                    type: 'bar',
+                                    zlevel: 1,
+                                    z: 2,
+                                    itemStyle: {
+                                        color: _.get($scope.options, 'backgroundColor'), // transparent
+                                        borderColor: 'transparent'
                                     },
-                                    borderColor: 'transparent',
-                                }
-                            },
-                            data: endData
+                                    data: startDatatemp
+
+                                }, {
+                                name: '结束时间',
+                                type: 'bar',
+                                label: {
+                                    show: true,
+                                    position: 'inside'
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        color: function (params) {
+                                            // 给出颜色组                        
+                                            const colorList = ['#66FF66', '#cca272', '#74608f', '#FF1493', '#d7a02b',
+                                                '#4B0082', '#c8ba23', '#00BFFF', '#333399', '#228B22',
+                                                '#FF4500', '#CC0033', '#FFD700'
+                                            ];
+                                            return colorList[params.dataIndex]
+                                        },
+                                        borderColor: 'transparent',
+                                    }
+                                },
+                                data: endData
+                            }
+
+                            );
                         }
 
-                        );
 
 
                         let myChart = null;

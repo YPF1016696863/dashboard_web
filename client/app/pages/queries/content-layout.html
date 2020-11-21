@@ -37,18 +37,20 @@
         </ui-select>
       </div>
 
-     
-      <div class="table-name" ng-click="isFilterColumn1 = !isFilterColumn1">
-        <div class="form-group" style="float:left">
-          <i class="fa fa-table"></i>
-          <strong>
-            <span>预警配置</span>
-          </strong>
+      <div ng-if="getQueryType() !== 'excelupload' && getQueryType() !== 'csvupload'">
+        <div class="table-name" ng-click="isFilterColumn1 = !isFilterColumn1">
+          <div class="form-group" style="float:left">
+            <i class="fa fa-table"></i>
+            <strong>
+              <span>预警配置</span>
+            </strong>
+          </div>
         </div>
       </div>
+
       <div uib-collapse="!isFilterColumn1" style="left: 10%;position: relative;">
         条数
-        <input type="number" style="width: 50%;" ng-model="options.number" placeholder="{{query.tags[0]}}" > </input>
+        <input type="number" style="width: 50%;" ng-model="options.number" placeholder="{{query.tags[0]}}"> </input>
         <br />
         频率
         <input type="number" style="width: 50%;" ng-model="options.rate"> </input>

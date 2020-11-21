@@ -41,7 +41,7 @@ function EchartsScatterNumberRenderer($rootScope) {
                 _.get($scope.options, "tooltip.backgroundColorTOpacity", 0)
               ));
 
-              _.set($scope.options, "lineColor",
+            _.set($scope.options, "lineColor",
               color16to10(_.get($scope.options, "lineColorT", "#000"),
                 _.get($scope.options, "lineColorTOpacity", 0)
               ));
@@ -129,33 +129,37 @@ function EchartsScatterNumberRenderer($rootScope) {
             setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
             // 视觉映射范围-若打开写入指定映射纬度值（现在映射2的数据），否则默认映射3的数据，散点大小相同
-            if (_.get($scope.options, "visualMap.show", false)) {
+            if (_.get($scope.options, "visualMap.show", true)) {
               _.set($scope.options, "visualMap.dimension", 2);
             } else {
               _.set($scope.options, "visualMap.dimension", 3);
             }
+            const chooseData = _.get($scope.options, "form.xAxisColumn", []);// 无数据选择
+            // console.log($scope.options);
+            if (chooseData) {
+              _.set($scope.options, "series", []);// 清空设置  
 
-            _.set($scope.options, "series", []);// 清空设置  
+              $scope.options.series.push({
+                data: echartsData,
+                type: 'line',
+                symbol: _.get($scope.options, 'pointSymbols', 'circle'),
 
-            $scope.options.series.push({
-              data: echartsData,
-              type: 'line',
-              symbol: _.get($scope.options, 'pointSymbols', 'circle'),
+                // 选择数值后，不可自定义散点大小，散点大小自动根据数值大小变化
+                symbolSize: _.get($scope.options, "visualMap.show", false) ?
+                  // eslint-disable-next-line no-shadow
+                  15 : setScatter(_.get($scope.options, 'pointSize', 15)),
 
-              // 选择数值后，不可自定义散点大小，散点大小自动根据数值大小变化
-              symbolSize: _.get($scope.options, "visualMap.show", false) ?
-                // eslint-disable-next-line no-shadow
-                15 : setScatter(_.get($scope.options, 'pointSize', 15)),
+                itemStyle: {
+                  color: _.get($scope.options, 'pointColor', '#ed4d50'),
+                },
+                lineStyle: {
+                  color: _.get($scope.options, 'lineColor', '#ed4d50'),
+                  type: 'none',
+                },
 
-              itemStyle: {
-                color: _.get($scope.options, 'pointColor', '#ed4d50'),
-              },
-              lineStyle: {
-                color: _.get($scope.options, 'lineColor', '#ed4d50'),
-                type: 'none',
-              },
+              });
+            }
 
-            });
 
 
             let myChart = null;

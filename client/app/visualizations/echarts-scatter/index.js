@@ -126,160 +126,166 @@ function EchartsScatterRenderer($timeout, $rootScope, $window) {
                                     return row[oldXData];
                                 }));
                         });
-                        _.set($scope.options, "series", []); // 清空设置
-                        // series下的
-                        let seriesNameIndex = 0;
-                        // setChartType($scope.options, selected);
-                        _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", "");// 无数据选择
+                        if (chooseData) {
+                            _.set($scope.options, "series", []); // 清空设置
+                            // series下的
+                            let seriesNameIndex = 0;
+                            // setChartType($scope.options, selected);
+                            _.each(_.get($scope.options, "form.yAxisColumns", []), (yAxisColumn) => {
 
 
-                            const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
-                            // 对y轴选择的列名进行处理，转化为原列名查找
-                            const newYData = yAxisColumn; // 前端页面选择的新列名
-                            let oldYData = newYData;
+                                const searchColumns = $scope.queryResult.getColumns(); // 获取包含新列名和旧列名的对象的数组
+                                // 对y轴选择的列名进行处理，转化为原列名查找
+                                const newYData = yAxisColumn; // 前端页面选择的新列名
+                                let oldYData = newYData;
 
-                            _.forEach(searchColumns, function (rowYValue, rowYKey) {
-                                const everyYColumn = rowYValue;
-                                if (newYData === everyYColumn.friendly_name) {
-                                    oldYData = everyYColumn.name;   // oldData为原来的列名
-                                }
+                                _.forEach(searchColumns, function (rowYValue, rowYKey) {
+                                    const everyYColumn = rowYValue;
+                                    if (newYData === everyYColumn.friendly_name) {
+                                        oldYData = everyYColumn.name;   // oldData为原来的列名
+                                    }
+                                });
+
+                                const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                                    return row[oldYData];
+                                })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
+
+                                const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                                    return row[oldYData];
+                                }))
+                                const minData = _.min(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
+                                    return row[oldYData];
+                                }))
+
+
+
+                                $scope.options.series.push({
+                                    name: _.get($scope.options, "series_ReName", [])[seriesNameIndex] === undefined ?
+                                        yAxisColumn : _.get($scope.options, "series_ReName", [])[seriesNameIndex],
+                                    type: parseChartType(
+                                        _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
+                                            _.get($scope.options, "defaultType"))
+                                    ), // 将每个系列的类型传进去判断和转换  _.get($scope.options, "defaultType") 
+                                    // type这里加了默认值的话容易出现预览界面都为左侧选择的图表类型
+                                    smooth: _.get($scope.options, "series_Smooth", false), //   series_Smooth 折线与曲线切换
+                                    data: yData,
+
+                                    // 下标传入配置数组找到相应的配置
+                                    areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
+
+                                    symbolSize: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "scatter2" ?
+                                        // eslint-disable-next-line no-shadow
+                                        function bubble(data) {
+                                            return (data) / (maxData) * 50;
+                                        } : setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
+
+                                    barWidth: _.get($scope.options, 'series_BarWidth', 25),
+                                    symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
+                                        'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
+                                    symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
+                                    label: {
+                                        show: _.get($scope.options, "series_Show", [])[seriesNameIndex],
+                                        position: _.get($scope.options, "series_Label_Position", [])[seriesNameIndex],
+                                        color: _.get($scope.options, "series_Label_Color", [])[seriesNameIndex],
+                                        fontWeight: _.get($scope.options, "series_Label_FontWeight", [])[seriesNameIndex],
+                                        fontSize: _.get($scope.options, "series_Label_FontSize", [])[seriesNameIndex],
+                                        fontFamily: _.get($scope.options, "series_Label_FontFamily", [])[seriesNameIndex],
+                                    },
+
+                                    // 数据标记线
+
+                                    markLine: {
+                                        data: [{
+                                            name: _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex] === undefined ?
+                                                '' : _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex],
+
+                                            xAxis: setxAxis($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
+
+                                            yAxis: setyAxis($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
+
+                                            lineStyle: {
+                                                color: _.get($scope.options, "series_MarkLine_Data_LineStyle_Color", [])[seriesNameIndex] === undefined ?
+                                                    '#ed4d50' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Color", [])[seriesNameIndex],
+
+                                                width: _.get($scope.options, "series_MarkLine_Data_LineStyle_Width", [])[seriesNameIndex] === undefined ?
+                                                    5 : _.get($scope.options, "series_MarkLine_Data_LineStyle_Width", [])[seriesNameIndex],
+
+                                                type: _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex] === undefined ?
+                                                    'solid' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex],
+
+                                            },
+
+                                        }]
+                                    },
+
+                                    // 数据标记点
+                                    markPoint: {
+                                        data: [{
+                                            name: '最大值',
+                                            type: _.get($scope.options, "series_MarkPoint_Data_MaxType", [])[seriesNameIndex] === true ?
+                                                'max' : undefined,
+                                            symbol: _.get($scope.options, "series_MarkPoint_Data_MaxSymbol", [])[seriesNameIndex],
+                                            symbolSize: _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex] ===
+                                                undefined ?
+                                                9 : _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex],
+                                            label: {
+                                                show: _.get($scope.options, "series_MarkPoint_Data_Label_MaxShow", [])[seriesNameIndex],
+                                                position: _.get($scope.options, "series_MarkPoint_Data_Label_MaxPosition", [])[seriesNameIndex],
+                                                color: _.get($scope.options, "series_MarkPoint_Data_Label_MaxColor", [])[seriesNameIndex],
+                                                fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontWeight", [])[seriesNameIndex],
+                                                fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontSize", [])[seriesNameIndex],
+                                                fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontFamily", [])[seriesNameIndex],
+                                            },
+                                        },
+                                        {
+                                            name: '最小值',
+                                            type: _.get($scope.options, "series_MarkPoint_Data_MinType", [])[seriesNameIndex] === true ?
+                                                'min' : undefined,
+                                            symbol: _.get($scope.options, "series_MarkPoint_Data_MinSymbol", [])[seriesNameIndex],
+                                            symbolSize: _.get($scope.options, "series_MarkPoint_Data_MinSymbolSize", [])[seriesNameIndex],
+                                            label: {
+                                                show: _.get($scope.options, "series_MarkPoint_Data_Label_MinShow", [])[seriesNameIndex],
+                                                position: _.get($scope.options, "series_MarkPoint_Data_Label_MinPosition", [])[seriesNameIndex],
+                                                color: _.get($scope.options, "series_MarkPoint_Data_Label_MinColor", [])[seriesNameIndex],
+                                                fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontWeight", [])[seriesNameIndex],
+                                                fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontSize", [])[seriesNameIndex],
+                                                fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontFamily", [])[seriesNameIndex],
+                                            },
+                                        },
+                                        {
+                                            name: '平均值',
+                                            type: _.get($scope.options, "series_MarkPoint_Data_AverageType", [])[seriesNameIndex] === true ?
+                                                'average' : undefined,
+                                            symbol: _.get($scope.options, "series_MarkPoint_Data_AverageSymbol", [])[seriesNameIndex],
+                                            symbolSize: _.get($scope.options, "series_MarkPoint_Data_AverageSymbolSize", [])[seriesNameIndex],
+                                            label: {
+                                                show: _.get($scope.options, "series_MarkPoint_Data_Label_AverageShow", [])[seriesNameIndex],
+                                                position: _.get($scope.options, "series_MarkPoint_Data_Label_AveragePosition", [])[seriesNameIndex],
+                                                color: _.get($scope.options, "series_MarkPoint_Data_Label_AverageColor", [])[seriesNameIndex],
+                                                fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontWeight", [])[seriesNameIndex],
+                                                fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontSize", [])[seriesNameIndex],
+                                                fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontFamily", [])[seriesNameIndex],
+                                            },
+                                        },
+                                        ]
+                                    },
+
+
+                                    itemStyle: {
+                                        color: _.get($scope.options, "series_ItemStyle_Color", [])[seriesNameIndex] === undefined ?
+                                            '' : _.get($scope.options, "series_ItemStyle_Color", [])[seriesNameIndex],
+                                    }
+                                });
+
+                                // 遍历时的下标++ 选到下一条系列
+                                seriesNameIndex += 1;
+
                             });
-
-                            const yData = _.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                return row[oldYData];
-                            })         // 用原来的列名oldData，在queryResult筛选数据，push为y轴的数据
-
-                            const maxData = _.max(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                return row[oldYData];
-                            }))
-                            const minData = _.min(_.map(_.get($scope.queryResult, "filteredData", []), (row) => {
-                                return row[oldYData];
-                            }))
+                        }
 
 
 
-                            $scope.options.series.push({
-                                name: _.get($scope.options, "series_ReName", [])[seriesNameIndex] === undefined ?
-                                    yAxisColumn : _.get($scope.options, "series_ReName", [])[seriesNameIndex],
-                                type: parseChartType(
-                                    _.get($scope.options.form.yAxisColumnTypes, yAxisColumn,
-                                        _.get($scope.options, "defaultType"))
-                                ), // 将每个系列的类型传进去判断和转换  _.get($scope.options, "defaultType") 
-                                // type这里加了默认值的话容易出现预览界面都为左侧选择的图表类型
-                                smooth: _.get($scope.options, "series_Smooth", false), //   series_Smooth 折线与曲线切换
-                                data: yData,
-
-                                // 下标传入配置数组找到相应的配置
-                                areaStyle: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "area" ? {} : undefined,
-
-                                symbolSize: _.get($scope.options.form.yAxisColumnTypes, yAxisColumn) === "scatter2" ?
-                                    // eslint-disable-next-line no-shadow
-                                    function bubble(data) {
-                                        return (data) / (maxData) * 50;
-                                    } : setScatter(_.get($scope.options, "series_SymbolSize", [])[seriesNameIndex]),
-
-                                barWidth: _.get($scope.options, 'series_BarWidth', 25),
-                                symbol: _.get($scope.options, "series_Symbol", [])[seriesNameIndex] === undefined ?
-                                    'circle' : _.get($scope.options, "series_Symbol", [])[seriesNameIndex],
-                                symbolRotate: _.get($scope.options, "series_SymbolRotate", [])[seriesNameIndex],
-                                label: {
-                                    show: _.get($scope.options, "series_Show", [])[seriesNameIndex],
-                                    position: _.get($scope.options, "series_Label_Position", [])[seriesNameIndex],
-                                    color: _.get($scope.options, "series_Label_Color", [])[seriesNameIndex],
-                                    fontWeight: _.get($scope.options, "series_Label_FontWeight", [])[seriesNameIndex],
-                                    fontSize: _.get($scope.options, "series_Label_FontSize", [])[seriesNameIndex],
-                                    fontFamily: _.get($scope.options, "series_Label_FontFamily", [])[seriesNameIndex],
-                                },
-
-                                // 数据标记线
-
-                                markLine: {
-                                    data: [{
-                                        name: _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex] === undefined ?
-                                            '' : _.get($scope.options, "series_MarkLine_Data_MarkName", [])[seriesNameIndex],
-
-                                        xAxis: setxAxis($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
-
-                                        yAxis: setyAxis($scope.options, _.get($scope.options, "bar2Flag", false), seriesNameIndex),
-
-                                        lineStyle: {
-                                            color: _.get($scope.options, "series_MarkLine_Data_LineStyle_Color", [])[seriesNameIndex] === undefined ?
-                                                '#ed4d50' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Color", [])[seriesNameIndex],
-
-                                            width: _.get($scope.options, "series_MarkLine_Data_LineStyle_Width", [])[seriesNameIndex] === undefined ?
-                                                5 : _.get($scope.options, "series_MarkLine_Data_LineStyle_Width", [])[seriesNameIndex],
-
-                                            type: _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex] === undefined ?
-                                                'solid' : _.get($scope.options, "series_MarkLine_Data_LineStyle_Type", [])[seriesNameIndex],
-
-                                        },
-
-                                    }]
-                                },
-
-                                // 数据标记点
-                                markPoint: {
-                                    data: [{
-                                        name: '最大值',
-                                        type: _.get($scope.options, "series_MarkPoint_Data_MaxType", [])[seriesNameIndex] === true ?
-                                            'max' : undefined,
-                                        symbol: _.get($scope.options, "series_MarkPoint_Data_MaxSymbol", [])[seriesNameIndex],
-                                        symbolSize: _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex] ===
-                                            undefined ?
-                                            9 : _.get($scope.options, "series_MarkPoint_Data_MaxSymbolSize", [])[seriesNameIndex],
-                                        label: {
-                                            show: _.get($scope.options, "series_MarkPoint_Data_Label_MaxShow", [])[seriesNameIndex],
-                                            position: _.get($scope.options, "series_MarkPoint_Data_Label_MaxPosition", [])[seriesNameIndex],
-                                            color: _.get($scope.options, "series_MarkPoint_Data_Label_MaxColor", [])[seriesNameIndex],
-                                            fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontWeight", [])[seriesNameIndex],
-                                            fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontSize", [])[seriesNameIndex],
-                                            fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MaxFontFamily", [])[seriesNameIndex],
-                                        },
-                                    },
-                                    {
-                                        name: '最小值',
-                                        type: _.get($scope.options, "series_MarkPoint_Data_MinType", [])[seriesNameIndex] === true ?
-                                            'min' : undefined,
-                                        symbol: _.get($scope.options, "series_MarkPoint_Data_MinSymbol", [])[seriesNameIndex],
-                                        symbolSize: _.get($scope.options, "series_MarkPoint_Data_MinSymbolSize", [])[seriesNameIndex],
-                                        label: {
-                                            show: _.get($scope.options, "series_MarkPoint_Data_Label_MinShow", [])[seriesNameIndex],
-                                            position: _.get($scope.options, "series_MarkPoint_Data_Label_MinPosition", [])[seriesNameIndex],
-                                            color: _.get($scope.options, "series_MarkPoint_Data_Label_MinColor", [])[seriesNameIndex],
-                                            fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontWeight", [])[seriesNameIndex],
-                                            fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontSize", [])[seriesNameIndex],
-                                            fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_MinFontFamily", [])[seriesNameIndex],
-                                        },
-                                    },
-                                    {
-                                        name: '平均值',
-                                        type: _.get($scope.options, "series_MarkPoint_Data_AverageType", [])[seriesNameIndex] === true ?
-                                            'average' : undefined,
-                                        symbol: _.get($scope.options, "series_MarkPoint_Data_AverageSymbol", [])[seriesNameIndex],
-                                        symbolSize: _.get($scope.options, "series_MarkPoint_Data_AverageSymbolSize", [])[seriesNameIndex],
-                                        label: {
-                                            show: _.get($scope.options, "series_MarkPoint_Data_Label_AverageShow", [])[seriesNameIndex],
-                                            position: _.get($scope.options, "series_MarkPoint_Data_Label_AveragePosition", [])[seriesNameIndex],
-                                            color: _.get($scope.options, "series_MarkPoint_Data_Label_AverageColor", [])[seriesNameIndex],
-                                            fontWeight: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontWeight", [])[seriesNameIndex],
-                                            fontSize: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontSize", [])[seriesNameIndex],
-                                            fontFamily: _.get($scope.options, "series_MarkPoint_Data_Label_AverageFontFamily", [])[seriesNameIndex],
-                                        },
-                                    },
-                                    ]
-                                },
-
-
-                                itemStyle: {
-                                    color: _.get($scope.options, "series_ItemStyle_Color", [])[seriesNameIndex] === undefined ?
-                                        '' : _.get($scope.options, "series_ItemStyle_Color", [])[seriesNameIndex],
-                                }
-                            });
-
-                            // 遍历时的下标++ 选到下一条系列
-                            seriesNameIndex += 1;
-
-                        });
 
                         let myChart = null;
 
