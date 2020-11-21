@@ -102,8 +102,7 @@ function EchartsPolarpieRenderer($rootScope) {
                         const fangwei = (parseFloat(90) - parseFloat(fangweiData));
                         const huduD = (parseFloat(huduData) / 360);
 
-                        _.set($scope.options, 'dataset.source[0][1]', 120 * huduD);
-                        _.set($scope.options, 'dataset.source[1][1]', 120 * (1 - huduD));
+                       
                         // dataset: {  弧度
                         //   source: [
                         //       ['a', 20],// 宽度
@@ -115,27 +114,34 @@ function EchartsPolarpieRenderer($rootScope) {
                         juliD += '%';
                         // console.log(fangwei,huduD,juliD);
                         // 0.08=0.8/100份 
-                        _.set($scope.options, "series", []); // 清空设置           
-                        $scope.options.series.push({
-                            type: 'pie',
-                            // id: 'pie',
-                            radius: juliD, // 距离
-                            label: {
-                                show: false
-                            },
-                            startAngle: fangwei, // 90开始 顺时针减(方位)
-                            itemStyle: {
-                                normal: {
-                                    color: function (params) {
-                                        const colorList = [
-                                            _.get($scope.options, 'series_ItemStyle_Color', 'rgba(255,0,0,0.5)'), 'rgba(0,0,0,0)'
-                                        ];
-                                        return colorList[params.dataIndex]
+                        
+                        const chooseData = _.get($scope.options, "fangweiColumn", []);// 无数据选择
+                        if (chooseData.length!==0) {
+                            _.set($scope.options, 'dataset.source[0][1]', 120 * huduD);
+                            _.set($scope.options, 'dataset.source[1][1]', 120 * (1 - huduD));
+                            _.set($scope.options, "series", []); // 清空设置           
+                            $scope.options.series.push({
+                                type: 'pie',
+                                // id: 'pie',
+                                radius: juliD, // 距离
+                                label: {
+                                    show: false
+                                },
+                                startAngle: fangwei, // 90开始 顺时针减(方位)
+                                itemStyle: {
+                                    normal: {
+                                        color: function (params) {
+                                            const colorList = [
+                                                _.get($scope.options, 'series_ItemStyle_Color', 'rgba(255,0,0,0.5)'), 'rgba(0,0,0,0)'
+                                            ];
+                                            return colorList[params.dataIndex]
+                                        }
                                     }
-                                }
-                            },
-                            center: ['50%', '50%'], // 和极坐标绑定
-                        });
+                                },
+                                center: ['50%', '50%'], // 和极坐标绑定
+                            });
+                        }
+
                         // 设置环形分割区域的间隔颜色
                         _.set($scope.options, "radiusAxis.splitArea.areaStyle.color", [_.get($scope.options, "radiusAxis.splitArea.areaStyle.color1", 'transparent'),
                         _.get($scope.options, "radiusAxis.splitArea.areaStyle.color2", 'transparent')

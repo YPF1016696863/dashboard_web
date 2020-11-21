@@ -92,184 +92,193 @@ function EchartsThreedbarRenderer($rootScope) {
                         // console.log("dataXname,dataYname", dataXname, dataYname);
                         // console.log("dataX,dataY", dataX, dataY);
 
-                        /**
-                         * xy排序方法
-                         * 
-                         *  */
-                        // 原始 nameX nameY 赋予一个序号 
-                        // 用于定位 z数组的行列用于交换 dataXNameX dataYNameY
-                        let dataXNameX = []
-                        let dataYNameY = []
-                        for (let i = 0; i < dataX.length; i += 1) {
-                            dataXNameX.push({
-                                num: dataX[i],
-                                name: dataXname[i]
-                            })
-                        }
-                        dataXNameX = _.uniqBy(dataXNameX, "num")// 去重
-                        for (let i = 0; i < dataY.length; i += 1) {
-                            dataYNameY.push({
-                                num: dataY[i],
-                                name: dataYname[i]
-                            })
-                        }
-                        dataYNameY = _.uniqBy(dataYNameY, "num");// 去重
-                        // console.log("dataXNameX, dataYNameY", dataXNameX, dataYNameY);
-                        // end
 
-                        dataXname = [];
-                        for (let i = 0; i < dataXNameX.length; i += 1) {
-                            dataXname.push(dataXNameX[i].name)
-                        }
-                        dataYname = [];
-                        for (let i = 0; i < dataYNameY.length; i += 1) {
-                            dataYname.push(dataYNameY[i].name)
-                        }
-
-                        let Xmax = 0;
-                        let Ymax = 0;
-                        for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
-                            Xmax = Xmax > dataX[i] ? Xmax : dataX[i];
-                            Ymax = Ymax > dataX[i] ? Ymax : dataY[i];
-                            echartsData.push([
-                                dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
-                                dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i],
-                                dataZ[i] === null || dataZ[i] === undefined ? 0 : dataZ[i]
-                            ]);
-                        }
-                        // console.log(Xmax,Ymax);
-                        // arrayZ原始二维数组映射关系（关于x的）生成
-                        // console.log(echartsData);
-                        const arrayZ = [];
-                        for (let i = 0; i <= Xmax; i += 1) {
-                            arrayZ.push([]);
-                            for (let j = 0; j <= Ymax; j += 1) {
-                                arrayZ[i].push(0);
-                            }
-                        }
-                        for (let i = 0; i < echartsData.length; i += 1) {
-                            const x = echartsData[i][0];
-                            const y = echartsData[i][1];
-                            arrayZ[x][y] = echartsData[i][2]
-                        }
-                        // console.log("159", arrayZ);
-
-                        let dataXNameXChange = dataXNameX
-                        let dataYNameYChange = dataYNameY
-                        // 用nameX 排序 反推得到对应的行列进行交换
-                        // x排序
-                        if (_.get($scope.options, "sortRuleX", 'noSort') !== 'noSort') {
-                            dataXNameXChange = _.orderBy(dataXNameX, "name",
-                                _.get($scope.options, "sortRuleX", 'noSort')
-                            );
-                        }
-                        if (_.get($scope.options, "sortRuleY", 'noSort') !== 'noSort') {
-                            dataYNameYChange = _.orderBy(dataYNameY, "name",
-                                _.get($scope.options, "sortRuleY", 'noSort')
-                            );
-                        }
-                        // console.log(dataXNameXChange, dataYNameYChange);
-
-                        // 用 arrayZ 原始二维数组映射关系生成 新的一个关于z的二维数组 arrayZChange
-                        // 方式是用dataXNameXChange, dataYNameYChange num将层次进行交换
-                        const arrayZChange = [];
-                        for (let i = 0; i < dataXNameXChange.length; i += 1) {
-                            arrayZChange.push(arrayZ[dataXNameXChange[i].num])
-                        }
-                        // 生成一个关于y为索引的数组 arrayZChange 的顺时针
-                        const arrayZChangeY = [];
-                        for (let i = 0; i < arrayZChange[0].length; i += 1) {
-                            arrayZChangeY.push([]);
-                            for (let j = 0; j < arrayZChange.length; j += 1) {
-                                arrayZChangeY[i].push(0);
-                            }
-                        }
-                        // 初始化
-                        for (let j = 0; j < arrayZChange[0].length; j += 1) {// 列                            
-                            for (let i = 0; i < arrayZChange.length; i += 1) {// 行
-                                arrayZChangeY[j][i] = arrayZChange[i][j]
-                            }
-                        }
-                        // console.log("arrayZChangeY",arrayZChangeY);
-                        // todo Y的变化
-                        const arrayZChangeYTemp = [];
-                        for (let i = 0; i < dataYNameYChange.length; i += 1) {
-                            arrayZChangeYTemp.push(arrayZChangeY[dataYNameYChange[i].num])
-                        }
-                        // console.log("arrayZChangeYTemp",arrayZChangeYTemp);
-
-                        // 逆时针90度恢复数组 写回原数组
-                        for (let i = 0; i < arrayZChangeYTemp.length; i += 1) {
-                            for (let j = 0; j < arrayZChangeYTemp[0].length; j += 1) {
-                                arrayZChange[j][i] = arrayZChangeYTemp[i][j]
-                            }
-                        }
-
-                        // console.log("****arrayZChange", arrayZChange);
-
-                        // 更新dataXname dataYname       echartsData                  
-                        for (let i = 0; i < dataXNameXChange.length; i += 1) {
-                            dataXname[i] = dataXNameXChange[i].name;
-                        }
-                        for (let i = 0; i < dataYNameYChange.length; i += 1) {
-                            dataYname[i] = dataYNameYChange[i].name;
-                        }
-                        echartsData = []
-                        for (let i = 0; i < arrayZChange.length; i += 1) {
-
-                            for (let j = 0; j < arrayZChange[i].length; j += 1) {
-                                echartsData.push([
-                                    i,
-                                    j,
-                                    arrayZChange[i][j] === null ||
-                                        arrayZChange[i][j] === undefined ?
-                                        0 : arrayZChange[i][j]
-                                ]);
-                            }
-                        }
-                        /**
-                         * xy排序方法 end
-                         * 
-                         *  */
-                        // console.log(echartsData);
 
                         // 切换主题颜色
                         setThemeColor($scope.options, _.get($rootScope, "theme.theme", "light"));
 
-                        _.set($scope.options, "xAxis3D.data", dataXname);
-                        _.set($scope.options, "yAxis3D.data", dataYname);
+                        console.log($scope.options);
+                        const chooseData = _.get($scope.options, "form.xAxisColumn", []);// 无数据选择
+                        if (chooseData.length !== 0) {
+                            console.log("a");
 
+                            /**
+                        * xy排序方法
+                        * 
+                        *  */
+                            // 原始 nameX nameY 赋予一个序号 
+                            // 用于定位 z数组的行列用于交换 dataXNameX dataYNameY
+                            let dataXNameX = []
+                            let dataYNameY = []
+                            for (let i = 0; i < dataX.length; i += 1) {
+                                dataXNameX.push({
+                                    num: dataX[i],
+                                    name: dataXname[i]
+                                })
+                            }
+                            dataXNameX = _.uniqBy(dataXNameX, "num")// 去重
+                            for (let i = 0; i < dataY.length; i += 1) {
+                                dataYNameY.push({
+                                    num: dataY[i],
+                                    name: dataYname[i]
+                                })
+                            }
+                            dataYNameY = _.uniqBy(dataYNameY, "num");// 去重
+                            // console.log("dataXNameX, dataYNameY", dataXNameX, dataYNameY);
+                            // end
 
-                        _.set($scope.options, "series", []); // 清空设置           
-                        $scope.options.series.push({
-                            type: 'bar3D', // echarts-gl 1.1.1
-                            data: echartsData.map(function (item) {
-                                return {
-                                    value: [item[0], item[1], item[2]],
+                            dataXname = [];
+                            for (let i = 0; i < dataXNameX.length; i += 1) {
+                                dataXname.push(dataXNameX[i].name)
+                            }
+                            dataYname = [];
+                            for (let i = 0; i < dataYNameY.length; i += 1) {
+                                dataYname.push(dataYNameY[i].name)
+                            }
+
+                            let Xmax = 0;
+                            let Ymax = 0;
+                            for (let i = 0; i < Math.max(dataX.length, dataY.length); i += 1) {
+                                Xmax = Xmax > dataX[i] ? Xmax : dataX[i];
+                                Ymax = Ymax > dataX[i] ? Ymax : dataY[i];
+                                echartsData.push([
+                                    dataX[i] === null || dataX[i] === undefined ? 0 : dataX[i],
+                                    dataY[i] === null || dataY[i] === undefined ? 0 : dataY[i],
+                                    dataZ[i] === null || dataZ[i] === undefined ? 0 : dataZ[i]
+                                ]);
+                            }
+                            // console.log(Xmax,Ymax);
+                            // arrayZ原始二维数组映射关系（关于x的）生成
+                            // console.log(echartsData);
+                            const arrayZ = [];
+                            for (let i = 0; i <= Xmax; i += 1) {
+                                arrayZ.push([]);
+                                for (let j = 0; j <= Ymax; j += 1) {
+                                    arrayZ[i].push(0);
                                 }
-                            }),
-                            shading: 'lambert',
+                            }
+                            for (let i = 0; i < echartsData.length; i += 1) {
+                                const x = echartsData[i][0];
+                                const y = echartsData[i][1];
+                                arrayZ[x][y] = echartsData[i][2]
+                            }
+                            // console.log("159", arrayZ);
 
-                            label: {
-                                textStyle: {
-                                    fontSize: 16,
-                                    borderWidth: 1
+                            let dataXNameXChange = dataXNameX
+                            let dataYNameYChange = dataYNameY
+                            // 用nameX 排序 反推得到对应的行列进行交换
+                            // x排序
+                            if (_.get($scope.options, "sortRuleX", 'noSort') !== 'noSort') {
+                                dataXNameXChange = _.orderBy(dataXNameX, "name",
+                                    _.get($scope.options, "sortRuleX", 'noSort')
+                                );
+                            }
+                            if (_.get($scope.options, "sortRuleY", 'noSort') !== 'noSort') {
+                                dataYNameYChange = _.orderBy(dataYNameY, "name",
+                                    _.get($scope.options, "sortRuleY", 'noSort')
+                                );
+                            }
+                            // console.log(dataXNameXChange, dataYNameYChange);
+
+                            // 用 arrayZ 原始二维数组映射关系生成 新的一个关于z的二维数组 arrayZChange
+                            // 方式是用dataXNameXChange, dataYNameYChange num将层次进行交换
+                            const arrayZChange = [];
+                            for (let i = 0; i < dataXNameXChange.length; i += 1) {
+                                arrayZChange.push(arrayZ[dataXNameXChange[i].num])
+                            }
+                            // 生成一个关于y为索引的数组 arrayZChange 的顺时针
+                            const arrayZChangeY = [];
+                            for (let i = 0; i < arrayZChange[0].length; i += 1) {
+                                arrayZChangeY.push([]);
+                                for (let j = 0; j < arrayZChange.length; j += 1) {
+                                    arrayZChangeY[i].push(0);
                                 }
-                            },
+                            }
+                            // 初始化
+                            for (let j = 0; j < arrayZChange[0].length; j += 1) {// 列                            
+                                for (let i = 0; i < arrayZChange.length; i += 1) {// 行
+                                    arrayZChangeY[j][i] = arrayZChange[i][j]
+                                }
+                            }
+                            // console.log("arrayZChangeY",arrayZChangeY);
+                            // todo Y的变化
+                            const arrayZChangeYTemp = [];
+                            for (let i = 0; i < dataYNameYChange.length; i += 1) {
+                                arrayZChangeYTemp.push(arrayZChangeY[dataYNameYChange[i].num])
+                            }
+                            // console.log("arrayZChangeYTemp",arrayZChangeYTemp);
 
-                            emphasis: {
-                                label: {
-                                    textStyle: {
-                                        fontSize: 20,
-                                        color: '#900'
-                                    }
-                                },
-                                itemStyle: {
-                                    color: '#900'
+                            // 逆时针90度恢复数组 写回原数组
+                            for (let i = 0; i < arrayZChangeYTemp.length; i += 1) {
+                                for (let j = 0; j < arrayZChangeYTemp[0].length; j += 1) {
+                                    arrayZChange[j][i] = arrayZChangeYTemp[i][j]
                                 }
                             }
 
-                        });
+                            // console.log("****arrayZChange", arrayZChange);
+
+                            // 更新dataXname dataYname       echartsData                  
+                            for (let i = 0; i < dataXNameXChange.length; i += 1) {
+                                dataXname[i] = dataXNameXChange[i].name;
+                            }
+                            for (let i = 0; i < dataYNameYChange.length; i += 1) {
+                                dataYname[i] = dataYNameYChange[i].name;
+                            }
+                            echartsData = []
+                            for (let i = 0; i < arrayZChange.length; i += 1) {
+
+                                for (let j = 0; j < arrayZChange[i].length; j += 1) {
+                                    echartsData.push([
+                                        i,
+                                        j,
+                                        arrayZChange[i][j] === null ||
+                                            arrayZChange[i][j] === undefined ?
+                                            0 : arrayZChange[i][j]
+                                    ]);
+                                }
+                            }
+                            /**
+                             * xy排序方法 end
+                             * 
+                             *  */
+                            // console.log(echartsData);
+
+                            _.set($scope.options, "xAxis3D.data", dataXname);
+                            _.set($scope.options, "yAxis3D.data", dataYname);
+
+
+                            _.set($scope.options, "series", []); // 清空设置           
+                            $scope.options.series.push({
+                                type: 'bar3D', // echarts-gl 1.1.1
+                                data: echartsData.map(function (item) {
+                                    return {
+                                        value: [item[0], item[1], item[2]],
+                                    }
+                                }),
+                                shading: 'lambert',
+
+                                label: {
+                                    textStyle: {
+                                        fontSize: 16,
+                                        borderWidth: 1
+                                    }
+                                },
+
+                                emphasis: {
+                                    label: {
+                                        textStyle: {
+                                            fontSize: 20,
+                                            color: '#900'
+                                        }
+                                    },
+                                    itemStyle: {
+                                        color: '#900'
+                                    }
+                                }
+
+                            });
+                        }
+
 
 
                         let myChart = null;

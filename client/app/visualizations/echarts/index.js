@@ -691,8 +691,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                             disabled: _.get($scope.options, "dataZoom_Disabled", true),
                         });
 
-
-
+                       
                         let myChart = null;
                         if (document.getElementById("main")) {
                             document.getElementById("main").id = $scope.options.id;
@@ -880,7 +879,7 @@ function EchartsRenderer($timeout, $rootScope, $window) {
                 });
             }
 
-
+          
 
 
         },
@@ -923,12 +922,12 @@ function EchartsEditor() {
                 console.log(BrowseFolder());
             }
 
-
             // 组件背景
             $scope.getImageUrlCb = (a) => {
                 _.set($scope.options, "images", a);
                 $scope.$apply();
             }
+
 
             function BrowseFolder() {
                 const jsonObj = $scope.options;

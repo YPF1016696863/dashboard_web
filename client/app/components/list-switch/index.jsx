@@ -138,8 +138,8 @@ class ListSwitch extends React.Component {
           })()
           }
         >
-          <Radio style={{ color: '#fff' }} value={1}>手动布局</Radio>
           <Radio style={{ color: '#fff' }} value={2}>自动布局</Radio>
+          <Radio style={{ color: '#fff' }} value={1}>手动布局</Radio>          
           <Radio style={{ color: '#fff' }} value={3}>固定</Radio>
         </Radio.Group>
         {/* {this.state.load && (

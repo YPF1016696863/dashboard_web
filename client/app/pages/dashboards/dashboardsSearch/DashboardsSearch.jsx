@@ -193,14 +193,14 @@ class DashboardsSearch extends React.Component {
     Dashboard.get(
       { slug: slugId },
       dashboard => {
-
+        // console.log(dashboard.background_image);
         let arr = [[], [], [], [], ["/static/images/themeBackgroundImages/empty-overview.png"]];
         if (dashboard.background_image !== null) {
           // console.log("1");
           arr = dashboard.background_image.slice(1, -1).split(",");
         }
 
-        // console.log(arr[4]);
+
         // /static/images/themeBackgroundImages/empty-overview.png
 
         this.setState({
@@ -352,6 +352,7 @@ class DashboardsSearch extends React.Component {
     const { dashboard, isDashboardOwner } = this.state;
     // 上传背景
     const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -404,8 +405,9 @@ class DashboardsSearch extends React.Component {
                     >
                       <Radio.Group
                         onChange={this.onChangeImgType}
-                        defaultValue={this.state.imgTypeState === null ||
-                          this.state.imgTypeState === ""
+                        defaultValue={this.state.imgTypeState.indexOf('/') ||
+                          this.state.imgTypeState === "" ||
+                          this.state.imgTypeState === null
                           ? "tianchong" : this.state.imgTypeState}
                       >
                         <Radio value="tianchong">填充</Radio>

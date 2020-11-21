@@ -105,11 +105,33 @@ export function defaultPolarpieChartOptions() {
         dataset: {
             source: [
                 ['a', 20],// 宽度
-                ['b', 60]
+                ['b', 100]
             ]
         },
 
-        series: [],
+        series: [
+            {
+                type: 'pie',
+                // id: 'pie',
+                radius: 100, // 距离
+                label: {
+                    show: false
+                },
+                startAngle: 90, // 90开始 顺时针减(方位)
+                itemStyle: {
+                    normal: {
+                        // eslint-disable-next-line object-shorthand
+                        color: function (params) {
+                            const colorList = [
+                                'rgba(255,0,0,0.5)', 'rgba(0,0,0,0)'
+                            ];
+                            return colorList[params.dataIndex]
+                        }
+                    }
+                },
+                center: ['50%', '50%'], // 和极坐标绑定
+            }
+        ],
         size: {
             responsive: true,
             width: "600px",

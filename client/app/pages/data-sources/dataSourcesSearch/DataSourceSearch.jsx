@@ -421,7 +421,13 @@ foldernameUpdate = (data) => {
                   }}
                 >
                   <TreeNode
-                    title="数据源（无分组）"
+                    icon={(
+                      <Icon
+                        type="container"
+                        style={{ color: 'darkmagenta' }}
+                      />
+                      )}
+                    title="数据源总集合（无分组）"
                     key="root"
                   >
                     {_.map(this.state.filtered, item => (

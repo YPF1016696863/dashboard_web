@@ -715,7 +715,13 @@ class DashboardsListSearch extends React.Component {
                 selectedKeys={[this.state.selected]}
               >
                 <TreeNode
-                  title="可视化仪表板(无分组)"
+                  icon={(
+                    <Icon
+                      type="container"
+                      style={{ color: 'darkmagenta' }}
+                    />
+                  )}
+                  title="可视化仪表板总集合(无分组)"
                   key="datavis-group#ungrouped"
                 >
                   {_.map(this.state.filtered, item => {
@@ -787,7 +793,7 @@ class DashboardsListSearch extends React.Component {
                                     }}
                                   />
                                 ) : (
-                                  item.name
+                                  item.name+" [ id : "+item.id+"]"
                                 )}
                             </span>
                           )}

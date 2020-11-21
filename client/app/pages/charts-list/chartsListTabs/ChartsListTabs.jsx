@@ -639,7 +639,7 @@ class ChartsListTabs extends React.Component {
                         <Descriptions.Item label="可视化组件类型">
                           {this.state.visualization.type}
                         </Descriptions.Item>
-                        <Descriptions.Item label="该可视化组件由以下数据集创建:">
+                        <Descriptions.Item label="来源数据集:">
                           {this.state.query.name}
                         </Descriptions.Item>
                       </Descriptions>

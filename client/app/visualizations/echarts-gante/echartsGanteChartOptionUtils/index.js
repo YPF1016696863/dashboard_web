@@ -27,6 +27,10 @@ export function defaultGanteChartOptions() {
         },
         title: {
             text: '科技工程工期',
+            textStyle: {
+                color: '#fff',
+            }
+
         },
         tooltip: {
             trigger: 'axis',
@@ -49,18 +53,62 @@ export function defaultGanteChartOptions() {
         },
         xAxis: {
             type: 'value',
-
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: '#fff',
+                }
+            },
         },
         yAxis: {
             type: 'category',
-            splitLine: { show: false },
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: '#fff',
+                }
+            },
             zlevel: 2,
             z: 3,
             data: ['总工期', '初步分析', '设计实践', '应用测试与验收',]
 
         },
         stack: true,
-        series: [],
+        series: [
+            {
+                name: '开始时间',
+                type: 'bar',
+                zlevel: 1,
+                z: 2,
+                itemStyle: {
+                    color: 'transparent', // transparent
+                    borderColor: 'transparent'
+                },
+                data: [0, 10, 100, 150]
+
+            }, {
+                name: '结束时间',
+                type: 'bar',
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                itemStyle: {
+                    normal: {
+                        color: function (params) {
+                            // 给出颜色组                        
+                            const colorList = ['#66FF66', '#cca272', '#74608f', '#FF1493', '#d7a02b',
+                                '#4B0082', '#c8ba23', '#00BFFF', '#333399', '#228B22',
+                                '#FF4500', '#CC0033', '#FFD700'
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                        borderColor: 'transparent',
+                    }
+                },
+                data: [300, 100, 130, 150]
+            }
+        ],
 
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',

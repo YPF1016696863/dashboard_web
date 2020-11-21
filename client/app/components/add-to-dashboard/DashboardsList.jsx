@@ -224,7 +224,6 @@ export class DashboardsList extends React.Component {
   render() {
     const { appSettings } = this.props;
     const { selectedName } = this.state;
-    // console.log(selectedName);
     return (
       <>
         <Button type="primary" onClick={this.showModal}>
@@ -274,7 +273,7 @@ export class DashboardsList extends React.Component {
                     </Col>
                     <Col span={2} offset={1}>
                       <Dropdown
-                        overlay={
+                        overlay={(
                           <Menu>
                             <Menu.Item
                               key="1"
@@ -291,7 +290,7 @@ export class DashboardsList extends React.Component {
                               按创建时间排序
                             </Menu.Item>
                           </Menu>
-                        }
+                        )}
                       >
                         <Button icon="menu-fold" size="small" />
                       </Dropdown>
@@ -322,17 +321,23 @@ export class DashboardsList extends React.Component {
                       selectedKeys={[this.state.selected]}
                     >
                       <TreeNode
-                        title="可视化仪表盘(无分组)"
+                        icon={(
+                          <Icon
+                            type="container"
+                            style={{ color: 'darkmagenta' }}
+                          />
+                          )}
+                        title="可视化仪表盘总集合(无分组)"
                         key="datavis-group#ungrouped"
                       >
-                        {_.map(this.state.filtered, item => (
+                        {_.map(this.state.filtered, item => (                          
                           <TreeNode
-                            icon={
+                            icon={(
                               <Icon
                                 type="dashboard"
                                 style={{ color: '#801336' }}
                               />
-                            }
+                            )}
                             title={item.name}
                             key={item.slug}
                             isLeaf
