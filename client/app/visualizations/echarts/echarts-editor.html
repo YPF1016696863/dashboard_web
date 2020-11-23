@@ -1109,8 +1109,7 @@
                     </ui-select>
                     <label class="control-label">系列名称</label>
                     <input name="name" type="text" class="form-control"
-                        ng-model="options.series_ReName[options.useSerie_Index]" placeholder="" 
-                        autocomplete="off" />
+                        ng-model="options.series_ReName[options.useSerie_Index]" placeholder="" autocomplete="off" />
                 </div>
 
                 <div class="form-group" style="width:49%;float:right">
@@ -1166,8 +1165,8 @@
                     <div class="form-group" style="width:49%;float:right">
                         <label class="control-label">标签文字大小</label>
                         <input name="name" type="text" class="form-control"
-                            ng-model="options.series_Label_FontSize[options.useSerie_Index]" placeholder="" 
-                            autocomplete="off"/>
+                            ng-model="options.series_Label_FontSize[options.useSerie_Index]" placeholder=""
+                            autocomplete="off" />
 
                         <label class="control-label">标签文字字体</label>
                         <ui-select ng-model="options.series_Label_FontFamily[options.useSerie_Index]">
@@ -1198,8 +1197,8 @@
                         <div class="form-group" style="width:49%;float:left">
                             <label class="control-label">标记点大小(单位:px)</label>
                             <input name="name" type="text" class="form-control"
-                                ng-model="options.series_SymbolSize[options.useSerie_Index]" placeholder="" 
-                                autocomplete="off"/>
+                                ng-model="options.series_SymbolSize[options.useSerie_Index]" placeholder=""
+                                autocomplete="off" />
                             <label class="control-label">标记点形状</label>
                             <ui-select ng-model="options.series_Symbol[options.useSerie_Index]">
                                 <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
@@ -1212,8 +1211,8 @@
                         <div class="form-group" style="width:49%;float:right">
                             <label class="control-label">标记点旋转角度</label>
                             <input name="name" type="text" class="form-control"
-                                ng-model="options.series_SymbolRotate[options.useSerie_Index]" placeholder="0" 
-                                autocomplete="off"/>
+                                ng-model="options.series_SymbolRotate[options.useSerie_Index]" placeholder="0"
+                                autocomplete="off" />
                         </div>
                     </div>
                 </div>
@@ -1497,21 +1496,26 @@
                         <label class="control-label">提示名称</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.series_MarkLine_Data_MarkName[options.useSerie_Index]" placeholder="" />
+                    </div>
+                    <div class="form-group" style="width:49%;float:left">
                         <label class="control-label">宽度</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.series_MarkLine_Data_LineStyle_Width[options.useSerie_Index]"
                             placeholder="5" />
-                        <label class="control-label">颜色</label>
-                        <input type="color" style="width:100%" class="form-control"
-                            ng-model="options.series_MarkLine_Data_LineStyle_Color[options.useSerie_Index]" />
                     </div>
 
                     <div class="form-group" style="width:49%;float:right">
                         <label class="control-label">线值</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.series_MarkLine_Data_MarkValue[options.useSerie_Index]" placeholder="" />
-                        <label class="control-label">类型</label>
-                        <ui-select name="symbolSize" required
+                    </div>
+
+                    <div class="form-group" style="width:49%;float:right">
+                        <label class="control-label" style="width:100%;float: left;">颜色</label>
+                        <input type="color" style="width:50%;float: left;" class="form-control"
+                            ng-model="options.series_MarkLine_Data_LineStyle_Color[options.useSerie_Index]" />
+                        <!-- <label class="control-label" style="width:50%;float: left;">类型</label> -->
+                        <ui-select name="symbolSize" required style="width:50%;float: left;"
                             ng-model="options.series_MarkLine_Data_LineStyle_Type[options.useSerie_Index]">
                             <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                             <ui-select-choices repeat="LineStyle.value as LineStyle in LineStyles">
@@ -1537,21 +1541,27 @@
                         <label class="control-label">提示名称</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.series_MarkLine_Data_MarkName2[options.useSerie_Index]" placeholder="" />
+                    </div>
+                    <div class="form-group" style="width:49%;float:left">
                         <label class="control-label">宽度</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.series_MarkLine_Data_LineStyle_Width2[options.useSerie_Index]"
                             placeholder="5" />
-                        <label class="control-label">颜色</label>
-                        <input type="color" style="width:100%" class="form-control"
-                            ng-model="options.series_MarkLine_Data_LineStyle_Color2[options.useSerie_Index]" />
+
                     </div>
 
                     <div class="form-group" style="width:49%;float:right">
                         <label class="control-label">线值</label>
                         <input name="name" type="text" class="form-control"
                             ng-model="options.series_MarkLine_Data_MarkValue2[options.useSerie_Index]" placeholder="" />
-                        <label class="control-label">类型</label>
-                        <ui-select name="symbolSize" required
+                    </div>
+
+                    <div class="form-group" style="width:49%;float:right">
+                        <label class="control-label" style="width:100%;float: left;">颜色</label>
+                        <input type="color" style="width:50%;float: left;" class="form-control"
+                            ng-model="options.series_MarkLine_Data_LineStyle_Color2[options.useSerie_Index]" />
+                        <!-- <label class="control-label">类型</label> -->
+                        <ui-select name="symbolSize" required style="width:50%;float: left;"
                             ng-model="options.series_MarkLine_Data_LineStyle_Type2[options.useSerie_Index]">
                             <ui-select-match placeholder="">{{$select.selected.label}}</ui-select-match>
                             <ui-select-choices repeat="LineStyle.value as LineStyle in LineStyles">
