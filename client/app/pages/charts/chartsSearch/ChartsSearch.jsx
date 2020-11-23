@@ -245,6 +245,7 @@ class ChartsSearch extends React.Component {
                         let type;
                         let chart;
                         switch (e.target.value) {
+                          case 'ECHARTS-Test': type = 'ECHARTS-TEST'; break;// 扩展测试图
                           case 'ECHARTS_line': type = 'ECHARTS'; chart = 'line'; break;
                           case 'ECHARTS_bar': type = 'ECHARTS'; chart = 'bar'; break;
                           case 'ECHARTS_area': type = 'ECHARTS'; chart = 'area'; break;
@@ -833,6 +834,22 @@ class ChartsSearch extends React.Component {
                                 <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>交叉表</p>
                               </Radio>
                             </Col>
+
+                            <Col
+                              style={{ paddingBottom: '6px' }}
+                              span={8}
+                              align="center"
+                            >
+                              <Radio value="ECHARTS-Test" style={{ width: '95%' }}>
+                                <Avatar
+                                  shape="square"
+                                  size="large"
+                                  src={`${CHART_IMG_ROOT}/datavis-charts/datavis-echarts-test.png`}
+                                />
+                                <p style={{ fontSize: '12px', position: 'relative', left: '10px' }}>Echarts扩展图</p>
+                              </Radio>
+                            </Col>
+
                           </Row>
                           <Divider style={{ margin: ' 0' }} />
                         </Panel>
