@@ -42,7 +42,10 @@ export function defaultPolarpieChartOptions() {
             show: true,
             trigger: 'item', // 触发类型,'item'数据项图形触发，
             axisPointer: {
-                type: 'cross'
+                type: 'cross',
+                label:{
+                    backgroundColor :'#000'
+               }
             }
         },
         grid: {

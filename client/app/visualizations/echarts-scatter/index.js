@@ -49,12 +49,22 @@ function EchartsScatterRenderer($timeout, $rootScope, $window) {
                         /* *********** 调色盘16位转10进制 加上 透明度 *********** */
                         _.set($scope.options, "backgroundColor",
                             color16to10(_.get($scope.options, "backgroundColorT", "#000"),
-                                _.get($scope.options, "backgroundColorOpacity", 0)
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
                             ));
 
                         _.set($scope.options, "tooltip.backgroundColor",
                             color16to10(_.get($scope.options, "tooltip.backgroundColorT", "#000"),
                                 _.get($scope.options, "tooltip.backgroundColorOpacity", 0)
+                            ));
+
+                        _.set($scope.options, "yAxis.splitLine.lineStyle.color",
+                            color16to10(_.get($scope.options, "yAxis.splitLine.lineStyle.colorT", "#fff"),
+                                _.get($scope.options, "yAxis.splitLine.lineStyle.colorTOpacity", 1)
+                            ));
+
+                        _.set($scope.options, "xAxis.splitLine.lineStyle.color",
+                            color16to10(_.get($scope.options, "xAxis.splitLine.lineStyle.colorT", "#fff"),
+                                _.get($scope.options, "xAxis.splitLine.lineStyle.colorTOpacity", 1)
                             ));
 
                         //  提示框文字格式
@@ -345,7 +355,10 @@ function EchartsScatterRenderer($timeout, $rootScope, $window) {
                                     + _.get($scope.options, "bgY", "0px"),
                                 'border-style': _.get($scope.options, "borderStyle", "solid"),
                                 'border-width': _.get($scope.options, "borderWidth", "0px"),
-                                'border-color': _.get($scope.options, "borderColor", "blue"),
+                                'border-color': color16to10(
+                                    _.get($scope.options, "borderColor", "#fff"),
+                                    _.get($scope.options, "borderColorOpacity", 1)
+                                ),
 
                             });
 

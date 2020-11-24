@@ -46,6 +46,16 @@ function EchartsScatterNumberRenderer($rootScope) {
                 _.get($scope.options, "lineColorTOpacity", 0)
               ));
 
+            _.set($scope.options, "yAxis.splitLine.lineStyle.color",
+              color16to10(_.get($scope.options, "yAxis.splitLine.lineStyle.colorT", "#fff"),
+                _.get($scope.options, "yAxis.splitLine.lineStyle.colorTOpacity", 1)
+              ));
+
+            _.set($scope.options, "xAxis.splitLine.lineStyle.color",
+              color16to10(_.get($scope.options, "xAxis.splitLine.lineStyle.colorT", "#fff"),
+                _.get($scope.options, "xAxis.splitLine.lineStyle.colorTOpacity", 1)
+              ));
+
             //  提示框文字格式
             const formatterString = `${_.get($scope.options, "Text_a", "")}
                    {a}${_.get($scope.options, "a_Text", "")}
@@ -215,7 +225,10 @@ function EchartsScatterNumberRenderer($rootScope) {
                   + _.get($scope.options, "bgY", "0px"),
                 'border-style': _.get($scope.options, "borderStyle", "solid"),
                 'border-width': _.get($scope.options, "borderWidth", "0px"),
-                'border-color': _.get($scope.options, "borderColor", "blue"),
+                'border-color': color16to10(
+                  _.get($scope.options, "borderColor", "#fff"),
+                  _.get($scope.options, "borderColorOpacity", 1)
+                ),
 
               });
 

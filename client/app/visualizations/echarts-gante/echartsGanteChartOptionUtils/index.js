@@ -40,9 +40,10 @@ export function defaultGanteChartOptions() {
             formatter: function (params) {
                 const start = params[0];
                 const tar = params[1];
+                const temp=tar.value+start.value;
                 return tar.name + '<br/>' +
                     start.seriesName + ':' + start.value + '<br/>' +
-                    tar.seriesName + ' : ' + tar.value;
+                    tar.seriesName + ' : ' + temp;
             }
         },
         grid: {

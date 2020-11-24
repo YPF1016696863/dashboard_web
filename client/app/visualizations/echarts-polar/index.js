@@ -34,7 +34,10 @@ function EchartsPolarRenderer($timeout, $rootScope, $window) {
                                 _.get($scope.options, "tooltip.backgroundColorTOpacity", 0)
                             ));
 
-
+                            _.set($scope.options, "backgroundColor",
+                            color16to10(_.get($scope.options, "backgroundColorT", "#000"),
+                                _.get($scope.options, "backgroundColorTOpacity", 0)
+                            ));
 
 
                         const data = $scope.queryResult.getData();

@@ -9,9 +9,9 @@
         <li ng-class="{active: currentTab == 'tooltip'}">
             <a ng-click="changeTab('tooltip')"> 提示框</a>
         </li>
-        <li ng-class="{active: currentTab == 'others'}">
+        <!-- <li ng-class="{active: currentTab == 'others'}">
             <a ng-click="changeTab('others')">其他设置</a>
-        </li>
+        </li> -->
 
     </ul>
     <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
@@ -233,7 +233,7 @@
                                 <input type="text" style="width:50%;float: left" class="form-control"
                                     ng-model="options.backgroundColorTOpacity " placeholder="" />
                             </div>
-                            <div class="form-group" style="width:100%;float:left">
+                            <div class="form-group" style="width:49%;float:left">
                                 <label class="control-label">背景图片</label>
                                 <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
                                 <input ng-show="false" name="name" type="text" class="form-control"
@@ -241,15 +241,12 @@
                             </div>
 
 
-                            <div class="form-group" style="width:49%;float:left">
-                                <label class="control-label">背景位置X</label>
+                            <div class="form-group" style="width:49%;float: right;">
+                                <label class="control-label">背景位置</label>
                                 <input name="name" type="text" class="form-control" ng-model="options.bgX"
-                                    placeholder="" />
-                            </div>
-                            <div class="form-group" style="width:49%;float:right">
-                                <label class="control-label">背景位置Y</label>
+                                    placeholder="X" />
                                 <input name="name" type="text" class="form-control" ng-model="options.bgY"
-                                    placeholder="" />
+                                    placeholder="Y" />
                             </div>
 
                         </div>
@@ -349,10 +346,16 @@
 
 
     <div ng-if="currentTab == 'tooltip'" class="m-t-10 m-b-10">
-        <div class="form-group" style="width:100%;float: left;">
+        <div class="form-group" style="width:49%;float: left;">
             <label>
                 <input type="checkbox" ng-model="options.tooltip.show">
                 显示提示框
+            </label>
+        </div>
+        <div class="form-group" style="width:49%;float:left">
+            <label>
+                <input type="checkbox" ng-model="options.toolbox.show">
+                显示工具栏
             </label>
         </div>
 
@@ -399,15 +402,6 @@
             </div>
         </div>
     </div>
-
-    <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
-
-        <div class="form-group" style="width:49%;float:left">
-            <label>
-                <input type="checkbox" ng-model="options.toolbox.show">
-                显示工具栏
-            </label>
-        </div>
-    </div>
+ 
 
 </div>

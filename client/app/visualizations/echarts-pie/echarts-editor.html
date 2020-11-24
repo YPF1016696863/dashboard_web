@@ -214,21 +214,20 @@
                             </div>
 
 
-                            <div class="form-group" style="width:100%;float:left">
-
+                            <div class="form-group" style="width:49%;float:left">
                                 <label class="control-label">背景图片</label>
                                 <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
+                                <input ng-show="false" name="name" type="text" class="form-control"
+                                    ng-model="options.images" placeholder="url" />
                             </div>
-
-                            <div class="form-group" style="width:49%;float:left">
-                                <label class="control-label">背景位置X</label>
+    
+    
+                            <div class="form-group" style="width:49%;float: right;">
+                                <label class="control-label">背景位置</label>
                                 <input name="name" type="text" class="form-control" ng-model="options.bgX"
-                                    placeholder="" />
-                            </div>
-                            <div class="form-group" style="width:49%;float:right">
-                                <label class="control-label">背景位置Y</label>
+                                    placeholder="X" />
                                 <input name="name" type="text" class="form-control" ng-model="options.bgY"
-                                    placeholder="" />
+                                    placeholder="Y" />
                             </div>
 
                         </div>

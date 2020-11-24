@@ -17,7 +17,7 @@ export function defaultContrastChartOptions() {
             yAxisColumns: []
         },
         title: {
-            text: 'Contrast 简单示例',
+            text: '简单示例',
             subtext: '',
             backgroundColor: 'transparent',
             textStyle: {

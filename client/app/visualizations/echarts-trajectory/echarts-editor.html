@@ -207,17 +207,13 @@
 
                     <div uib-collapse="isCollapsedColor">
                         <div class="form-group" style="float:left;width:100% ">
-                          
+
+
+                            <!-- <div class="form-group" style="width:49%;float:left">
+
+                            </div> -->
 
                             <div class="form-group" style="width:49%;float:left">
-                                <label class="control-label" style="width:100%;float: left">背景颜色</label>
-                                <input type="color" style="width:50%;float: left" class="form-control"
-                                    ng-model="options.backgroundColorT" />
-                                <input type="text" style="width:50%;float: left" class="form-control"
-                                    ng-model="options.backgroundColorTOpacity" placeholder="0" />
-                            </div>
-
-                            <div class="form-group" style="width:100%;float:left">
                                 <label class="control-label">背景图片</label>
                                 <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
                                 <input ng-show="false" name="name" type="text" class="form-control"
@@ -225,15 +221,18 @@
                             </div>
 
 
-                            <div class="form-group" style="width:49%;float:left">
-                                <label class="control-label">背景位置X</label>
+                            <div class="form-group" style="width:49%;float: right;">
+                                <label class="control-label">背景位置</label>
                                 <input name="name" type="text" class="form-control" ng-model="options.bgX"
-                                    placeholder="" />
-                            </div>
-                            <div class="form-group" style="width:49%;float:right">
-                                <label class="control-label">背景位置Y</label>
+                                    placeholder="X" />
                                 <input name="name" type="text" class="form-control" ng-model="options.bgY"
-                                    placeholder="" />
+                                    placeholder="Y" />
+
+                                <label class="control-label" style="width:100%;float: left">背景颜色</label>
+                                <input type="color" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.backgroundColorT" />
+                                <input type="text" style="width:50%;float: left" class="form-control"
+                                    ng-model="options.backgroundColorTOpacity" placeholder="0" />
                             </div>
 
                         </div>
@@ -308,7 +307,7 @@
                     </div>
 
 
-                    
+
 
 
 
@@ -507,7 +506,7 @@
                     <div class="form-group" style="width:49%;float:left">
                         <label class="control-label">轨迹颜色</label>
                         <input type="color" style="width:100%" class="form-control"
-                        ng-model="options.lineColor[options.useSerie_Index]" />
+                            ng-model="options.lineColor[options.useSerie_Index]" />
                     </div>
 
                 </div>
@@ -518,7 +517,7 @@
                         class="form-control" placeholder="15">
                     <label class="control-label">标记点颜色</label>
                     <input type="color" style="width:100%" class="form-control"
-                    ng-model="options.pointColor[options.useSerie_Index]" />
+                        ng-model="options.pointColor[options.useSerie_Index]" />
                 </div>
             </div>
         </div>
@@ -561,24 +560,21 @@
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_a"
                     placeholder="前缀..." />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="系列名称" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.a_Text"
                     placeholder="后缀..." />
             </div>
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_b"
                     placeholder="" />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="类目值" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.b_Text"
                     placeholder="" />
             </div>
             <div class="form-group" style="width:100%;float: left;">
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.Text_c"
                     placeholder="" />
-                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值"
-                    disabled="true" />
+                <input name="name" type="text" style="width:33.3%;float: left;" placeholder="数值" disabled="true" />
                 <input name="name" type="text" style="width:33.3%;float: left;" ng-model="options.c_Text"
                     placeholder="" />
             </div>
