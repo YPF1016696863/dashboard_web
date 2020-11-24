@@ -228,7 +228,7 @@
                             <input type="color" style="width:100%" class="form-control"
                                 ng-model="options.gTitle.color" />
                         </div>
-                        <div class="form-group" style="width:100%;float:left">
+                        <div class="form-group" style="width:49%;float:left">
                             <label class="control-label">背景图片</label>
                             <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
                             <input ng-show="false" name="name" type="text" class="form-control"
@@ -236,13 +236,12 @@
                         </div>
 
 
-                        <div class="form-group" style="width:49%;float:left">
-                            <label class="control-label">背景位置X</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.bgX" placeholder="" />
-                        </div>
-                        <div class="form-group" style="width:49%;float:right">
-                            <label class="control-label">背景位置Y</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.bgY" placeholder="" />
+                        <div class="form-group" style="width:49%;float: right;">
+                            <label class="control-label">背景位置</label>
+                            <input name="name" type="text" class="form-control" ng-model="options.bgX"
+                                placeholder="X" />
+                            <input name="name" type="text" class="form-control" ng-model="options.bgY"
+                                placeholder="Y" />
                         </div>
 
                     </div>
@@ -353,18 +352,20 @@
                             <label class="control-label">仪表盘最小值</label>
                             <input name="name" type="text" class="form-control" ng-model="options.minValue"
                                 placeholder="0" />
+
+
                             <label class="control-label">轴线分段1[0-1]</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.duan1"
-                                placeholder="0.3" />
+                            <input name="name" type="text" style="width:100%" class="form-control"
+                                ng-model="options.duan1" placeholder="0.3" />
                             <label class="control-label">轴线分段2[0-1]</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.duan2"
-                                placeholder="0.4" />
+                            <input name="name" type="text" style="width:100%" class="form-control"
+                                ng-model="options.duan2" placeholder="0.4" />
                             <label class="control-label">轴线分段3[0-1]</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.duan3"
-                                placeholder="0.8" />
+                            <input name="name" type="text" style="width:100%" class="form-control"
+                                ng-model="options.duan3" placeholder="0.8" />
                             <label class="control-label">轴线分段4[0-1]</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.duan4"
-                                placeholder="1" />
+                            <input name="name" type="text" style="width:100%" class="form-control"
+                                ng-model="options.duan4" placeholder="1" />
 
                             <label class="control-label" style="width:100%;float: left">比例</label>
                             <input type="text" style="width:100%;float: left" class="form-control"
@@ -386,22 +387,29 @@
                                 <input name="name" type="text" class="form-control" style="width:100%;float: left"
                                     ng-model="options.maxValue" placeholder="100" />
 
-
+                                <label class="control-label">轴线分段1颜色</label>
+                                <input type="color" style="width:100%" class="form-control"
+                                    ng-model="options.duan1Color" />
+                                <label class="control-label">轴线分段2颜色</label>
+                                <input type="color" style="width:100%" class="form-control"
+                                    ng-model="options.duan2Color" />
+                                <label class="control-label">轴线分段3颜色</label>
+                                <input type="color" style="width:100%" class="form-control"
+                                    ng-model="options.duan3Color" />
+                                <label class="control-label">轴线分段4颜色</label>
+                                <input type="color" style="width:100%" class="form-control"
+                                    ng-model="options.duan4Color" />
                             </div>
                             <!-- <label class="control-label">仪表盘最大值</label>
                             <input name="name" type="text" class="form-control" ng-model="options.maxValue"
                                 placeholder="100" /> -->
-                            <label class="control-label">轴线分段1颜色</label>
-                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan1Color" />
-                            <label class="control-label">轴线分段2颜色</label>
-                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan2Color" />
-                            <label class="control-label">轴线分段3颜色</label>
-                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan3Color" />
-                            <label class="control-label">轴线分段4颜色</label>
-                            <input type="color" style="width:100%" class="form-control" ng-model="options.duan4Color" />
+
 
                         </div>
+
                     </div>
+
+
 
 
                 </div>
@@ -411,10 +419,16 @@
 
     </div>
     <div ng-if="currentTab == 'tooltip'" class="m-t-10 m-b-10">
-        <div class="form-group" style="width:100%;float: left;">
+        <div class="form-group" style="width:49%;float: left;">
             <label>
                 <input type="checkbox" ng-model="options.tooltip.show">
                 显示提示框
+            </label>
+        </div>
+        <div class="form-group" style="width:49%;float: right;">
+            <label>
+                <input type="checkbox" ng-model="options.toolbox.show">
+                显示工具栏
             </label>
         </div>
 
@@ -465,12 +479,7 @@
     <div ng-if="currentTab == 'others'" class="m-t-10 m-b-10">
 
 
-        <div class="form-group" style="width:49%;float:left">
-            <label>
-                <input type="checkbox" ng-model="options.toolbox.show">
-                显示工具栏
-            </label>
-        </div>
+
 
         <div class="form-group">
             <label>

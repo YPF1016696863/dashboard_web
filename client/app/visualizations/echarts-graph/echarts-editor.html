@@ -17,7 +17,7 @@
     <div ng-if="currentTab == 'general'" class="m-t-10 m-b-10">
         <ul class="tab-nav">
             <li ng-class="{active: currentTab2 == 'start'}">
-                <a ng-click="changeTab2('title')">开始节点</a>
+                <a ng-click="changeTab2('start')">开始节点</a>
             </li>
             <li ng-class="{active: currentTab2 == 'end'}">
                 <a ng-click="changeTab2('end')">结束节点</a>
@@ -328,7 +328,7 @@
                             ng-model="options.zbColor" />
 
                         </div>
-                        <div class="form-group" style="width:100%;float:left">
+                        <div class="form-group" style="width:49%;float:left">
                             <label class="control-label">背景图片</label>
                             <image-upload get-image-url-cb="getImageUrlCb"></image-upload>
                             <input ng-show="false" name="name" type="text" class="form-control"
@@ -336,13 +336,12 @@
                         </div>
 
 
-                        <div class="form-group" style="width:49%;float:left">
-                            <label class="control-label">背景位置X</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.bgX" placeholder="" />
-                        </div>
-                        <div class="form-group" style="width:49%;float:right">
-                            <label class="control-label">背景位置Y</label>
-                            <input name="name" type="text" class="form-control" ng-model="options.bgY" placeholder="" />
+                        <div class="form-group" style="width:49%;float: right;">
+                            <label class="control-label">背景位置</label>
+                            <input name="name" type="text" class="form-control" ng-model="options.bgX"
+                                placeholder="X" />
+                            <input name="name" type="text" class="form-control" ng-model="options.bgY"
+                                placeholder="Y" />
                         </div>
 
                     </div>
