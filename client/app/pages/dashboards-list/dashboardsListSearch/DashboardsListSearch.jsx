@@ -496,7 +496,9 @@ class DashboardsListSearch extends React.Component {
                   delete value.id;
                   delete value.created_at;
                   delete value.updated_at;
-                  value.visualization_id = value.visualization.id;
+                  if(value.visualization){
+                    value.visualization_id = value.visualization.id;
+                  }else{value.visualization_id = null}
                   delete value.visualization;
               });
               const postdata = response;
