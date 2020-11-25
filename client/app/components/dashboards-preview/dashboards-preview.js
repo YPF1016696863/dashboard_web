@@ -346,7 +346,7 @@ function DashboardPreviewCtrl(
   this.globalParameters = [];
   this.isDashboardOwner = false;
   this.isLayoutDirty = false;
-
+  this.paflag = false;
   // Dashboard Header default style
 
 
@@ -408,7 +408,9 @@ function DashboardPreviewCtrl(
     this.globalParameters.forEach((param) => {
       _.extend(params, param.toUrlParams());
     });
+    _.remove(this.globalParameters,(param) => {return param.type === "query" && param.global[2][0] === ""})
     $location.search(params);
+    this.paflag = this.showParaFlag();
   };
 
   $scope.$on('dashboard.update-parameters', () => {
@@ -468,9 +470,11 @@ function DashboardPreviewCtrl(
     this.extractGlobalParameters();
     collectFilters(dashboard, force);
     console.log("globalparameter", this.globalParameters);
+    console.log("showflag",this.showParaFlag());
+    console.log("paflag", this.paflag);
   };
 
-  const showParaFlag = () => {
+  this.showParaFlag = () => {
       let countp = 0;
       if (this.globalParameters.length === 0){
           return false
@@ -478,6 +482,7 @@ function DashboardPreviewCtrl(
       if (this.globalParameters.length > 0){
           this.globalParameters.forEach((param)=>{
               if(param.type === "query" && param.global[2][0] === ""){
+
                   countp +=1;
               }
           });

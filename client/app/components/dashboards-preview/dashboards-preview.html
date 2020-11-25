@@ -50,12 +50,12 @@
           params="$ctrl.globalParameters"></parameter-drawer-c>
       </div>
     </div> -->
-    <div class="dashboard-widget-wrapper" ng-if="$ctrl.showParaFlag"
+    <div class="dashboard-widget-wrapper" ng-if="$ctrl.paflag"
          ng-repeat="widget in  $ctrl.dashboard.widgets  | limitTo:1 " gridstack-item="widget.options.position"
          gridstack-item-id="a99" data-test="WidgetIda99" id="switch"
     >
       <div class="grid-stack-item-content ">
-        <parameter-drawer-c widget="widget" ng-if="$ctrl.showParaFlag" on-submit="$ctrl.onSubmit"
+        <parameter-drawer-c widget="widget" ng-if="$ctrl.paflag" on-submit="$ctrl.onSubmit"
                             params="$ctrl.globalParameters"></parameter-drawer-c>
       </div>
     </div>

@@ -488,8 +488,10 @@ class DashboardsListSearch extends React.Component {
       $http
           .get(this.props.appSettings.server.backendUrl + '/api/dashboards/'+this.state.selected)
           .success((response) => {
+              console.log("response",response);
               const backgroundinformation = response.background_image;
               const widgets = response.widgets;
+              console.log("widgets",widgets);
               _.forEach(widgets,(value)=>{
                   delete value.id;
                   delete value.created_at;

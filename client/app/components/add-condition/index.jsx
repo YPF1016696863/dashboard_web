@@ -316,6 +316,7 @@ export class AddCondition extends React.Component {
 
   render() {
     this.whereUpdata();
+    console.log("addcondition",this.props.selectedcondiRes);
     return (
       <div>        
         <PlusCircleOutlined onClick={this.addCondition}>增加</PlusCircleOutlined>
